@@ -1,0 +1,304 @@
+;
+                                                  
+                           ---  R E N A M Z  ---          
+                                                  
+                                Version 1.9
+
+
+            An Enhanced ZCPR3-Compatible File Renaming Utility
+                      With Optional Directory Caching
+
+
+
+            I -->  Installation       C -->  Caching          
+            O -->  Overview           / -->  Options          
+            S -->  Syntax             E -->  Error Flag       
+            W -->  Wildcard Use       
+:I
+Installation
+ 
+Thå distributioî versioî oæ RENAMÚ ió supplieä witè á Z3ENÖ addresó oæ 
+0000H¬ readù foò uså iî ZCPR33« environments®  ZCPR3° useró shoulä instalì 
+RENAMÚ usinç theiò regulaò installatioî methods®  Nï installatioî ió 
+requireä foò operatioî iî non-ZCPR³ environments®  
+
+Configuration
+
+RENAMÚ haó severaì locationó neaò thå beginninç oæ thå prograí thaô caî bå 
+configureä usinç ZCNFG.COÍ anä thå configuratioî filå RENAMZxx.CFÇ tï alteò 
+thå operatioî oæ thå prograí tï suiô thå user®  Foò example¬ manù oæ thå 
+optionó maù bå enableä oò disableä anä thå optioî letteró anä defaulô 
+settingó maù alsï bå changed® 
+:O
+Overview - 1/2
+
+RENAMÚ ió aî enhanceä Z8° filå renaminç utilitù foò uså witè CP/Í 2.2¬ 
+CP/M« oò ZCPR³ CCP'ó runninç undeò CP/Í 2.2¬ CP/M+¬ Z80DOS¬ ZRDOS¬ 
+ZSDOS/ZDDOÓ oò otheò extendeä DOS's®  
+
+RENAMÚ waó developeä aó á fast¬ generaì purposå filå renaminç utilitù witè 
+flexiblå commanä linå optioî controì oveò manù aspectó oæ thå renaminç 
+process®  Iô caî helğ reducå thå ALIAÓ commanä linå lengtè requireä tï 
+renamå groupó oæ fileó witè unrelateä names®  Iô doeó thió bù optionallù 
+renaminç onlù thoså fileó thaô havå anù oæ thå specifieä filenamå 
+attributeó (thå higè bitó oæ thå filenamå anä filetypå bytes© F± througè F· 
+set®  Filenamå attributeó maù bå seô usinç á ZCPR³ utilitù sucè aó DFÁ 
+(Display/Definå Filå Attributes© oò á similaò CP/Í Publiã Domaiî utilitù 
+sucè aó DA®  Seå thå 'Options§ sectioî foò informatioî oî thå resô oæ thå 
+RENAMÚ commanä linå options.
+
+RENAMÚ caî alsï 'move§ fileó betweeî differenô useò areaó aó welì aó renamå 
+theí aô thå samå timå iæ yoõ specifù thå desireä ne÷ useò areá aó parô oæ 
+thå ne÷ filename®  Anù drivå specifieä foò thå ne÷ filenamå wilì bå 
+ignored¬ however®  
+Overview - 2/2
+
+RENAMÚ ió fullù ZCPR³ compatiblå wheî operatinç iî á ZCPR³ environment¬ 
+acceptinç botè thå DIRº anä DUº formó anä checkinç thå environmenô foò thå 
+validitù oæ thå drivå anä useò specified¬ whetheò iô ió tï bå operatinç iî 
+á quieô environment¬ anä thå namå undeò whicè thå prograí waó calleä foò 
+uså iî thå commanä linå HELĞ message®  RENAMÚ wilì operatå usinç thå GÏ 
+command®  Erroró wilì causå thå ZCPR³ prograí erroò flaç tï bå set®  Wheî 
+operatinç iî á ZRDOÓ environment¬ PUBLIÃ fileó arå protecteä unlesó 
+specificallù referenced®  
+
+Wheî RENAMÚ operateó iî á non-ZCPR³ environment¬ thå requireä informatioî 
+ió obtaineä froí internaì locations¬ whicè maù bå configureä tï suiô youò 
+systeí usinç ZCNFG.COÍ anä RENAMZxx.CFG®  RENAMÚ wilì noô accepô thå DIRº 
+forí wheî operatinç iî á non-ZCPR³ environment.
+:S
+Syntax - 1/3
+
+RENAMÚ supportó thå uså oæ botè CP/Í (new_afn=old_afn© anä MS-DOÓ 
+(old_afî new_afn© syntax®  Thå commanä linå syntaø is:
+
+         RENAMZ [dir:]old_afn [dir:]new_afn [excluded] [/option(s)İ
+      oò RENAMZ [dir:]new_afn=[dir:]old_afn [excluded] [/option(s)İ
+
+Fileó caî onlù bå renameä tï ne÷ filenameó oî thå samå drive¬ sï RENAMÚ 
+wilì ignorå anù drivå specificatioî foò thå ne÷ filename®  Specifyinç á 
+differenô useò numbeò foò thå ne÷ filenamå wilì causå thå olä filenamå tï 
+bå renameä tï thå ne÷ filenamå anä 'moved§ tï thå ne÷ useò area®  Iæ thå 
+olä filenamå dirº specificatioî ió noô supplied¬ RENAMÚ wilì assumå thå 
+defaulô drivå anä user®  Iæ thå ne÷ filenamå useò numbeò ió noô specified¬ 
+RENAMÚ wilì assumå thå olä filenamå useò number.
+Syntax - 2/3
+
+Both     
+          A0>renamz oldfile.tyğ b11ºnewfile.typ 
+      anä A0>renamz b11:newfile.typ=oldfile.tyğ 
+
+wilì renamå thå filå A0:OLDFILE.TYĞ tï A11:NEWFILE.TYP®  Notå thaô thå 
+drivå 'B§ specificatioî foò thå filå newfile.tyğ ió ignored®  
+
+The command
+          A0>renamz b11:filename.typ *
+
+wilì rename thå filå B11:FILENAME.TYĞ tï B11ºFILENAME.
+Syntax - 3/3
+
+Yoõ maù sometimeó wisè tï renamå á grouğ oæ fileó specifieä bù á 
+filename/attributå masë whicè alsï includeó somå fileó yoõ don'ô wanô 
+renamed®  Yoõ caî optionallù uså aî exclusioî filenamå masë tï specifù 
+fileó thaô yoõ wisè tï excludå froí renaming¬ eveî iæ theù otherwiså matcè 
+thå old_afn filå specification®  Iæ yoõ chooså tï uså it¬ thå exclusioî 
+filenamå masë musô bå specifieä afteò botè thå old_afî anä new_afî 
+filenames®  Thå exclusioî filenamå ió á filenamå masë only¬ anä anù 
+drive/useò specifieä wilì bå ignored.
+
+Á renameä filå wilì normallù retaiî alì itó filenamå attributes®  However¬ 
+iæ á filå ió renameä tï thå samå namå aó aî existinç file¬ iô wilì takå oî 
+thå attributeó oæ thå existinç file®  Normallù alì renameä fileó arå 
+considereä 'changed§ anä arå markeä aó non-archived¬ buô thå uså oæ thå 'D§ 
+optioî wilì archivå alì renameä (destination© fileó aó aî aiä iî somå filå 
+backuğ operations®  Thå 'D§ optioî maù alsï bå seô tï normallù on usinç 
+ZCNFG iæ yoõ prefeò renameä fileó tï normally bå archived®  
+:W
+Wildcards - 1/2
+
+Old¬ ne÷ anä exclusioî filenameó maù alì contaiî wildcards®  Olä anä 
+exclusioî filenamå wildcardó arå expandeä iî thå usuaì way®  RENAMÚ 
+attemptó tï resolvå ne÷ filenamå wildcardó bù á matchinç process®  Foò 
+example:
+
+          A0>renamz a1:file.z80 ??????10.ª
+
+wilì resulô iî á renamed filenamå oæ FILE10.Z80®  
+
+Sincå iô ió possiblå thaô thió procesó maù resulô iî thå creatioî oæ 
+duplicatå files¬ RENAMÚ storeó thå namå oæ thå lasô filå renameä anä 
+compareó iô tï thå namå oæ thå filå currentlù beinç renamed®  Iæ theù 
+match¬ RENAMÚ printó á 'Duplicate!§ erroò message¬ anä thå currenô filå ió 
+skipped®  Iæ twï fileó witè thå samå nameó arå noô renameä iî sequence¬ á 
+duplicatå filenamå maù stilì bå created®  Carå shoulä bå exerciseä iî usinç 
+renameä filå wildcards¬ buô iæ yoõ arå carefuì anä awarå oæ thå limitationó 
+oæ thå process¬ yoõ caî dï renaminç oæ multiplå fileó iî onå steğ witè 
+minimaì typing.
+Wildcards - 2/2
+
+Ne÷ filenamå wildcardó arå treateä iî á speciaì waù bù thå 'K§ option®  Thå 
+'K§ optioî deleteó thå numbeò oæ ne÷ filenamå wildcarä characteró froí thå 
+beginninç oæ thå olä filename.  For example:
+
+          A0>renamz a1:abcdefgh.z80 ???.ª /k
+
+wilì resulô iî á renamed filenamå oæ A1:DEFGH.Z80®  
+:C
+Directory Caching 1/2
+
+RENAMÚ caî bå configureä sï thaô iô thå disë directorù iî RAÍ tï speeä uğ 
+thå renaminç procesó wheî iô runó undeò CP/Í 2.2-compatiblå systems®  
+Becauså CP/M« handleó directorù operationó differently¬ directorù cachinç 
+ió automaticallù turneä ofæ wheî RENAMÚ runó undeò CP/M+®  RENAMÚ ió 
+distributeä witè directorù cachinç turneä off¬ buô iô maù bå activateä 
+usinç ZCNFG.
+
+RENAMÚ adaptó thå ideaó developeä bù Haì Boweò iî hió SPEEDUĞ disë 
+directorù buffeò RSØ tï cachå thå disë directorù iî RAÍ foò fasô renaminç 
+wheî usinç slo÷ mediá likå floppù disks®  Alì referenceó tï thå disë 
+directory¬ uğ tï á maximuí oæ 25¶ entries¬ arå madå tï thå cacheä RAÍ copy¬ 
+eliminatinç thå timå requireä tï writå eacè changeä disë directorù recorä 
+tï disë eacè timå á renamå ió performed®  Alì referenceó tï directorù 
+entrieó noô iî thå RAÍ cachå arå madå tï thå physicaì disë directorù aó 
+usual®  Wheî thå renaminç procesó ió completed¬ alì changeä cacheä disë 
+directorù recordó arå theî writteî bacë tï disë alì aô once®  
+Directory Caching 2/2
+
+Renaminç usinç disë directorù cachinç ió mosô effectivå witè floppù disks¬ 
+buô caî alsï bå slightlù fasteò witè RAÍ diskó anä harä disks®  Witè harä 
+diskó thaô havå largå anä crowdeä directories¬ however¬ iô maù noô providå 
+mucè advantage®  Iô ió alsï noô aó effectivå wheî datestamper-typå 
+datestampinç ió beinç done¬ aó thå requireä accesseó tï thå !!!TIME&.DAÔ 
+filå offseô mucè oæ thå timå saveä oî directorù accesses®  Iæ yoõ routinelù 
+uså datestampeò datestamping¬ cachinç maù noô providå mucè advantage®  
+:/
+Options - 1/6
+
+RENAMÚ haó á numbeò oæ commanä linå options¬ whicè musô bå precedeä bù thå 
+optioî flaç characteò '/'®  Thå optioî letteró oò numberó maù appeaò iî anù 
+ordeò anä maù appeaò anywherå iî thå commanä line®  Optionó maù bå combineä 
+iî anù combination®  Optionó arå toggleä aó theù arå read¬ sï thaô aî 
+optioî appearinç twicå wilì canceì itself®  Foò example¬ alì oæ thå 
+followinç commanä lineó havå thå samå meaning:
+
+          A0>renamz source.exô dest.exô excluded.ft /12q 
+          A0>renamz source.exô dest.exô /± /ñ /2 excluded.ft 
+          A0>renamz /12 dest.ext=source.exô excluded.ft /ñ
+          A0>renamz /q /q source.exô /ñ dest.exô /2± excluded.ft 
+
+Excepô foò thå attributå optionó (1-7)¬ individuaì optionó maù bå disableä 
+using ZCNFG iæ you'ä ratheò noô havå theí available®  
+Options - 2/6
+
+Thå followinç descriptionó oæ thå optionó reflecô thå defaulô optioî 
+settingó iî thå distributioî version®  Yoõ maù changå thå defaulô optioî 
+characteró oò settingó tï suiô youò owî needó usinç ZCNFG®  Thå commanä 
+linå HELĞ screeî wilì automaticallù displaù thå propeò selectioî messagå 
+foò eacè optioî baseä oî whetheò iô haó beeî seô tï OÎ oò OFF® 
+
+Thå default optionó are:
+
+     1 - 7 options®  Renames onlù thoså specifieä fileó whicè alsï 
+          havå thå selecteä combinatioî oæ thå F± througè thå F· 
+          attributes set®  
+
+          Undeò Z80DOÓ anä ZSDOS¬ wherå PUBLIÃ fileó havå thå F² 
+          attributå set¬ yoõ caî alsï uså thå '2§ optioî tï 
+          selecô onlù PUBLIÃ fileó foò renaming®  Iæ yoõ trù 
+          renaminç á PUBLIÃ filå tï á differenô useò area¬ RENAMZ
+          wilì telì yoõ thaô iô alreadù existó anä wilì prevenô 
+          overwritinç thå 'existing§ filå bù abortinç witè á Filå 
+          W/Ğ BDOÓ error.
+Options - 3/6
+
+     N - Renameó onlù NON-archiveä (changed© files®  Thå sourcå 
+          filå ió archiveä afteò thå renaminç ió completed®  
+          Undeò ZRDOS¬ ZSDOÓ anä otheò extendeä DOS's¬ thå 'N§ 
+          optioî allowó yoõ tï limiô renaminç tï non-archiveä 
+          fileó (thoså fileó thaô havå beeî openeä oò modifieä 
+          sincå thå archivå attributå waó set)®  Thå renameä 
+          fileó arå markeä aó non-archiveä unlesó thå 'A§ optioî 
+          ió selecteä tï archivå thå renameä files®  Thió optioî 
+          ió usefuì iî 'moving§ onlù changeä fileó tï anotheò 
+          useò areá oî thå samå disk.
+
+          Undeò CP/Í 2.2¬ thå archivå attributå ió noô reseô wheî 
+          á filå ió updated¬ sï thió optioî ió noô toï usefuì 
+          unlesó yoõ uså á utilitù prograí tï 'manually§ seô oò 
+          reseô thå archivå attribute®  
+
+     A - Renamå ALÌ (Directorù ANÄ System© files®  Normally¬ onlù 
+          Directorù fileó arå renamed.
+Options - 4/6
+
+     X - Skipó renaminç iæ thå ne÷ filenameó alreadù exist®  
+          Normally¬ yoõ arå askeä first®  Overriddeî bù eitheò 
+          thå 'O§ (Overwrite© oò thå 'R§ (R/O© option.
+
+     O - Overwriteó R/× destinatioî fileó oæ thå samå namå 
+          withouô asking®  Normally¬ yoõ arå askeä first®  
+          Overridden by the 'I' (Inspect) option.
+
+     R - Overwriteó R/Ï (oò R/×) destinatioî fileó oæ thå samå 
+          namå withouô asking®  Normally¬ yoõ arå askeä first®  
+          Overriddeî bù thå 'I§ (Inspect© option.
+
+     I - Inspecô option®  Displayó eacè proposeä renamå anä askó 
+          foò operatoò approvaì beforå proceeding®  Thå defaulô 
+          ió tï automaticallù renamå fileó withouô askinç 
+          provideä thaô thå ne÷ filenamås don'ô alreadù exist®  
+          Overriddeî bù thå 'Q§ optioî oò thå ZCPR³ QUIEÔ flag.
+Options - 5/6
+
+     D - Setó thå archivå attributeó iî alì renameä (destination© 
+          files¬ markinç theí aó archived®  Normallù thå archivå 
+          biô ió cleared®  Nï messagå ió displayeä iî thå statuó 
+          line®  Thió optioî ió usefuì iî filå backuğ operationó 
+          wherå fileó oî á backuğ disë caî bå renameä tï á ne÷ 
+          'backup§ namå anä archiveä aô thå samå timå beforå 
+          beinç replaceä witè thå latesô versioî oæ thå file®  
+
+     Q - Quiet®  Usuallù useä iî aliaó environments¬ thå 'Q§ 
+          optioî turnó ofæ non-erroò statuó messages®  Anù 
+          informatioî yoõ shoulä kno÷ abouô durinç thå renaming 
+          process¬ sucè aó erroò information¬ ió stilì displayed®  
+          Nï existinç fileó wilì bå overwritteî unlesó thå 'O§ oò 
+          'R§ optionó arå alsï used®  Overrides the 'I' option.
+
+          Wheî operatinç iî á ZCPR³ environment¬ thå 'Ñ' optioî 
+          statå wilì automaticallù bå seô accordinç tï thå statå 
+          oæ thå ZCPR³ QUIEÔ flag¬ nï matteò ho÷ thå defaulô 
+          optioî settinç ió patched®  
+Options - 6/6
+
+     K -  Deletå thå numbeò oæ leadinç newfilenamå wildcarä characteró froí 
+          thå beginninç oæ thå oldfilenames®  Wildcarä filetypeó arå 
+          matcheä normally®  Iæ botè 'K§ anä 'P§ optionó arå selected¬ thå 
+          'P§ optioî wilì bå ignored.
+
+          Example:  oldfilename:   ABCDEF 
+                    new_afn spec:  ???    
+                    ----------------------
+          Results in newfilename:  DEF    
+
+
+     P - Adä thå prefiø specifieä iî thå newfilenamå tï thå oldfilenames®  
+          Wildcard filetypeó arå matched normally.
+
+          Example:  oldfilename:   DEFGH    
+                    new_afn spec:  ABC???
+                    ----------------------
+          Results in newfilename:  ABCDEF 
+:E
+ZCPR3 Program Error Flag
+
+Iæ thå ZCPR³ prograí erroò flaç exists¬ RENAMÚ setó iô wheî aî erroò occuró 
+durinç prograí operation®  Foò morå flexiblå uså bù aliaó anä ZEØ scriptó 
+usinç flo÷ control¬ RENAMÚ followó thå conventioî seô bù Ricë Charneó bù 
+settinç thå erroò flaç tï thå followinç valueó foò thå indicateä erroò 
+conditionsº 
+
+     0 = Program operation successful - no errors.
+     8 = Program abort - user abort command.
+  0FFh = Program abort - fatal error. 
+

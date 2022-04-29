@@ -1,0 +1,8 @@
+AT+CIPSTART="TCP","192.168.178.22",4434
+AT+CIPSEND=130
+GET /sectordata?disk=0&track=2&sector=20 HTTP/1.1
+Host: www.elektronik-kompendium.de
+Keep-Alive: 999
+Connection: keep-alive
+
+

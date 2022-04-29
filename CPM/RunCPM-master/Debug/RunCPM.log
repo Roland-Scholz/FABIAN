@@ -1,0 +1,37 @@
+﻿  main.c
+  lzio.c
+  lvm.c
+  lutf8lib.c
+  lundump.c
+  ltm.c
+  ltablib.c
+  ltable.c
+  lstrlib.c
+  lstring.c
+  lstate.c
+  lparser.c
+  loslib.c
+  lopcodes.c
+  lobject.c
+  loadlib.c
+  lmem.c
+  lmathlib.c
+  llex.c
+  liolib.c
+  Code wird generiert...
+  Kompilieren...
+  linit.c
+  lgc.c
+  lfunc.c
+  ldump.c
+  ldo.c
+  ldebug.c
+  ldblib.c
+  lctype.c
+  lcorolib.c
+  lcode.c
+  lbaselib.c
+  lauxlib.c
+  lapi.c
+  Code wird generiert...
+  RunCPM.vcxproj -> C:\atarigit\CPM\RunCPM-master\Debug\RunCPM.exe

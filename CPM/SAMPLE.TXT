@@ -1,0 +1,58 @@
+.op
+.pl 67
+                    SAMPLE TEXT
+
+WordStar“ ió á CP/Í compatible¬  screen-orienteä worä 
+processinç    systeí   witè   integrateä    printinç 
+capabilities®   Botè  thå initiaì entrù oæ texô  anä 
+thå  alteratioî  oæ  previouslù  entereä  texô   arå 
+displayeä  directlù oî thå screen¬  aó yoõ shoulä bå 
+ablå tï see®   Mosô formattinç functionó takå  placå 
+immediately¬  resultinç  iî  thå displaù oæ  á  truå 
+prinô  image»  additionaì enhancementó arå performeä 
+durinç  printing¬   iæ  desired®   Osbornå  Computeò 
+Corporatioî   provideó  MailMerge“   witè   WordStar¬ 
+allowinç yoõ tï integratå datá files--sucè aó á maiì 
+list--witè youò text.
+
+Paragraphó  maù  bå  entereä aô higè  speeä  withouô 
+pressinç  thå  carriagå  returî  key¬   aó  WordStar“ 
+automaticallù  "wraps¢ wordó ontï thå nexô  linå  iæ 
+theù  wilì  noô  fiô oî thå currenô linå  witè  youò 
+currenô margins®   Otheò thaî this¬ enterinç texô oî 
+thå  Osbornå É ió almosô exactlù likå enterinç  texô 
+oî á typewriter.
+
+Amonç  thå  featureó  WordStar“   incorporates¬   thå 
+followinç  arå  thå  mosô usefuì  foò  seriouó  worä 
+processing:
+
+    o  Automatic justification of text.
+    o  Variable line spacing.
+    o  Automatic centering of text.
+    o  Ability to reformat entered text.
+    o  Automatic buffering of text to diskette
+       (files can be up to 92,000 characters in
+       length--that's about 1500 lines of text, 
+       or approximately 30 single-spaced pages!).
+    o  Hyphen help; WordStar identifies places
+       where hyphens may be inserted to improve
+       a document's appearance.
+    o  True decimal tab for aligning numbers.
+    o  Complete HELP system built-in.
+    o  Subscripts, superscripts, variable character
+       pitch, underlining, double strike, boldface,
+       strikeout printing available with appropriate
+       printers.
+
+Thió  shorô documenô barelù toucheó upoî  WordStar'ó 
+manù features®  Asë youò Osbornå É dealeò tï providå 
+yoõ  witè  morå informatioî anä á  demonstratioî  oæ 
+WordStar.
+
+            Osborne Computer Corporation
+               26500 Corporate Avenue
+                 Hayward, CA  94545
+
+Calì  415-887-808° tï finä ouô thå locatioî oæ  youò 
+nearesô Osbornå É dealer® Š

@@ -1,0 +1,1510 @@
+z80.asm:
+     1                          		;FNAME "z80.bin"
+     2                          
+     3                          CR:		equ	0dh
+     4                          
+     5                          
+     6                          VARS		equ	$FFF0
+     7                          sum:		equ	0
+     8                          addr:		equ	1
+     9                          echo:		equ	3
+    10                          
+    11                          MODEA		equ	0
+    12                          STATA		equ	1
+    13                          CLOCKA		equ	1
+    14                          COMMA		equ	2
+    15                          RECA		equ	3
+    16                          TRANSA		equ	3
+    17                          IPCHANGE	equ	4
+    18                          AUXCTRL		equ	4
+    19                          ISR		equ	5
+    20                          IMR		equ	5
+    21                          CNTMSB		equ	6
+    22                          CNTLSB		equ	7
+    23                          MODEB		equ	8
+    24                          STATB		equ	9
+    25                          CLOCKB		equ	9
+    26                          COMMB		equ	10
+    27                          RECB		equ	11
+    28                          TRANSB		equ	11
+    29                          IVR		equ	12
+    30                          INPORT		equ	13
+    31                          OPCTRL		equ	13
+    32                          STRTCNT		equ	14
+    33                          OPSET		equ	14
+    34                          STOPCNT		equ	15
+    35                          OPRES		equ	15
+    36                          
+    37                          		ORG     0000h
+    38                          
+    39   000000 210000          		ld	HL, 0			;copy ROM to RAM from
+    40   000003 110000          		ld	DE, 0			;to
+    41   000006 010018          		ld	BC, 1800h		;length, 6KB
+    42   000009 edb0            		ldir
+    43                          
+    44   00000b 21001a          		ld	HL, 1A00h		;copy ROM to RAM from $1A00
+    45   00000e 1100fa          		ld	DE, 0FA00h		;to $FA00 (CP/M Bios)
+    46   000011 010006          		ld	BC, 600h		;length, 6 pages
+    47   000014 edb0            		ldir
+    48                          
+    49   000016 ed43f1ff        		ld	(VARS + addr), BC	;set addr to zero
+    50                          
+    51   00001a 31f0ff          		ld	SP, VARS
+    52                          
+    53   00001d dd21f0ff        		ld	IX, VARS
+    54   000021 dd360301        		ld	(IX + echo), 1		;echo on
+    55                          
+    56   000025 3e4a            		ld	a, $4A			;RX+TX off and
+    57   000027 d302            		out	(COMMA),a		;RESET ERROR
+    58   000029 d30a            		out	(COMMB),a
+    59                          
+    60   00002b 3e30            		ld	a, $30			;RESET TRANS
+    61   00002d d302            		out	(COMMA),a
+    62   00002f d30a            		out	(COMMB),a
+    63                          
+    64   000031 3e20            		ld	a, $20			;RESET RECV
+    65   000033 d302            		out	(COMMA),a
+    66   000035 d30a            		out	(COMMB),a
+    67                          
+    68   000037 3e10            		ld	a, $10			;RESET to MODE REG1
+    69   000039 d302            		out	(COMMA),a
+    70   00003b d30a            		out	(COMMB),a
+    71                          
+    72   00003d 3ee0            		ld	a, $E0			;BRG set 2 and timer = X1/CLK
+    73   00003f d304            		out	(AUXCTRL),a
+    74                          
+    75   000041 3e00            		ld	a, 0			;load timer with
+    76   000043 d306            		out	(CNTMSB),a		;
+    77   000045 3e02            		ld	a, 2			;57600 BAUD
+    78   000047 d307            		out	(CNTLSB),a
+    79                          
+    80                          ;		in	a, (COMMA)		;Switch to test baudrates
+    81                          
+    82   000049 3e66            		ld	a, $66			;115200 BAUD
+    83   00004b d301            		out	(CLOCKA),a
+    84                          ;		ld	a, $66			;
+    85   00004d d309            		out	(CLOCKB),a
+    86                          
+    87                          
+    88   00004f 3e13            		ld	a, $13			;no RTS handshake + 8bits no parity
+    89   000051 d300            		out	(MODEA),a
+    90   000053 d308            		out	(MODEB),a
+    91                          
+    92   000055 3e07            		ld	a, $07			;no CTS handshake + 1 stopbit
+    93   000057 d300            		out	(MODEA),a
+    94   000059 d308            		out	(MODEB),a
+    95                          
+    96   00005b 3e00            		ld	a, 0			;OP2-7 output
+    97   00005d d30d            		out	(OPCTRL),a
+    98                          
+    99                          ;		ld	a, %11111111		;out = low; inverting!
+   100                          ;		out	(OPSET),a
+   101                          
+   102                          ;		ld	a, %10101010
+   103                          ;		out	(OPRES),a
+   104                          
+   105   00005f 3e00            		ld	a, 0			;IRQS AUS
+   106   000061 d305            		out	(IMR),a
+   107                          
+   108   000063 3e05            		ld	a, 5			;RX+TX AN
+   109   000065 d302            		out	(COMMA),a
+   110   000067 d30a            		out	(COMMB),a
+   111                          
+   112                          
+   113   000069 3e80            		ld	a, 080h			;OP7 = LOW, activate RAM
+   114   00006b d30e            		out	(OPSET), a
+   115                          
+   116   00006d 0e20            		ld	c, 32			;output space
+   117   00006f 0600            		ld	b, 0
+   118   000071 cdb902          		call	conout
+   119   000074 db01            wait:		in	a, (STATA)
+   120   000076 04              		inc	b
+   121   000077 e604            		and	4
+   122   000079 28f9            		jr	Z, wait
+   123                          
+   124   00007b 78              		ld	a, b
+   125   00007c fe0a            		cp	10
+   126   00007e 3802            		jr	C, printmenu
+   127   000080 db02            		in	a, (COMMA)		;Switch to test baudrates
+   128                          
+   129                          printmenu:
+   130   000082 211103          		ld      HL, menutext
+   131   000085 cda202          		call	printstr
+   132                          
+   133                          printprompt:
+   134   000088 cd1405          		call	newline
+   135   00008b 0e3e            		ld	c, '>'
+   136   00008d cd1402          		call	printaddr
+   137                          
+   138                          enterkey:
+   139   000090 0e00            		ld	c, 0
+   140   000092 21ec02          		ld	HL, menukey
+   141   000095 46              		ld	b, (HL)
+   142   000096 23              		inc	HL
+   143   000097 cd2405          		call	getupper
+   144                          enterkey2:
+   145   00009a be              		cp	(HL)
+   146   00009b 2807            		jr	Z, enterkey1
+   147   00009d 23              		inc	HL
+   148   00009e 0c              		inc	c
+   149   00009f 0c              		inc	c
+   150   0000a0 10f8            		djnz	enterkey2
+   151   0000a2 18ec            		jr	enterkey
+   152                          enterkey1:
+   153   0000a4 0600            		ld	b, 0
+   154   0000a6 21f902          		ld	HL, menutab
+   155   0000a9 09              		add	HL, BC
+   156   0000aa 018800          		ld	BC, printprompt
+   157   0000ad c5              		push	BC
+   158   0000ae 5e              		ld	e, (HL)
+   159   0000af 23              		inc	HL
+   160   0000b0 56              		ld	d, (HL)
+   161   0000b1 eb              		ex	DE, HL
+   162   0000b2 e9              		jp	(HL)
+   163                          
+   164                          
+   165                          ;--------------------------------------------------------------
+   166                          ; open a diskfile (and close if already assigned)
+   167                          ;--------------------------------------------------------------
+   168                          opendisk:
+   169   0000b3 cdf600          		call	getDiskno
+   170   0000b6 d8              		ret	C
+   171                          
+   172   0000b7 4f              		ld	c, a
+   173   0000b8 cdb902          		call	conout
+   174                          
+   175   0000bb d630            		sub	a, '0'
+   176   0000bd 47              		ld	b, a
+   177   0000be 3e4f            		ld	a, 'O'
+   178   0000c0 cde102          		call	serout
+   179   0000c3 78              		ld	a, b
+   180   0000c4 cde102          		call	serout
+   181   0000c7 cde102          		call	serout
+   182   0000ca cde102          		call	serout
+   183                          
+   184   0000cd cdc502          		call	serintime
+   185   0000d0 d8              		ret	C
+   186   0000d1 fe41            		cp	'A'
+   187   0000d3 c0              		ret	NZ
+   188                          
+   189   0000d4 cd0601          		call	getfilename
+   190   0000d7 c9              		ret
+   191                          
+   192                          ;--------------------------------------------------------------
+   193                          ; close a diskfile
+   194                          ;--------------------------------------------------------------
+   195                          closedisk:
+   196   0000d8 cdf600          		call	getDiskno
+   197   0000db d8              		ret	C
+   198                          
+   199   0000dc 4f              		ld	c, a
+   200   0000dd cdb902          		call	conout
+   201                          
+   202   0000e0 d630            		sub	a, '0'
+   203   0000e2 47              		ld	b, a
+   204   0000e3 3e43            		ld	a, 'C'
+   205   0000e5 cde102          		call	serout
+   206   0000e8 78              		ld	a, b
+   207   0000e9 cde102          		call	serout
+   208   0000ec cde102          		call	serout
+   209   0000ef cde102          		call	serout
+   210                          
+   211   0000f2 cdc502          		call	serintime
+   212   0000f5 c9              		ret
+   213                          
+   214                          
+   215                          ;--------------------------------------------------------------
+   216                          ; enter disk number (0-9)
+   217                          ;--------------------------------------------------------------
+   218                          getDiskno:
+   219   0000f6 21d004          		ld	HL, disktext
+   220   0000f9 cda202          		call	printstr
+   221   0000fc cdb002          		call	conin
+   222   0000ff fe30            		cp	'0'
+   223   000101 d8              		ret	C
+   224   000102 fe3a            		cp	'9'+1
+   225   000104 3f              		ccf
+   226   000105 c9              		ret
+   227                          
+   228                          ;--------------------------------------------------------------
+   229                          ; enter text (filename) delimited by CR and send to SER:
+   230                          ;--------------------------------------------------------------
+   231   000106 21e904          getfilename:	ld	HL, filetext
+   232   000109 cda202          		call	printstr
+   233                          getfilename1:
+   234   00010c cdb002          		call	conin
+   235   00010f cde102          		call	serout
+   236   000112 4f              		ld	c, a
+   237   000113 cdb902          		call	conout
+   238   000116 fe0d            		cp	13
+   239   000118 20f2            		jr	NZ, getfilename1
+   240   00011a c9              		ret
+   241                          
+   242                          ;--------------------------------------------------------------
+   243                          ; jump to CP/M
+   244                          ;--------------------------------------------------------------
+   245                          cpm:
+   246   00011b c300fa          		jp	0FA00h
+   247                          ;--------------------------------------------------------------
+   248                          ; jump to printmenu
+   249                          ;--------------------------------------------------------------
+   250                          questionmark:
+   251   00011e c1              		pop	BC
+   252   00011f c38200          		jp	printmenu
+   253                          
+   254                          ;--------------------------------------------------------------
+   255                          ; exit from monitor
+   256                          ;--------------------------------------------------------------
+   257                          ;exit:		pop	BC
+   258                          ;		ld	SP, (VARS + oldstack)
+   259                          ;		ret
+   260                          
+   261                          
+   262                          ;--------------------------------------------------------------
+   263                          ; jump to (addr)
+   264                          ;--------------------------------------------------------------
+   265   000122 2af1ff          goto:		ld	HL, (VARS + addr)
+   266   000125 e9              		jp	(HL)
+   267                          
+   268                          
+   269                          ;--------------------------------------------------------------
+   270                          ; Disassemble 22 lines starting from (addr)
+   271                          ;--------------------------------------------------------------
+   272                          disass:
+   273   000126 0616            		ld	B, 22
+   274   000128 ed5bf1ff        		ld	DE, (VARS + addr)
+   275   00012c cd1405          		call	newline
+   276                          disass1:
+   277   00012f c5              		push	BC
+   278   000130 cd2d05          		call	DISASM
+   279   000133 cd1405          		call	newline
+   280   000136 c1              		pop	BC
+   281   000137 10f6            		djnz	disass1
+   282                          
+   283   000139 ed53f1ff        		ld	(VARS + addr), DE	;save new address
+   284   00013d c9              		ret
+   285                          
+   286                          ;--------------------------------------------------------------
+   287                          ;
+   288                          ;--------------------------------------------------------------
+   289                          fillmem:
+   290   00013e 21be04          		ld	HL, filltext
+   291   000141 cda202          		call	printstr
+   292                          
+   293   000144 cd6e02          		call	gethexbyte		;get from-addr
+   294   000147 67              		ld	h, a
+   295   000148 cd6e02          		call	gethexbyte
+   296   00014b 6f              		ld	l, a
+   297   00014c e5              		push	HL
+   298   00014d e5              		push	HL
+   299                          
+   300   00014e 21b304          		ld	HL, lentext
+   301   000151 cda202          		call	printstr
+   302   000154 cd6e02          		call	gethexbyte		;get length
+   303   000157 47              		ld	b, a
+   304   000158 cd6e02          		call	gethexbyte
+   305   00015b 4f              		ld	c, a
+   306                          
+   307   00015c 78              		ld	a, b			; if BC = 0
+   308   00015d b1              		or	a, c
+   309   00015e c8              		ret	Z			; return
+   310   00015f 0b              		dec	BC
+   311                          
+   312   000160 21c904          		ld	HL, withtext
+   313   000163 cda202          		call	printstr
+   314   000166 cd6e02          		call	gethexbyte
+   315                          
+   316   000169 d1              		pop	DE			; DE = HL + 1
+   317   00016a 13              		inc	DE
+   318                          
+   319   00016b e1              		pop	HL
+   320   00016c 77              		ld	(HL), a
+   321                          
+   322   00016d 78              		ld	a, b
+   323   00016e b1              		or	a, c
+   324   00016f c8              		ret	Z
+   325                          
+   326   000170 edb0            		LDIR
+   327                          
+   328   000172 c9              		ret
+   329                          
+   330                          ;--------------------------------------------------------------
+   331                          ;
+   332                          ;--------------------------------------------------------------
+   333                          transfer:
+   334   000173 21a404          		ld	HL, transtext
+   335   000176 cda202          		call	printstr
+   336                          
+   337   000179 cd6e02          		call	gethexbyte		;get from-addr
+   338   00017c 67              		ld	h, a
+   339   00017d cd6e02          		call	gethexbyte
+   340   000180 6f              		ld	l, a
+   341   000181 e5              		push	HL
+   342                          
+   343   000182 21b304          		ld	HL, lentext
+   344   000185 cda202          		call	printstr
+   345   000188 cd6e02          		call	gethexbyte		;get length
+   346   00018b 47              		ld	b, a
+   347   00018c cd6e02          		call	gethexbyte
+   348   00018f 4f              		ld	c, a
+   349                          
+   350   000190 21b904          		ld	HL, totext
+   351   000193 cda202          		call	printstr
+   352   000196 cd6e02          		call	gethexbyte		;get dest-addr
+   353   000199 57              		ld	d, a
+   354   00019a cd6e02          		call	gethexbyte
+   355   00019d 5f              		ld	e, a
+   356                          
+   357   00019e e1              		pop	HL
+   358                          
+   359   00019f edb0            		LDIR
+   360                          
+   361   0001a1 c9              		ret
+   362                          
+   363                          ;--------------------------------------------------------------
+   364                          ; change a byte in (addr)
+   365                          ;--------------------------------------------------------------
+   366                          changebyte:
+   367   0001a2 2af1ff          		ld	HL, (VARS + addr)
+   368   0001a5 7e              		ld	a, (HL)
+   369   0001a6 cdf404          		call	printhex
+   370   0001a9 0e3a            		ld	c, ':'
+   371   0001ab cdb902          		call	conout
+   372   0001ae cd6e02          		call	gethexbyte
+   373   0001b1 77              		ld	(HL), a
+   374   0001b2 c9              		ret
+   375                          
+   376                          
+   377                          ;--------------------------------------------------------------
+   378                          ; read new address from conin
+   379                          ;--------------------------------------------------------------
+   380                          newaddress:
+   381   0001b3 219404          		ld	HL, addrtext
+   382   0001b6 cda202          		call	printstr
+   383   0001b9 cd6e02          		call	gethexbyte
+   384   0001bc 32f2ff          		ld	(VARS + addr + 1), a
+   385   0001bf cd6e02          		call	gethexbyte
+   386   0001c2 32f1ff          		ld	(VARS + addr), a
+   387   0001c5 c9              		ret
+   388                          
+   389                          
+   390                          ;--------------------------------------------------------------
+   391                          ; dump 256 bytes starting from (HL)
+   392                          ;--------------------------------------------------------------
+   393                          dumpmem:
+   394   0001c6 cd1405          		call	newline
+   395   0001c9 1610            		ld	d, 16
+   396   0001cb 2af1ff          		ld	HL, (VARS + addr)
+   397                          
+   398                          dumpline:
+   399   0001ce 0e3a            		ld	c, ':'
+   400   0001d0 cd1402          		call	printaddr
+   401   0001d3 cd1c05          		call	space
+   402   0001d6 e5              		push	HL
+   403                          
+   404   0001d7 0610            		ld	b, 16
+   405                          dumpmem1:
+   406   0001d9 7e              		ld	a, (HL)
+   407   0001da 23              		inc	HL
+   408   0001db cdf404          		call	printhex
+   409   0001de cd1c05          		call	space
+   410   0001e1 78              		ld	a, b
+   411   0001e2 fe09            		cp	9
+   412   0001e4 2003            		jr	NZ, dumpmem3
+   413   0001e6 cd1c05          		call	space
+   414                          dumpmem3:
+   415   0001e9 10ee            		djnz	dumpmem1
+   416                          
+   417                          
+   418   0001eb 0e7c            		ld	c, '|'
+   419   0001ed cdb902          		call	conout
+   420   0001f0 0610            		ld	b, 16
+   421   0001f2 e1              		pop	HL
+   422                          
+   423                          dumpmem5:
+   424   0001f3 7e              		ld	a, (HL)
+   425   0001f4 23              		inc	HL
+   426   0001f5 fe20            		cp	32
+   427   0001f7 3804            		jr	C, dumpmem6
+   428   0001f9 fe7e            		cp	126
+   429   0001fb 3802            		jr	C, dumpmem4
+   430                          dumpmem6:
+   431   0001fd 3e2e            		ld	a, '.'
+   432                          dumpmem4:
+   433   0001ff 4f              		ld	c, a
+   434   000200 cdb902          		call	conout
+   435   000203 10ee            		djnz	dumpmem5
+   436                          
+   437   000205 0e7c            		ld	c, '|'
+   438   000207 cdb902          		call	conout
+   439                          
+   440   00020a cd1405          		call	newline
+   441   00020d 22f1ff          		ld	(VARS + addr), hl
+   442   000210 15              		dec	d
+   443   000211 20bb            		jr	NZ, dumpline
+   444   000213 c9              		ret
+   445                          
+   446                          
+   447                          ;--------------------------------------------------------------
+   448                          ; print zero-terminated string via conout and character in C
+   449                          ; uses A, E
+   450                          ;--------------------------------------------------------------
+   451                          printaddr:
+   452   000214 3af2ff          		ld	a, (VARS + addr + 1)
+   453   000217 cdf404          		call	printhex
+   454   00021a 3af1ff          		ld	a, (VARS + addr)
+   455   00021d cdf404          		call	printhex
+   456   000220 c3b902          		jp	conout
+   457                          
+   458                          
+   459                          ;--------------------------------------------------------------
+   460                          ; download an Intel-Hex file
+   461                          ; uses A, B, HL, E
+   462                          ;--------------------------------------------------------------
+   463   000223 af              download:	xor	a
+   464   000224 32f3ff          		ld	(VARS + echo), a	;echo off
+   465   000227 32f0ff          		ld	(VARS + sum), a		;sum = 0
+   466   00022a 217904          		ld	HL, downtext		;print "download..."
+   467   00022d cda202          		call	printstr
+   468                          download2:
+   469   000230 cdb002          		call	conin			;wait for ':'
+   470   000233 fe3a            		cp	a, ':'
+   471   000235 20f9            		jr	NZ, download2
+   472                          
+   473   000237 cd6e02          		call	gethexbyte		;# of bytes to read
+   474   00023a 47              		ld	b, a			;in b
+   475   00023b cd6e02          		call	gethexbyte		;address high
+   476   00023e 67              		ld	h, a
+   477   00023f cd6e02          		call	gethexbyte		;address low
+   478   000242 6f              		ld	l, a
+   479   000243 cd6e02          		call	gethexbyte		;record-type
+   480   000246 b7              		or	a
+   481   000247 2012            		jr	NZ, downend
+   482                          
+   483                          download1:
+   484   000249 cd6e02          		call	gethexbyte		;get byte to store
+   485                          
+   486   00024c 77              		ld	(HL), a			;store
+   487   00024d 23              		inc	HL			;increment address
+   488   00024e 10f9            		djnz	download1		;loop
+   489                          
+   490   000250 cd6e02          		call	gethexbyte
+   491   000253 3af0ff          		ld	a, (VARS + sum)
+   492   000256 b7              		or	a
+   493   000257 2010            		jr	NZ, downerror
+   494                          
+   495   000259 18d5            		jr	download2
+   496                          
+   497                          downend:
+   498   00025b cd6e02          		call	gethexbyte
+   499   00025e 218904          		ld	HL, downendtext
+   500                          downend1:
+   501   000261 cda202          		call	printstr
+   502   000264 dd360301        		ld	(IX + echo), 1	;echo on
+   503   000268 c9              		ret
+   504                          
+   505                          downerror:
+   506   000269 219d04          		ld	HL, errortext
+   507   00026c 18f3            		jr	downend1
+   508                          
+   509                          
+   510                          ;--------------------------------------------------------------
+   511                          ; gethexbyte
+   512                          ; returns 00-FF in A
+   513                          ; uses E
+   514                          ;--------------------------------------------------------------
+   515                          gethexbyte:
+   516   00026e d5              		push	DE
+   517   00026f cd8502          		call	getnibble
+   518   000272 07              		rlca
+   519   000273 07              		rlca
+   520   000274 07              		rlca
+   521   000275 07              		rlca
+   522   000276 5f              		ld	e, a
+   523   000277 cd8502          		call	getnibble
+   524   00027a b3              		or	e
+   525   00027b 5f              		ld	e, a
+   526   00027c dd8600          		add	a, (IX + sum)
+   527   00027f 32f0ff          		ld	(VARS + sum), a
+   528   000282 7b              		ld	a, e
+   529   000283 d1              		pop	DE
+   530   000284 c9              		ret
+   531                          
+   532                          
+   533                          ;--------------------------------------------------------------
+   534                          ; calls conin
+   535                          ; returns 0-F in A
+   536                          ;--------------------------------------------------------------
+   537                          getnibble:
+   538   000285 cdb002          		call	conin
+   539   000288 f5              		push	AF
+   540   000289 3af3ff          		ld	a, (VARS + echo)
+   541   00028c b7              		or	a
+   542   00028d 2808            		jr	Z, getnibble2
+   543   00028f f1              		pop	AF
+   544   000290 f5              		push	AF
+   545   000291 c5              		push	BC
+   546   000292 4f              		ld	c, a
+   547   000293 cdb902          		call	conout
+   548   000296 c1              		pop	BC
+   549                          getnibble2:
+   550   000297 f1              		pop	AF
+   551   000298 d630            		sub	'0'
+   552   00029a fe0a            		cp	10		; < 10 ?
+   553   00029c d8              		ret	C		; yes, return
+   554   00029d e6df            		and	11011111b	; make uppercase
+   555   00029f d607            		sub	7
+   556   0002a1 c9              		ret
+   557                          
+   558                          
+   559                          ;--------------------------------------------------------------
+   560                          ; print text in (HL) uses
+   561                          ; A
+   562                          ;--------------------------------------------------------------
+   563                          printstr:
+   564   0002a2 c5              		push	BC
+   565                          printstr2:
+   566   0002a3 7e              		ld	a, (HL)
+   567   0002a4 23              		inc	HL
+   568   0002a5 b7              		or	a
+   569   0002a6 2806            		jr	Z, printstr1
+   570   0002a8 4f              		ld	c, a
+   571   0002a9 cdb902          		call	conout
+   572   0002ac 18f5            		jr	printstr2
+   573                          printstr1:
+   574   0002ae c1              		pop	BC
+   575   0002af c9              		ret
+   576                          
+   577                          ;--------------------------------------------------------------
+   578                          ; get a character in A from rs232 (1)
+   579                          ;
+   580                          ;--------------------------------------------------------------
+   581                          chrin:
+   582   0002b0 db01            		in	a, (STATA)
+   583   0002b2 e601            		and	a, 1
+   584   0002b4 28fa            		jr	Z, chrin
+   585   0002b6 db03            		in	a, (RECA)
+   586   0002b8 c9              		ret
+   587                          
+   588                          ;--------------------------------------------------------------
+   589                          ; output a character in A over rs232 (1)
+   590                          ;
+   591                          ;--------------------------------------------------------------
+   592                          chrout:
+   593   0002b9 f5              		push	AF
+   594   0002ba db01            chrout1:	in	a, (STATA)
+   595   0002bc e604            		and	a, 4
+   596   0002be 28fa            		jr	Z, chrout1
+   597   0002c0 79              		ld	a, c
+   598   0002c1 d303            		out	(TRANSA), a
+   599   0002c3 f1              		pop	AF
+   600   0002c4 c9              		ret
+   601                          
+   602                          ;--------------------------------------------------------------
+   603                          ; get a character in A from rs232 (2)
+   604                          ;
+   605                          ;--------------------------------------------------------------
+   606                          serintime:
+   607   0002c5 010000          		ld	BC, 0
+   608   0002c8 db09            serintime2:	in	a, (STATB)
+   609   0002ca e601            		and	a, 1
+   610   0002cc 2007            		jr	NZ, serintime1		;byte received?
+   611   0002ce 10f8            		djnz	b, serintime2		;no, decrement b and try again
+   612   0002d0 0d              		dec	c
+   613   0002d1 20f5            		jr	NZ, serintime2
+   614   0002d3 3f              		ccf				;set carry ('and' clears carry)
+   615   0002d4 c9              		ret
+   616   0002d5 db0b            serintime1:	in	a, (RECB)
+   617   0002d7 c9              		ret
+   618                          
+   619                          ;--------------------------------------------------------------
+   620                          ; get a character in A from rs232 (2)
+   621                          ;
+   622                          ;--------------------------------------------------------------
+   623                          serin:
+   624   0002d8 db09            		in	a, (STATB)
+   625   0002da e601            		and	a, 1
+   626   0002dc 28fa            		jr	Z, serin
+   627   0002de db0b            		in	a, (RECB)
+   628   0002e0 c9              		ret
+   629                          
+   630                          ;--------------------------------------------------------------
+   631                          ; output a character in A over rs232 (2)
+   632                          ;
+   633                          ;--------------------------------------------------------------
+   634                          serout:
+   635   0002e1 f5              		push	AF
+   636   0002e2 db09            serout1:	in	a, (STATB)
+   637   0002e4 e604            		and	a, 4
+   638   0002e6 28fa            		jr	Z, serout1
+   639   0002e8 f1              		pop	AF
+   640   0002e9 d30b            		out	(TRANSB), a
+   641   0002eb c9              		ret
+   642                          
+   643                          menukey:
+   644   0002ec 0c              		DB	12
+   645   0002ed 3f43444546474c4d		DB	"?CDEFGLMNOPT"
+                4e4f5054        
+   646                          
+   647   0002f9 1e01            menutab:	DW	questionmark
+   648   0002fb a201            		DW	changebyte
+   649   0002fd 2302            		DW	download
+   650   0002ff d800            		DW	closedisk
+   651   000301 3e01            		DW	fillmem
+   652   000303 2201            		DW	goto
+   653   000305 2601            		DW	disass
+   654   000307 c601            		DW	dumpmem
+   655   000309 b301            		DW	newaddress
+   656   00030b b300            		DW	opendisk
+   657   00030d 1b01            		DW	cpm
+   658   00030f 7301            		DW	transfer
+   659                          ;		DW	exit
+   660                          
+   661                          menutext:
+   662   000311 201b5b6d0d      		DB	32, 27, "[m", CR
+   663   000316 2a2a2a2a2a2a2a2a		DB	"*************************************************", CR
+                2a2a2a2a2a2a2a2a
+                2a2a2a2a2a2a2a2a
+                2a2a2a2a2a2a2a2a
+                2a2a2a2a2a2a2a2a
+                2a2a2a2a2a2a2a2a
+                2a0d            
+   664   000348 2a2a2a20205a3830		DB	"***  Z80 Mini-Monitor  (c) '22  by ", 27, "[1mR. Scholz", 27,"[m  ***", CR
+                204d696e692d4d6f
+                6e69746f72202028
+                6329202732322020
+                6279201b5b316d52
+                2e205363686f6c7a
+                1b5b6d20202a2a2a
+                0d              
+   665   000381 2a2a2a2a2a2a2a2a		DB	"*************************************************", CR
+                2a2a2a2a2a2a2a2a
+                2a2a2a2a2a2a2a2a
+                2a2a2a2a2a2a2a2a
+                2a2a2a2a2a2a2a2a
+                2a2a2a2a2a2a2a2a
+                2a0d            
+   666   0003b3 3f202d2054686973		DB	"? - This help", CR
+                2068656c700d    
+   667   0003c1 43202d204368616e		DB	"C - Change byte", CR
+                676520627974650d
+   668   0003d1 44202d20446f776e		DB	"D - Download Intel Hex file", CR
+                6c6f616420496e74
+                656c204865782066
+                696c650d        
+   669   0003ed 45202d20436c6f73		DB	"E - Close Disk", CR
+                65204469736b0d  
+   670   0003fc 46202d2046696c6c		DB	"F - Fill memory", CR
+                206d656d6f72790d
+   671   00040c 47202d20476f746f		DB	"G - Goto address", CR
+                2061646472657373
+                0d              
+   672   00041d 4c202d2044697361		DB	"L - Disassemble", CR
+                7373656d626c650d
+   673   00042d 4d202d204d656d6f		DB	"M - Memory dump", CR
+                72792064756d700d
+   674   00043d 4e202d204e657720		DB	"N - New address", CR
+                616464726573730d
+   675   00044d 4f202d204f70656e		DB	"O - Open Disk", CR
+                204469736b0d    
+   676   00045b 50202d2043502f4d		DB	"P - CP/M", CR
+                0d              
+   677   000464 54202d205472616e		DB	"T - Transfer memory", CR
+                73666572206d656d
+                6f72790d        
+   678                          ;		DB	"X - eXit", CR
+   679   000478 00              		DB	0
+   680                          
+   681   000479 646f776e6c6f6164downtext:	DB	"downloading...", CR, 0
+                696e672e2e2e0d00
+   682   000489 66696e6973686564downendtext:	DB	"finished.", CR, 0
+                2e0d00          
+   683   000494 616464726573733aaddrtext:	DB	"address:", 0
+                00              
+   684   00049d 6572726f722100  errortext:	DB	"error!", 0
+   685   0004a4 7472616e73666572transtext:	DB	"transfer from:", 0
+                2066726f6d3a00  
+   686   0004b3 206c656e3a00    lentext:	DB	" len:", 0
+   687   0004b9 20746f3a00      totext:		DB	" to:", 0
+   688   0004be 66696c6c2066726ffilltext:	DB	"fill from:", 0
+                6d3a00          
+   689   0004c9 20776974683a00  withtext:	DB	" with:", 0
+   690   0004d0 656e746572206469disktext:	DB	"enter disk number (0-9):",0
+                736b206e756d6265
+                722028302d39293a
+                00              
+   691   0004e9 0d66696c656e616dfiletext:	DB	CR, "filename:",0
+                653a00          
+   692                          
+   693                          ;--------------------------------------------------------------
+   694                          ; prints byte in A in hexadecimal format
+   695                          ;--------------------------------------------------------------
+   696                          printhex:
+   697   0004f4 f5              		push    AF
+   698   0004f5 f5              		push    AF
+   699   0004f6 1f              		rra
+   700   0004f7 1f              		rra
+   701   0004f8 1f              		rra
+   702   0004f9 1f              		rra
+   703   0004fa cd0305          		call    printnib
+   704   0004fd f1              		pop     AF
+   705   0004fe cd0305          		call    printnib
+   706   000501 f1              		pop     AF
+   707   000502 c9              		ret
+   708                          printnib:
+   709   000503 e60f            		and     0fh
+   710   000505 fe0a            		cp      0ah
+   711   000507 3802            		jr      C, printnib1
+   712   000509 c607            		add     a, 07h
+   713                          printnib1:
+   714   00050b c630            		add     a, '0'
+   715                          print:
+   716   00050d c5              		push    BC
+   717   00050e 4f              		ld      c, a
+   718   00050f cdb902          		call    conout
+   719   000512 c1              		pop     BC
+   720   000513 c9              		ret
+   721                          
+   722                          newline:
+   723   000514 c5              		push    BC
+   724   000515 0e0d            		ld      c, CR
+   725   000517 cdb902          		call    conout
+   726   00051a c1              		pop     BC
+   727   00051b c9              		ret
+   728                          
+   729                          space:
+   730   00051c c5              		push    BC
+   731   00051d 0e20            		ld      c, ' '
+   732   00051f cdb902          		call    conout
+   733   000522 c1              		pop     BC
+   734   000523 c9              		ret
+   735                          
+   736                          getupper:
+   737   000524 cdb002          		call	conin
+   738   000527 fe61            		cp	'a'
+   739   000529 d8              		ret	C
+   740   00052a d620            		sub	32
+   741   00052c c9              		ret
+   742                          
+   743                          conout:		equ	chrout
+   744                          conin:		equ	chrin
+   745                          
+   746                          
+   747                          	include "disz80.asm"
+disz80.asm:
+     1                          
+     2                          
+     3                          ;	SECTION	code_clib
+     4                          ;	PUBLIC	disz80
+     5                          ;	PUBLIC	_disz80
+     6                          ;	EXTERN	fputc_cons
+     7                          
+     8                          ;fputc_cons	equ	conout
+     9                          
+    10                          ;  This code is been found in a ZX Spectrum tool called UTILITY3 v1.3
+    11                          
+    12                          
+    13                          ;.disz80
+    14                          ;._disz80
+    15                          ;	pop	hl
+    16                          ;	pop	bc
+    17                          ;	pop	de
+    18                          ;	push	de
+    19                          ;	push	bc
+    20                          ;	push	hl
+    21                          ;	push	ix	;save callers ix
+    22                          ;
+    23                          ;	ld	a,d	;Supplying -1 as the address means we disassemble the following opcode
+    24                          ;	and	e
+    25                          ;	inc	a
+    26                          ;	jr	nz,dizloop
+    27                          ;	ld	hl,2
+    28                          ;	add	hl,sp
+    29                          ;	ld	e,(hl)
+    30                          ;	inc	hl
+    31                          ;	ld	d,(hl)
+    32                          ;
+    33                          ;.dizloop
+    34                          ;	push	bc
+    35                          ;	call	DISASM
+    36                          ;	pop	bc
+    37                          ;	ld	a,13
+    38                          ;	call	CHROP
+    39                          ;	ld	a,10
+    40                          ;	call	CHROP
+    41                          ;	dec	bc
+    42                          ;	ld	a,b
+    43                          ;	or	c
+    44                          ;	jr	nz,dizloop
+    45                          ;	ld	h,d	;Address of next instruction
+    46                          ;	ld	l,e
+    47                          ;	pop	ix	;restore callers ix
+    48                          ;	ret
+    49                          
+    50                          ; ====================
+    51                          ; DIS-Z80 was published in the SUBSET column of Personal Computer World 1987.
+    52                          ; The routine disassembles a single Z80 instruction at address DE.
+    53                          ; It is required to be followed by a routine called CHROP that outputs a
+    54                          ; single ASCII character.
+    55                          ; It was originally developed for CP/M on an Amstrad CPC128.
+    56                          
+    57                          ; The original ORG was $0100. I have added $5000 to all addresses.
+    58                          ; The stated aim was to write a Z80 disassembly routine in as short a space
+    59                          ; as possible and, at just over 1K (1090 bytes), it is a rather incredible
+    60                          ; program.
+    61                          
+    62                          ; The SUBSET editor David Barrow was able to trim only one byte from John
+    63                          ; Kerr's compact code. I've forgotten where so there's a challenge.
+    64                          ; ====================
+    65                          
+    66   00052d cd5409          .DISASM	CALL 	ADRSP
+    67   000530 010009                 	LD 	BC,$0900
+    68   000533 212020                 	LD 	HL,$2020
+    69                          
+    70   000536 e5              .BUFFER	PUSH 	HL
+    71   000537 10fd                   	DJNZ 	BUFFER
+    72   000539 60                     	LD 	H,B
+    73   00053a 69                     	LD 	L,C
+    74   00053b 39                     	ADD 	HL,SP
+    75                          
+    76   00053c c5                     	PUSH 	BC
+    77   00053d dde3                   	EX 	(SP),IX
+    78   00053f c5                     	PUSH 	BC
+    79   000540 c5                     	PUSH 	BC
+    80   000541 dd39                   	ADD 	IX,SP
+    81                          
+    82   000543 e5                     	PUSH 	HL
+    83   000544 21be06                 	LD 	HL,GROUP3
+    84                          
+    85   000547 cd4909          .TRYNDX	CALL 	FETCH
+    86                          
+    87   00054a 41                     	LD 	B,C
+    88   00054b feed                   	CP 	$ED
+    89   00054d 280a                   	JR 	Z,CONFLG
+    90                          
+    91   00054f 04                     	INC 	B
+    92   000550 fedd                   	CP 	$DD
+    93   000552 2805                   	JR 	Z,CONFLG
+    94                          
+    95   000554 04                     	INC 	B
+    96   000555 fefd                   	CP 	$FD
+    97   000557 2008                   	JR 	NZ,NOTNDX
+    98                          
+    99   000559 dd7001          .CONFLG	LD 	(IX+1),B
+   100   00055c 04                     	INC 	B
+   101   00055d 10e8                   	DJNZ 	TRYNDX
+   102                          
+   103   00055f 182a                   	JR 	NXBYTE
+   104                          
+   105   000561 4f              .NOTNDX	LD 	C,A
+   106   000562 dd7e01                 	LD 	A,(IX+1)
+   107   000565 b7                     	OR 	A
+   108   000566 2818                   	JR 	Z,NODISP
+   109                          
+   110   000568 79                     	LD 	A,C
+   111   000569 fecb                   	CP 	$CB
+   112   00056b 280d                   	JR 	Z,GETDIS
+   113                          
+   114   00056d e644                   	AND 	$44
+   115   00056f fe04                   	CP 	4
+   116   000571 2807                   	JR 	Z,GETDIS
+   117                          
+   118   000573 79                     	LD 	A,C
+   119   000574 e6c0                   	AND 	$C0
+   120   000576 fe40                   	CP 	$40
+   121   000578 2006                   	JR 	NZ,NODISP
+   122                          
+   123   00057a cd4909          .GETDIS	CALL 	FETCH
+   124   00057d dd7702                 	LD 	(IX+2),A
+   125                          
+   126   000580 211606          .NODISP	LD 	HL,GROUP1
+   127   000583 79                     	LD 	A,C
+   128   000584 fecb                   	CP 	$CB
+   129   000586 2007                   	JR 	NZ,NEWMSK
+   130                          
+   131   000588 21fb05                 	LD 	HL,GROUP2
+   132                          
+   133   00058b cd4909          .NXBYTE	CALL 	FETCH
+   134   00058e 4f                     	LD 	C,A
+   135                          
+   136   00058f 7e              .NEWMSK	LD 	A,(HL)
+   137   000590 b7                     	OR 	A
+   138   000591 2816                   	JR 	Z,TABEND
+   139                          
+   140   000593 a1                     	AND 	C
+   141   000594 23                     	INC 	HL
+   142                          
+   143   000595 46              .NEWMOD	LD 	B,(HL)
+   144   000596 23                     	INC 	HL
+   145   000597 04                     	INC 	B
+   146   000598 28f5                   	JR 	Z,NEWMSK
+   147                          
+   148   00059a be              .TRYMAT	CP 	(HL)
+   149   00059b 23                     	INC 	HL
+   150   00059c 2807                   	JR 	Z,GETNDX
+   151                          
+   152   00059e cb7e                   	BIT 	7,(HL)
+   153   0005a0 23                     	INC 	HL
+   154   0005a1 28f7                   	JR 	Z,TRYMAT
+   155                          
+   156   0005a3 18f0                   	JR 	NEWMOD
+   157                          
+   158   0005a5 7e              .GETNDX	LD 	A,(HL)
+   159   0005a6 e67f                   	AND 	$7F
+   160   0005a8 05                     	DEC 	B
+   161                          
+   162   0005a9 e1              .TABEND	POP 	HL
+   163   0005aa d5                     	PUSH 	DE
+   164   0005ab e5                     	PUSH 	HL
+   165                          
+   166   0005ac eb                     	EX 	DE,HL
+   167   0005ad 211407                 	LD 	HL,MONICS
+   168   0005b0 cd3409                 	CALL 	XTRACT
+   169                          
+   170   0005b3 e1                     	POP 	HL
+   171   0005b4 110500                 	LD 	DE,5
+   172   0005b7 19                     	ADD 	HL,DE
+   173   0005b8 d1                     	POP 	DE
+   174                          
+   175   0005b9 78                     	LD 	A,B
+   176   0005ba e6f0                   	AND 	$F0
+   177   0005bc 2813                   	JR 	Z,SECOND
+   178                          
+   179   0005be 1f                     	RRA
+   180   0005bf 1f                     	RRA
+   181   0005c0 1f                     	RRA
+   182   0005c1 1f                     	RRA
+   183   0005c2 c5                     	PUSH 	BC
+   184                          
+   185   0005c3 47                     	LD 	B,A
+   186   0005c4 79                     	LD 	A,C
+   187   0005c5 cde407                 	CALL 	OPRND1
+   188                          
+   189   0005c8 c1                     	POP 	BC
+   190   0005c9 78                     	LD 	A,B
+   191   0005ca e60f                   	AND 	$0F
+   192   0005cc 280b                   	JR 	Z,OPDONE
+   193                          
+   194   0005ce 362c                   	LD 	(HL),44  		;,
+   195   0005d0 23                     	INC 	HL
+   196                          
+   197   0005d1 78              .SECOND	LD 	A,B
+   198   0005d2 e60f                   	AND 	$0F
+   199                          
+   200   0005d4 47                     	LD 	B,A
+   201   0005d5 79                     	LD 	A,C
+   202   0005d6 c4ea07                 	CALL 	NZ,OPRND2
+   203                          
+   204   0005d9 3e03            .OPDONE	LD 	A,3
+   205   0005db dd9600                 	SUB 	(IX+0)
+   206                          
+   207   0005de e1                     	POP 	HL
+   208   0005df e1                     	POP 	HL
+   209   0005e0 dde1                   	POP 	IX
+   210                          
+   211   0005e2 380c                   	JR 	C,OUTEXT
+   212                          
+   213   0005e4 3c                     	INC 	A
+   214   0005e5 47                     	LD 	B,A
+   215   0005e6 80                     	ADD 	A,B
+   216   0005e7 80                     	ADD 	A,B
+   217   0005e8 47                     	LD 	B,A
+   218                          
+   219   0005e9 3e20            .SPACES	LD 	A,$20
+   220   0005eb cd7009                 	CALL 	CHROP
+   221   0005ee 10f9                   	DJNZ 	SPACES
+   222                          
+   223   0005f0 0612            .OUTEXT	LD 	B,18
+   224                          
+   225   0005f2 3b              .PUTOUT	DEC 	SP
+   226   0005f3 e1                     	POP 	HL
+   227   0005f4 7c                     	LD 	A,H
+   228   0005f5 cd7009                 	CALL 	CHROP
+   229   0005f8 10f8                   	DJNZ 	PUTOUT
+   230                          
+   231   0005fa c9                     	RET
+   232                          
+   233                          ;***********************
+   234                          
+   235   0005fb c03640          .GROUP2	defb 	$C0,$36,$40
+   236   0005fe 04802dc0be      	defb 	$04,$80,$2D,$C0,$BE
+   237   000603 fff8060033      	defb 	$FF,$F8,$06,$00,$33
+   238   000608 0838103518      	defb 	$08,$38,$10,$35,$18
+   239   00060d 3a203f2840      	defb 	$3A,$20,$3F,$28,$40
+   240   000612 300038c1        	defb 	$30,$00,$38,$C1
+   241                          
+   242                          
+   243   000616 ff0000          .GROUP1	defb 	$FF,$00,$00
+   244   000619 2407320f37      	defb 	$24,$07,$32,$0F,$37
+   245   00061e 17311f3627      	defb 	$17,$31,$1F,$36,$27
+   246   000623 0d2f0b373d      	defb 	$0D,$2F,$0B,$37,$3D
+   247   000628 3f067614c9      	defb 	$3F,$06,$76,$14,$C9
+   248   00062d 30d912f30f      	defb 	$30,$D9,$12,$F3,$0F
+   249   000632 fb9172c602      	defb 	$FB,$91,$72,$C6,$02
+   250   000637 ce01debc02      	defb 	$CE,$01,$DE,$BC,$02
+   251   00063c d642e603ee      	defb 	$D6,$42,$E6,$03,$EE
+   252   000641 43f625fe8c      	defb 	$43,$F6,$25,$FE,$8C
+   253   000646 0408930110      	defb 	$04,$08,$93,$01,$10
+   254   00064b 10189daf22      	defb 	$10,$18,$9D,$AF,$22
+   255   000650 a2fa2aa2a7      	defb 	$A2,$FA,$2A,$A2,$A7
+   256   000655 32a27a3aa2      	defb 	$32,$A2,$7A,$3A,$A2
+   257   00065a 03c31ccd85      	defb 	$03,$C3,$1C,$CD,$85
+   258   00065f 97d3aa79db      	defb 	$97,$D3,$AA,$79,$DB
+   259   000664 9b5fe3930e      	defb 	$9B,$5F,$E3,$93,$0E
+   260   000669 e99c05eb93      	defb 	$E9,$9C,$05,$EB,$93
+   261   00066e dff9a2ffc0      	defb 	$DF,$F9,$A2,$FF,$C0
+   262   000673 b640a2fff8      	defb 	$B6,$40,$A2,$FF,$F8
+   263   000678 7680028801      	defb 	$76,$80,$02,$88,$01
+   264   00067d 98bc069042      	defb 	$98,$BC,$06,$90,$42
+   265   000682 a003a843b0      	defb 	$A0,$03,$A8,$43,$B0
+   266   000687 25b88cffc7      	defb 	$25,$B8,$8C,$FF,$C7
+   267   00068c 0b0416058e      	defb 	$0B,$04,$16,$05,$8E
+   268   000691 b206a220c0      	defb 	$B2,$06,$A2,$20,$C0
+   269   000696 b023c21cc4      	defb 	$B0,$23,$C2,$1C,$C4
+   270   00069b 8510c7bbff      	defb 	$85,$10,$C7,$BB,$FF
+   271   0006a0 cfd301a20d      	defb 	$CF,$D3,$01,$A2,$0D
+   272   0006a5 03160b8efd      	defb 	$03,$16,$0B,$8E,$FD
+   273   0006aa 098260c12b      	defb 	$09,$82,$60,$C1,$2B
+   274   0006af c5acffe721      	defb 	$C5,$AC,$FF,$E7,$21
+   275   0006b4 209dffefe7      	defb 	$20,$9D,$FF,$EF,$E7
+   276   0006b9 02a27e0aa2      	defb 	$02,$A2,$7E,$0A,$A2
+   277                          
+   278                          
+   279   0006be ff0044          .GROUP3	defb 	$FF,$00,$44
+   280   0006c1 23452f4d2e      	defb 	$23,$45,$2F,$4D,$2E
+   281   0006c6 4e0067396f      	defb 	$4E,$00,$67,$39,$6F
+   282   0006cb 3470007100      	defb 	$34,$70,$00,$71,$00
+   283   0006d0 a021a10aa2      	defb 	$A0,$21,$A1,$0A,$A2
+   284   0006d5 1aa329a81f      	defb 	$1A,$A3,$29,$A8,$1F
+   285   0006da a908aa18ab      	defb 	$A9,$08,$AA,$18,$AB
+   286   0006df 28b020b109      	defb 	$28,$B0,$20,$B1,$09
+   287   0006e4 b219b327b8      	defb 	$B2,$19,$B3,$27,$B8
+   288   0006e9 1eb907ba17      	defb 	$1E,$B9,$07,$BA,$17
+   289   0006ee bba6ffc7b8      	defb 	$BB,$A6,$FF,$C7,$B8
+   290   0006f3 409b8b41aa      	defb 	$40,$9B,$8B,$41,$AA
+   291   0006f8 ffcffd423c      	defb 	$FF,$CF,$FD,$42,$3C
+   292   0006fd 4a81ad43a2      	defb 	$4A,$81,$AD,$43,$A2
+   293   000702 da4ba2ffe7      	defb 	$DA,$4B,$A2,$FF,$E7
+   294   000707 404695fff7      	defb 	$40,$46,$95,$FF,$F7
+   295   00070c c747a27c57      	defb 	$C7,$47,$A2,$7C,$57
+   296   000711 a2ff00          	defb 	$A2,$FF,$00
+   297                          
+   298                          ;_______________
+   299                          
+   300   000714 bf              .MONICS	defb 	$BF
+   301   000715 4144c3          	defb 	'A','D','C'+$80   	; ADC
+   302   000718 4144c4          	defb 	'A','D','D'+$80   	; ADD
+   303   00071b 414ec4          	defb 	'A','N','D'+$80   	; AND
+   304   00071e 4249d4          	defb 	'B','I','T'+$80   	; BIT
+   305   000721 43414ccc        	defb 	'C','A','L','L'+$80	; CALL
+   306   000725 4343c6          	defb 	'C','C','F'+$80   	; CCF
+   307   000728 435044d2        	defb 	'C','P','D','R'+$80	; CPDR
+   308   00072c 4350c4          	defb 	'C','P','D'+$80   	; CPD
+   309   00072f 435049d2        	defb 	'C','P','I','R'+$80	; CPIR
+   310   000733 4350c9          	defb 	'C','P','I'+$80   	; CPI
+   311   000736 4350cc          	defb 	'C','P','L'+$80   	; CPL
+   312   000739 43d0            	defb 	'C','P'+$80      	; CP
+   313   00073b 4441c1          	defb 	'D','A','A'+$80   	; DAA
+   314   00073e 4445c3          	defb 	'D','E','C'+$80   	; DEC
+   315   000741 44c9            	defb 	'D','I'+$80      	; DI
+   316   000743 444a4eda        	defb 	'D','J','N','Z'+$80	; DJNZ
+   317   000747 45c9            	defb 	'E','I'+$80      	; EI
+   318   000749 4558d8          	defb 	'E','X','X'+$80   	; EXX
+   319   00074c 45d8            	defb 	'E','X'+$80      	; EX
+   320   00074e 48414cd4        	defb 	'H','A','L','T'+$80	; HALT
+   321   000752 49cd            	defb 	'I','M'+$80      	; IM
+   322   000754 494ec3          	defb 	'I','N','C'+$80   	; INC
+   323   000757 494e44d2        	defb 	'I','N','D','R'+$80	; INDR
+   324   00075b 494ec4          	defb 	'I','N','D'+$80   	; IND
+   325   00075e 494e49d2        	defb 	'I','N','I','R'+$80	; INIR
+   326   000762 494ec9          	defb 	'I','N','I'+$80   	; INI
+   327   000765 49ce            	defb 	'I','N'+$80      	; IN
+   328   000767 4ad0            	defb 	'J','P'+$80      	; JP
+   329   000769 4ad2            	defb 	'J','R'+$80      	; JR
+   330   00076b 4c4444d2        	defb 	'L','D','D','R'+$80	; LDDR
+   331   00076f 4c44c4          	defb 	'L','D','D'+$80   	; LDD
+   332   000772 4c4449d2        	defb 	'L','D','I','R'+$80	; LDIR
+   333   000776 4c44c9          	defb 	'L','D','I'+$80   	; LDI
+   334   000779 4cc4            	defb 	'L','D'+$80      	; LD
+   335   00077b 4e45c7          	defb 	'N','E','G'+$80   	; NEG
+   336   00077e 4e4fd0          	defb 	'N','O','P'+$80   	; NOP
+   337   000781 4fd2            	defb 	'O','R'+$80      	; OR
+   338   000783 4f5444d2        	defb 	'O','T','D','R'+$80	; OTDR
+   339   000787 4f5449d2        	defb 	'O','T','I','R'+$80	; OTIR
+   340   00078b 4f5554c4        	defb 	'O','U','T','D'+$80	; OUTD
+   341   00078f 4f5554c9        	defb 	'O','U','T','I'+$80	; OUTI
+   342   000793 4f55d4          	defb 	'O','U','T'+$80   	; OUT
+   343   000796 504fd0          	defb 	'P','O','P'+$80   	; POP
+   344   000799 505553c8        	defb 	'P','U','S','H'+$80	; PUSH
+   345   00079d 5245d3          	defb 	'R','E','S'+$80   	; RES
+   346   0007a0 524554c9        	defb 	'R','E','T','I'+$80	; RETI
+   347   0007a4 524554ce        	defb 	'R','E','T','N'+$80	; RETN
+   348   0007a8 5245d4          	defb 	'R','E','T'+$80   	; RET
+   349   0007ab 524cc1          	defb 	'R','L','A'+$80   	; RLA
+   350   0007ae 524c43c1        	defb 	'R','L','C','A'+$80	; RLCA
+   351   0007b2 524cc3          	defb 	'R','L','C'+$80   	; RLC
+   352   0007b5 524cc4          	defb 	'R','L','D'+$80   	; RLD
+   353   0007b8 52cc            	defb 	'R','L'+$80      	; RL
+   354   0007ba 5252c1          	defb 	'R','R','A'+$80   	; RRA
+   355   0007bd 525243c1        	defb 	'R','R','C','A'+$80	; RA
+   356   0007c1 5252c3          	defb 	'R','R','C'+$80   	; RRC
+   357   0007c4 5252c4          	defb 	'R','R','D'+$80   	; RRD
+   358   0007c7 52d2            	defb 	'R','R'+$80      	; RR
+   359   0007c9 5253d4          	defb 	'R','S','T'+$80   	; RST
+   360   0007cc 5342c3          	defb 	'S','B','C'+$80   	; SBC
+   361   0007cf 5343c6          	defb 	'S','C','F'+$80   	; SCF
+   362   0007d2 5345d4          	defb 	'S','E','T'+$80   	; SET
+   363   0007d5 534cc1          	defb 	'S','L','A'+$80   	; SLA
+   364   0007d8 5352c1          	defb 	'S','R','A'+$80   	; SRA
+   365   0007db 5352cc          	defb 	'S','R','L'+$80   	; SRL
+   366   0007de 5355c2          	defb 	'S','U','B'+$80   	; SUB
+   367   0007e1 584fd2          	defb 	'X','O','R'+$80   	; XOR
+   368                          
+   369                          
+   370                          
+   371                          ;*****************
+   372                          
+   373   0007e4 1012            .OPRND1	DJNZ 	CONDIT
+   374                          
+   375   0007e6 e638            .RSTADR	AND 	$38
+   376   0007e8 182a                   	JR 	DA
+   377                          
+   378   0007ea 101d            .OPRND2	DJNZ 	DAT8
+   379                          
+   380   0007ec cd4909          .RELADR	CALL 	FETCH
+   381   0007ef 4f                     	LD 	C,A
+   382   0007f0 17                     	RLA
+   383   0007f1 9f                     	SBC 	A,A
+   384   0007f2 47                     	LD 	B,A
+   385   0007f3 eb                     	EX 	DE,HL
+   386   0007f4 e5                     	PUSH 	HL
+   387   0007f5 09                     	ADD 	HL,BC
+   388   0007f6 182d                   	JR 	DHL
+   389                          
+   390   0007f8 1f              .CONDIT	RRA
+   391   0007f9 1f                     	RRA
+   392   0007fa 1f                     	RRA
+   393   0007fb 1013                   	DJNZ 	BITNUM
+   394                          
+   395   0007fd cb67                   	BIT 	4,A
+   396   0007ff 2002                   	JR 	NZ,ABS
+   397                          
+   398   000801 e603                   	AND 	3
+   399                          
+   400   000803 e607            .ABS   	AND 	7
+   401   000805 c614                   	ADD 	A,$14
+   402   000807 1836                   	JR 	PS1
+   403                          
+   404   000809 100d            .DAT8  	DJNZ 	DAT16
+   405                          
+   406   00080b cd4909          .D8    	CALL 	FETCH
+   407   00080e 1804                   	JR 	DA
+   408                          
+   409   000810 1027            .BITNUM	DJNZ 	INTMOD
+   410   000812 e607                   	AND 	7
+   411                          
+   412   000814 4f              .DA    	LD 	C,A
+   413   000815 97                     	SUB 	A
+   414   000816 1809                   	JR 	DAC
+   415                          
+   416   000818 1038            .DAT16 	DJNZ 	EXAF
+   417                          
+   418   00081a cd4909          .D16   	CALL 	FETCH
+   419   00081d 4f                     	LD 	C,A
+   420   00081e cd4909                 	CALL 	FETCH
+   421                          
+   422   000821 eb              .DAC   	EX 	DE,HL
+   423   000822 e5                     	PUSH 	HL
+   424   000823 67                     	LD 	H,A
+   425   000824 69                     	LD 	L,C
+   426                          
+   427   000825 0ef8            .DHL   	LD 	C,$F8
+   428   000827 e5                     	PUSH 	HL
+   429   000828 cd1409                 	CALL 	CONVHL
+   430   00082b e1                     	POP 	HL
+   431   00082c 010a00                 	LD 	BC,$000A
+   432   00082f b7                     	OR 	A
+   433   000830 ed42                   	SBC 	HL,BC
+   434   000832 e1                     	POP 	HL
+   435   000833 eb                     	EX 	DE,HL
+   436   000834 d8                     	RET 	C
+   437                          
+   438   000835 3648                   	LD 	(HL),'H'
+   439   000837 23                     	INC 	HL
+   440   000838 c9                     	RET
+   441                          
+   442                          
+   443   000839 1006            .INTMOD	DJNZ 	STKTOP
+   444   00083b e603                   	AND 	3
+   445   00083d c61c                   	ADD 	A,$1C
+   446                          
+   447   00083f 1852            .PS1   	JR 	PS3
+   448                          
+   449   000841 0e13            .STKTOP	LD 	C,$13
+   450   000843 05                     	DEC 	B
+   451   000844 284c                   	JR 	Z,PS2
+   452                          
+   453   000846 1042            .REG16P	DJNZ 	COMMON
+   454   000848 1f                     	RRA
+   455   000849 e603                   	AND 	3
+   456   00084b fe03                   	CP 	3
+   457   00084d 2068                   	JR 	NZ,RX
+   458                          
+   459   00084f 3d                     	DEC 	A
+   460   000850 1869                   	JR 	RNX
+   461                          
+   462   000852 0e0a            .EXAF  	LD 	C,$0A
+   463   000854 05                     	DEC 	B
+   464   000855 283b                   	JR 	Z,PS2
+   465                          
+   466   000857 0c              .EXDE  	INC 	C
+   467   000858 05                     	DEC 	B
+   468   000859 2837                   	JR 	Z,PS2
+   469                          
+   470   00085b 102a            .REG8S 	DJNZ 	ACCUM
+   471                          
+   472   00085d e607            .R8    	AND 	7
+   473   00085f fe06                   	CP 	6
+   474   000861 2030                   	JR 	NZ,PS3
+   475                          
+   476   000863 3628                   	LD 	(HL),'('
+   477   000865 23                     	INC 	HL
+   478   000866 cdcb08                 	CALL 	REGX
+   479   000869 dd7e02                 	LD 	A,(IX+2)
+   480   00086c b7                     	OR 	A
+   481   00086d 2858                   	JR 	Z,RP
+   482                          
+   483   00086f 362b                   	LD 	(HL),43 		;+
+   484   000871 07                     	RLCA
+   485   000872 0f                     	RRCA
+   486   000873 3004                   	JR 	NC,POS
+   487                          
+   488   000875 362d                   	LD 	(HL),45			;-
+   489   000877 ed44                   	NEG
+   490                          
+   491   000879 23              .POS   	INC 	HL
+   492   00087a eb                     	EX 	DE,HL
+   493   00087b e5                     	PUSH 	HL
+   494   00087c 60                     	LD 	H,B
+   495   00087d 6f                     	LD 	L,A
+   496   00087e 0efb                   	LD 	C,$FB
+   497   000880 cd1409                 	CALL 	CONVHL
+   498   000883 e1                     	POP 	HL
+   499   000884 eb                     	EX 	DE,HL
+   500   000885 1840                   	JR 	RP
+   501                          
+   502   000887 1f              .ACCUM 	RRA
+   503   000888 1f                     	RRA
+   504   000889 1f                     	RRA
+   505                          
+   506   00088a 0e07            .COMMON	LD 	C,7
+   507   00088c 05                     	DEC 	B
+   508   00088d 2803                   	JR 	Z,PS2
+   509                          
+   510   00088f 0d              .PORTC 	DEC 	C
+   511   000890 1003                   	DJNZ 	IDAT8
+   512                          
+   513   000892 79              .PS2   	LD 	A,C
+   514   000893 183b            .PS3   	JR 	PS4
+   515                          
+   516   000895 1008            .IDAT8 	DJNZ 	IDAT16
+   517   000897 3628                   	LD 	(HL),'('
+   518   000899 23                     	INC 	HL
+   519   00089a cd0b08                 	CALL 	D8
+   520   00089d 1828                   	JR 	RP
+   521                          
+   522   00089f 1008            .IDAT16	DJNZ 	REG8
+   523   0008a1 3628                   	LD 	(HL),'('
+   524   0008a3 23                     	INC 	HL
+   525   0008a4 cd1a08                 	CALL 	D16
+   526   0008a7 181e                   	JR 	RP
+   527                          
+   528   0008a9 05              .REG8  	DEC 	B
+   529   0008aa 28b1                   	JR 	Z,R8
+   530                          
+   531   0008ac 1004            .IPAREF 	DJNZ 	REG16
+   532   0008ae e609                   	AND 	9
+   533   0008b0 181e                   	JR 	PS4
+   534                          
+   535   0008b2 1f              .REG16 	RRA
+   536   0008b3 100a                   	DJNZ 	IREG16
+   537                          
+   538   0008b5 e603            .R16   	AND 	3
+   539   0008b7 fe02            .RX    	CP  	2
+   540   0008b9 2810                   	JR 	Z,REGX
+   541                          
+   542   0008bb c60c            .RNX   	ADD 	A,$0C
+   543   0008bd 1811                   	JR 	PS4
+   544                          
+   545   0008bf 100a            .IREG16	DJNZ 	REGX
+   546   0008c1 3628                   	LD 	(HL),'('
+   547   0008c3 23                     	INC 	HL
+   548   0008c4 cdb508                 	CALL 	R16
+   549                          
+   550   0008c7 3629            .RP    	LD 	(HL),')'
+   551   0008c9 23                     	INC 	HL
+   552   0008ca c9                     	RET
+   553                          
+   554   0008cb dd7e01          .REGX  	LD 	A,(IX+1)
+   555   0008ce c610                   	ADD 	A,$10
+   556                          
+   557   0008d0 eb              .PS4   	EX 	DE,HL
+   558   0008d1 e5                     	PUSH 	HL
+   559   0008d2 21db08                 	LD 	HL,RGSTRS
+   560   0008d5 cd3409                 	CALL 	XTRACT
+   561   0008d8 e1                     	POP 	HL
+   562   0008d9 eb                     	EX 	DE,HL
+   563   0008da c9                     	RET
+   564                          
+   565                          ;*************
+   566                          
+   567   0008db c2              .RGSTRS	defb 	'B'				+$80
+   568   0008dc c3              	defb 	'C'       			+$80
+   569   0008dd c4              	defb 	'D'       			+$80
+   570   0008de c5              	defb 	'E'       			+$80
+   571   0008df c8              	defb 	'H'       			+$80
+   572   0008e0 cc              	defb 	'L'       			+$80
+   573   0008e1 2843a9          	defb 	'(','C',')' 			+$80
+   574   0008e4 c1              	defb 	'A'       			+$80
+   575   0008e5 c9              	defb 	'I'       			+$80
+   576   0008e6 d2              	defb 	'R'       			+$80
+   577   0008e7 41462c4146a7    	defb 	'A','F',',','A','F','\''		+$80
+   578   0008ed 44452c48cc      	defb 	'D','E',',','H','L'    		+$80
+   579   0008f2 42c3            	defb 	'B','C'             		+$80
+   580   0008f4 44c5            	defb 	'D','E'             		+$80
+   581   0008f6 41c6            	defb 	'A','F'             		+$80
+   582   0008f8 53d0            	defb 	'S','P'             		+$80
+   583   0008fa 48cc            	defb 	'H','L'             		+$80
+   584   0008fc 49d8            	defb 	'I','X'             		+$80
+   585   0008fe 49d9            	defb 	'I','Y'             		+$80
+   586   000900 285350a9        	defb 	'(','S','P',')'       		+$80
+   587   000904 4eda            	defb 	'N','Z'             		+$80
+   588   000906 da              	defb 	'Z'                		+$80
+   589   000907 4ec3            	defb 	'N','C'             		+$80
+   590   000909 c3              	defb 	'C'                		+$80
+   591   00090a 50cf            	defb 	'P','O'             		+$80
+   592   00090c 50c5            	defb 	'P','E'             		+$80
+   593   00090e d0              	defb 	'P'                		+$80
+   594   00090f cd              	defb 	'M'                		+$80
+   595   000910 b0              	defb 	'0'    				+$80
+   596   000911 bf              	defb 	'?'    				+$80
+   597   000912 b1              	defb 	'1'    				+$80
+   598   000913 b2              	defb 	'2'    				+$80
+   599                          
+   600                          ;********************
+   601                          
+   602   000914 97              .CONVHL	SUB 	A
+   603                          
+   604   000915 f5              .CVHL1 	PUSH 	AF
+   605   000916 97                     	SUB 	A
+   606   000917 0610                   	LD 	B,16
+   607                          
+   608   000919 81              .CVHL2 	ADD 	A,C
+   609   00091a 3801                   	JR 	C,CVHL3
+   610   00091c 91                     	SUB 	C
+   611                          
+   612   00091d ed6a            .CVHL3 	ADC 	HL,HL
+   613   00091f 17                     	RLA
+   614   000920 10f7                   	DJNZ 	CVHL2
+   615                          
+   616   000922 20f1                   	JR 	NZ,CVHL1
+   617                          
+   618   000924 fe0a                   	CP 	10
+   619   000926 04                     	INC 	B
+   620   000927 30ec                   	JR 	NC,CVHL1
+   621                          
+   622   000929 fe0a            .CVHL4 	CP 	10
+   623   00092b de69                   	SBC 	A,$69
+   624   00092d 27                     	DAA
+   625   00092e 12                     	LD 	(DE),A
+   626   00092f 13                     	INC 	DE
+   627   000930 f1                     	POP 	AF
+   628   000931 20f6                   	JR 	NZ,CVHL4
+   629                          
+   630   000933 c9                     	RET
+   631                          
+   632                          ;****************
+   633                          
+   634   000934 b7              .XTRACT	OR 	A
+   635   000935 2808                   	JR 	Z,COPY
+   636                          
+   637   000937 cb7e            .SKIP  	BIT 	7,(HL)
+   638   000939 23                     	INC 	HL
+   639   00093a 28fb                   	JR 	Z,SKIP
+   640                          
+   641   00093c 3d                     	DEC 	A
+   642   00093d 20f8                   	JR 	NZ,SKIP
+   643                          
+   644   00093f 7e              .COPY  	LD 	A,(HL)
+   645   000940 07                     	RLCA
+   646   000941 cb3f                   	SRL 	A
+   647   000943 12                     	LD 	(DE),A
+   648                          
+   649   000944 13                     	INC 	DE
+   650   000945 23                     	INC 	HL
+   651   000946 30f7                   	JR 	NC,COPY
+   652                          
+   653   000948 c9                     	RET
+   654                          
+   655                          ;*******************
+   656                          
+   657   000949 1a              .FETCH 	LD 	A,(DE)
+   658   00094a 13                     	INC 	DE
+   659   00094b dd3400                 	INC 	(IX+0)
+   660   00094e f5                     	PUSH 	AF
+   661   00094f cd5909                 	CALL 	BYTSP
+   662   000952 f1                     	POP 	AF
+   663   000953 c9                     	RET
+   664                          
+   665   000954 7a              .ADRSP 	LD 	A,D
+   666   000955 cd6009                 	CALL 	BYTOP
+   667   000958 7b                     	LD 	A,E
+   668                          
+   669   000959 cd6009          .BYTSP 	CALL 	BYTOP
+   670   00095c 3e20                   	LD 	A,$20
+   671   00095e 1810                   	JR 	CHROP
+   672                          
+   673   000960 f5              .BYTOP 	PUSH 	AF
+   674   000961 1f                     	RRA
+   675   000962 1f                     	RRA
+   676   000963 1f                     	RRA
+   677   000964 1f                     	RRA
+   678   000965 cd6909                 	CALL 	HEXOP
+   679   000968 f1                     	POP 	AF
+   680                          
+   681   000969 e60f            .HEXOP 	AND 	$0F
+   682   00096b fe0a                   	CP 	10
+   683   00096d de69                   	SBC 	A,$69
+   684   00096f 27                     	DAA
+   685                          
+   686                          ; -----------------------------------
+   687                          ;
+   688                          ; End of John Kerr's DIS-Z80 routine.
+   689                          ;
+   690                          ; The next routine outputs a character.
+   691                          ;
+   692                          ; -------------------------------------
+   693                          
+   694   000970 e5              .CHROP 	PUSH 	HL
+   695   000971 d5                     	PUSH 	DE
+   696   000972 c5                     	PUSH 	BC
+   697                          
+   698   000973 4f              	ld	c, a
+   699   000974 cdb902          	call	conout
+   700                          
+   701                          ;	ld	h,0
+   702                          ;	ld	l,a
+   703                          ;	push	hl		; parameter passing
+   704                          ;      	call 	fputc_cons	; This calls the Z88DK "put char" function
+   705                          ;	pop	hl
+   706                          
+   707   000977 c1                     	POP 	BC
+   708   000978 d1                     	POP 	DE
+   709   000979 e1                     	POP 	HL
+   710                          
+   711   00097a c9                     	RET
+   712                          
+   713                          
+   714                          
+z80.asm:
+   748                          

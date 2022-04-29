@@ -1,0 +1,503 @@
+;
+		  Programmbeschreibung zu NC.COM  
+		  Version 1.2a        22.02.2010  
+
+  1 ... Allgemeines, Systemanforderungen
+
+  2 ... Programmstart
+
+  3 ... Anzeigen
+
+  4 ... Bedienung
+
+  5 ... Kommandos
+
+  6 ... Definierte Dateitypen
+
+  7 ... Konfiguration
+
+  8 ... Entstehung / Lieferumfang
+:1
+
+  Allgemeines 
+
+ NC.COM  ist die  Weiterentwicklung des  Dateibetrachters ML.COM durch  eine 
+ Zwei-Fenstertechnik zum Dateimanager "KC-Commander" fuer die CP/M-Betriebs-
+ art des KC85/4.  Dabei wurden alle Funktionen von ML.COM erhalten und diese
+ um weitere wichtige Funktionen wie  Kopieren,  Verschieben,  Umbenennen und
+ Loeschen von Dateien ergaenzt. Dateiattribute lassen sich jetzt bearbeiten.
+ Textdateien lassen sich durch den Aufruf eines externen Editors bearbeiten.
+
+ Es koennen alle auf dem  KC85/4 ueblichen Bildformate,  Text- und Programm-
+ dateien und  Archive betrachtet werden.  Zum Entpacken der  Archive ist der 
+ entsprechende Entpacker wie bisher zu verwenden.
+
+ Unterstuetzt  wird  ein  solcher  Programmaufruf  durch  die  Moeglichkeit,
+ Dateien auch mit Parameteruebergabe direkt aus dem Dateifenster zu starten,
+ bzw. auch komplette Kommandozeilen einzugeben.
+
+  Systemanforderungen 
+
+  * KC85/4 mit Floppy und wahlweise Festplatte
+  * KC-MicroDOS 2.6 oder CP/M 2.2 kompatibles System mit ZSDOS/ZDDOS
+  * ZAS 1.0 oder hoeher, ab ZAS 1.3 Speicherverwaltung
+  * freier TPA-Speicher bis mindestens 9100H
+
+ Wird  vom Programm ein anderes System vorgefunden erfolgt der  Abbruch  mit 
+ einer  entsprechenden Fehlermeldung.   NC.COM benutzt ausserdem den RAM4 im 
+ Grundgeraet fuer die Uebertragung/Konvertierung von  Bildern.  Unterstuetzt 
+ wird  die  Speicherverwaltung  von ZAS 1.3  (kein  Ueberschreiben  belegter 
+ Bereiche im RAM4).  Unter NZCOM werden die Verzeichnisnamen unterstuetzt.
+
+ Zum Kopieren, Verschieben, Umbenennen und Editieren von Dateien sind weitere
+ externe Programme erforderlich.
+
+   H I N W E I S  zu MicroDOS !!!  
+
+ MicroDOS  bietet die Moeglichkeit der Fehlerbehandlung im Anwenderprogramm, 
+ siehe dazu BDOS-Funktion 45 im Handbuch fuer den Programmierer, Seite 43.
+
+ Leider funktioniert das Abschalten nicht,  somit wird jeder Diskettenfehler 
+ mit der Meldung "BDOS-Fehler auf ...  " auf dem Bildschirm quittiert.  Fuer 
+ grafische   Bedienoberflaechen  mit  Fenstertechnik  bedeutet  dies   unter 
+ Umstaenden (scrollen am BS-Ende), dass alle Anzeigen durcheinander geraten. 
+ Mit  dem Hilfsprogramm FE.COM ist eine Korrektur dieses  Fehlers  moeglich.  
+ FE.COM  modifiziert MicroDOS dabei nicht in den Systemspuren der  Diskette, 
+ sondern  nur  im  RAM!   Nach jedem Neustart ist der  alte  Zustand  wieder 
+ vorhanden.    FE.COM   ist  fuer  die  Arbeit  mit  NC.COM  nicht  zwingend 
+ erforderlich,   sollte  aber  wegen  moeglicher  Lesefehler  vorher  einmal 
+ gestartet werden.   Bei der Weitergabe von NC.COM also auch an das Programm 
+ FE.COM mit denken!
+
+
+ Anmerkung: Unter ZSDOS/ZDDOS funktioniert die Fehlerbehandlung korrekt.
+:2
+  Programmstart 
+
+ Das Programm NC.COM sollte sich im aktuellen Suchpfad befinden.  Das heisst 
+ fuer  MicroDOS  im USER-Bereich 0 des  eingestellten  Systemlaufwerks,  bei 
+ NC.COM  muss  dazu  das System-Attribut gesetzt  sein.   Nutzer  von  ZSDOS 
+ und/oder  NZCOM  koennen einen direkten Suchpfad  installieren,  bei  ZDDOS 
+ besteht nur die Moeglichkeit,  NC.COM mit dem PUBLIC-Attribut zu  versehen.  
+ Dann kann zumindest von jedem USER-Bereich darauf zugegriffen werden.
+
+ Zur  SUBMIT-Abarbeitung unter  MicroDOS nutzt  NC.COM das MicroDOS-Kommando 
+ "<",  waehrend  bei  einer  zu  CP/M 2.2  kompatiblen  Umgebung der externe 
+ Submit-Prozessor  SUBMIT.COM  aufgerufen wird.  Fuer  ZSDOS/ZDDOS empfiehlt 
+ sich deshalb, das Programm  SUBMIT.COM  im gleichen Verzeichnis wie  NC.COM 
+ bereitzustellen.
+
+ Beim  Start  von  NC.COM koennen in der  Kommandozeile noch zwei  Parameter 
+ angegeben werden,  der erste fuer das linke  Dateifenster,  der zweite fuer
+ das rechte  Dateifenster.  Dabei kann jeweils ein  Laufwerk und eine Datei-
+ maske angegeben werden.
+
+ Beispiel:		A0>NC B2:*.TXT NZCOM:
+
+ Diese  Kommandozeile wuerde NC.COM von Laufwerk  A0:  bzw.  einem  Laufwerk 
+ entlang des Suchpfades laden.  Im linken  Dateifenster wuerden alle Dateien 
+ *.TXT  aus Laufwerk  B2: angezeigt, im rechten Fenster alle Dateien aus dem 
+ Laufwerk mit dem Namen  NZCOM.  Diese Form der Laufwerksangabe funktioniert 
+ jedoch nur unter NZCOM.
+
+ Ist  kein  Laufwerk angegeben,  wird  fuer das linke  Fenster das  aktuelle 
+ Laufwerk  benutzt und fuer das rechte  Fenster  Laufwerk  A0: (RAM-Floppy). 
+ Ist keine Dateimaske angegeben, werden alle Dateien ausgegeben.
+
+ Es  koennen  Verzeichnisse  mit so vielen gueltigen  Dateinamen  eingelesen 
+ werden,  wie im freien TPA-Speicher Platz finden.  Die genaue Anzahl haengt 
+ vom  Betriebssystem ab und kann mit dem Kommando "I"  kontrolliert  werden.  
+ Ueberschneiden sich die Speicherbereiche der DIR-Puffer mit dem Bildpuffer, 
+ dann ueberschreibt der Bildbetrachter einen  Teil der Dateinamen und NC.COM 
+ muss nach jeder  Bildbetrachtung das  Verzeichnis neu einlesen.  Durch Wahl 
+ geeigneter Dateimasken und Laufwerkskombination sollte die Liste deshalb so 
+ weit eingeschraenkt werden, dass dieses Einlesen entfaellt.
+:3
+  Anzeigen 
+
+ NC.COM generiert mehrere Fenster auf dem Bildschirm:
+
+ - Links oben wird neben dem Copyright noch das Systemdatum und die Uhrzeit
+   angezeigt - falls vom System bereitgestellt (bei MicroDOS nur die Zeit).
+
+ - Rechts oben wird eine Liste aller installierten Laufwerke angezeigt.  Zu
+   jedem Laufwerk wird die phys. Einheit  (0-3 fuer die Diskettenlaufwerke,
+   R fuer das  RAM-Floppy und M bzw. S fuer Master- bzw. Slave-Festplatte),
+   danach  der  Laufwerksbuchstabe  und  darunter  die  Kapazitaet je  nach
+   Groesse in KByte oder MByte.
+   Bei mehr als 8 Laufwerken erscheinen diese in einer zweiten Reihe.
+   Die Anzeige der phys. Laufwerke laesst sich mit der CFG-Datei abschalten.
+
+ - Das mittlere grosse  Fenster ist zweigeteilt.  Auf jeder Seite werden die 
+   Dateien eines unabhaengig waehlbaren Verzeichnisses alphabetisch geordnet 
+   aufgelistet.   Die  Titelzeile  jedes dieser  Fenster zeigt  das aktuelle 
+   Laufwerk in der Form DU:, bei NZCOM zusaetzlich der zugehoerige Name.  In
+   der Zeile darunter steht noch die  Anzahl der Dateien und der freie Platz
+   auf dem Laufwerk.  Falls Dateien markiert sind, wechselt diese Zeile zur
+   Anzeige der markierten Dateien in Anzahl und Gesamtgroesse.
+
+ - Unter dem Haupt-Fenster erscheint noch eine Statuszeile, wo weitere Infos 
+   wie  Dateiattribute (in eckigen Klammern),  Dateidatum  und  Dateigroesse
+   angezeigt  werden.  Die  Statuszeile wird  ebenfalls genutzt, um  belegte 
+   USER-Bereiche, Bildformate, Fehlermeldungen usw. anzuzeigen.
+   Diese Zeile wird auch zur Eingabe der Kommandozeile verwendet.
+
+ - Am unteren Bildschirmrand ist schliesslich eine Menuezeile zu sehen,  die 
+   einige wichtige Kommandos zeigt, eine ausfuehrliche  Liste sieht man nach
+   der Betaetigung von H = Hilfe.
+
+   Noch ausfuehrlichere  Hilfe erhaelt man in der  Datei  NC.HLP, welche mit
+   dem Programm LBRHLP vom Z-System menuegefuehrt angezeigt werden kann.
+:4
+  Bedienung 
+
+ Die  aktuelle Datei ist invers hervorgehoben,  mit den Cursortasten  bewegt 
+ man  sich im Dateifenster.   Sind mehr als 45 gueltige Dateien  im  Puffer, 
+ erfolgt  ein  Wechsel  der  Anzeige,   wenn  man  am  rechten  bzw.  linken 
+ Bildschirmrand  hinausgeraet.   Mit Shift und den waagerechten Cursortasten 
+ kann man eine ganze  Seite weiterblaettern.   Mit Shift und den senkrechten 
+ Cursortasten springt man zur ersten bzw. letzten  Datei.  Mit  TAB  (Shift+ 
+ Leertaste) wechselt man das Dateifenster.  Die Leertaste markiert Dateien - 
+ markierte Dateien werden durch ein  Ausrufezeichen an Stelle des Punktes im 
+ Dateinamen dargestellt.
+
+ Beim Wechseln der Diskette im aktuellen Laufwerk sollte eine der Funktionen 
+ L, M oder 0-9 gewaehlt werden, um das neue Direktory einzulesen.
+
+ Dateien,  die  einen speziellen Dateityp besitzen,  koennen direkt mit  der 
+ Enter-Taste "gestartet" werden.  Bei allen anderen Dateien wird ein Hexdump 
+ angezeigt.  Darueberhinaus kann jede Datei - unabhaengig vom Dateityp - mit 
+ den 4 Kommandos X (Hexdump), T (Type), K (KC-Dump) oder V (View) betrachtet 
+ werden.
+
+ Bei einigen Kommandos (Type,  Dump, BASIC-Listing) ist ein Blaettern in der 
+ Datei  moeglich:   Mit der Entertaste wird die Datei fortlaufend  angezeigt 
+ und  am Dateiende wieder zur Dateiliste zurueckgegangen.   Die Cursortasten 
+ "HOCH"  und "RUNTER" blaettern jeweils eine Seite   vor- oder  rueckwaerts.  
+ Am  Anfang und Ende der Datei sind die Cursortasten nur fuer  jeweils  eine 
+ Richtung aktiv.
+
+ Andere  Kommandos,  z.B.  die Directories der Archive und LBR's koennen nur 
+ vorwaerts  ausgegeben werden.   Ist eine Bildschirmseite voll,  wartet  das 
+ Programm jedoch eine Tastatureingabe ab.   Mit ESC oder 'Q' kann  an  jeder 
+ Eingabeposition zum Menue zurueckgekehrt werden.
+
+ Bei der Eingabe von Kommandozeilen, Dateimasken, Laufwerksbezeichnungen und
+ USER-Bereichen ist die  Einfuegefunktion immer aktiv.  Der Cursor kann nach
+ rechts  und links bewegt werden  und die  Eingabe laesst sich  somit leicht
+ korrigieren.  Soll die gesamte  Eingabe geloescht werden,  dann genuegt die
+ Betaetigung der Taste fuer Cursor nach oben oder nach unten.
+:5
+  Die Kommandos des KC-Commanders in alphabetischer Reihenfolge: 
+
+
+  0-9   direkter Wechsel zu USER-Bereich 0 bis 9, fuer den Wechsel zu hoeheren
+	USER-Bereichen ist das Kommando L zu benutzen.
+
+  A     Attribute setzen und ruecksetzen kann man mit dieser Funktion.
+	Wenn keine Datei markiert ist, dann bekommt man die Attribute der
+	Datei zur Bearbeitung vorgeschlagen.  Hir kann man einfach die
+	gewuenschten Attribute dazuschreiben oder loeschen. Sind mehrere
+	Dateien markiert, dann lassen sich von diesen Dateien Attribute
+	loeschen oder hinzufuegen. Hier muss die Eingabe mit + oder - beginnen,
+	gefolgt von den jeweiligen Attributkennzeichen.  Attribute sind:
+
+	 1 - User-Attribut 1, wird z.B. von DEFRAG.COM ausgewertet
+	 P - Datei ist oeffentlich, d.h von jedem USER-Bereich ansprechbar
+	 D - Dateizugriff wird nicht in Datumstempeln protokolliert
+	 4 - User-Attribut 4 (momentan nicht verwendet am KC)
+	 W - "Wheel-Schutz" der Datei - spezielle Z-System-Funktionalitaet 
+	 R - Datei ist schreibgeschuetzt
+	 S - Datei ist Systemdatei
+	 A - Datei ist archiviert (wird von Backup-Programmen benutzt)
+
+  C     COPY - kopieren der aktuellen Datei bzw. aller markierten Dateien.
+	Als Kopierziel wird das Verzeichnis des jeweils anderen Fensters
+	vorgeschlagen, kann aber auch durch jedes andere ersetzt werden.
+	Enter startet den Kopiervorgang, ESC bricht das Kommando ab.
+	Das Kopieren wird durch ein externes Kopierprogramm mit entsprechenden
+	Parametern aufgerufen. Das externe Programm kann konfiguriert werden.
+
+  D     DELETE - loeschen der aktuellen Datei bzw. aller markierten Dateien.
+	Vor Ausfuehrung erfolgt noch eine Sicherheitsabfrage.  Schreibge-
+	schuetzte Dateien muessen nochmals einzeln bestaetigt werden.
+
+  E     EDIT - Aufruf des voreingestellten Texteditors zur Bearbeitung der
+	der aktuellen Datei.
+
+	(ACHTUNG! Es erfolgt keine Pruefung, ob die Datei eine Textdatei ist!)
+
+  G     GROUP - Gruppenkommando fuer alle markierten Dateien ausfuehren.
+	Einzugeben ist das komplette Kommando, $1 wird bei der Abarbeitung
+	durch die jeweiligen Dateinamen und $2 durch den Verzeichnisnamen des
+	zweiten Dateifensters ersetzt.
+
+  H     HILFE - Anzeige einer Liste aller zur Verfuegung stehenden Kommandos.
+	>>> Ausfuehrliche Hilfe findet sich in der Datei NC.HLP!
+
+  I     Statusanzeige von NC.COM:
+	- Versionsnummern von NC.COM, CP/M, ZAS und CAOS
+	- benutzte Speicherbereiche von NC.COM selbst, den DIR's links+rechts
+	  sowie der Bildpuffer und der freie RAM 4 im KC-Grundgeraet.
+	- Anzeige der maximal einlesbaren Dateien im aktuellen Fenster, sowie
+	  in Klammern insgesamt.
+	Die Groesse des nutzbaren RAM4 entscheidet darueber, welche kompri-
+	mierten Bilder betrachtet werden koennen: die CAOS-Datei muss in den 
+	freien Bereich passen!
+
+  K     Hexdump einer CAOS-Datei mit Vorblock.  Die Anfangs-, End-, und 
+	Startadresse werden dem Vorblock entnommen.  Ist kein gueltiger CAOS-
+	Vorblock am Dateianfang, erfolgt die Ausschrift "Dateiformatfehler!"
+
+  L     Eingabe neues Laufwerk und/oder USER-Bereich bzw. Verzeichnisname, 
+	wenn NZCOM aktiv ist.  Die Eingabe des sonst ueblichen Doppelpunktes 
+	kann entfallen.  Zur Hilfe werden die belegten USER-Bereiche des
+	aktuellen Laufwerks angezeigt.
+
+  M     Eingabe einer neuen Dateimaske, Jokerzeichen '?' und '*' koennen 
+	verwendet werden.
+
+  O     MOVE - verschieben der aktuellen Datei bzw. aller markierten Dateien.
+	Siehe dazu auch die Erlaeuterungen von COPY!  In der Regel wird das
+	gleiche externe Programm, jedoch mit anderen Parametern verwendet.
+
+  P     direktes Drucken einer (Text-)Datei.
+	Die Datei wird zeichenweise gelesen und an den Drucker gesendet.
+
+	(ACHTUNG! Es erfolgt keine Pruefung, ob die Datei eine Textdatei ist!)
+
+  Q     oder ESC beendet NC.COM und kehrt zum CP/M-Betriebssystem zurueck.
+
+  R     REN - Umbenennen der aktuellen Datei.
+	Dazu wird ein externes Programm mit entsprechenden Parametern
+	aufgerufen.  Vor Ausfuehrung muss noch der neue Dateiname eingegeben
+	werden (weitere Hinweise siehe Beschreibung externes Programm).
+
+  S     Datumstempelanzeige ein/aus.  Der KC-Commander kann in der Statuszeile
+	das Datum einer Datei mit anzeigen (nur unter ZSDOS/ZDDOS mit instal-
+	liertem Treiber).  Standardmaessig ist diese Anzeige jedoch ausge-
+	schalten, da hierzu fuer jede Datei die entsprechende Info aus der
+	!!!TIME&.DAT des Laufwerks gelesen werden muss und das die Bedienung
+	verzoegert.  Mit "S" kann diese Funktion umgeschalten werden.
+	Die Voreinstelleung laesst sich mit der CFG-Datei konfigurieren.
+
+  T     Aufruf des Type-Kommandos fuer Textdateien, die nicht automatisch 
+	erkannt werden.  Der gewuenschte Zeichensatz ist vorher mit F1+6 
+	(ASCII/IBM) und F1+9 (USA/deutsch) einzustellen.  Der Wert der 
+	Prozentanzeige stimmt nur, wenn die Datei im Standardtextformat ist, 
+	also mit EOF (^Z) endet und danach keine weiteren Sektoren sind!
+
+  V     View-Kommando fuer beliebige Dateien mit oder ohne CAOS-Vorblock, 
+	geeignet zum Betrachten von IRM-Abzuegen,  Zeichentabellen oder 
+	einfach zur optischen Programmanalyse.
+
+  W     WILDCARD - Markieren bzw. Unmarkieren einer Reihe von Dateien.
+	zunaechst muss man auswaehlen ob Dateien markiert (M) oder unmar-
+	kiert (U) werden sollen. Danach ist eine Dateimaske einzugegeben,
+	wobei alle Dateien die der Maske entsprechen in der aktuellen Datei-
+	liste markiert bzw. unmarkiert werden.
+
+  X     Hexdump der Datei, als Adresse wird standardmaessig 100H angenommen.
+
+  Z     Eingabemoeglichkeit einer beliebigen CP/M-Kommandozeile.
+	Mit Betaetigung der Enter-Taste wird NC.COM beendet und das Kommando 
+	so wie eingegeben unter CP/M ausgefuehrt.  Anschliessend wird NC.COM
+	neu gestartet, die Verzeichnisse neu eingelesen usw.
+	Mit ESC kann die Eingabe der Kommandozeile abgebrochen werden.
+
+	Damit nach Rueckkehr von dem Kommando NC.COM wieder korrekt geladen
+	werden kann, muss der Dateipfad zu NC.COM im Wiederstartkommando
+	entsprechend konfiguriert sein oder NC.COM im Suchpfad liegen.
+
+	Das letzte eingegebene Kommando wird in NC.COM zwischengespeichert und
+	bei erneutem Aufruf von "Z" wieder zur Bearbeitung angeboten.
+:6
+  Definierte Dateitypen 
+
+  ... Textdateien:				Zeichensatz:
+
+  180		Assembler-Quellen Z180		ASCII
+  AS		HITECH-C Assemblerquelltext	ASCII, USA
+  ASM		Edas- oder ASM-Quelltexte	ASCII
+  BRF		Briefe als TP-Text		ASCII, deutsch
+  C		C-Quelltexte			ASCII, USA
+  CMD		ZFILER- oder Alias-Kommandos	ASCII, USA
+  CRC		CRC Pruefsummen			ASCII
+  CSM		BDS-C Assemblerquelltext	ASCII, USA
+  DOC		Dokumentation als TP-Text	ASCII, USA
+  DOK		Dokumentation als TP-Text	ASCII, deutsch
+  FOR		Programmkurzbeschreibungen	ASCII
+  H		C-Headerfiles			ASCII, USA
+  HIS		History-Files			ASCII
+  HEX		Intel-Hex Files			ASCII
+  HLP		Help-Texte fuer HELP.COM	ASCII, USA
+  INC		Includedatei versch. Programme	ASCII
+  LOG		LOG Dateien			ASCII
+  MAC		Assembler-Quelltexte		ASCII
+
+  ... weitere Textdateien:			Zeichensatz:
+
+  ME		Read.ME Dateien			ASCII
+  MNU		Menue-Listen			ASCII
+  PAS		Turbo-Pascal Quelltexte		ASCII, USA
+  PRG		REDABAS-Programm		ASCII
+  PRN		Programmlistings		ASCII
+  SRC		Quelltexte fuer CFG-Dateien	ASCII
+  TXT		TP/WS-Text			ASCII
+  TXW		WP-Text auflisten		IBM, USA
+  UUU		BASIC-Listing, Stapeldatei	ASCII
+  Z80		Assembler-Quellen Z80		ASCII
+  HEX		Intel HEX Files			ASCII
+  ME		READ.ME Files			ASCII
+  ZEX		Z-System-Submit			ASCII, USA
+
+  ... KC-Bilddateien:
+
+  PIF		Anzeige eines farbigen Bildes (PIP und PIF)
+  PIP		Anzeige eines Pixelbildes (oder FRACTALE-Bild)
+  HIF		Anzeige eines HIRES-Bildes (HIP und HIF)
+  HIP		Anzeige eines HIRES-Bildes (HIP und HIF)
+  FRC		Anzeige eines HIRES-Bildes im FRACTAL4-Format
+  PCX		Anzeige eines PCX-Bildes mit 2, 4 oder 24 KC-Farben
+  IRM		Bildspeicherabzug im CAOS-Format
+  PTB		1 Zeichensatz
+  SET		Sammlung mehrerer Zeichensaetze
+
+  ... spezielle KC-Dateiformate:
+
+  PIC		KC-Hexdump (Bildabzug KC85/3 oder Kassettenladeroutine)
+  KCC		KC-Hexdump KCC-Datei (MC-Datei fuer CAOS)
+  DSH		KC-Hexdump Diashow-Ablaufdatei
+  KEY		F-Tastendatei listen (Speicherabzug B900 B99C)
+  LST		Hexdump Druckertreiber (ab Adresse 200H)
+  KOP		Hexdump Koppeltreiber (ab Adresse 380H)
+  ZAS		Hexdump Terminaltreiber (ab Adresse 400H)
+
+  ... Archive/Bibliotheken:
+
+  LBR		LBR-Directory
+  PMA		Archivdirectory *.PMA
+  LZH		Archivdirectory *.LZH
+  ARC		Archivdirectory *.ARC
+  ARK		Archivdirectory *.ARK
+  ZIP		Archivdirectory *.ZIP
+
+  ... ausfuehrbare Dateien:
+
+  COM		CP/M-Programmdatei starten
+  SUB		Stapelkommando mit SUBMIT-Prozessor starten
+  BAT		siehe SUB
+
+ Die  Ausfuehrung  dieser Dateien erfolgt ueber die  Kommandodatei  $$$.SUB.  
+ Vor  Start  des  Programms  koennen weitere  Parameter  eingegeben  werden.  
+ NC.COM  wird nach Ausfuehrung der Kommandos automatisch  wieder  gestartet. 
+ Die aktuellen Einstellungen legt  NC.COM zeitweilig in der Datei  A0:NC.TMP
+ ab.  Vor dem Bildaufbau wartet  NC  noch eine  Tastenbetaetigung ab, um den
+ letzten Bildinhalt erst in Ruhe lesen zu koennen.
+
+  ... Programme von KC-BASIC und HCBASIC.COM
+
+  SSS		BASIC-Programm, abgespeichert mit CSAVE"name"
+  KCB		BASIC-Programm, abgespeichert mit BSAVE.KCC
+
+
+ Unabhaengig,  mit  welcher Methode das BASIC-Programm abgespeichert  wurde, 
+ kann  das  Listing wie ein normaler Text betrachtet und  darin  geblaettert 
+ werden.   Endet  die  Prozentanzeige  am Dateiende  nicht  mit  100.0%  ist 
+ versteckter  Maschinencode enthalten.   Eine Betrachtung ueber das Ende des 
+ eigentlichen   BASIC-Programm  hinaus  ist  nicht  moeglich.    Die   CAOS-
+ Sonderzeichen  werden  (soweit dies moeglich ist)  in  den  IBM-Zeichensatz 
+ konvertiert.   Zeichencodes  > 80H werden als IBM-Grafikzeichen ausgegeben.  
+ In  Zeichenketten,  DATA-Zeilen oder Kommentaren  enthaltene  Steuerzeichen 
+ werden als inverse Buchstaben dargestellt.
+:7
+   Konfiguration:  
+
+ NC.COM kann in einigen Punkten konfiguriert, das heisst den eigenen Wuenschen
+ angepasst werden.  Dazu wird eine Konfigurationsdatei NC.CFG mitgeliefert,
+ die zusammen mit dem Programm ZCNFG vom Z-System die Konfiguration vornimmt.
+
+ Aufruf:	ZCNFG NC
+
+ Zur Zeit sind folgende Eigenschaften konfigurierbar:
+
+						Voreinstellung
+ (1) Name der CFG-Datei selbst			 NC10 
+ (2) Wiederstartkommando fuer NC.COM		 NC  
+ (3) Voreinstellung Datumsfunktion ein/aus	 aus 
+ (4) phys. Laufwerke anzeigen ein/aus		 ein 
+ (5) Kommando zum Kopieren			 COPY $1 $2 /A  
+ (6) Kommando zum Verschieben			 COPY $1 $2 /AM 
+ (7) Kommando zum Umbenennen			 REN 
+ (8) Standard-Texteditor			 ZDE 
+
+ Durch Eingabe von "/" erhaelt man zu allen Punkten noch eine kurze Hilfe. 
+:8
+   Entstehung: I 
+
+ ML.COM
+ <*> V1.0 (28.08.1995) ist nur fuer MicroDOS 2.6.
+ <*> V2.0 (13.11.1996) laeuft unter MicroDOS, ZSDOS/ZDDOS und NZCOM.
+ <*> V2.1 (15.01.1997) Unterstuetzung der NZCOM-Verzeichnisnamen
+ <*> V2.1 (06.07.1997) weitere Dateitypen definiert
+ <*> V2.2 (08.10.1997) Unterstuetzung von ZAS 1.3 (Speicheranfrage)
+ <*> V2.3 (01.01.1998) Nutzung von Teilbereichen des RAM4
+ <*> V2.4 (10.05.1998) korrekte Anzeige von Dateigroessen bis 4MByte
+ <*> V2.5 (23.08.1998) automatische Einstellung des 80-Zeichenmodus
+ <*> V2.6 (06.02.2003) Anzeige von bis zu 16 Laufwerken, Groesse in MB
+ <*> V2.7 (18.11.2007) Fehlerbeseitigung und Anzeige phys. Laufwerke
+ <*> V2.8 (09.03.2008) verbesserte Anzeige von PCX- und HLP-Dateien
+ <*> V2.9 (22.02.2009) neue Dateitypen, PCX und ZIP aus NC eingearbeitet.
+ <*> V2.9a(22.02.2010) Korrektur "Jahr-2050-Fehler"
+
+   Entstehung: II  
+
+ NC.COM
+ <*> V0.1 (20.03.2006) erste beta-Version mit zwei Dateifenstern
+ <*> V0.2 (26.02.2007) Dateidatum, Kommandozeile, Hilfe, COPY/REN/MOVE/ERA
+ <*> V0.3 (16.12.2007) Texteditor, Attributbearbeitung, Fehlerkorrektur
+ <*> V1.0 (27.03.2008) Gruppenkommando, Wildcard-Markieren, PCX erweitert
+ <*> V1.1 (16.02.2009) PCX verbessert, ZIP-Archive anzeigen
+ <*> V1.2 (22.11.2009) Datei drucken, max. 127 Dateien kopieren
+ <*> V1.2a(22.02.2010) Korrektur "Jahr-2050-Fehler"
+
+   Lieferumfang:  
+
+ Zum KC-Commander NC.COM gehoeren folgende Dateien:
+
+ NC.COM   - Das Hauptprogramm
+ NC10.CFG - Konfigurationsdatei fuer ZCNFG
+ NC.HLP   - Programmbeschreibung und Hilfe
+ FE.COM   - Korrekturprogramm fuer MicroDOS
+
+
+ Weitere empfohlene Programme:
+
+ (Programm)	(Konfiguration)	(Hilfe)
+ COPY.COM	ACOPY35.CFG	ACOPY.HLP	= Kopierprogramm ACOPY
+ REN.COM	RENAMZ19.CFG	RENAMZ.HLP	= Dateien Umbenennen
+ HELP.COM *	LBRHLP23.CFG	LBRHLP23.HLP	= Hilfe-Dateien anzeigen
+ SUBMIT.COM					= Submit-Prozessor (ML-DOS)
+ ZDE16.COM	ZDENST.COM	ZDE.HLP		= Texteditor, KC-angepasst
+ ZCNFG.COM *	ZCNFG24.CFG	ZCNFG.HLP	= Programme konfigurieren
+
+ * nur mit NZCOM verwendbar!
+
+ 
+
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
+
+	Anregungen und Hinweise bitte an:
+
+
+		Mario Leubner
+
+		eMail: maleuma@web.de
+
+
+
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+                                                                                                                   

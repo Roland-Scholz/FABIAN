@@ -1,0 +1,51 @@
+
+
+           TURBO pascal RAINBOW Keypad
+
+     +--------+--------+--------+--------+
+     |        |  Find  | Repeat |        |
+     |  Find  |   &    | Last   |  Del L |
+     |        |Replace | Find   |        |
+     +--------+--------+--------+--------+
+     |  Copy  |  Move  | Delete |        |
+     |  Block |  Block | Block  |  Del W |
+     |        |        |        |        |
+     +--------+--------+--------+--------+
+     |  Word  |  Read  |  Write |        |
+     |  Left  |  Block |  Block |  Del C |
+     |        |  Disk  |  Disk  |        |
+     +--------+--------+--------+--------+
+     |  Word  | Delete | Hide/  |        |
+     |  Right |   to   | Display|        |
+     |        |  EOL   | Block  |  Mark  |
+     +--------+--------+--------+  End   |
+     |                 | Mark   |  Block |
+     |   Insert Line   | Begin  |        |
+     |                 | Block  |        |
+     +-----------------+--------+--------+
+
+
+     Delete     Delete left character
+
+     CTRL/P     Toggle Auto Tab ON/Off
+     CTRL/W     Beginning of Block
+     CTRL/Z     End of Block
+     CTRL/X     End of File
+     CTRL/Q     Quit Edit
+     CTRL/I     Tab
+     CTRL/U     Page Up
+     CTRL/N     Page Down
+     CTRL/Y     Page Top
+     CTRL/B     Page Bottom
+     CTRL/R     Restore Line
+     CTRL/T     Scroll Up
+     CTRL/V     Scroll Down
+     CTRL/E     Top of File
+     CTRL/L     To Last Cursor Position
+     CTRL/A     Toggle Insert/Overstrike Mode
+     CTRL/S     Mark Single Word
+     CTRL/J     End of line
+     CTRL/H     Beginning of line
+     CTRL/C     Control Character Prefix
+
+

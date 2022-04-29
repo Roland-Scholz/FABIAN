@@ -1,0 +1,119 @@
+#type ("hs")##limit (16.0)# 
+#type ("prop3.3-24")# #center#*** MPG-GRAPHIK *** #block# 
+ 
+#type ("prop7.5-16")# 
+#on ("u")#Einleitung:#off ("u")# 
+#type ("prop10-12")# 
+ 
+                 Das MPG-Graphik-System ist eine Sammlung von aufein-
+                 ander aufbauenden Umgebungs- und Applikationspaketen, in
+                 die auch die bisherige EUMEL-Graphik vollständig integriert
+                 ist. 
+ 
+                 Folgende Leistungsmerkmale zeichnen die MPG-Graphik aus: 
+                 - verbesserter und nun auch in der Paket-Hierarchie voll-
+                   ständig Endgerätunabhängiger EUMEL-Graphik-Kern. 
+                 - umfassende Dokumentation der EUMEL-Graphik und des
+                   MPG-Graphik-Systems. 
+                 - taskunabhängige und mehrbenutzerfähige Ansteuerung der
+                   Endgeräte. 
+                 - normierte Ansteuerung der Endgeräte auf unterster
+                   Ebene. 
+                 - indirekte Graphik-Ausgabe. 
+                 - komfortable Steuerung der Graphik-Ausgabe. 
+                 - Vollständige Unterstützung aller von der EUMEL-Graphik
+                   vorgesehenen Leistungen: 
+                   - beliebig breite Linien 
+                   - frei definierbare Linientypen mit Erhalt des Musters
+                     bei verketteten Linien 
+                   - Ansatzfreie verkettete Linien durch abrundung der
+                     Enden. 
+                   - frei definierbare vektorielle Zeichensätze in beliebiger
+                     Größe und Rotation. 
+                   - schnelles Clipping an den Kanten der Zeichenfläche. 
+ 
+                   Desweiteren: 
+                   - frei definierbare Farben in normierter RGB-Codierung. 
+                   - automatische Einstellung der EUMEL-Farben auf den
+                     Endgeräten (abschaltbar). 
+                   - Automatische Pause nach Abschluß der Ausgabe
+                     (abschaltbar, also auch unterbrechungslose Ausgabe
+                     möglich). 
+                   - Übereinanderzeichnen mehrerer Zeichnungen möglich. 
+                 - leichte Anpassung und Integration neuer Endgeräte bzw.
+                   Endgerät-Typen. 
+ 
+#type ("prop7.5-16")# 
+#on ("u")#Applikationen:#off ("u")# 
+#type ("prop10-12")# 
+
+                 - der komfortable menügesteuerte Funktionenplotter 'FKT'. 
+ 
+                 - die einfach zu programmierende 'TURTLE'-Graphik. 
+ 
+                 - der vollintegrierte dynamische Multispool-Manager 'PLOT'. 
+ 
+                 - das 'EUCLID'-System zur umfassenden graphischen
+                   Funktions- und Kurvendiskussion (in Vorbereitung). 
+ 
+                 - der objektorientierte 2D-Graphik-Editor 'GED', auch zur
+                   Zeichensatz-Erstellung (in PLanung). 
+ 
+#type ("prop7.5-16")# 
+#on ("u")#Zur EUMEL-Graphik:#off ("u")# 
+#type ("prop10-12")# 
+                 - Es wurde die vorletzte Version der EUMEL-Graphik
+                   (PICFILE-Typ: 1102) verwendet, da diese einen um-
+                   fassenderen Objektumfang (neue Version: keine Hidden-
+                   Lines und kein Zeichen in Weltkoordinaten) bietet. 
+                   Neuere PICFILEs (Typ: 1103) können mittels
+                   'GRAPHIK.Convert' in diesen Typ knvertiert werden. 
+ 
+                 - Fehler dieser Version (die auch in der neuen Version
+                   auftreten) wurden weitgehend beseitigt bzw. in der teil-
+                   weise neuerstellten Dokumentation vermerkt. 
+ 
+                 - Die Ausgabe von PICTUREs und PICFILEs wurde von den
+                   Verwaltungspaketen ('picture' bzw. 'picfile') abgespalten,
+                   so daß die Erzeugung von Graphiken auch in der
+                   Paket-Hierarchie Endgerät-unabhängig möglich ist. 
+ 
+#type ("prop7.5-16")# 
+#on ("u")#Zum Graphik-Tasksystem:#off ("u")# 
+#type ("prop10-12")# 
+                 - Jede Task im 'GRAPHIK'-Zweig kann auf jedes Endgerät
+                   direkt zugreifen, und aufgrund der normierten An-
+                   steuerung der Endgeräte können auch die (schnelleren)
+                   Zeichnungs-Primitiva (Gerade ziehen, positionieren usw.)
+                   bei Beachtung der Auflösung endgerätunabhängig
+                   verwendet werden. 
+ 
+                 - Die indirekte Ausgabe von PICFILEs ist über die Task
+                   'PLOT' möglich, dabei kann über das Netz auch auf
+                   Endgeräte anderer Stationen zugegriffen werden. 
+ 
+#type ("prop7.5-16")# 
+#on ("u")#Zur Ansteuerung der Endgeräte:#off ("u")# 
+#type ("prop10-12")# 
+                 Vor der Ausgabe ist mit 'select plotter' das Endgerät
+                 einzustellen, auf das ausgegeben werden soll. 
+                 Die vom Graphik-System verwendeten Konstanten
+                 ('drawing area' usw.) beziehen sich nunmehr auf das
+                 eingestellte Endgerät. 
+                 Bei Verwendung der Zeichnungs-Primitiva ist zu beachten,
+                 das diese nur am Endgerät-Kanal sinnvoll sind (die Über-
+                 einstimmung von Endgerät- und Task-Kanal wird aus Zeit-
+                 gründen jedoch nicht überprüft). 
+                 Die Ausgabe von PICFILEs erfolgt automatisch richtig, d.h.
+                 am Endgerät-Kanal direkt, ansonsten indirekt über die
+                 'PLOT', die zur Ausgabe dynamische Kanal-Server erzeugt. 
+ 
+#type ("prop7.5-16")# 
+#on ("u")#Zur Mehrbenutzerfähigkeit:#off ("u")# 
+#type ("prop10-12")# 
+                 Da die Task 'PLOT' für alle Endgeräte auch als Spooler
+                 arbeitet, können Graphiken als PICFILEs von beliebig vielen
+                 Benutzern von jeder Task im Graphik-Zweig aus erstellt
+                 und ausgegeben werden (Soweit der Endgerät-Kanal nicht
+                 direkt genutzt wird), 'PLOT' sorgt dann für die sequentielle
+                 Ausgabe auf dem jeweils zugeordneten Endgerät.

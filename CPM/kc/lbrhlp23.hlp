@@ -1,0 +1,251 @@
+;
+                                  LBRHLP 
+                                Version 2.3
+
+                                06-Jun-1997
+
+
+LBRHLP is a ZCPR3 utility to display Z-System help files.  The targeted 
+help files can be members of libraries or stand-alone, compressed or not.  
+Two versions of LBRHLP are supplied:  LHC handles GEL crunched files and 
+LHQ handles squeezed files.  Either version will handle uncompressed files.
+
+
+
+         U  Usage                          S  Security
+         C  HELP System Commands           E  Errors
+         D  Display Details                I  Installation
+         F  HELP Files                     H  History
+:U
+
+                                   USAGE 
+
+
+     LBRHLP {-{dir:}library} {{dir:}hlpfile}
+
+
+If no DIR or DU specification is given, the current drive and user are 
+assumed.  If a library name is given, a leading hyphen ("-") is required.  
+If only the name of a help file is given, and that name is preceded by a 
+directory specification, LBRHLP searches for a matching stand-alone help 
+file.  The directory specification may be in the form D:, U:, DU:, DIR:, or 
+a colon alone for the current directory.
+
+The library name and the help file name default to internally configured 
+names.  If the default library name is empty, LBRHLP works in stand-alone 
+mode by default.  The default filetype for help files is H?P.  If a 
+matching file or library is not found in the given or current directory, 
+the configured alternate named directory will also be searched.  If no 
+named directory with that name is found, the configured alternate 
+drive/user will be searched.
+
+ USAGE (continued): 
+
+The program allows you to specify a different Library and or help file from 
+the command line:
+
+Example 1:     lbrhlp -c15:special syslib
+
+With this example we told the program that we wanted a different library on 
+c15 and a help file called syslib.  The (-) must precede the drive/user or 
+library name, if the default D/U is wanted.
+
+Example 2:     lbrhlp syslib
+
+With this we told the program that we wanted the default LBR with the 
+filename syslib. If the default LBR is empty, the file syslib is assumed as 
+stand-alone file.
+
+Example 3:     lbrhlp -helps
+
+With this we are specifing just the library, using the default DU/DIR and 
+default filename.
+
+ USAGE (continued): 
+
+If the default library name is installed, access to stand-alone files can 
+be simplified by use of a simple ARUNZ alias:
+
+     HLP  lbrhlp $td1$tu1:$tf1
+
+Via this alias, no directory specification is needed if the help file is in 
+the current directory.  Just "HLP filename" will do it.
+
+For easy access to the usage screen, the alias could be expanded:
+
+     HLP  if nu $1;lbrhlp //;else;if eq $1 //;lbrhlp //
+               ;else;libhlp $td1$tu1:$tf1;fi;fi
+
+With this alias, "HLP" with no command line parameters bypasses the 
+internal file and directory defaults of LBRHLP.
+:C
+                           HELP System Commands 
+
+From a menu, pressing a letter or number will take you to the appropriate 
+information section.
+
+    CR    Display next information screen.  Also returns to the menu from 
+          the end of an information section.
+   Space  Next screen (same as CR).
+     L    Return to previous information screen.
+     S    Return to start of current information section.
+     M    Return to previous menu.
+     ,    Return to menu for previous level.
+     ^    Return to previous level (same as ",").
+     .    Return to root (main) menu (level 0).
+     P    Send current screen to printer.
+    ^P    Send current information section to printer.
+    ESC   Exit HELP system.
+    ^C    Exit (same as ESC).
+:D
+                              DISPLAY DETAILS 
+
+On the Index-Screen is in the upper-left corner after the version of LBRHLP 
+the Name of the HELP file displayed.  In library mode the display shows the 
+library name before the name of the HELP file as "lbrname/hlpfile".
+
+
+                            Navigation Markers 
+
+The current level in the HELP system hierarchy is displayed in the lower- 
+left corner of the screen (except at the root level, level 0).  While in 
+information sections, the current screen number is also displayed.
+
+For example:
+
+      1:       Screen 1 of level 0 information section.
+   Level 2     Level 2 menu screen.
+   Level 1/2   Screen 2 of a level 1 information section.
+
+The last screen of an information section will have the initials "EOI" (end 
+of information) immediately preceding the level and screen numbers.
+:S
+
+                                 SECURITY 
+
+For remote access systems, security is assured by using the directory 
+specification as parsed by the command processor, or the internally 
+configured alternate directory.
+
+In addition, the printer cannot be accessed unless the wheel byte is set.  
+Non-wheels do not even see the "P" option displayed.
+:E
+
+                                  ERRORS 
+
+The ZCPR3 program error flag is set to FFh for most errors, including the 
+following:
+
+     Library file not found.
+     Library file error (ambigous name or opening error).
+     Helpfile (in library) not found.
+     Node Level Limit (15) reached.
+     Memory overflow, File too large. *
+     Unsupported filetype (middle character not "L", "Z", or "Q").
+     Uncrunch errors, such as invalid crunched file (LHC only).
+     Unsqueeze errors, such as unexpected end-of-file (LHQ only).
+
+
+
+* LBRHLP can handle larger files if they are already uncompressed.
+:I
+
+                               INSTALLATION 
+
+Several configuration options are available:
+                                                        as distributed:
+   Default library name . . . . . . . . . . . . . . . . . . HLPFILES
+   Library filetype . . . . . . . . . . . . . . . . . . . . LBR
+   Default help file name . . . . . . . . . . . . . . . . . MENU
+   Alternate named directory to search  . . . . . . . . . . HELP:
+   Alternate drive and user to search . . . . . . . . . . . A15:
+   Check BIOS for "printer ready" before accessing printer  YES
+   Suppres formfeed printing  . . . . . . . . . . . . . . . NO
+   printer standout string  . . . . . . . . . . . . . . . . none
+   printer no-standout string . . . . . . . . . . . . . . . none
+
+Configuration changes are made with ZCNFG and the accompanying LBRHLPnn.CFG 
+file.  If the name of the configuration file is not changed, ZCNFG will 
+always be able to find it, even if the names LHC or LHQ are changed to 
+something else, such as HELP or LBRHLP.  Full explanations for the various 
+configuration options are available on the ZCNFG help screens.
+:H
+
+                                  HISTORY 
+
+New features in version 2.3:
+
+In previous versions I must know in which library is which HELP file, when 
+I invoke LBRHLP.  Now I have added a possibility to change the library into 
+the help files with an extended syntax in the form of ":A:-M MENU".  This 
+would load the HELP file MENU.HLP from the library M.LBR.  Whitout the 
+library extention the files are searched in the default library or 
+directory in stand-alone mode. So work all old HELP files and LBR's.  With 
+my default HELP file <the main menu> I can now acces to each submenu and to 
+each HELP file.  The maximum level I have reduced from 25 to 15, so I could 
+save some bytes in the memory because I need the double space to store 
+lbrname and filename for each level.  If no default library is defined, 
+LBRHLP now searches for single HELP files.  For Printing I have added a 
+configurable flag to suppres the formfeed printing after every information. 
+So I can print different informations continuous on the same page.  Two
+configurable printer strings may be defined for standout and no-standout.
+
+ HISTORY (continued): 
+
+Version: 2.3 (06/06/97 by Mario Leubner)
+Version: 2.2 (05/10/92 by Gene Pizzetta)
+Version: 2.1 (02/21/92 by Bruce Morgen)
+Version: 2.0 (09/16/91 by Howard Goldstein)
+Version: 1.9 (08/07/91 by Howard Goldstein)
+Version: 1.8 (02/20/91 by Terry Hazen)
+Version: 1.7 (02/08/91 by Howard Goldstein)
+Version: 1.6 (08/27/90 by Howard Goldstein)
+Version: 1.5 (06/20/90 by Howard Goldstein)
+Version: 1.4 (06/18/90 by Howard Goldstein)
+Version: 1.3 (02-13-88)
+Version: 1.2 (02-10-88)
+Version: 1.1
+Version: 1.0 (02-06-88) by Bob Peddicord
+This program derives from the use of Help53 by R. Conn.  I also want to 
+thank Steve Greenburg for his uncrunch routines.
+
+ ---> For more history details see LBRHLP23.HIS!
+:F
+                                HELP Files 
+
+LBRHLP can be used with crunched (LHC), squeezed (LHQ) or uncompressed 
+files as single files or help library's. The HELP files can be in three 
+different forms:
+
+ - HELP files without index. The file must begin with a colon as first 
+   character. The file is displayed continous until end of file.
+
+ - HELP files with automatic index. The file has several information 
+   sections, every section begins with a colon in the first column. At the 
+   beginning of the file is the index-page, which contains one line for 
+   each information section. LBRHLP adds a index-letter to each line. The 
+   information sections are beginning with a colon in the first column, so 
+   LBRHLP can count the colons to find the sections.
+
+ - HELP files with user index. The file must begin with a leading ";" for 
+   the index-page. This page contains the menu for the other information 
+   sections. The information sections are beginning with a colon followed 
+   by the letter(s) to acces this section.
+
+ HELP Files (continoued): 
+
+For extensive HELP Files you can use submenu calls. You can chain many HELP 
+Files to build big HELP's. The syntax is simply, you write in the section 
+of the HELP File:
+
+ :1:TEST       -> to load the file TEST.H?P from the current library, (or 
+                  the stand-alone file in no library mode).
+
+ :2:-M MENU    -> to load the file MENU.H?P from the library M.LBR. M.LBR 
+                  is now the new library to use. The next submenu of the 
+                  form as in example 1 would load the HELP file from M.LBR.
+
+NOTE:
+Information sections can contain only text or calling submenu. The text 
+following the submenu call is ignored!
+

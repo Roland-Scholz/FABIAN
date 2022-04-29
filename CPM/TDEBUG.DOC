@@ -1,0 +1,657 @@
+
+
+
+
+
+
+
+                                             December 31, 1985
+
+                          TDEBUG.DOC
+
+OVERVIEW
+
+TDEBUG is a source code debugger for use in debugging Turbo 
+Pascal (tm) Programs on the IBM-PC (tm).  When used in 
+conjunction with TURBO.COM, it allows you to:
+
+     1.  View your source code while debugging.
+     2.  Trace the operation of your program statement by 
+         statement.
+     3.  Insert breakpoints in your program by procedure/function 
+         name or by statement number.
+     4.  Examine (and change) global or local variables in your 
+         program, including strings, array variables, and 
+         records.
+
+
+SYSTEM REQUIREMENTS
+
+     1.  One of the following versions of Turbo Pascal for the 
+         IBM-PC:
+             TURBO.COM     v3.00b
+             TURBO.COM     v3.01a
+             TURBO-87.COM  v3.01a
+     2.  Approximately 128k more memory than would normally be 
+         required to run your program in the Turbo memory mode.
+     3.  A hard disk is desirable and may be a necessity when 
+         debugging large programs with the optional local 
+         symbols.
+
+
+OPERATION
+
+To use TDEBUG, include the file TDEBUG.COM on the disk (or in the 
+directory) with TURBO.COM (or TURBO-87.COM), TURBO.MSG, and your 
+program file.  At the DOS prompt, call for TDEBUG.  After a brief 
+sign on message, TDEBUG will load TURBO.COM and transfer control 
+to it.  (The message 'Incorrect TURBO.COM version!' indicates 
+that TDEBUG and your version of TURBO.COM are incompatible.)
+
+When calling for TDEBUG, the following optional parameters may be 
+used:
+
+  G
+  Use global symbols only.  Users with limited disk space may 
+  not be able to accommodate the local symbol disk file.
+
+  T=<filename>
+  The T option allows the name (and path) of the Turbo compiler 
+
+
+                           1
+
+
+
+
+
+
+
+
+
+
+
+  to be specified.  '.COM' should be a part of this 
+  specification.  The default is TURBO.COM.
+
+  L=<filename>
+  The L option allows specification of the local symbol file 
+  name.  This option has been included mostly to allow a path to 
+  be specified.  If enough space is available, a ramdisk drive is 
+  ideal with a hard disk being a second choice.  The default 
+  filename is '@@LOCAL.SYM'.
+
+  B=n
+  For this option, n specifies the symbol table buffer size 
+  (decimal).  This is important mainly when using local symbols 
+  because the local symbol file size will be approximately n 
+  times the number of procedures and functions in the program 
+  under test.  Users with limited disk space will probably want 
+  to make n as small as possible.  Unfortunately, the actual size 
+  required is not known until the program under test is compiled 
+  so some experimenting may be necessary.  The default value is 
+  6000 bytes. n may not be made less than 1000 bytes.
+
+Examples:
+
+  TDEBUG T=TURBO-87.COM L=D:LOCAL  B=5000
+  TDEBUG  G
+
+
+Once TDEBUG has loaded and begun execution of TURBO.COM, all of 
+the commands and features of Turbo Pascal should operate as they 
+always have with the exception of the Run command.  The only 
+special requirement for programs to be debugged is that the {$U+} 
+compiler directive not be used.  When the Run command is 
+executed, TDEBUG will regain control and the debugging screen 
+will appear.
+
+The debugging screen is divided into two parts.  The lower 
+section is the command and data section.  The '*' is a prompt for 
+one of the commands described later.  The top part of the screen 
+displays the program source code text which at this point will be 
+centered at the first executable statement of your program.
+
+Within the text part of the display, the current statement (the 
+next one to be executed) will be highlighted.  The left margin 
+contains the statement number of the first statement occurring on 
+that particular line.  Statement numbers are consecutive numbers 
+and are used to refer to individual statements in the commands 
+described later.  Since there may be more than one statement on a 
+line, the statement number in the margin is that of the first 
+statement on the line.  The first character of each statement is 
+highlighted.  Note also that there may be no statements on a 
+given line so those lines will have no numbers.
+
+
+
+                           2
+
+
+
+
+
+
+
+
+
+
+
+Dividing the two portions of the debugging screen is a line which 
+at this point will probably display 'Memory'.  This indicates 
+that the text file being observed is in memory.  Later, when 
+viewing a portion of the program source code which is in an 
+'include' file, the name of the 'include' file will appear here.
+
+When the Run command is issued after a fresh compilation, TDEBUG 
+will issue a report giving the symbol table buffer size actually 
+required, the number of statements and include files found and 
+any disk errors which might have occurred during compilation.  In 
+the event of any errors, it will not be possible to continue with 
+the debugging session until the errors are corrected.  Hit any 
+key to return to TURBO to make the corrections.  The most likely 
+error is a symbol table buffer overflow which will require a 
+change in the 'B' option at load time.
+
+
+SPECIAL KEYS FOR VIEWING TEXT
+
+The following keys may be used to change the text being 
+displayed:
+
+     Pg Up
+     Pg Dn  Move the display up or down one page.
+
+     ^Pg Up
+     ^Pg Dn Move to the start or end of the current file.
+
+     Up arrow
+     Down arrow  Scroll up or down one line.
+
+     F10 key  Toggle between the debug screen and the screen
+              of the program under test.
+
+In addition, the text being displayed may be changed using the 
+View command described later.
+
+
+COMMAND EDITOR
+
+When entering commands, the following keys may used to edit the 
+command:  (They perform the same functions as they do in the 
+Turbo Pascal editor.)
+
+     ^A,^S,^D,^F,^G,^T,^H,LFARW,RTARW,^LFARW,^RTARW,
+     Ins, Del, Backspace
+
+The Insert mode (default) is indicated by a slightly fatter 
+cursor while the cursor is normal in the Overwrite mode.
+
+In addition, the F3 function key causes the last command entered 
+(having more than three characters) to be redisplayed.  This may 
+
+
+                           3
+
+
+
+
+
+
+
+
+
+
+
+be used to make minor changes to a previous command or to correct 
+a syntax error.
+
+Note that commands are not acted upon until the Enter key is hit.  
+(The cursor does not have to be at the line end to enter the 
+command.)
+
+
+COMMAND PARAMETERS
+
+Commands consist of one or two letters which may be followed by 
+one or more parameters.  A non alphabetic character must follow 
+the command to delimit it from a following parameter.  The 
+parameters which may be used are:
+
+  <Symbol>
+     A Pascal source code symbol representing a 
+     procedure/function name, variable, or constant as 
+     appropriate.  The special symbol 'RTN' may be used to refer 
+     to the return point of a procedure/function.  The usage of 
+     global or local symbols is explained more fully in a later 
+     section.
+
+  <Statement>
+     A statement number as displayed in the left margin of the 
+     text display.
+
+
+COMMANDS
+
+G    (Go)
+
+  Format:
+     G [<parameter> [<parameter..]]
+
+  The Go command starts execution of the program under test.  
+  Execution will continue until a breakpoint is reached, the 
+  program terminates, or the <control Break> key is hit.
+
+  One or more breakpoints may be entered with the Go command.  
+  These breakpoints are called temporary breakpoints as they are 
+  in effect only until the first stopping point is reached.  Any 
+  temporary breakpoint would then have to reentered with the next 
+  Go command if desired.
+
+  The program under test may be interrupted using the <control 
+  Break> key.  Note that <control C> does not perform the same 
+  function but rather performs its normal Turbo Pascal function 
+  (as defined by the {$C } compiler directive.
+
+
+
+
+
+                           4
+
+
+
+
+
+
+
+
+
+
+
+  Examples:
+
+     G   Start execution with no temporary breakpoints. (There 
+         might be some permanent breakpoints, however.)
+
+     G 345 PROC1 RTN
+         Start execution with temporary breakpoints at statement 
+         345, at the start of procedure PROC1, and at the return 
+         point of the current procedure/function.  In addition, 
+         there might be other permanent breakpoints in effect.
+
+T    (Trace)
+
+  Format:
+     T
+
+  Execute the current statement.  Only one statement is executed.
+
+
+N    (Next)
+
+  Format:
+     N
+
+  Execute the current statement in its entirety.
+
+  The difference between the Trace and the Next command is that 
+  if the current statement is a procedure or function call, Next 
+  will completely execute the procedure/function whereas Trace 
+  will Trace through the procedure/function.
+
+
+P    (Permanent breakpoint)
+
+  Format:
+     [-]P [<parameter>]
+
+  The P command is used to specify permanent breakpoints.  Unlike 
+  temporary breakpoints, permanent breakpoints remain in effect 
+  until removed (using a '-' preceding the P command).  
+
+  If no parameter is entered, the breakpoints in effect are 
+  listed.
+
+  Examples:
+
+     P        List all permanent breakpoints.
+    -P        Delete all permanent breakpoints.
+     P 345    Install a breakpoints at statement 345.
+    -P PROC1  Remove a breakpoint at procedure PROC1.
+
+
+
+
+                           5
+
+
+
+
+
+
+
+
+
+
+
+V    (View text)
+
+  Format:
+     V [<parameter>]
+
+  The View command may be used to change the text being observed 
+  in the text window.  If no parameter is entered, the text will 
+  be centered around the current statement (the one to be 
+  executed next).
+
+  Examples:
+
+     V InitScreens   View text at procedure InitScreens.
+     V 545           View text around statement 545.
+     V Rtn           Find out where this procedure/function was
+                     called from.
+
+
+E    (Examine/change variable or constant)
+
+  Format:
+     E <symbol>
+
+  The Examine/change command allows the the value of global 
+  and local variables and constants to be displayed.  In 
+  addition, for variables, a new value may be entered.  Note that 
+  Turbo Pascal 'typed constants' are actually initialized 
+  variables and these may also be changed.  
+
+  After a variable value has been output in response to the 
+  Examine/change command, a new value may be entered followed by 
+  the Enter key.  For byte and integer types, a hex value may be 
+  specified by preceding it with a '$'.  Hitting the Enter key 
+  only retains the old variable value.  
+
+  8 bit variables (byte, char, boolean) are displayed in decimal, 
+  hex, and character (if printable).  In the case of boolean, 0 
+  is false, and 1 is true.
+
+  Integer variables are displayed in both decimal and hex.
+
+  Real variables are displayed in 'E' format and also decimal 
+  format if within a reasonable range.
+
+  Pointer variables are displayed with the phrase 'Points to:' 
+  followed by an address and symbolic name if appropriate.  If 
+  the pointer variable is followed by '^', the contents of the 
+  pointed to variable are displayed.  To change a pointer 
+  variable, use either a symbolic name or a segment:offset 
+  numerical address with a colon separator such as $1234:$5678.
+
+
+
+
+                           6
+
+
+
+
+
+
+
+
+
+
+
+  String variables are displayed as a string within quotes.  When 
+  specifying a change to a string variable, the new string should 
+  be enclosed in quotes.  A null string is specified by two 
+  quotes enclosing nothing.  Individual characters of a string 
+  may be displayed and changed by treating the string as an 
+  array.
+
+  Non numerical scaler variables are displayed numerically.  For 
+  instance, a variable defined as
+
+    Var   Color   :(red,green,blue,orange);
+
+  would be be given a value of 2 if it contained blue.  However, 
+  note that:
+
+     E BLUE
+
+  could be used to verify that blue was represented by 2.
+
+  Sets cannot be examined.
+
+  Examples:
+
+     E RealArray[4,3]
+     E InString
+     E PersonRecord[12].ID.Lastname
+     E PT^.Index1
+     E START^.NEXT^.NEXT^.NEXT^.VALUE[10][3]
+
+
+Q    (Quit)
+
+  Format:
+     Q
+
+  The Quit command when entered in TDEBUG returns control to 
+  Turbo Pascal without running the program under test to 
+  completion.
+
+
+X    (Translate)
+
+  Format:
+     X <parameter>
+
+  The translate command translates symbols and statements into 
+  segment-offset addresses.  This is useful mainly when using an 
+  external assembly language debugger.  Unlike the E (Examine) 
+  command, a variable need not be completely specified to get an 
+  address.
+
+
+
+
+                           7
+
+
+
+
+
+
+
+
+
+
+
+  Examples:
+
+     X PersonRecord              ;yields the first address of 
+                                  PersonRecord
+     X PersonRecord[12]          ;yields the first address of 
+                                  PersonRecord[12]
+     X PersonRecord[12].ID       ;yields the first address of 
+                                  PersonRecord[12].ID
+
+
+DB   (DeBug)
+
+  Format:
+     DB
+
+This command is used to enter an optional external assembly 
+language debugger.  Its use is explained in a later section.
+
+
+SYMBOLS
+
+TDEBUG makes use of two sets of symbols, the global symbols and 
+(optionally) the local symbols.  Global symbols are those which 
+would be available in the main block of the Pascal program and 
+include all non nested procedure/function names as well as 
+variables and constants defined outside of procedure/functions.
+
+Local symbols are those defined within a procedure/function and 
+are valid and only accessible within the block of that 
+procedure/function.  Local symbols include the formal parameters 
+defined in the procedure heading and also function results.  Note 
+that the block boundaries are delimited by the BEGIN and END for 
+any particular procedure.  In particular, this means that local 
+symbols cannot be accessed when the current instruction is a 
+procedure/function heading.  This should be kept in mind since 
+breakpoints are frequently placed at procedure/function headings.
+
+Error messages such as 'Not a GLOBAL symbol' or 'Not a GLOBAL 
+Variable' are meant to be a reminder that only the GLOBAL symbols 
+are being searched.  From a procedure/function heading it is only 
+necessary to do one 'T' (Trace) command to be within procedure 
+block where the local symbols can be accessed.
+
+TDEBUG searches local symbols before global symbols.  This is of 
+significance in cases where duplicate symbol names are used.
+
+
+HINTS
+
+It is possible to insert breakpoints in the source code using 
+INLINE($CC).  These breakpoints cannot be removed by TDEBUG 
+but may be useful for conditional breaks.  For instance:
+
+
+                           8
+
+
+
+
+
+
+
+
+
+
+
+
+  IF I=49 THEN INLINE($CC);
+
+
+USING AN EXTERNAL ASSEMBLY LANGUAGE DEBUGGER
+
+It is possible to use an assembly language debugger in 
+conjunction with TDEBUG.  It is often desirable to examine the 
+compiled code of a program to determine what the problems really 
+are and this provides a convenient way to do this.  The following 
+instructions are for using DOS DEBUG although other debuggers may 
+be used in a similar manner.
+
+Load DEBUG by:
+
+  DEBUG  TDEBUG.COM <parameters>
+
+where the <parameters> are the optional TDEBUG parameters.  Once 
+the load is completed and you are in DEBUG, issue the 'G' (Go) 
+command.  Operation of TDEBUG and TURBO will proceed in a normal 
+fashion.  At the appropriate time in the debugging session, use 
+the X (Translate) command to find the machine addresses to be 
+inspected.  Then issue the DB (DeBug) command.  You will find 
+yourself back in DEBUG.
+
+At this point, the DEBUG U (Unassemble) or D (Display) commands 
+can be used to inspect code or data.  
+
+To reenter TDEBUG, it is necessary to jump over the INT 3 
+instruction which caused the break to DEBUG.  Do this by using 
+the G command:
+
+  G=xxxx
+
+where xxxx is the contents of the IP register plus 1.  No 
+breakpoints should be installed with DEBUG as TDEBUG takes over 
+the breakpoint vector when it is reentered.
+
+
+RESTRICTIONS, PROBLEMS, BUGS
+
+The following are current limits.  
+
+  Permanent and temporary breakpoints are limited to 6 each.
+  Maximum number of include files = 20.
+  Maximum include file size = 32k.
+  Maximum number of statements = 4000.
+  Maximum symbol length = 28.
+  Maximum number of local symbol blocks = 250.
+
+
+Presently symbolic constants cannot be used as subscripts in the
+Examine/change command.  For instance, if
+
+
+                           9
+
+
+
+
+
+
+
+
+
+
+
+ Var   Opcode  :ARRAY[MOV..CMP] OF BYTE;
+
+it is presently necessary to specify OPCODE[0] rather than
+OPCODE[MOV] when using the Examine/change command.
+
+The <control Break> program interrupt does not perform properly 
+when the program under test is waiting for keyboard input.
+
+A simple screen switch is currently used.  This limits debugging
+to text only programs.
+
+Function results should be accessible only within the block of 
+the function whereas they can now be accessed from wherever the 
+function may be called.  Any results displayed outside of the
+function block are not valid.  Use care not to alter a function 
+result outside of its block as you will be altering an odd memory 
+location.
+
+Variables defined as 'absolute' are sometimes stored as pointers.  
+TDEBUG presently does not resolve these correctly.
+
+There is a problem when compiling to a disk COM file.  Turbo 
+often takes a short cut and transfers directly from memory to 
+disk without recompiling.  However, the memory file has been 
+altered by TDEBUG and the resulting COM file is corrupted.  It 
+is best at this stage to compile to disk only without the 
+debugger.
+
+
+
+
+
+     IBM-PC is a trademark of International Business Machines 
+     Corporation.
+     Turbo Pascal is a trademark of Borland International Inc.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                          10
+
