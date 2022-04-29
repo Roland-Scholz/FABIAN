@@ -16,7 +16,7 @@ A simple Z80 based CP/M system. I'll find here:
 - Serial CP/M disk server written in Java
 - 8 output pins (7 usable, OP7 toggels ROM on/off)
 - 6 input pins
-- I have some PCBs left, write to me if you want one
+- I have some PCBs left, write to rolandscholz@gmx.de if you want one
 
 ![FabianPCB](doc/fabian-pcb.jpg)
 ![FabianPCBbottom](doc/fabian-pcb-bottom.jpg)
