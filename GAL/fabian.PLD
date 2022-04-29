@@ -1,0 +1,63 @@
+Name     z80logic;
+PartNo   00 ;
+Date     14.02.2022 ;
+Revision 01 ;
+Designer Roland ;
+Company  Scholz Electronics ;
+Assembly None ;
+Location  ;
+Device   g16v8a;
+
+/*
+**************************************************
+Pin#     Function
+     1     CLK/IN
+     2     IN
+     3     IN
+     4     IN
+     5     IN
+     6     IN
+     7     IN
+     8     IN
+     9     IN
+    10     GND
+    11     OE/IN
+    12     IO
+    13     IO
+    14     IO
+    15     IO
+    16     IO
+    17     IO
+    18     IO
+    19     IO
+    20     VCC
+
+**************************************************
+Device Notes:
+*/
+
+/* *************** INPUT PINS *********************/
+PIN 1	= A13;
+PIN 2	= A14; 
+PIN 3	= A15;
+PIN 4 	= MEMREQ; 
+PIN 5	= IOREQ; 
+PIN 6	= OP7; 
+PIN 7	= CLK_IN;
+PIN 8	= REFRESH;
+PIN 9	= RD;
+PIN 11	= M1;
+PIN 12	= WR;
+
+/* *************** OUTPUT PINS *********************/
+PIN 19	= ROMCS;
+PIN 18	= RAM1CS; 
+PIN 17	= RAM0CS; 
+PIN 16	= CLK_OUT; 
+PIN 15	= M1IOREQ;
+
+ROMCS	= A13 # A14 # A15 # MEMREQ # RD # !OP7 # !REFRESH;
+RAM0CS	= A15 # (OP7 & WR) # MEMREQ # !REFRESH; /*A15 # MEMREQ # !REFRESH # !(A13 # A14 # A15 # RD # !OP7);*/
+RAM1CS	= !A15 # MEMREQ # !REFRESH /*# (RD & WR)*/;
+/*M1IOREQ	= IOREQ # !M1; */
+CLK_OUT	= CLK_IN;
