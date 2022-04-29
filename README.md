@@ -16,3 +16,5 @@ A simple Z80 based CP/M system. I'll find here:
 - 6 input pins
 
 ![FabianPCB](doc/fabian-pcb.jpg)
+![Monitor](doc/monitor.jpg)
+![Turbo](doc/turbo.jpg)
