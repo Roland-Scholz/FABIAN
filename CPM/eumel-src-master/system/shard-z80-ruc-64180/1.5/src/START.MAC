@@ -1,4 +1,0 @@
-; Start zum EBOOT, 29.12.86
-	EXTRN	EBOOT
-	JP	EBOOT
-	END

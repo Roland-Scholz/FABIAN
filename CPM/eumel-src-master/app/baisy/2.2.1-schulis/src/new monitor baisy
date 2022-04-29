@@ -1,4 +1,0 @@
-PACKET newmonitorbaisyDEFINES monitor:PROC monitor:commanddialogue(TRUE );
-disablestop;REP oeffnedatenbank(schulisdbname);startebaisy;clearerrorEND REP 
-.END PROC monitor;END PACKET newmonitorbaisy;
-
