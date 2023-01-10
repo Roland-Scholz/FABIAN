@@ -1,7 +1,7 @@
 # Fa Bi An
 FAbulous BInary ANihilator
 
-A simple Z80 based CP/M system. I'll find here:
+A simple Z80 based CP/M system. You'll find here:
 
 - KiCad files for the pcb
 - 6-chip Z80 hardware
