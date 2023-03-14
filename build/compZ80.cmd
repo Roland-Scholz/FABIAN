@@ -8,12 +8,16 @@ rem set ASM=tniasm.exe
 
 call :compile z80 0000
 if not %ERRORLEVEL%==0 goto error
-call :compile z80test 8000
-if not %ERRORLEVEL%==0 goto error
+
+rem call :compile z80test 8000
+rem if not %ERRORLEVEL%==0 goto error
+
 call :compile cpm22z80 E400
 if not %ERRORLEVEL%==0 goto error
+
 call :compile cpm22bios FA00 -DSTANDALONE
 if not %ERRORLEVEL%==0 goto error
+
 
 move ..\src\*.o ..\release
 move ..\src\*.hex ..\release

@@ -1,675 +1,686 @@
 z80.asm:
      1                          		;FNAME "z80.bin"
      2                          
-     3                          CR:		equ	0dh
+     3                          	include "mc68681.asm"
+mc68681.asm:
+     1                          ;--------------------------------------------------------------------------------
+     2                          ; equates for MC68681 DUART
+     3                          ;
+     4                          ; see ./doc/scc68681.pdf
+     5                          ;--------------------------------------------------------------------------------
+     6                          MODEA		equ	0
+     7                          STATA		equ	1
+     8                          CLOCKA		equ	1
+     9                          COMMA		equ	2
+    10                          RECA		equ	3
+    11                          TRANSA		equ	3
+    12                          IPCHANGE	equ	4
+    13                          AUXCTRL		equ	4
+    14                          ISR		equ	5
+    15                          IMR		equ	5
+    16                          CNTMSB		equ	6
+    17                          CNTLSB		equ	7
+    18                          MODEB		equ	8
+    19                          STATB		equ	9
+    20                          CLOCKB		equ	9
+    21                          COMMB		equ	10
+    22                          RECB		equ	11
+    23                          TRANSB		equ	11
+    24                          IVR		equ	12
+    25                          INPORT		equ	13
+    26                          OPCTRL		equ	13
+    27                          STRTCNT		equ	14
+    28                          OPSET		equ	14
+    29                          STOPCNT		equ	15
+    30                          OPRES		equ	15
+    31                          
+z80.asm:
      4                          
-     5                          
-     6                          VARS		equ	$FFF0
-     7                          sum:		equ	0
-     8                          addr:		equ	1
-     9                          echo:		equ	3
-    10                          
-    11                          MODEA		equ	0
-    12                          STATA		equ	1
-    13                          CLOCKA		equ	1
-    14                          COMMA		equ	2
-    15                          RECA		equ	3
-    16                          TRANSA		equ	3
-    17                          IPCHANGE	equ	4
-    18                          AUXCTRL		equ	4
-    19                          ISR		equ	5
-    20                          IMR		equ	5
-    21                          CNTMSB		equ	6
-    22                          CNTLSB		equ	7
-    23                          MODEB		equ	8
-    24                          STATB		equ	9
-    25                          CLOCKB		equ	9
-    26                          COMMB		equ	10
-    27                          RECB		equ	11
-    28                          TRANSB		equ	11
-    29                          IVR		equ	12
-    30                          INPORT		equ	13
-    31                          OPCTRL		equ	13
-    32                          STRTCNT		equ	14
-    33                          OPSET		equ	14
-    34                          STOPCNT		equ	15
-    35                          OPRES		equ	15
-    36                          
-    37                          		ORG     0000h
-    38                          
-    39   000000 210000          		ld	HL, 0			;copy ROM to RAM from
-    40   000003 110000          		ld	DE, 0			;to
-    41   000006 010018          		ld	BC, 1800h		;length, 6KB
-    42   000009 edb0            		ldir
-    43                          
-    44   00000b 21001a          		ld	HL, 1A00h		;copy ROM to RAM from $1A00
-    45   00000e 1100fa          		ld	DE, 0FA00h		;to $FA00 (CP/M Bios)
-    46   000011 010006          		ld	BC, 600h		;length, 6 pages
-    47   000014 edb0            		ldir
-    48                          
-    49   000016 ed43f1ff        		ld	(VARS + addr), BC	;set addr to zero
-    50                          
-    51   00001a 31f0ff          		ld	SP, VARS
+     5                          CR:		equ	0dh
+     6                          
+     7                          
+     8                          VARS		equ	$FFF0
+     9                          sum:		equ	0
+    10                          addr:		equ	1
+    11                          echo:		equ	3
+    12                          
+    13                          
+    14                          
+    15                          		ORG     0000h
+    16                          
+    17   000000 210000          		ld	HL, 0			;copy ROM to RAM from
+    18   000003 110000          		ld	DE, 0			;to
+    19   000006 010018          		ld	BC, 1800h		;length, 6KB
+    20   000009 edb0            		ldir
+    21                          
+    22   00000b 21001a          		ld	HL, 1A00h		;copy ROM to RAM from $1A00
+    23   00000e 1100fa          		ld	DE, 0FA00h		;to $FA00 (CP/M Bios)
+    24   000011 010006          		ld	BC, 600h		;length, 6 pages
+    25   000014 edb0            		ldir
+    26                          
+    27   000016 ed43f1ff        		ld	(VARS + addr), BC	;set addr to zero
+    28                          
+    29   00001a 31f0ff          		ld	SP, VARS
+    30                          
+    31   00001d dd21f0ff        		ld	IX, VARS
+    32   000021 dd360301        		ld	(IX + echo), 1		;echo on
+    33                          
+    34   000025 3e4a            		ld	a, $4A			;RX+TX off and
+    35   000027 d302            		out	(COMMA),a		;RESET ERROR
+    36   000029 d30a            		out	(COMMB),a
+    37                          
+    38   00002b 3e30            		ld	a, $30			;RESET TRANS
+    39   00002d d302            		out	(COMMA),a
+    40   00002f d30a            		out	(COMMB),a
+    41                          
+    42   000031 3e20            		ld	a, $20			;RESET RECV
+    43   000033 d302            		out	(COMMA),a
+    44   000035 d30a            		out	(COMMB),a
+    45                          
+    46   000037 3e10            		ld	a, $10			;RESET to MODE REG1
+    47   000039 d302            		out	(COMMA),a
+    48   00003b d30a            		out	(COMMB),a
+    49                          
+    50   00003d 3ee0            		ld	a, $E0			;BRG set 2 and timer = X1/CLK
+    51   00003f d304            		out	(AUXCTRL),a
     52                          
-    53   00001d dd21f0ff        		ld	IX, VARS
-    54   000021 dd360301        		ld	(IX + echo), 1		;echo on
-    55                          
-    56   000025 3e4a            		ld	a, $4A			;RX+TX off and
-    57   000027 d302            		out	(COMMA),a		;RESET ERROR
-    58   000029 d30a            		out	(COMMB),a
+    53   000041 3e00            		ld	a, 0			;load timer with
+    54   000043 d306            		out	(CNTMSB),a		;
+    55   000045 3e02            		ld	a, 2			;57600 BAUD
+    56   000047 d307            		out	(CNTLSB),a
+    57                          
+    58                          ;		in	a, (COMMA)		;Switch to test baudrates
     59                          
-    60   00002b 3e30            		ld	a, $30			;RESET TRANS
-    61   00002d d302            		out	(COMMA),a
-    62   00002f d30a            		out	(COMMB),a
-    63                          
-    64   000031 3e20            		ld	a, $20			;RESET RECV
-    65   000033 d302            		out	(COMMA),a
-    66   000035 d30a            		out	(COMMB),a
-    67                          
-    68   000037 3e10            		ld	a, $10			;RESET to MODE REG1
-    69   000039 d302            		out	(COMMA),a
-    70   00003b d30a            		out	(COMMB),a
-    71                          
-    72   00003d 3ee0            		ld	a, $E0			;BRG set 2 and timer = X1/CLK
-    73   00003f d304            		out	(AUXCTRL),a
-    74                          
-    75   000041 3e00            		ld	a, 0			;load timer with
-    76   000043 d306            		out	(CNTMSB),a		;
-    77   000045 3e02            		ld	a, 2			;57600 BAUD
-    78   000047 d307            		out	(CNTLSB),a
+    60   000049 3e66            		ld	a, $66			;115200 BAUD
+    61   00004b d301            		out	(CLOCKA),a
+    62                          ;		ld	a, $66			;
+    63   00004d d309            		out	(CLOCKB),a
+    64                          
+    65                          
+    66   00004f 3e13            		ld	a, $13			;no RTS handshake + 8bits no parity
+    67   000051 d300            		out	(MODEA),a
+    68   000053 d308            		out	(MODEB),a
+    69                          
+    70   000055 3e07            		ld	a, $07			;no CTS handshake + 1 stopbit
+    71   000057 d300            		out	(MODEA),a
+    72   000059 d308            		out	(MODEB),a
+    73                          
+    74   00005b 3e00            		ld	a, 0			;OP2-7 output
+    75   00005d d30d            		out	(OPCTRL),a
+    76                          
+    77                          ;		ld	a, %11111111		;out = low; inverting!
+    78                          ;		out	(OPSET),a
     79                          
-    80                          ;		in	a, (COMMA)		;Switch to test baudrates
-    81                          
-    82   000049 3e66            		ld	a, $66			;115200 BAUD
-    83   00004b d301            		out	(CLOCKA),a
-    84                          ;		ld	a, $66			;
-    85   00004d d309            		out	(CLOCKB),a
-    86                          
-    87                          
-    88   00004f 3e13            		ld	a, $13			;no RTS handshake + 8bits no parity
-    89   000051 d300            		out	(MODEA),a
-    90   000053 d308            		out	(MODEB),a
-    91                          
-    92   000055 3e07            		ld	a, $07			;no CTS handshake + 1 stopbit
-    93   000057 d300            		out	(MODEA),a
-    94   000059 d308            		out	(MODEB),a
-    95                          
-    96   00005b 3e00            		ld	a, 0			;OP2-7 output
-    97   00005d d30d            		out	(OPCTRL),a
-    98                          
-    99                          ;		ld	a, %11111111		;out = low; inverting!
-   100                          ;		out	(OPSET),a
+    80                          ;		ld	a, %10101010
+    81                          ;		out	(OPRES),a
+    82                          
+    83   00005f 3e00            		ld	a, 0			;IRQS AUS
+    84   000061 d305            		out	(IMR),a
+    85                          
+    86   000063 3e05            		ld	a, 5			;RX+TX AN
+    87   000065 d302            		out	(COMMA),a
+    88   000067 d30a            		out	(COMMB),a
+    89                          
+    90                          
+    91   000069 3e80            		ld	a, 080h			;OP7 = LOW, activate RAM
+    92   00006b d30e            		out	(OPSET), a
+    93                          
+    94   00006d 0e20            		ld	c, 32			;output space
+    95   00006f 0600            		ld	b, 0
+    96   000071 cdb902          		call	conout
+    97   000074 db01            wait:		in	a, (STATA)
+    98   000076 04              		inc	b
+    99   000077 e604            		and	4
+   100   000079 28f9            		jr	Z, wait
    101                          
-   102                          ;		ld	a, %10101010
-   103                          ;		out	(OPRES),a
-   104                          
-   105   00005f 3e00            		ld	a, 0			;IRQS AUS
-   106   000061 d305            		out	(IMR),a
-   107                          
-   108   000063 3e05            		ld	a, 5			;RX+TX AN
-   109   000065 d302            		out	(COMMA),a
-   110   000067 d30a            		out	(COMMB),a
-   111                          
-   112                          
-   113   000069 3e80            		ld	a, 080h			;OP7 = LOW, activate RAM
-   114   00006b d30e            		out	(OPSET), a
+   102   00007b 78              		ld	a, b			;if b < 10
+   103   00007c fe0a            		cp	10			;test baudrate is already acrivated
+   104   00007e 3802            		jr	C, printmenu
+   105   000080 db02            		in	a, (COMMA)		;switch to test baudrates
+   106                          
+   107                          printmenu:
+   108   000082 211103          		ld      HL, menutext
+   109   000085 cda202          		call	printstr
+   110                          
+   111                          printprompt:
+   112   000088 cd1405          		call	newline
+   113   00008b 0e3e            		ld	c, '>'
+   114   00008d cd1402          		call	printaddr
    115                          
-   116   00006d 0e20            		ld	c, 32			;output space
-   117   00006f 0600            		ld	b, 0
-   118   000071 cdb902          		call	conout
-   119   000074 db01            wait:		in	a, (STATA)
-   120   000076 04              		inc	b
-   121   000077 e604            		and	4
-   122   000079 28f9            		jr	Z, wait
-   123                          
-   124   00007b 78              		ld	a, b
-   125   00007c fe0a            		cp	10
-   126   00007e 3802            		jr	C, printmenu
-   127   000080 db02            		in	a, (COMMA)		;Switch to test baudrates
-   128                          
-   129                          printmenu:
-   130   000082 211103          		ld      HL, menutext
-   131   000085 cda202          		call	printstr
-   132                          
-   133                          printprompt:
-   134   000088 cd1405          		call	newline
-   135   00008b 0e3e            		ld	c, '>'
-   136   00008d cd1402          		call	printaddr
-   137                          
-   138                          enterkey:
-   139   000090 0e00            		ld	c, 0
-   140   000092 21ec02          		ld	HL, menukey
-   141   000095 46              		ld	b, (HL)
-   142   000096 23              		inc	HL
-   143   000097 cd2405          		call	getupper
-   144                          enterkey2:
-   145   00009a be              		cp	(HL)
-   146   00009b 2807            		jr	Z, enterkey1
-   147   00009d 23              		inc	HL
-   148   00009e 0c              		inc	c
-   149   00009f 0c              		inc	c
-   150   0000a0 10f8            		djnz	enterkey2
-   151   0000a2 18ec            		jr	enterkey
-   152                          enterkey1:
-   153   0000a4 0600            		ld	b, 0
-   154   0000a6 21f902          		ld	HL, menutab
-   155   0000a9 09              		add	HL, BC
-   156   0000aa 018800          		ld	BC, printprompt
-   157   0000ad c5              		push	BC
-   158   0000ae 5e              		ld	e, (HL)
-   159   0000af 23              		inc	HL
-   160   0000b0 56              		ld	d, (HL)
-   161   0000b1 eb              		ex	DE, HL
-   162   0000b2 e9              		jp	(HL)
-   163                          
-   164                          
-   165                          ;--------------------------------------------------------------
-   166                          ; open a diskfile (and close if already assigned)
-   167                          ;--------------------------------------------------------------
-   168                          opendisk:
-   169   0000b3 cdf600          		call	getDiskno
-   170   0000b6 d8              		ret	C
-   171                          
-   172   0000b7 4f              		ld	c, a
-   173   0000b8 cdb902          		call	conout
-   174                          
-   175   0000bb d630            		sub	a, '0'
-   176   0000bd 47              		ld	b, a
-   177   0000be 3e4f            		ld	a, 'O'
-   178   0000c0 cde102          		call	serout
-   179   0000c3 78              		ld	a, b
-   180   0000c4 cde102          		call	serout
-   181   0000c7 cde102          		call	serout
-   182   0000ca cde102          		call	serout
-   183                          
-   184   0000cd cdc502          		call	serintime
-   185   0000d0 d8              		ret	C
-   186   0000d1 fe41            		cp	'A'
-   187   0000d3 c0              		ret	NZ
+   116                          enterkey:
+   117   000090 0e00            		ld	c, 0
+   118   000092 21ec02          		ld	HL, menukey
+   119   000095 46              		ld	b, (HL)
+   120   000096 23              		inc	HL
+   121   000097 cd2405          		call	getupper
+   122                          enterkey2:
+   123   00009a be              		cp	(HL)
+   124   00009b 2807            		jr	Z, enterkey1
+   125   00009d 23              		inc	HL
+   126   00009e 0c              		inc	c
+   127   00009f 0c              		inc	c
+   128   0000a0 10f8            		djnz	enterkey2
+   129   0000a2 18ec            		jr	enterkey
+   130                          enterkey1:
+   131   0000a4 0600            		ld	b, 0
+   132   0000a6 21f902          		ld	HL, menutab
+   133   0000a9 09              		add	HL, BC
+   134   0000aa 018800          		ld	BC, printprompt
+   135   0000ad c5              		push	BC
+   136   0000ae 5e              		ld	e, (HL)
+   137   0000af 23              		inc	HL
+   138   0000b0 56              		ld	d, (HL)
+   139   0000b1 eb              		ex	DE, HL
+   140   0000b2 e9              		jp	(HL)
+   141                          
+   142                          
+   143                          ;--------------------------------------------------------------
+   144                          ; open a diskfile (and close if already assigned)
+   145                          ;--------------------------------------------------------------
+   146                          opendisk:
+   147   0000b3 cdf600          		call	getDiskno
+   148   0000b6 d8              		ret	C
+   149                          
+   150   0000b7 4f              		ld	c, a
+   151   0000b8 cdb902          		call	conout
+   152                          
+   153   0000bb d630            		sub	a, '0'
+   154   0000bd 47              		ld	b, a
+   155   0000be 3e4f            		ld	a, 'O'
+   156   0000c0 cde102          		call	serout
+   157   0000c3 78              		ld	a, b
+   158   0000c4 cde102          		call	serout
+   159   0000c7 cde102          		call	serout
+   160   0000ca cde102          		call	serout
+   161                          
+   162   0000cd cdc502          		call	serintime
+   163   0000d0 d8              		ret	C
+   164   0000d1 fe41            		cp	'A'
+   165   0000d3 c0              		ret	NZ
+   166                          
+   167   0000d4 cd0601          		call	getfilename
+   168   0000d7 c9              		ret
+   169                          
+   170                          ;--------------------------------------------------------------
+   171                          ; close a diskfile
+   172                          ;--------------------------------------------------------------
+   173                          closedisk:
+   174   0000d8 cdf600          		call	getDiskno
+   175   0000db d8              		ret	C
+   176                          
+   177   0000dc 4f              		ld	c, a
+   178   0000dd cdb902          		call	conout
+   179                          
+   180   0000e0 d630            		sub	a, '0'
+   181   0000e2 47              		ld	b, a
+   182   0000e3 3e43            		ld	a, 'C'
+   183   0000e5 cde102          		call	serout
+   184   0000e8 78              		ld	a, b
+   185   0000e9 cde102          		call	serout
+   186   0000ec cde102          		call	serout
+   187   0000ef cde102          		call	serout
    188                          
-   189   0000d4 cd0601          		call	getfilename
-   190   0000d7 c9              		ret
+   189   0000f2 cdc502          		call	serintime
+   190   0000f5 c9              		ret
    191                          
-   192                          ;--------------------------------------------------------------
-   193                          ; close a diskfile
-   194                          ;--------------------------------------------------------------
-   195                          closedisk:
-   196   0000d8 cdf600          		call	getDiskno
-   197   0000db d8              		ret	C
-   198                          
-   199   0000dc 4f              		ld	c, a
-   200   0000dd cdb902          		call	conout
-   201                          
-   202   0000e0 d630            		sub	a, '0'
-   203   0000e2 47              		ld	b, a
-   204   0000e3 3e43            		ld	a, 'C'
-   205   0000e5 cde102          		call	serout
-   206   0000e8 78              		ld	a, b
-   207   0000e9 cde102          		call	serout
-   208   0000ec cde102          		call	serout
-   209   0000ef cde102          		call	serout
-   210                          
-   211   0000f2 cdc502          		call	serintime
-   212   0000f5 c9              		ret
-   213                          
-   214                          
-   215                          ;--------------------------------------------------------------
-   216                          ; enter disk number (0-9)
-   217                          ;--------------------------------------------------------------
-   218                          getDiskno:
-   219   0000f6 21d004          		ld	HL, disktext
-   220   0000f9 cda202          		call	printstr
-   221   0000fc cdb002          		call	conin
-   222   0000ff fe30            		cp	'0'
-   223   000101 d8              		ret	C
-   224   000102 fe3a            		cp	'9'+1
-   225   000104 3f              		ccf
-   226   000105 c9              		ret
-   227                          
-   228                          ;--------------------------------------------------------------
-   229                          ; enter text (filename) delimited by CR and send to SER:
-   230                          ;--------------------------------------------------------------
-   231   000106 21e904          getfilename:	ld	HL, filetext
-   232   000109 cda202          		call	printstr
-   233                          getfilename1:
-   234   00010c cdb002          		call	conin
-   235   00010f cde102          		call	serout
-   236   000112 4f              		ld	c, a
-   237   000113 cdb902          		call	conout
-   238   000116 fe0d            		cp	13
-   239   000118 20f2            		jr	NZ, getfilename1
-   240   00011a c9              		ret
-   241                          
+   192                          
+   193                          ;--------------------------------------------------------------
+   194                          ; enter disk number (0-9)
+   195                          ;--------------------------------------------------------------
+   196                          getDiskno:
+   197   0000f6 21d004          		ld	HL, disktext
+   198   0000f9 cda202          		call	printstr
+   199   0000fc cdb002          		call	conin
+   200   0000ff fe30            		cp	'0'
+   201   000101 d8              		ret	C
+   202   000102 fe3a            		cp	'9'+1
+   203   000104 3f              		ccf
+   204   000105 c9              		ret
+   205                          
+   206                          ;--------------------------------------------------------------
+   207                          ; enter text (filename) delimited by CR and send to SER:
+   208                          ;--------------------------------------------------------------
+   209   000106 21e904          getfilename:	ld	HL, filetext
+   210   000109 cda202          		call	printstr
+   211                          getfilename1:
+   212   00010c cdb002          		call	conin
+   213   00010f cde102          		call	serout
+   214   000112 4f              		ld	c, a
+   215   000113 cdb902          		call	conout
+   216   000116 fe0d            		cp	13
+   217   000118 20f2            		jr	NZ, getfilename1
+   218   00011a c9              		ret
+   219                          
+   220                          ;--------------------------------------------------------------
+   221                          ; jump to CP/M
+   222                          ;--------------------------------------------------------------
+   223                          cpm:
+   224   00011b c300fa          		jp	0FA00h
+   225                          ;--------------------------------------------------------------
+   226                          ; jump to printmenu
+   227                          ;--------------------------------------------------------------
+   228                          questionmark:
+   229   00011e c1              		pop	BC
+   230   00011f c38200          		jp	printmenu
+   231                          
+   232                          ;--------------------------------------------------------------
+   233                          ; exit from monitor
+   234                          ;--------------------------------------------------------------
+   235                          ;exit:		pop	BC
+   236                          ;		ld	SP, (VARS + oldstack)
+   237                          ;		ret
+   238                          
+   239                          
+   240                          ;--------------------------------------------------------------
+   241                          ; jump to (addr)
    242                          ;--------------------------------------------------------------
-   243                          ; jump to CP/M
-   244                          ;--------------------------------------------------------------
-   245                          cpm:
-   246   00011b c300fa          		jp	0FA00h
+   243   000122 2af1ff          goto:		ld	HL, (VARS + addr)
+   244   000125 e9              		jp	(HL)
+   245                          
+   246                          
    247                          ;--------------------------------------------------------------
-   248                          ; jump to printmenu
+   248                          ; Disassemble 22 lines starting from (addr)
    249                          ;--------------------------------------------------------------
-   250                          questionmark:
-   251   00011e c1              		pop	BC
-   252   00011f c38200          		jp	printmenu
-   253                          
-   254                          ;--------------------------------------------------------------
-   255                          ; exit from monitor
-   256                          ;--------------------------------------------------------------
-   257                          ;exit:		pop	BC
-   258                          ;		ld	SP, (VARS + oldstack)
-   259                          ;		ret
+   250                          disass:
+   251   000126 0616            		ld	B, 22
+   252   000128 ed5bf1ff        		ld	DE, (VARS + addr)
+   253   00012c cd1405          		call	newline
+   254                          disass1:
+   255   00012f c5              		push	BC
+   256   000130 cd2d05          		call	DISASM
+   257   000133 cd1405          		call	newline
+   258   000136 c1              		pop	BC
+   259   000137 10f6            		djnz	disass1
    260                          
-   261                          
-   262                          ;--------------------------------------------------------------
-   263                          ; jump to (addr)
+   261   000139 ed53f1ff        		ld	(VARS + addr), DE	;save new address
+   262   00013d c9              		ret
+   263                          
    264                          ;--------------------------------------------------------------
-   265   000122 2af1ff          goto:		ld	HL, (VARS + addr)
-   266   000125 e9              		jp	(HL)
-   267                          
-   268                          
-   269                          ;--------------------------------------------------------------
-   270                          ; Disassemble 22 lines starting from (addr)
-   271                          ;--------------------------------------------------------------
-   272                          disass:
-   273   000126 0616            		ld	B, 22
-   274   000128 ed5bf1ff        		ld	DE, (VARS + addr)
-   275   00012c cd1405          		call	newline
-   276                          disass1:
-   277   00012f c5              		push	BC
-   278   000130 cd2d05          		call	DISASM
-   279   000133 cd1405          		call	newline
-   280   000136 c1              		pop	BC
-   281   000137 10f6            		djnz	disass1
-   282                          
-   283   000139 ed53f1ff        		ld	(VARS + addr), DE	;save new address
-   284   00013d c9              		ret
-   285                          
-   286                          ;--------------------------------------------------------------
-   287                          ;
-   288                          ;--------------------------------------------------------------
-   289                          fillmem:
-   290   00013e 21be04          		ld	HL, filltext
-   291   000141 cda202          		call	printstr
-   292                          
-   293   000144 cd6e02          		call	gethexbyte		;get from-addr
-   294   000147 67              		ld	h, a
-   295   000148 cd6e02          		call	gethexbyte
-   296   00014b 6f              		ld	l, a
-   297   00014c e5              		push	HL
-   298   00014d e5              		push	HL
+   265                          ;
+   266                          ;--------------------------------------------------------------
+   267                          fillmem:
+   268   00013e 21be04          		ld	HL, filltext
+   269   000141 cda202          		call	printstr
+   270                          
+   271   000144 cd6e02          		call	gethexbyte		;get from-addr
+   272   000147 67              		ld	h, a
+   273   000148 cd6e02          		call	gethexbyte
+   274   00014b 6f              		ld	l, a
+   275   00014c e5              		push	HL
+   276   00014d e5              		push	HL
+   277                          
+   278   00014e 21b304          		ld	HL, lentext
+   279   000151 cda202          		call	printstr
+   280   000154 cd6e02          		call	gethexbyte		;get length
+   281   000157 47              		ld	b, a
+   282   000158 cd6e02          		call	gethexbyte
+   283   00015b 4f              		ld	c, a
+   284                          
+   285   00015c 78              		ld	a, b			; if BC = 0
+   286   00015d b1              		or	a, c
+   287   00015e c8              		ret	Z			; return
+   288   00015f 0b              		dec	BC
+   289                          
+   290   000160 21c904          		ld	HL, withtext
+   291   000163 cda202          		call	printstr
+   292   000166 cd6e02          		call	gethexbyte
+   293                          
+   294   000169 d1              		pop	DE			; DE = HL + 1
+   295   00016a 13              		inc	DE
+   296                          
+   297   00016b e1              		pop	HL
+   298   00016c 77              		ld	(HL), a
    299                          
-   300   00014e 21b304          		ld	HL, lentext
-   301   000151 cda202          		call	printstr
-   302   000154 cd6e02          		call	gethexbyte		;get length
-   303   000157 47              		ld	b, a
-   304   000158 cd6e02          		call	gethexbyte
-   305   00015b 4f              		ld	c, a
-   306                          
-   307   00015c 78              		ld	a, b			; if BC = 0
-   308   00015d b1              		or	a, c
-   309   00015e c8              		ret	Z			; return
-   310   00015f 0b              		dec	BC
-   311                          
-   312   000160 21c904          		ld	HL, withtext
-   313   000163 cda202          		call	printstr
-   314   000166 cd6e02          		call	gethexbyte
-   315                          
-   316   000169 d1              		pop	DE			; DE = HL + 1
-   317   00016a 13              		inc	DE
-   318                          
-   319   00016b e1              		pop	HL
-   320   00016c 77              		ld	(HL), a
-   321                          
-   322   00016d 78              		ld	a, b
-   323   00016e b1              		or	a, c
-   324   00016f c8              		ret	Z
-   325                          
-   326   000170 edb0            		LDIR
+   300   00016d 78              		ld	a, b
+   301   00016e b1              		or	a, c
+   302   00016f c8              		ret	Z
+   303                          
+   304   000170 edb0            		LDIR
+   305                          
+   306   000172 c9              		ret
+   307                          
+   308                          ;--------------------------------------------------------------
+   309                          ;
+   310                          ;--------------------------------------------------------------
+   311                          transfer:
+   312   000173 21a404          		ld	HL, transtext
+   313   000176 cda202          		call	printstr
+   314                          
+   315   000179 cd6e02          		call	gethexbyte		;get from-addr
+   316   00017c 67              		ld	h, a
+   317   00017d cd6e02          		call	gethexbyte
+   318   000180 6f              		ld	l, a
+   319   000181 e5              		push	HL
+   320                          
+   321   000182 21b304          		ld	HL, lentext
+   322   000185 cda202          		call	printstr
+   323   000188 cd6e02          		call	gethexbyte		;get length
+   324   00018b 47              		ld	b, a
+   325   00018c cd6e02          		call	gethexbyte
+   326   00018f 4f              		ld	c, a
    327                          
-   328   000172 c9              		ret
-   329                          
-   330                          ;--------------------------------------------------------------
-   331                          ;
-   332                          ;--------------------------------------------------------------
-   333                          transfer:
-   334   000173 21a404          		ld	HL, transtext
-   335   000176 cda202          		call	printstr
+   328   000190 21b904          		ld	HL, totext
+   329   000193 cda202          		call	printstr
+   330   000196 cd6e02          		call	gethexbyte		;get dest-addr
+   331   000199 57              		ld	d, a
+   332   00019a cd6e02          		call	gethexbyte
+   333   00019d 5f              		ld	e, a
+   334                          
+   335   00019e e1              		pop	HL
    336                          
-   337   000179 cd6e02          		call	gethexbyte		;get from-addr
-   338   00017c 67              		ld	h, a
-   339   00017d cd6e02          		call	gethexbyte
-   340   000180 6f              		ld	l, a
-   341   000181 e5              		push	HL
-   342                          
-   343   000182 21b304          		ld	HL, lentext
-   344   000185 cda202          		call	printstr
-   345   000188 cd6e02          		call	gethexbyte		;get length
-   346   00018b 47              		ld	b, a
-   347   00018c cd6e02          		call	gethexbyte
-   348   00018f 4f              		ld	c, a
-   349                          
-   350   000190 21b904          		ld	HL, totext
-   351   000193 cda202          		call	printstr
-   352   000196 cd6e02          		call	gethexbyte		;get dest-addr
-   353   000199 57              		ld	d, a
-   354   00019a cd6e02          		call	gethexbyte
-   355   00019d 5f              		ld	e, a
-   356                          
-   357   00019e e1              		pop	HL
-   358                          
-   359   00019f edb0            		LDIR
-   360                          
-   361   0001a1 c9              		ret
-   362                          
-   363                          ;--------------------------------------------------------------
-   364                          ; change a byte in (addr)
-   365                          ;--------------------------------------------------------------
-   366                          changebyte:
-   367   0001a2 2af1ff          		ld	HL, (VARS + addr)
-   368   0001a5 7e              		ld	a, (HL)
-   369   0001a6 cdf404          		call	printhex
-   370   0001a9 0e3a            		ld	c, ':'
-   371   0001ab cdb902          		call	conout
-   372   0001ae cd6e02          		call	gethexbyte
-   373   0001b1 77              		ld	(HL), a
-   374   0001b2 c9              		ret
+   337   00019f edb0            		LDIR
+   338                          
+   339   0001a1 c9              		ret
+   340                          
+   341                          ;--------------------------------------------------------------
+   342                          ; change a byte in (addr)
+   343                          ;--------------------------------------------------------------
+   344                          changebyte:
+   345   0001a2 2af1ff          		ld	HL, (VARS + addr)
+   346   0001a5 7e              		ld	a, (HL)
+   347   0001a6 cdf404          		call	printhex
+   348   0001a9 0e3a            		ld	c, ':'
+   349   0001ab cdb902          		call	conout
+   350   0001ae cd6e02          		call	gethexbyte
+   351   0001b1 77              		ld	(HL), a
+   352   0001b2 c9              		ret
+   353                          
+   354                          
+   355                          ;--------------------------------------------------------------
+   356                          ; read new address from conin
+   357                          ;--------------------------------------------------------------
+   358                          newaddress:
+   359   0001b3 219404          		ld	HL, addrtext
+   360   0001b6 cda202          		call	printstr
+   361   0001b9 cd6e02          		call	gethexbyte
+   362   0001bc 32f2ff          		ld	(VARS + addr + 1), a
+   363   0001bf cd6e02          		call	gethexbyte
+   364   0001c2 32f1ff          		ld	(VARS + addr), a
+   365   0001c5 c9              		ret
+   366                          
+   367                          
+   368                          ;--------------------------------------------------------------
+   369                          ; dump 256 bytes starting from (HL)
+   370                          ;--------------------------------------------------------------
+   371                          dumpmem:
+   372   0001c6 cd1405          		call	newline
+   373   0001c9 1610            		ld	d, 16
+   374   0001cb 2af1ff          		ld	HL, (VARS + addr)
    375                          
-   376                          
-   377                          ;--------------------------------------------------------------
-   378                          ; read new address from conin
-   379                          ;--------------------------------------------------------------
-   380                          newaddress:
-   381   0001b3 219404          		ld	HL, addrtext
-   382   0001b6 cda202          		call	printstr
-   383   0001b9 cd6e02          		call	gethexbyte
-   384   0001bc 32f2ff          		ld	(VARS + addr + 1), a
-   385   0001bf cd6e02          		call	gethexbyte
-   386   0001c2 32f1ff          		ld	(VARS + addr), a
-   387   0001c5 c9              		ret
-   388                          
-   389                          
-   390                          ;--------------------------------------------------------------
-   391                          ; dump 256 bytes starting from (HL)
-   392                          ;--------------------------------------------------------------
-   393                          dumpmem:
-   394   0001c6 cd1405          		call	newline
-   395   0001c9 1610            		ld	d, 16
-   396   0001cb 2af1ff          		ld	HL, (VARS + addr)
-   397                          
-   398                          dumpline:
-   399   0001ce 0e3a            		ld	c, ':'
-   400   0001d0 cd1402          		call	printaddr
-   401   0001d3 cd1c05          		call	space
-   402   0001d6 e5              		push	HL
-   403                          
-   404   0001d7 0610            		ld	b, 16
-   405                          dumpmem1:
-   406   0001d9 7e              		ld	a, (HL)
-   407   0001da 23              		inc	HL
-   408   0001db cdf404          		call	printhex
-   409   0001de cd1c05          		call	space
-   410   0001e1 78              		ld	a, b
-   411   0001e2 fe09            		cp	9
-   412   0001e4 2003            		jr	NZ, dumpmem3
-   413   0001e6 cd1c05          		call	space
-   414                          dumpmem3:
-   415   0001e9 10ee            		djnz	dumpmem1
-   416                          
+   376                          dumpline:
+   377   0001ce 0e3a            		ld	c, ':'
+   378   0001d0 cd1402          		call	printaddr
+   379   0001d3 cd1c05          		call	space
+   380   0001d6 e5              		push	HL
+   381                          
+   382   0001d7 0610            		ld	b, 16
+   383                          dumpmem1:
+   384   0001d9 7e              		ld	a, (HL)
+   385   0001da 23              		inc	HL
+   386   0001db cdf404          		call	printhex
+   387   0001de cd1c05          		call	space
+   388   0001e1 78              		ld	a, b
+   389   0001e2 fe09            		cp	9
+   390   0001e4 2003            		jr	NZ, dumpmem3
+   391   0001e6 cd1c05          		call	space
+   392                          dumpmem3:
+   393   0001e9 10ee            		djnz	dumpmem1
+   394                          
+   395                          
+   396   0001eb 0e7c            		ld	c, '|'
+   397   0001ed cdb902          		call	conout
+   398   0001f0 0610            		ld	b, 16
+   399   0001f2 e1              		pop	HL
+   400                          
+   401                          dumpmem5:
+   402   0001f3 7e              		ld	a, (HL)
+   403   0001f4 23              		inc	HL
+   404   0001f5 fe20            		cp	32
+   405   0001f7 3804            		jr	C, dumpmem6
+   406   0001f9 fe7e            		cp	126
+   407   0001fb 3802            		jr	C, dumpmem4
+   408                          dumpmem6:
+   409   0001fd 3e2e            		ld	a, '.'
+   410                          dumpmem4:
+   411   0001ff 4f              		ld	c, a
+   412   000200 cdb902          		call	conout
+   413   000203 10ee            		djnz	dumpmem5
+   414                          
+   415   000205 0e7c            		ld	c, '|'
+   416   000207 cdb902          		call	conout
    417                          
-   418   0001eb 0e7c            		ld	c, '|'
-   419   0001ed cdb902          		call	conout
-   420   0001f0 0610            		ld	b, 16
-   421   0001f2 e1              		pop	HL
-   422                          
-   423                          dumpmem5:
-   424   0001f3 7e              		ld	a, (HL)
-   425   0001f4 23              		inc	HL
-   426   0001f5 fe20            		cp	32
-   427   0001f7 3804            		jr	C, dumpmem6
-   428   0001f9 fe7e            		cp	126
-   429   0001fb 3802            		jr	C, dumpmem4
-   430                          dumpmem6:
-   431   0001fd 3e2e            		ld	a, '.'
-   432                          dumpmem4:
-   433   0001ff 4f              		ld	c, a
-   434   000200 cdb902          		call	conout
-   435   000203 10ee            		djnz	dumpmem5
+   418   00020a cd1405          		call	newline
+   419   00020d 22f1ff          		ld	(VARS + addr), hl
+   420   000210 15              		dec	d
+   421   000211 20bb            		jr	NZ, dumpline
+   422   000213 c9              		ret
+   423                          
+   424                          
+   425                          ;--------------------------------------------------------------
+   426                          ; print zero-terminated string via conout and character in C
+   427                          ; uses A, E
+   428                          ;--------------------------------------------------------------
+   429                          printaddr:
+   430   000214 3af2ff          		ld	a, (VARS + addr + 1)
+   431   000217 cdf404          		call	printhex
+   432   00021a 3af1ff          		ld	a, (VARS + addr)
+   433   00021d cdf404          		call	printhex
+   434   000220 c3b902          		jp	conout
+   435                          
    436                          
-   437   000205 0e7c            		ld	c, '|'
-   438   000207 cdb902          		call	conout
-   439                          
-   440   00020a cd1405          		call	newline
-   441   00020d 22f1ff          		ld	(VARS + addr), hl
-   442   000210 15              		dec	d
-   443   000211 20bb            		jr	NZ, dumpline
-   444   000213 c9              		ret
-   445                          
-   446                          
-   447                          ;--------------------------------------------------------------
-   448                          ; print zero-terminated string via conout and character in C
-   449                          ; uses A, E
-   450                          ;--------------------------------------------------------------
-   451                          printaddr:
-   452   000214 3af2ff          		ld	a, (VARS + addr + 1)
-   453   000217 cdf404          		call	printhex
-   454   00021a 3af1ff          		ld	a, (VARS + addr)
-   455   00021d cdf404          		call	printhex
-   456   000220 c3b902          		jp	conout
-   457                          
-   458                          
-   459                          ;--------------------------------------------------------------
-   460                          ; download an Intel-Hex file
-   461                          ; uses A, B, HL, E
-   462                          ;--------------------------------------------------------------
-   463   000223 af              download:	xor	a
-   464   000224 32f3ff          		ld	(VARS + echo), a	;echo off
-   465   000227 32f0ff          		ld	(VARS + sum), a		;sum = 0
-   466   00022a 217904          		ld	HL, downtext		;print "download..."
-   467   00022d cda202          		call	printstr
-   468                          download2:
-   469   000230 cdb002          		call	conin			;wait for ':'
-   470   000233 fe3a            		cp	a, ':'
-   471   000235 20f9            		jr	NZ, download2
+   437                          ;--------------------------------------------------------------
+   438                          ; download an Intel-Hex file
+   439                          ; uses A, B, HL, E
+   440                          ;--------------------------------------------------------------
+   441   000223 af              download:	xor	a
+   442   000224 32f3ff          		ld	(VARS + echo), a	;echo off
+   443   000227 32f0ff          		ld	(VARS + sum), a		;sum = 0
+   444   00022a 217904          		ld	HL, downtext		;print "download..."
+   445   00022d cda202          		call	printstr
+   446                          download2:
+   447   000230 cdb002          		call	conin			;wait for ':'
+   448   000233 fe3a            		cp	a, ':'
+   449   000235 20f9            		jr	NZ, download2
+   450                          
+   451   000237 cd6e02          		call	gethexbyte		;# of bytes to read
+   452   00023a 47              		ld	b, a			;in b
+   453   00023b cd6e02          		call	gethexbyte		;address high
+   454   00023e 67              		ld	h, a
+   455   00023f cd6e02          		call	gethexbyte		;address low
+   456   000242 6f              		ld	l, a
+   457   000243 cd6e02          		call	gethexbyte		;record-type
+   458   000246 b7              		or	a
+   459   000247 2012            		jr	NZ, downend
+   460                          
+   461                          download1:
+   462   000249 cd6e02          		call	gethexbyte		;get byte to store
+   463                          
+   464   00024c 77              		ld	(HL), a			;store
+   465   00024d 23              		inc	HL			;increment address
+   466   00024e 10f9            		djnz	download1		;loop
+   467                          
+   468   000250 cd6e02          		call	gethexbyte
+   469   000253 3af0ff          		ld	a, (VARS + sum)
+   470   000256 b7              		or	a
+   471   000257 2010            		jr	NZ, downerror
    472                          
-   473   000237 cd6e02          		call	gethexbyte		;# of bytes to read
-   474   00023a 47              		ld	b, a			;in b
-   475   00023b cd6e02          		call	gethexbyte		;address high
-   476   00023e 67              		ld	h, a
-   477   00023f cd6e02          		call	gethexbyte		;address low
-   478   000242 6f              		ld	l, a
-   479   000243 cd6e02          		call	gethexbyte		;record-type
-   480   000246 b7              		or	a
-   481   000247 2012            		jr	NZ, downend
+   473   000259 18d5            		jr	download2
+   474                          
+   475                          downend:
+   476   00025b cd6e02          		call	gethexbyte
+   477   00025e 218904          		ld	HL, downendtext
+   478                          downend1:
+   479   000261 cda202          		call	printstr
+   480   000264 dd360301        		ld	(IX + echo), 1	;echo on
+   481   000268 c9              		ret
    482                          
-   483                          download1:
-   484   000249 cd6e02          		call	gethexbyte		;get byte to store
-   485                          
-   486   00024c 77              		ld	(HL), a			;store
-   487   00024d 23              		inc	HL			;increment address
-   488   00024e 10f9            		djnz	download1		;loop
-   489                          
-   490   000250 cd6e02          		call	gethexbyte
-   491   000253 3af0ff          		ld	a, (VARS + sum)
-   492   000256 b7              		or	a
-   493   000257 2010            		jr	NZ, downerror
-   494                          
-   495   000259 18d5            		jr	download2
-   496                          
-   497                          downend:
-   498   00025b cd6e02          		call	gethexbyte
-   499   00025e 218904          		ld	HL, downendtext
-   500                          downend1:
-   501   000261 cda202          		call	printstr
-   502   000264 dd360301        		ld	(IX + echo), 1	;echo on
-   503   000268 c9              		ret
-   504                          
-   505                          downerror:
-   506   000269 219d04          		ld	HL, errortext
-   507   00026c 18f3            		jr	downend1
-   508                          
+   483                          downerror:
+   484   000269 219d04          		ld	HL, errortext
+   485   00026c 18f3            		jr	downend1
+   486                          
+   487                          
+   488                          ;--------------------------------------------------------------
+   489                          ; gethexbyte
+   490                          ; returns 00-FF in A
+   491                          ; uses E
+   492                          ;--------------------------------------------------------------
+   493                          gethexbyte:
+   494   00026e d5              		push	DE
+   495   00026f cd8502          		call	getnibble
+   496   000272 07              		rlca
+   497   000273 07              		rlca
+   498   000274 07              		rlca
+   499   000275 07              		rlca
+   500   000276 5f              		ld	e, a
+   501   000277 cd8502          		call	getnibble
+   502   00027a b3              		or	e
+   503   00027b 5f              		ld	e, a
+   504   00027c dd8600          		add	a, (IX + sum)
+   505   00027f 32f0ff          		ld	(VARS + sum), a
+   506   000282 7b              		ld	a, e
+   507   000283 d1              		pop	DE
+   508   000284 c9              		ret
    509                          
-   510                          ;--------------------------------------------------------------
-   511                          ; gethexbyte
-   512                          ; returns 00-FF in A
-   513                          ; uses E
+   510                          
+   511                          ;--------------------------------------------------------------
+   512                          ; calls conin
+   513                          ; returns 0-F in A
    514                          ;--------------------------------------------------------------
-   515                          gethexbyte:
-   516   00026e d5              		push	DE
-   517   00026f cd8502          		call	getnibble
-   518   000272 07              		rlca
-   519   000273 07              		rlca
-   520   000274 07              		rlca
-   521   000275 07              		rlca
-   522   000276 5f              		ld	e, a
-   523   000277 cd8502          		call	getnibble
-   524   00027a b3              		or	e
-   525   00027b 5f              		ld	e, a
-   526   00027c dd8600          		add	a, (IX + sum)
-   527   00027f 32f0ff          		ld	(VARS + sum), a
-   528   000282 7b              		ld	a, e
-   529   000283 d1              		pop	DE
-   530   000284 c9              		ret
-   531                          
-   532                          
-   533                          ;--------------------------------------------------------------
-   534                          ; calls conin
-   535                          ; returns 0-F in A
-   536                          ;--------------------------------------------------------------
-   537                          getnibble:
-   538   000285 cdb002          		call	conin
-   539   000288 f5              		push	AF
-   540   000289 3af3ff          		ld	a, (VARS + echo)
-   541   00028c b7              		or	a
-   542   00028d 2808            		jr	Z, getnibble2
-   543   00028f f1              		pop	AF
-   544   000290 f5              		push	AF
-   545   000291 c5              		push	BC
-   546   000292 4f              		ld	c, a
-   547   000293 cdb902          		call	conout
-   548   000296 c1              		pop	BC
-   549                          getnibble2:
-   550   000297 f1              		pop	AF
-   551   000298 d630            		sub	'0'
-   552   00029a fe0a            		cp	10		; < 10 ?
-   553   00029c d8              		ret	C		; yes, return
-   554   00029d e6df            		and	11011111b	; make uppercase
-   555   00029f d607            		sub	7
-   556   0002a1 c9              		ret
-   557                          
-   558                          
-   559                          ;--------------------------------------------------------------
-   560                          ; print text in (HL) uses
-   561                          ; A
-   562                          ;--------------------------------------------------------------
-   563                          printstr:
-   564   0002a2 c5              		push	BC
-   565                          printstr2:
-   566   0002a3 7e              		ld	a, (HL)
-   567   0002a4 23              		inc	HL
-   568   0002a5 b7              		or	a
-   569   0002a6 2806            		jr	Z, printstr1
-   570   0002a8 4f              		ld	c, a
-   571   0002a9 cdb902          		call	conout
-   572   0002ac 18f5            		jr	printstr2
-   573                          printstr1:
-   574   0002ae c1              		pop	BC
-   575   0002af c9              		ret
-   576                          
-   577                          ;--------------------------------------------------------------
-   578                          ; get a character in A from rs232 (1)
-   579                          ;
+   515                          getnibble:
+   516   000285 cdb002          		call	conin
+   517   000288 f5              		push	AF
+   518   000289 3af3ff          		ld	a, (VARS + echo)
+   519   00028c b7              		or	a
+   520   00028d 2808            		jr	Z, getnibble2
+   521   00028f f1              		pop	AF
+   522   000290 f5              		push	AF
+   523   000291 c5              		push	BC
+   524   000292 4f              		ld	c, a
+   525   000293 cdb902          		call	conout
+   526   000296 c1              		pop	BC
+   527                          getnibble2:
+   528   000297 f1              		pop	AF
+   529   000298 d630            		sub	'0'
+   530   00029a fe0a            		cp	10		; < 10 ?
+   531   00029c d8              		ret	C		; yes, return
+   532   00029d e6df            		and	11011111b	; make uppercase
+   533   00029f d607            		sub	7
+   534   0002a1 c9              		ret
+   535                          
+   536                          
+   537                          ;--------------------------------------------------------------
+   538                          ; print text in (HL) uses
+   539                          ; A
+   540                          ;--------------------------------------------------------------
+   541                          printstr:
+   542   0002a2 c5              		push	BC
+   543                          printstr2:
+   544   0002a3 7e              		ld	a, (HL)
+   545   0002a4 23              		inc	HL
+   546   0002a5 b7              		or	a
+   547   0002a6 2806            		jr	Z, printstr1
+   548   0002a8 4f              		ld	c, a
+   549   0002a9 cdb902          		call	conout
+   550   0002ac 18f5            		jr	printstr2
+   551                          printstr1:
+   552   0002ae c1              		pop	BC
+   553   0002af c9              		ret
+   554                          
+   555                          ;--------------------------------------------------------------
+   556                          ; get a character in A from rs232 (1)
+   557                          ;
+   558                          ;--------------------------------------------------------------
+   559                          chrin:
+   560   0002b0 db01            		in	a, (STATA)
+   561   0002b2 e601            		and	a, 1
+   562   0002b4 28fa            		jr	Z, chrin
+   563   0002b6 db03            		in	a, (RECA)
+   564   0002b8 c9              		ret
+   565                          
+   566                          ;--------------------------------------------------------------
+   567                          ; output a character in A over rs232 (1)
+   568                          ;
+   569                          ;--------------------------------------------------------------
+   570                          chrout:
+   571   0002b9 f5              		push	AF
+   572   0002ba db01            chrout1:	in	a, (STATA)
+   573   0002bc e604            		and	a, 4
+   574   0002be 28fa            		jr	Z, chrout1
+   575   0002c0 79              		ld	a, c
+   576   0002c1 d303            		out	(TRANSA), a
+   577   0002c3 f1              		pop	AF
+   578   0002c4 c9              		ret
+   579                          
    580                          ;--------------------------------------------------------------
-   581                          chrin:
-   582   0002b0 db01            		in	a, (STATA)
-   583   0002b2 e601            		and	a, 1
-   584   0002b4 28fa            		jr	Z, chrin
-   585   0002b6 db03            		in	a, (RECA)
-   586   0002b8 c9              		ret
-   587                          
-   588                          ;--------------------------------------------------------------
-   589                          ; output a character in A over rs232 (1)
-   590                          ;
-   591                          ;--------------------------------------------------------------
-   592                          chrout:
-   593   0002b9 f5              		push	AF
-   594   0002ba db01            chrout1:	in	a, (STATA)
-   595   0002bc e604            		and	a, 4
-   596   0002be 28fa            		jr	Z, chrout1
-   597   0002c0 79              		ld	a, c
-   598   0002c1 d303            		out	(TRANSA), a
-   599   0002c3 f1              		pop	AF
-   600   0002c4 c9              		ret
-   601                          
-   602                          ;--------------------------------------------------------------
-   603                          ; get a character in A from rs232 (2)
-   604                          ;
-   605                          ;--------------------------------------------------------------
-   606                          serintime:
-   607   0002c5 010000          		ld	BC, 0
-   608   0002c8 db09            serintime2:	in	a, (STATB)
-   609   0002ca e601            		and	a, 1
-   610   0002cc 2007            		jr	NZ, serintime1		;byte received?
-   611   0002ce 10f8            		djnz	b, serintime2		;no, decrement b and try again
-   612   0002d0 0d              		dec	c
-   613   0002d1 20f5            		jr	NZ, serintime2
-   614   0002d3 3f              		ccf				;set carry ('and' clears carry)
-   615   0002d4 c9              		ret
-   616   0002d5 db0b            serintime1:	in	a, (RECB)
-   617   0002d7 c9              		ret
-   618                          
-   619                          ;--------------------------------------------------------------
-   620                          ; get a character in A from rs232 (2)
-   621                          ;
-   622                          ;--------------------------------------------------------------
-   623                          serin:
-   624   0002d8 db09            		in	a, (STATB)
-   625   0002da e601            		and	a, 1
-   626   0002dc 28fa            		jr	Z, serin
-   627   0002de db0b            		in	a, (RECB)
-   628   0002e0 c9              		ret
-   629                          
-   630                          ;--------------------------------------------------------------
-   631                          ; output a character in A over rs232 (2)
-   632                          ;
-   633                          ;--------------------------------------------------------------
-   634                          serout:
-   635   0002e1 f5              		push	AF
-   636   0002e2 db09            serout1:	in	a, (STATB)
-   637   0002e4 e604            		and	a, 4
-   638   0002e6 28fa            		jr	Z, serout1
-   639   0002e8 f1              		pop	AF
-   640   0002e9 d30b            		out	(TRANSB), a
-   641   0002eb c9              		ret
-   642                          
-   643                          menukey:
-   644   0002ec 0c              		DB	12
-   645   0002ed 3f43444546474c4d		DB	"?CDEFGLMNOPT"
+   581                          ; get a character in A from rs232 (2)
+   582                          ;
+   583                          ;--------------------------------------------------------------
+   584                          serintime:
+   585   0002c5 010000          		ld	BC, 0
+   586   0002c8 db09            serintime2:	in	a, (STATB)
+   587   0002ca e601            		and	a, 1
+   588   0002cc 2007            		jr	NZ, serintime1		;byte received?
+   589   0002ce 10f8            		djnz	b, serintime2		;no, decrement b and try again
+   590   0002d0 0d              		dec	c
+   591   0002d1 20f5            		jr	NZ, serintime2
+   592   0002d3 3f              		ccf				;set carry ('and' clears carry)
+   593   0002d4 c9              		ret
+   594   0002d5 db0b            serintime1:	in	a, (RECB)
+   595   0002d7 c9              		ret
+   596                          
+   597                          ;--------------------------------------------------------------
+   598                          ; get a character in A from rs232 (2)
+   599                          ;
+   600                          ;--------------------------------------------------------------
+   601                          serin:
+   602   0002d8 db09            		in	a, (STATB)
+   603   0002da e601            		and	a, 1
+   604   0002dc 28fa            		jr	Z, serin
+   605   0002de db0b            		in	a, (RECB)
+   606   0002e0 c9              		ret
+   607                          
+   608                          ;--------------------------------------------------------------
+   609                          ; output a character in A over rs232 (2)
+   610                          ;
+   611                          ;--------------------------------------------------------------
+   612                          serout:
+   613   0002e1 f5              		push	AF
+   614   0002e2 db09            serout1:	in	a, (STATB)
+   615   0002e4 e604            		and	a, 4
+   616   0002e6 28fa            		jr	Z, serout1
+   617   0002e8 f1              		pop	AF
+   618   0002e9 d30b            		out	(TRANSB), a
+   619   0002eb c9              		ret
+   620                          
+   621                          menukey:
+   622   0002ec 0c              		DB	12
+   623   0002ed 3f43444546474c4d		DB	"?CDEFGLMNOPT"
                 4e4f5054        
-   646                          
-   647   0002f9 1e01            menutab:	DW	questionmark
-   648   0002fb a201            		DW	changebyte
-   649   0002fd 2302            		DW	download
-   650   0002ff d800            		DW	closedisk
-   651   000301 3e01            		DW	fillmem
-   652   000303 2201            		DW	goto
-   653   000305 2601            		DW	disass
-   654   000307 c601            		DW	dumpmem
-   655   000309 b301            		DW	newaddress
-   656   00030b b300            		DW	opendisk
-   657   00030d 1b01            		DW	cpm
-   658   00030f 7301            		DW	transfer
-   659                          ;		DW	exit
-   660                          
-   661                          menutext:
-   662   000311 201b5b6d0d      		DB	32, 27, "[m", CR
-   663   000316 2a2a2a2a2a2a2a2a		DB	"*************************************************", CR
+   624                          
+   625   0002f9 1e01            menutab:	DW	questionmark
+   626   0002fb a201            		DW	changebyte
+   627   0002fd 2302            		DW	download
+   628   0002ff d800            		DW	closedisk
+   629   000301 3e01            		DW	fillmem
+   630   000303 2201            		DW	goto
+   631   000305 2601            		DW	disass
+   632   000307 c601            		DW	dumpmem
+   633   000309 b301            		DW	newaddress
+   634   00030b b300            		DW	opendisk
+   635   00030d 1b01            		DW	cpm
+   636   00030f 7301            		DW	transfer
+   637                          ;		DW	exit
+   638                          
+   639                          menutext:
+   640   000311 201b5b6d0d      		DB	32, 27, "[m", CR
+   641   000316 2a2a2a2a2a2a2a2a		DB	"*************************************************", CR
                 2a2a2a2a2a2a2a2a
                 2a2a2a2a2a2a2a2a
                 2a2a2a2a2a2a2a2a
                 2a2a2a2a2a2a2a2a
                 2a2a2a2a2a2a2a2a
                 2a0d            
-   664   000348 2a2a2a20205a3830		DB	"***  Z80 Mini-Monitor  (c) '22  by ", 27, "[1mR. Scholz", 27,"[m  ***", CR
+   642   000348 2a2a2a20205a3830		DB	"***  Z80 Mini-Monitor  (c) '22  by ", 27, "[1mR. Scholz", 27,"[m  ***", CR
                 204d696e692d4d6f
                 6e69746f72202028
                 6329202732322020
@@ -677,120 +688,120 @@ z80.asm:
                 2e205363686f6c7a
                 1b5b6d20202a2a2a
                 0d              
-   665   000381 2a2a2a2a2a2a2a2a		DB	"*************************************************", CR
+   643   000381 2a2a2a2a2a2a2a2a		DB	"*************************************************", CR
                 2a2a2a2a2a2a2a2a
                 2a2a2a2a2a2a2a2a
                 2a2a2a2a2a2a2a2a
                 2a2a2a2a2a2a2a2a
                 2a2a2a2a2a2a2a2a
                 2a0d            
-   666   0003b3 3f202d2054686973		DB	"? - This help", CR
+   644   0003b3 3f202d2054686973		DB	"? - This help", CR
                 2068656c700d    
-   667   0003c1 43202d204368616e		DB	"C - Change byte", CR
+   645   0003c1 43202d204368616e		DB	"C - Change byte", CR
                 676520627974650d
-   668   0003d1 44202d20446f776e		DB	"D - Download Intel Hex file", CR
+   646   0003d1 44202d20446f776e		DB	"D - Download Intel Hex file", CR
                 6c6f616420496e74
                 656c204865782066
                 696c650d        
-   669   0003ed 45202d20436c6f73		DB	"E - Close Disk", CR
+   647   0003ed 45202d20436c6f73		DB	"E - Close Disk", CR
                 65204469736b0d  
-   670   0003fc 46202d2046696c6c		DB	"F - Fill memory", CR
+   648   0003fc 46202d2046696c6c		DB	"F - Fill memory", CR
                 206d656d6f72790d
-   671   00040c 47202d20476f746f		DB	"G - Goto address", CR
+   649   00040c 47202d20476f746f		DB	"G - Goto address", CR
                 2061646472657373
                 0d              
-   672   00041d 4c202d2044697361		DB	"L - Disassemble", CR
+   650   00041d 4c202d2044697361		DB	"L - Disassemble", CR
                 7373656d626c650d
-   673   00042d 4d202d204d656d6f		DB	"M - Memory dump", CR
+   651   00042d 4d202d204d656d6f		DB	"M - Memory dump", CR
                 72792064756d700d
-   674   00043d 4e202d204e657720		DB	"N - New address", CR
+   652   00043d 4e202d204e657720		DB	"N - New address", CR
                 616464726573730d
-   675   00044d 4f202d204f70656e		DB	"O - Open Disk", CR
+   653   00044d 4f202d204f70656e		DB	"O - Open Disk", CR
                 204469736b0d    
-   676   00045b 50202d2043502f4d		DB	"P - CP/M", CR
+   654   00045b 50202d2043502f4d		DB	"P - CP/M", CR
                 0d              
-   677   000464 54202d205472616e		DB	"T - Transfer memory", CR
+   655   000464 54202d205472616e		DB	"T - Transfer memory", CR
                 73666572206d656d
                 6f72790d        
-   678                          ;		DB	"X - eXit", CR
-   679   000478 00              		DB	0
-   680                          
-   681   000479 646f776e6c6f6164downtext:	DB	"downloading...", CR, 0
+   656                          ;		DB	"X - eXit", CR
+   657   000478 00              		DB	0
+   658                          
+   659   000479 646f776e6c6f6164downtext:	DB	"downloading...", CR, 0
                 696e672e2e2e0d00
-   682   000489 66696e6973686564downendtext:	DB	"finished.", CR, 0
+   660   000489 66696e6973686564downendtext:	DB	"finished.", CR, 0
                 2e0d00          
-   683   000494 616464726573733aaddrtext:	DB	"address:", 0
+   661   000494 616464726573733aaddrtext:	DB	"address:", 0
                 00              
-   684   00049d 6572726f722100  errortext:	DB	"error!", 0
-   685   0004a4 7472616e73666572transtext:	DB	"transfer from:", 0
+   662   00049d 6572726f722100  errortext:	DB	"error!", 0
+   663   0004a4 7472616e73666572transtext:	DB	"transfer from:", 0
                 2066726f6d3a00  
-   686   0004b3 206c656e3a00    lentext:	DB	" len:", 0
-   687   0004b9 20746f3a00      totext:		DB	" to:", 0
-   688   0004be 66696c6c2066726ffilltext:	DB	"fill from:", 0
+   664   0004b3 206c656e3a00    lentext:	DB	" len:", 0
+   665   0004b9 20746f3a00      totext:		DB	" to:", 0
+   666   0004be 66696c6c2066726ffilltext:	DB	"fill from:", 0
                 6d3a00          
-   689   0004c9 20776974683a00  withtext:	DB	" with:", 0
-   690   0004d0 656e746572206469disktext:	DB	"enter disk number (0-9):",0
+   667   0004c9 20776974683a00  withtext:	DB	" with:", 0
+   668   0004d0 656e746572206469disktext:	DB	"enter disk number (0-9):",0
                 736b206e756d6265
                 722028302d39293a
                 00              
-   691   0004e9 0d66696c656e616dfiletext:	DB	CR, "filename:",0
+   669   0004e9 0d66696c656e616dfiletext:	DB	CR, "filename:",0
                 653a00          
-   692                          
-   693                          ;--------------------------------------------------------------
-   694                          ; prints byte in A in hexadecimal format
-   695                          ;--------------------------------------------------------------
-   696                          printhex:
-   697   0004f4 f5              		push    AF
-   698   0004f5 f5              		push    AF
-   699   0004f6 1f              		rra
-   700   0004f7 1f              		rra
-   701   0004f8 1f              		rra
-   702   0004f9 1f              		rra
-   703   0004fa cd0305          		call    printnib
-   704   0004fd f1              		pop     AF
-   705   0004fe cd0305          		call    printnib
-   706   000501 f1              		pop     AF
-   707   000502 c9              		ret
-   708                          printnib:
-   709   000503 e60f            		and     0fh
-   710   000505 fe0a            		cp      0ah
-   711   000507 3802            		jr      C, printnib1
-   712   000509 c607            		add     a, 07h
-   713                          printnib1:
-   714   00050b c630            		add     a, '0'
-   715                          print:
-   716   00050d c5              		push    BC
-   717   00050e 4f              		ld      c, a
-   718   00050f cdb902          		call    conout
-   719   000512 c1              		pop     BC
-   720   000513 c9              		ret
-   721                          
-   722                          newline:
-   723   000514 c5              		push    BC
-   724   000515 0e0d            		ld      c, CR
-   725   000517 cdb902          		call    conout
-   726   00051a c1              		pop     BC
-   727   00051b c9              		ret
-   728                          
-   729                          space:
-   730   00051c c5              		push    BC
-   731   00051d 0e20            		ld      c, ' '
-   732   00051f cdb902          		call    conout
-   733   000522 c1              		pop     BC
-   734   000523 c9              		ret
-   735                          
-   736                          getupper:
-   737   000524 cdb002          		call	conin
-   738   000527 fe61            		cp	'a'
-   739   000529 d8              		ret	C
-   740   00052a d620            		sub	32
-   741   00052c c9              		ret
-   742                          
-   743                          conout:		equ	chrout
-   744                          conin:		equ	chrin
-   745                          
-   746                          
-   747                          	include "disz80.asm"
+   670                          
+   671                          ;--------------------------------------------------------------
+   672                          ; prints byte in A in hexadecimal format
+   673                          ;--------------------------------------------------------------
+   674                          printhex:
+   675   0004f4 f5              		push    AF
+   676   0004f5 f5              		push    AF
+   677   0004f6 1f              		rra
+   678   0004f7 1f              		rra
+   679   0004f8 1f              		rra
+   680   0004f9 1f              		rra
+   681   0004fa cd0305          		call    printnib
+   682   0004fd f1              		pop     AF
+   683   0004fe cd0305          		call    printnib
+   684   000501 f1              		pop     AF
+   685   000502 c9              		ret
+   686                          printnib:
+   687   000503 e60f            		and     0fh
+   688   000505 fe0a            		cp      0ah
+   689   000507 3802            		jr      C, printnib1
+   690   000509 c607            		add     a, 07h
+   691                          printnib1:
+   692   00050b c630            		add     a, '0'
+   693                          print:
+   694   00050d c5              		push    BC
+   695   00050e 4f              		ld      c, a
+   696   00050f cdb902          		call    conout
+   697   000512 c1              		pop     BC
+   698   000513 c9              		ret
+   699                          
+   700                          newline:
+   701   000514 c5              		push    BC
+   702   000515 0e0d            		ld      c, CR
+   703   000517 cdb902          		call    conout
+   704   00051a c1              		pop     BC
+   705   00051b c9              		ret
+   706                          
+   707                          space:
+   708   00051c c5              		push    BC
+   709   00051d 0e20            		ld      c, ' '
+   710   00051f cdb902          		call    conout
+   711   000522 c1              		pop     BC
+   712   000523 c9              		ret
+   713                          
+   714                          getupper:
+   715   000524 cdb002          		call	conin
+   716   000527 fe61            		cp	'a'
+   717   000529 d8              		ret	C
+   718   00052a d620            		sub	32
+   719   00052c c9              		ret
+   720                          
+   721                          conout:		equ	chrout
+   722                          conin:		equ	chrin
+   723                          
+   724                          
+   725                          	include "disz80.asm"
 disz80.asm:
      1                          
      2                          
@@ -1507,4 +1518,4 @@ disz80.asm:
    713                          
    714                          
 z80.asm:
-   748                          
+   726                          

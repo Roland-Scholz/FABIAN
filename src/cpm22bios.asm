@@ -1,28 +1,5 @@
-MODEA		equ 0
-STATA		equ 1
-CLOCKA		equ 1
-COMMA		equ 2
-RECA		equ 3
-TRANSA		equ 3
-IPCHANGE	equ 4
-AUXCTRL		equ 4
-ISR		equ 5
-IMR		equ 5
-CNTMSB		equ 6
-CNTLSB		equ 7
-MODEB		equ 8
-STATB		equ 9
-CLOCKB		equ 9
-COMMB		equ 10
-RECB		equ 11
-TRANSB		equ 11
-IVR		equ 12
-INPORT		equ 13
-OPCTRL		equ 13
-STRTCNT		equ 14
-OPSET		equ 14
-STOPCNT		equ 15
-OPRES		equ 15
+	include "mc68681.asm"
+	
 ;
 ;	skeletal cbios for first level of CP/M 2.0 alteration
 ;
@@ -31,10 +8,10 @@ msize		equ	64		;cp/m version memory size in kilobytes
 ;	"bias" is address offset from 3400h for memory systems
 ;	than 16k (referred to as"b" throughout the text)
 ;
-bias		equ	(msize-20)*1024
-ccp		equ	3400h+bias	;base of ccp
-bdos		equ	ccp+806h	;base of bdos
-bios		equ	ccp+1600h	;base of bios
+bias		equ	(msize-20)*1024	;$B000
+ccp		equ	3400h+bias	;base of ccp	($E400)
+bdos		equ	ccp+806h	;base of bdos	($EC06)
+bios		equ	ccp+1600h	;base of bios	($FA00)
 cdisk		equ	0004h		;current disk number 0=a,... l5=p
 iobyte		equ	0003h		;intel i/o byte
 INBUFFE		equ	0DC06h
@@ -44,9 +21,7 @@ INBUFFE		equ	0DC06h
 	ENDIF
 	
 	
-;nsects		equ	(3400h+bias-ccp)/128	;warm start sector count
-nsects		equ	44
-;nsects		equ	17
+nsects		equ	$1600/128	;warm start sector count (44 sectors for BDOS + CCP)
 ;
 ;		jump vector for individual subroutines
 ;	
@@ -156,6 +131,7 @@ boot2:
 		call	bhome		;go to track 00
 ;		jp	gocpm
 ;	
+		
 		ld	b, nsects	;b counts * of sectors to load
 		ld	c, 0		;c has the current track number
 		ld	d, 0		;d has the next sector to read
@@ -185,13 +161,17 @@ load1:		;load	one more sector
 		pop	DE		;recall sector address
 		pop	BC		;recall number of sectors remaining, and current trk
 		dec	b		;sectors=sectors-1
-		jp	Z, gocpm		;transfer to cp/m if all have been loaded
+		jp	Z, gocpm	;transfer to cp/m if all have been loaded
 ;	
 ;		more	sectors remain to load, check for track change
 		inc	d
 		ld	a, d		;sector=26?, if so, change tracks
-		cp	26
-		jp	C, load1		;carry generated if sector<27
+		
+		push	HL
+		ld	HL, (dpbase + $a) ;load Hl with dpblk of drive A:
+		cp	(HL)
+		pop	HL
+		jp	C, load1	;carry generated if sector<26
 ;	
 ;		end of	current track,	go to next track
 		ld	d, 0		;begin with first sector of next track
