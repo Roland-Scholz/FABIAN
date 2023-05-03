@@ -1,352 +1,426 @@
-MODEA		equ 0
-STATA		equ 1
-CLOCKA		equ 1
-COMMA		equ 2
-RECA		equ 3
-TRANSA		equ 3
-IPCHANGE	equ 4
-AUXCTRL		equ 4
-ISR		equ 5
-IMR		equ 5
-CNTMSB		equ 6
-CNTLSB		equ 7
-MODEB		equ 8
-STATB		equ 9
-CLOCKB		equ 9
-COMMB		equ 10
-RECB		equ 11
-TRANSB		equ 11
-IVR		equ 12
-INPORT		equ 13
-OPCTRL		equ 13
-STRTCNT		equ 14
-OPSET		equ 14
-STOPCNT		equ 15
-OPRES		equ 15
+		include "mc68681.asm"
 
-conin		equ 0f209h
-conout		equ 0f20ch
+adr0038		equ	038h
 
-		org $8000
-		jr	shardStart
+
+
+
+;PS2DATA		equ	IP2	
+;PS2CLK		equ	IP1
+
+CR:		equ	$0d
+
+CCHM		equ	$1C	;move cursor home
+CCBT		equ	$1D	;move cursor to bottom
+CCLM		equ	$1E	;move cursor to left margin
+CCRM		equ	$1F	;move cursor to right margin
+	
+				;SUPERF equ 0
+				
+CLS		equ	$01	;clear screen
+BACK		equ	$08	;backspace
+LF		equ	$0A	;$9B	;end of line (RETURN)
+ESC		equ	$1B	;escape key
+CCUP		equ	$1C	;cursor up
+CCDN		equ	$1D	;cursor down
+CCLF		equ	$1E	;cursor left
+CCRT		equ	$1F	;cursor right
+CSPACE		equ	$20	;space
+TABU		equ	09	;tabulator
+CILN		equ	$9D	;insert line
+CDCH		equ	$FE	;delete character
+CICH		equ	$FF	;insert character
+	
+HELP		equ	$11	;key code for HELP
+CNTLF1		equ	$83	;key code for CTRL-F1
+CNTLF2		equ	$84	;key code for CTRL-F2
+CNTLF3		equ	$93	;key code for CTRL-F3
+CNTLF4		equ	$94	;key code for CTRL-F4
+CNTL1		equ	$9F	;key code for CTRL-1
+
+;	special key scan-codes
+ALTGR		equ	$11	;extended!
+ALR		equ	$11
+CLSHIFT		equ	$12
+CLSTRG		equ	$14
+CRSHIFT		equ	$59
+CCAPS		equ	$58
+
+FATBUF		equ	$F800
+DATBUF		equ	$FA00
+
+		org	$2000
+
+		call	sdInit
+		ld	de, sec2
+		call	sdReadDat
+		ret
 		
-shardeye:	defm	"SHARD           "
-vers:		defw	8 
-mode:		defw	0
-id4:		defw	0
-id5:		defw	0
-id6:		defw	0
-id7:		defw	0
-		defw	0
-		defw	0
-		jp	shout 
-		jp	shbin 
-        	jp	shbout 
-		jp	shiocnt 
-		jp	shend 
-		jp	shsinf 
-		jp	shsacc 
-		defw 	0
-limit:		defw 	0ffffh
-		defw	0
-		defw	0
-		defw	0
-		defw	0
-		defw	0
-		defw	0
+		ld	de, sec2
+		call	sdWriteDat
+		ret
 
-shardStart:	ld	hl, shardeye
-		jp	0141Eh
+sec2:		db	2, 0, 0, 0
 
-shout:		ret
-shbin:		ret
-shbout:		ret
-
-
-;          Eingang:         A     Kanalnummer (0...31) 
-;                           BC    1 
-;          Ausgang:         BC    Kanaltyp 
-; 
-;          Zweck:           Informiert EUMEL-0, welche IO für den angegebenen Kanal
-;                           sinnvoll ist. Die Rückmeldung in BC wird bitweise interpre­
-;                           tiert: 
-; 
-;                           Bit 0 gesetzt  <=>      'inputinterrupt' kann kommen. 
-;                           Bit 1 gesetzt  <=>      OUTPUT ist sinnvoll. 
-;                           Bit 2 gesetzt  <=>      BLOCKIN ist sinnvoll. 
-;                           Bit 3 gesetzt  <=>      BLOCKOUT ist sinnvol. 
-;                           Bit 4 gesetzt  <=>      IOCONTROL "format" ist sinn­
-;                                                   voll. 
-;						   
-;     #dx("IOCONTROL ""frout""")##goalpage("frout")# 
-; 
-;          Eingang:         A     Kanalnummer (1...15) 
-;                           BC    2 
-;          Ausgang:         BC    Anzahl Zeichen, die nächster OUTPUT übernimmt 
-;                           C-Flag gesetzt <=> Puffer leer 
-; 
-;          Zweck:           Liefert Information über die Belegung des Puffers. Diese
-;                           Information wird von EUMEL-0 zum Scheduling benutzt. 
-; 
-;          Achtung:         #on("i")#Wenn EUMEL-0 längere Zeit kein OUTPUT gemacht hat,
-;                           muß irgendwann BC > 49 gemeldet werden.#off("i")# 
-; 
-;          Hinweis:         Unter Berücksichtigung des oben Gesagten darf "gelogen"
-;                           werden. Man kann z.B. immer 50 in BC zurückmelden, muß
-;                           dann aber schlechtere Nutzung der CPU bei Multi-User-
-;                           Systemen in Kauf nehmen. 
-; 
-;                           Falls auf dem angegebenen Kanal ein Drucker mit eigenem
-;                           Puffer über Parallelschnittstelle angeschlossen ist (siehe
-;                           S.#topage("druck")#) und man auf einen SHard-internen Puffer verzichtet hat,
-;                           sollte bei 'Druckerpuffer voll' 0 in BC und 'NC' zurückge­
-;                           meldet werden. Wenn aber Zeichen übernommen werden
-;                           können, sollte 50 in BC und 'C-Flag gesetzt' gemeldet
-;                           werden. 
-; 
-;          Vorschlag:       Falls der Kanal nicht existiert oder nicht für Stream-IO zur
-;                           Verfügung steht, sollten 200 in BC und C-Flag gesetzt
-;                           zurückgemeldet werden. 
-
-shiocnt:	push	af		;save channel-nr
-		ld	a, c
-		dec	a
-		rlca
-		ld	c, a
-		ld	hl, iotab
-		add	hl, bc
-		ld	a, (hl)
+		ld	hl, $d800
+		ld	de, $8000
+		ld	BC, $1600
+compare:	ld	a, (de)
+		cp	(hl)
+		jr	NZ, noequal
 		inc	hl
-		ld	h, (hl)
-		ld	l, a
-		jp	(HL)
-			
-;--------------------------------------------------------------
-iotyp:		pop	af		;channel
-		xor	a
-		jr	NZ, iotyp1	;channel <> 0
-		ld	BC, 12		;blockio
-		ret
-iotyp1:		ld	BC, 2
-		ret
-
-;--------------------------------------------------------------
-iofrout:	pop	af
-		cp	1
-		jr	NZ, iofrout1
-		ld	BC, 50
-		ccf
-		ret
-iofrout1:	ld	BC, 200
-		ccf
-		ret
-		
-;--------------------------------------------------------------
-ioweiter:	ret
-;--------------------------------------------------------------
-iosize:
-;--------------------------------------------------------------
-ioformat:
-;--------------------------------------------------------------
-iounknown:	pop	AF
-		ret
-	
-iotab:		defw	iotyp
-		defw	iofrout
-		defw	iounknown
-		defw	ioweiter
-		defw	iosize
-		defw	iounknown
-		defb	ioformat
-		
-shend:		ret
-shsinf:		ret
-shsacc:		ret
-	
-		
-opend:		call	getDiskno
-		ret	C
-		ld	c, a
-		call	conout
-		
-		sub	a, '0'
-		ld	b, a
-		ld	a, 'O'
-		call	serout
+		inc	de
+		dec	bc
 		ld	a, b
-		call	serout
-		call	serout
-		call	serout
+		or	c
+		jr	NZ, compare
+		ret
 		
-		call	serin
-		cp	'A'
+noequal:	call	printadr
+		ex	de, hl
+		call	printadr
+		ret
+		
+debug:		db	0
+
+	include "common.asm"
+	include	"fat16.asm"
+	
+	if	NOEXCLUDE
+	
+		di
+
+		jp	skip
+		
+		
+		ld	a, 0c3h				;ld jump
+		ld	(adr0038), a
+		
+		ld	hl, intproc
+		ld	(adr0038 + 1), hl
+		im	1				;interrupt mode 1, goto $38
+		
+		ld	a, $E2				;BRG set 2 and timer = X1/CLK and IP1 change
+		out	(AUXCTRL), a
+		
+		ld	a, $82				;enable IP0-3 change
+		out	(IMR), a			;enable RxRDY A interrupt
+
+skip:
+		ld	hl, 0
+		ld	(rxstat), hl
+		ld	(rxrdy), hl
+		ld	(rxshift), hl
+		ld	(rxaltgr), hl
+		ld	(sdsector), hl
+		ld	(sdsector + 1), hl	
+		
+;		ei
+
+;
+;
+;
+		
+		
+		call	sdInit				;initSd and read FAT data
+		
+		call	dirPrint
+		call	fopen
 		ret	NZ
 
-		call	gettext
-		ret
+readloop:		
+		ld	hl, 0
+		ld	(fseeklen + 2), hl
+		ld	hl, 1000
+		ld	(fseeklen), hl
+		ld	hl, fseeklen
+		call	fseek		
+		
+		ld	bc, $80
+		ld	hl, $1000
+		call	fread
+		
+;		push	bc
+;		push	hl		
+;		call	printadr
+;		push	bc
+;		pop	hl
+;		call	printadr
+;		ld	a, (fstatus)
+;		call	printhex
+;		call	newline
 
+		ld	d, b
+		ld	e, c
 
-closedisk:	call	getDiskno
-		ret	C
-		ld	c, a
+readloop1:	ld	c, (hl)
 		call	conout
+		inc	hl
+		dec	de
+		ld	a, d
+		or	a, e
+		jr	NZ, readloop1
+		
+		ld	a, (fstatus)
+;		call	printhex
+		or	a
+		ret	NZ
+		ret
+		jr	readloop
+				
+;--------------------------------------------------------------
+		include	"common.asm"
+		include "fat16.asm"
+;--------------------------------------------------------------
 
-		sub	a, '0'
+;--------------------------------------------------------------
+;
+;
+;--------------------------------------------------------------
+intproc:	ex	af, af'
+		exx
+		
+intproc1:	in	a, (ISR)
 		ld	b, a
-		ld	a, 'C'
-		call	serout
+		
+		and	2				;RxRdy A?
+		jr	Z, intIPchange
+
+intReceive:	in	a, (RECA)
+		out	(TRANSA),a
+		
+intIPchange:
 		ld	a, b
-		call	serout
-		call	serout
-		call	serout
-		
-		call	serin
-		ret
+		and	128
+		jr	Z, intprocex
 		
 		
-getDiskno:	call	conin
-		cp	'0'
-		ret	C
-		cp	'9'+1
-		ccf
-		ret
-
-gettext:	;ld	hl, line
-gettext1:	call	conin
-		call	serout
-		ld	c, a
-		call	conout
-		cp	13
-		jr	NZ, gettext1
-		ret
+		in	a, (IPCHANGE)			;IP1 = low?
+		and	PS2CLK
+		jr	NZ, intprocex			;IP1 = high, no nothing
+				
+		ld	hl, rxstat			;status 0 (start-bit expected)	
+		ld	a, (hl)				;load status
+		or	a				;test if zero
+		jr	NZ, intIPdata			;status <> 0
+		in	a, (IPCHANGE)
+		and	PS2DATA				;start-bit 0?
+		jr	NZ, intprocex			;no, do nothing
+		inc	(hl)				;increment rxstat
+	
+		jr	intprocex
 		
-
-
-
-
-;--------------------------------------------------------------
-; read sector 
-; diskno, track, sector, dmaad
-;--------------------------------------------------------------
-readsec:		
-		ld	a, 'R'		;read
-		call	serout
-		ld	a, (diskno)	;disk 0
-		call	serout
-		ld	a, (track)	;track 2
-		call	serout
-		ld	a, (sector)	;sector 0
-		call	serout
 		
-		call	serin		;check ack
-		jr	C, readsec	;timeout?, retry
+intIPdata:	inc	(hl)				;inc rxstat
+		inc	hl				;hl = rxval
+		cp	9
+		jr	NC, intIPstop
+		
+		in	a, (IPCHANGE)			;PS2DATA = IP0		
+		rra					;shift until bit in C
+		rr	(hl)				;shift in result
+		jr	intprocex
 
-readsec3:		
-		cp	'A'
-		jr	NZ, readsec	;ack NOT OK, retry
-readsec2:
-		ld	hl, (dmaad)
-		ld	d, 128
-readsec1:	call	serinfast
-		ld	(hl), a
-		inc	hl
-		dec	d
-		jr	NZ, readsec1
+intIPstop:	cp	10
+		jr	NZ, intprocex
 
 		xor	a
-		ret
+		ld	(rxstat), a			;set rxstat to 0
+		
+		call	decodeKey
 
-;--------------------------------------------------------------
-; write sector 
-; diskno, track, sector, dmaad
-;--------------------------------------------------------------
-writesec:
-		ld	a, 'W'		;write
-		call	serout
-		ld	a, (diskno)	;disk 0
-		call	serout
-		ld	a, (track)	;track 2
-		call	serout
-		ld	a, (sector)	;sector 0
-		call	serout
-		
-		ld	b, 128
-		ld	hl, (dmaad)
-writesec1:	ld	a, (hl)
-		inc	hl
-		call	serout
-		djnz	b, writesec1
-		
-		call	serin		;check ack
-		jr	C, writesec	;timeout?, retry
-		cp	a, 'A'		;ack?
-		jr	NZ, writesec	;error, retry
-		
-		xor	a
+				
+intprocex:	exx
+		ex	af, af'
+		ei
 		ret
 	
-;--------------------------------------------------------------
-; get a character in A from rs232 (1)
-; 
-;--------------------------------------------------------------
-chrin:
-		in	a, (STATA)
-		and	a, 1
-		jr	Z, chrin
-		in	a, (RECA)
+;
+;
+;
+decodeKey:	ld	a, (hl)				;load scan-code
+		cp	$E0				;extended?
+		jr	NZ, decodeBreak
+		ld	(rxextended), a
+		ret
+
+decodeBreak:	cp	$F0				;break-key?
+		jr	NZ, decodeShift			;no -> make
+		ld	(rxbreak), a			;store Info
+		ret
+
+decodeShift:	cp	CLSHIFT				;left-shift?
+		jr	Z, decodeShift1
+		cp	CRSHIFT
+		jr	NZ, decodeStrg			;right-shift
+decodeShift1:	ld	a, (rxbreak)
+		xor	$f0
+		ld	(rxshift), a			;save shift-info
+		jr	decodeEnd			;clear break
+		
+decodeStrg:	cp	CLSTRG
+		jr	NZ, decodeChkBrk
+		ld	a, (rxbreak)
+		xor	$f0
+		ld	(rxstrg), a			;save strg-info
+		jr	decodeEnd
+		
+decodeChkBrk:	ld	a, (rxbreak)			;break?
+		or	a
+		jr	Z, decodeNormal			;no
+
+		ld	a, (hl)				;load scan-code
+		cp	ALTGR				;is it ALTGR?
+		jr	NZ, decodeEnd			;no
+		xor	a				;clear altgr
+		ld	(rxaltgr), a
+decodeEnd:	xor	a				;clear rxbreak
+		ld	(rxbreak), a			
+		ld	(rxextended), a	
+		ret
+	
+decodeNormal:	ld	c, (hl)				;load scan-code
+		ld	b, 0
+		ld	hl, CHARTABLE_NOSHIFT		;load normal table
+		ld	a, (rxshift)
+		or	a
+		jr	Z, decodeMakeExt
+		ld	hl, CHARTABLE_SHIFT		;load shift table
+		
+decodeMakeExt:	ld	a, (rxextended)
+		or	a
+		jr	Z, decodeAltGr			;no extended
+
+		xor	a
+		ld	(rxextended), a			;clear extended
+		
+		ld	hl, EXT_TABLE_IND
+		ld	a, (rxval)
+		ld	b, 13
+decodeMakeExt1:	cp	(hl)
+		jr	Z, decodeMakeExt2
+		inc	hl
+		djnz	decodeMakeExt1
+		ret
+decodeMakeExt2: ld	bc, 13
+		cp	ALTGR				;ALTGR-key?
+		jr	NZ, decodeMake
+		ld	(rxaltgr), a			
 		ret
 		
-;--------------------------------------------------------------
-; output a character in A over rs232 (1)
-; 
-;--------------------------------------------------------------
-chrout:
-		push	AF
-chrout1:	in	a, (STATA)
-		and	a, 4
-		jr	Z, chrout1
-		pop	AF
-		out	(TRANSA), a
-		ret
-
-;--------------------------------------------------------------
-; get a character in A from rs232 (2)
-; 
-;--------------------------------------------------------------
-serin:		ld	bc, 0
-serin1:		in	a, (STATB)
-		and	a, 1
-		jr	NZ, serin2
-		djnz	b, serin1
-		dec	c
-		jr	NZ, serin1
-		scf
-		ret
-serin2:		in	a, (RECB)
-		ret
-
-
-serinfast:	ld	a, (STATB)
-		and	a, 1
-		jr	Z, serinfast
-		in	a, (RECB)
-		ret
+decodeAltGr:	ld	a, (rxaltgr)			;ALTGR-Presed?
+		or	a
+		jr	Z, decodeMake			;no
 		
-
-;--------------------------------------------------------------
-; output a character in A over rs232 (2)
-; 
-;--------------------------------------------------------------
-serout:
-		push	AF
-serout1:	in	a, (STATB)
-		and	a, 4
-		jr	Z, serout1
-		pop	AF
-		out	(TRANSB), a
+		ld	a, (rxval)
+		ld	b, 8
+		ld	hl, ALTGR_TABLE_IND
+decodeAltGr1:	cp 	(hl)
+		jr	Z, decodeAltGr2
+		inc	hl
+		djnz	decodeAltGr1
 		ret		
+decodeAltGr2:	ld	bc, 8
 
-diskno:		defb	0
-track:		defb	0
-sector:		defb	0
-dmaad:		defw	0
+decodeMake:	add	hl, bc
+
+		ld	b, 0
+		ld	a, (rxstrg)
+		or	a
+		jr	Z, decodeMake1
+		ld	b, 96
+decodeMake1:	ld	a, (hl)
+		sub	a, b
+		ld	(rxval), a
+		ld	(rxrdy), a
+
+		ret
+	
+rxstat:		db	0
+rxval:		db	0
+rxrdy:		db	0
+rxbreak:	db	0
+rxshift:	db	0
+rxstrg:		db	0
+rxaltgr:	db	0
+rxextended:	db	0
+
+			
+CHARTABLE_NOSHIFT:
+;		 	 00   01   02   03   04   05   06   07   08   09   0A   0B   0C   0D   0E   0F 
+		db	  0,   9,   0,   5,   3,   1,   2,  12,   0,  10,   8,   6,   4,TABU, '^',   0	; 00
+		db     	  0,   0,   0,   0,   0, 'q', '1',   0,   0,   0, 'y', 's', 'a', 'w', '2',   0	; 10
+		db	  0, 'c', 'x', 'd', 'e', '4', '3',   0,   0, ' ', 'v', 'f', 't', 'r', '5',   0	; 20 
+		db	  0, 'n', 'b', 'h', 'g', 'z', '6',   0,   0,   0, 'm', 'j', 'u', '7', '8',   0	; 30 
+		db	  0, ',', 'k', 'i', 'o', '0', '9',   0,   0, '.', '-', 'l', $94, 'p', 223,   0	; 40 	5c = \, 223 = ß
+		db	  0,   0, $84,  'X',252, 180,   0,   0,   0,   0, LF, '+',   0, '#',   0,   0	; 50 
+		db	  0, '<',   0,   0,   0,   0,BACK,   0,   0, '1',   0, '4', '7',   0,   0,   0	; 60 
+		db	 '0', '.', '2', '5', '6', '8',ESC,   0,  11, '+', '3', '-', '*', '9', CLS,   0	; 70 
+		db	  0,   0,   0,   7,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0	; 80
+
+CHARTABLE_SHIFT:
+;		 	 00   01   02   03   04   05   06   07   08   09   0A   0B   0C   0D   0E   0F 
+		db	  0,   9,   0,   5,   3,   1,   2,  12,   0,  10,   8,   6,   4,TABU, $B0,   0	; 00
+		db        0,   0,   0,   0,   0, 'Q', '!',   0,   0,   0, 'Y', 'S', 'A', 'W', '"',   0	; 10
+		db	  0, 'C', 'X', 'D', 'E', '$', 167,   0,   0, ' ', 'V', 'F', 'T', 'R', '%',   0	; 20 	167=§
+		db	  0, 'N', 'B', 'H', 'G', 'Z', '&',   0,   0,   0, 'M', 'J', 'U', '/', '(',   0	; 30 
+		db	  0, ';', 'K', 'I', 'O', '=', ')',   0,   0, ':', '_', 'L', $99, 'P', '?',   0	; 40 
+		db	  0,   0, $8E,   0, 220, '`',   0,   0,   0,   0,  LF, '*',   0, $27,   0,   0	; 50 
+		db	  0, '>',   0,   0,   0,   0,CDCH,   0,   0, '1',   0, CCLF, '7',   0,  0,   0	; 60 
+		db	'0', '.', CCDN, '5', CCRT, CCUP,  0,   0,  11, '+', '3', '-', '*', '9', 0,   0  ; 70 
+		db	  0,   0,   0,   7,   0,   0,   0,   0,   0,   0,   0,   0,   0,  0,    0,   0	; 80
+
+ALTGR_TABLE_IND:
+		db	$15	; q = @
+		db	$61	; <> = |
+		db	$5B	; *+ = ~
+		db	$4E	; ?ß = \
+		db	$3E	; 8( = [
+		db	$46	; 9) = ]
+		db	$3D	; 7/ = {
+		db	$45	; 0= = }
+		
+ALTGR_TABLE:	db	'@'
+		db	'|'
+		db	'~'
+		db	$5C
+		db	'['
+		db	']'
+		db	'{'
+		db	'}'
+		
+EXT_TABLE_IND:	db	ALTGR
+		db	$4A	; /
+		db	$5A	; ENTER
+		db	$69	; END
+		db	$6B	; LEFT
+		db	$6C	; HOME
+		db	$70	; INS
+		db	$71	; DEL
+		db	$72	; DOWN
+		db	$74	; RIGHT
+		db	$75	; Up
+		db	$7A	; PAGE DOWN
+		db	$7D	; PAGE UP
+		
+EXT_TABLE:	db	ALTGR
+		db	'/'	; NumPad division symbol
+		db	LF	; ENTER
+		db	CCBT	; cursor bottom with SuperFlag
+		db	CCLF	; cursor left
+		db	CCHM	; cursor home with SuperFLag
+		db	CICH	; insert
+		db	CDCH	; delete
+		db	CCDN	; cursor down
+		db	CCRT	; cursor right
+		db	CCUP	; cursor up
+		db	CCLM	; left margin with SuperFLag
+		db	CCRM	; right margin with SuperFLag
+;--------------------------------------------------------------
+;--------------------------------------------------------------
+;--------------------------------------------------------------
+
+conout:		equ	chrout
+conin:		equ	chrin
+
+		ENDIF

@@ -1,19 +1,25 @@
 		;FNAME "z80.bin"
 
-	include "mc68681.asm"
+		include "mc68681.asm"
 	
 CR:		equ	0dh
 
 
-VARS		equ	$FFF0
+VARS		equ	$FFF0			;stack grows downwards from this address
 sum:		equ	0
 addr:		equ	1
-echo:		equ	3
+echo:		equ	3			;0 = off, 1 = on
 
 
 
 		ORG     0000h
 		
+		di				;disable interrupts
+		im	1			;interrup mode 1 = jp @ 038h
+		
+		ld	a, 80h			;OP7 = HIGH, deactivate RAM
+		out	(OPRES), a
+
 		ld	HL, 0			;copy ROM to RAM from
 		ld	DE, 0			;to
 		ld	BC, 1800h		;length, 6KB
@@ -26,7 +32,7 @@ echo:		equ	3
 		
 		ld	(VARS + addr), BC	;set addr to zero
 		
-		ld	SP, VARS
+		ld	SP, VARS		;load stack-pointer
 				
 		ld	IX, VARS
 		ld	(IX + echo), 1		;echo on
@@ -91,8 +97,9 @@ echo:		equ	3
 		ld	a, 080h			;OP7 = LOW, activate RAM
 		out	(OPSET), a	
 			
+			
 		ld	c, 32			;output space
-		ld	b, 0
+		ld	b, 0			;test how long it takes to send
 		call	conout
 wait:		in	a, (STATA)
 		inc	b
@@ -104,6 +111,14 @@ wait:		in	a, (STATA)
 		jr	C, printmenu
 		in	a, (COMMA)		;switch to test baudrates
 
+
+;--------------------------------------------------------------
+; print menu
+; print prompt
+; read upper key
+; check if key is found in menukey
+; read jmp-address and jump to subroutine
+;--------------------------------------------------------------
 printmenu:
 		ld      HL, menutext
 		call	printstr
@@ -114,29 +129,29 @@ printprompt:
 		call	printaddr
 	
 enterkey:	
-		ld	c, 0
-		ld	HL, menukey
-		ld	b, (HL)
+		ld	c, 0			;offset in jumptable
+		ld	HL, menukey		;number auf keys
+		ld	b, (HL)			;in b
 		inc	HL
-		call	getupper
+		call	getupper		;read upper key
 enterkey2: 
-		cp	(HL)
-		jr	Z, enterkey1
+		cp	(HL)			;key found?
+		jr	Z, enterkey1		;yes ==>
 		inc	HL
 		inc	c
 		inc	c
-		djnz	enterkey2
+		djnz	enterkey2		;decrease b and jump
 		jr	enterkey
 enterkey1:	
-		ld	b, 0
-		ld	HL, menutab
+		ld	b, 0			;add offset in BC
+		ld	HL, menutab		;to base
 		add	HL, BC
-		ld	BC, printprompt
+		ld	BC, printprompt		;push return-address
 		push	BC
-		ld	e, (HL)
+		ld	e, (HL)			;load jp address in DE
 		inc	HL
 		ld	d, (HL)
-		ex	DE, HL
+		ex	DE, HL			;in HL now
 		jp	(HL)
 
 
@@ -722,4 +737,4 @@ conout:		equ	chrout
 conin:		equ	chrin
 
 
-	include "disz80.asm"
+		include "disz80.asm"

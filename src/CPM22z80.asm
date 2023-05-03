@@ -8,10 +8,11 @@
 ;*
 ;**************************************************************
 ;
-;   Set memory limit here. This is the amount of contigeous
+; Set memory limit here. This is the amount of contigeous
 ; ram starting from 0000. CP/M will reside at the end of this space.
 ;
-MEM	EQU	64		;for a 62k system (TS802 TEST - WORKS OK).
+MEM	EQU	62		;for a 62k system (TS802 TEST - WORKS OK).
+BIOS	EQU	(MEM-7)*1024 + $1600
 ;
 IOBYTE	EQU	3		;i/o definition byte.
 TDRIVE	EQU	4		;current drive name and user number.
@@ -604,7 +605,8 @@ CLEARBUF: XOR	A
 ;*
 ;**************************************************************
 ;*
-COMMAND:LD	SP,CCPSTACK	;setup stack area.
+COMMAND:
+	LD	SP,CCPSTACK	;setup stack area.
 	PUSH	BC		;note that (C) should be equal to:
 	LD	A,C		;(uuuudddd) where 'uuuu' is the user number
 	RRA			;and 'dddd' is the drive number.
@@ -3707,6 +3709,8 @@ CKSUMTBL: DB	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 ;   Extra space ?
 ;
 	DB	0,0,0,0
+	
+	DS	1024
 ;
 ;**************************************************************
 ;*
@@ -3714,26 +3718,26 @@ CKSUMTBL: DB	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 ;*
 ;**************************************************************
 ;
-;BOOT:	JP	0		;NOTE WE USE FAKE DESTINATIONS
-;WBOOT:	JP	0
-;CONST:	JP	0
-;CONIN:	JP	0
-;CONOUT:	JP	0
-;LIST:	JP	0
-;PUNCH:	JP	0
-;READER:	JP	0
-;HOME:	JP	0
-;SELDSK:	JP	0
-;SETTRK:	JP	0
-;SETSEC:	JP	0
-;SETDMA:	JP	0
-;READ:	JP	0
-;WRITE:	JP	0
-;PRSTAT:	JP	0
-;SECTRN:	JP	0
+BOOT:	equ	BIOS		;NOTE WE USE FAKE DESTINATIONS
+WBOOT:	equ	BIOS + 3
+CONST:	equ	BIOS + 6
+CONIN:	equ	BIOS + 9
+CONOUT:	equ	BIOS + 12
+LIST:	equ	BIOS + 15
+PUNCH:	equ	BIOS + 18
+READER:	equ	BIOS + 21
+HOME:	equ	BIOS + 24
+SELDSK:	equ	BIOS + 27
+SETTRK:	equ	BIOS + 30
+SETSEC:	equ	BIOS + 33
+SETDMA:	equ	BIOS + 36
+READ:	equ	BIOS + 39
+WRITE:	equ	BIOS + 42
+PRSTAT:	equ	BIOS + 45
+SECTRN:	equ	BIOS + 48
 ;
 ;*
 ;******************   E N D   O F   C P / M   *****************
 ;*
 
-	include "cpm22bios.asm"
+;	include "cpm22bios.asm"

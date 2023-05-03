@@ -9,13 +9,13 @@ rem set ASM=tniasm.exe
 call :compile z80 0000
 if not %ERRORLEVEL%==0 goto error
 
-rem call :compile z80test 8000
-rem if not %ERRORLEVEL%==0 goto error
-
-call :compile cpm22z80 E400
+call :compile z80test 8000
 if not %ERRORLEVEL%==0 goto error
 
-call :compile cpm22bios FA00 -DSTANDALONE
+call :compile cpm22z80 DC00
+if not %ERRORLEVEL%==0 goto error
+
+call :compile cpm22bios F200 -DSTANDALONE
 if not %ERRORLEVEL%==0 goto error
 
 
@@ -30,7 +30,7 @@ pushd ..\CPM
 del ..\release\disk00.dsk
 cpmimage.exe ..\release\disk00.dsk make
 cpmimage.exe ..\release\disk00.dsk init
-cpmimage.exe ..\release\disk00.dsk wsys cpm22z80.com
+cpmimage.exe ..\release\disk00.dsk wsys ..\release\cpm22z80.com
 
 cpmimage.exe ..\release\disk00.dsk w test.pas
 cpmimage.exe ..\release\disk00.dsk w turbo.com

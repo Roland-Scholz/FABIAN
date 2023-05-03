@@ -1,26 +1,29 @@
 	include "mc68681.asm"
+
+DEBUG		equ	0
 	
+FATBUF		equ	$FC00		;address of 512-byte buffer for FAT
+DATBUF		equ	FATBUF + $200	;adddres of 512-byte buffer for data
+
 ;
 ;	skeletal cbios for first level of CP/M 2.0 alteration
 ;
-msize		equ	64		;cp/m version memory size in kilobytes
+msize		equ	62		;cp/m version memory size in kilobytes
 ;
 ;	"bias" is address offset from 3400h for memory systems
 ;	than 16k (referred to as"b" throughout the text)
-;
-bias		equ	(msize-20)*1024	;$B000
-ccp		equ	3400h+bias	;base of ccp	($E400)
-bdos		equ	ccp+806h	;base of bdos	($EC06)
-bios		equ	ccp+1600h	;base of bios	($FA00)
+;									25616 (TP)	24592 (TP)
+bias		equ	(msize-20)*1024	;		$B000 (64k)	$A800 (62k)		
+ccp		equ	3400h+bias	;base of ccp	$E400		$DC00		$D800 (61k) 
+bdos		equ	ccp+806h	;base of bdos	$EC06		$E406				
+bios		equ	ccp+1600h	;base of bios	$FA00		$F200		$EE00
 cdisk		equ	0004h		;current disk number 0=a,... l5=p
 iobyte		equ	0003h		;intel i/o byte
-INBUFFE		equ	0DC06h
 ;
 	IFDEF STANDALONE
 	org	bios		;origin of this program
 	ENDIF
-	
-	
+		
 nsects		equ	$1600/128	;warm start sector count (44 sectors for BDOS + CCP)
 ;
 ;		jump vector for individual subroutines
@@ -93,15 +96,15 @@ dpblk:		;disk parameter block, common to all disks
 ;
 ;	individual subroutines to perform each function
 boot:	;simplest case is to just perform parameter initialization
-	
-;	ld	sp, 80h		;use space below buffer for stack
+;		ld	sp, 80h		;use space below buffer for stack
+		
+		call	sdInit
 			
-
 ;	jp	gocpm		;initialize and go to cp/m
 ;
 bwboot:	;simplest case is to read the disk until all sectors loaded
 		ld	sp, 80h		;use space below buffer for stack
-	
+
 ;		ld	HL, 0100h
 ;		ld	DE, 0101h
 ;		ld	BC, 0F0FFh
@@ -110,9 +113,11 @@ bwboot:	;simplest case is to read the disk until all sectors loaded
 	
 		ld	HL, copyright
 		call	printstr
-	
-boot2:	
-;		xor	a		;zero in the accum
+		
+		call	fopen
+;		call	dirPrintEntry
+		
+		xor	a		;zero in the accum
 		ld	(iobyte), a	;clear the iobyte
 		ld	(cdisk), a	;select disk zero
 		
@@ -125,8 +130,7 @@ boot2:
 ;		dec	a
 ;		jp	P, opendisks
 		
-		ld	c, 0		;select disk 0
-	
+		ld	c, 0		;select disk 0	
 		call	bseldsk
 		call	bhome		;go to track 00
 ;		jp	gocpm
@@ -135,10 +139,10 @@ boot2:
 		ld	b, nsects	;b counts * of sectors to load
 		ld	c, 0		;c has the current track number
 		ld	d, 0		;d has the next sector to read
-;		note that we begin by reading track 0, sector 2 since sector 1
-;		contains the cold start loader, which is skipped in a warm start
+					;note that we begin by reading track 0, sector 2 since sector 1
+					;contains the cold start loader, which is skipped in a warm start
 		ld	HL, ccp		;base of cp/m (initial load point)
-load1:		;load	one more sector
+load1:					;load	one more sector
 		push	BC		;save sector count, current track
 		push	DE		;save next sector to read
 		push	HL		;save dma address
@@ -148,13 +152,13 @@ load1:		;load	one more sector
 		push	BC		;replace on stack for later recall
 		call	bsetdma		;set dma address from b, C
 ;	
-;		drive set to 0, track set, sector set, dma address set
+					;drive set to 0, track set, sector set, dma address set
 		call	bread
 ;		cp	00h		;any errors?
 		or	a
 		jp	NZ, bwboot	;retry the entire boot if an error occurs
 ;	
-;		no error, lde to next sector
+					;no error, lde to next sector
 		pop	HL		;recall dma address
 		ld	DE, 128		;dma=dma+128
 		add	HL, DE		;new dma address is in h, l
@@ -163,7 +167,7 @@ load1:		;load	one more sector
 		dec	b		;sectors=sectors-1
 		jp	Z, gocpm	;transfer to cp/m if all have been loaded
 ;	
-;		more	sectors remain to load, check for track change
+					;more sectors remain to load, check for track change
 		inc	d
 		ld	a, d		;sector=26?, if so, change tracks
 		
@@ -173,7 +177,7 @@ load1:		;load	one more sector
 		pop	HL
 		jp	C, load1	;carry generated if sector<26
 ;	
-;		end of	current track,	go to next track
+					;end of	current track,	go to next track
 		ld	d, 0		;begin with first sector of next track
 		inc	c		;track=track+1
 ;	
@@ -221,38 +225,18 @@ bconst:		;console status, return 0ffh if character ready, 00h if not
 		ld	a, 0ffh		; $ff, ready
 		ret
 ;
-bconin:	;console character into register a
-;	ds	10h		;space for input routine
-;--------------------------------------------------------------
-; get a character in A from rs232 (1)
-; 
-;--------------------------------------------------------------
-chrin:
-		in	a, (STATA)
-		and	a, 1
-		jr	Z, chrin
-		in	a, (RECA)
-		ret
+bconin:					;console character into register a
+;		ds	10h		;space for input routine
+		jp	chrin
+		
+
 		
 ;		in      01h
 ;		and	7fh		;strip parity bit
 ;		ret
 ;
-chrouta:
-		ld	c, a
-bconout:	;console character output from register c
-;--------------------------------------------------------------
-; output a character in A over rs232 (1)
-; 
-;--------------------------------------------------------------
-chrout:
-		in	a, (STATA)
-		and	a, 4
-		jr	Z, chrout
-		ld	a, c
-		out	(TRANSA), a
-		ret
-		
+bconout:				;console character output from register c
+		jp	chrout		
 ;		ld	a, c		;get to accumulator
 ;		ds	10h		;space for output routine
 ;		out     01h
@@ -362,189 +346,125 @@ bread:
 		;perform read operation (usually this is similar to write
 		;so we will allow space to set up read command, then use
 		;common code in write)
-
-;		ld	c, 'R'
-;		call	chrout
-	
-;		call	newline
-;;		call	cmdGetSector
-;		call	newline
+	if DEBUG = 1
+		ld	a, 0	
+		ld	(debug), a
 		
-;		ld	a, (seclen)
-;		cp	128
-;		jp	NZ, error
-;	
-;		ld	HL, secdata		;copy ROM to RAM from
-;		ld	DE, (dmaad)		;to
-;		ld	BC, 128			;length
-;		ldir
+		ld	c, 'R'
+		call	chroutdebug
+		call	spacedebug
+	endif
+		call	seeksectrk
 
-readsec:		
-		ld	a, 'R'		;read
-		call	serout
-		ld	a, (diskno)	;disk 0
-		call	serout
-		ld	a, (track)	;track 2
-		call	serout
-		ld	a, (sector)	;sector 0
-		call	serout
 		
-		call	serin		;check ack
-		jr	C, readsec	;timeout?, redo
-
-readsec3:		
-		cp	'A'
-		jr	Z, readsec2	;ack OK
-		ld	a, 1		;else return 1 (= unrecov. error)
-		ret
-readsec2:
 		ld	hl, (dmaad)
-		ld	d, 128
-readsec1:	call	serin
-		ld	(hl), a
-		inc	hl
-		dec	d
-		jr	NZ, readsec1
-		
-;		call	newline
-;		ld	hl, (dmaad)
-;		ld	b, 128
-;		ld	d, 16
-;readsec4:	ld	a, (hl)
-;		inc	hl
-;		call	printhex
-;		call	space
-;		dec	d
-;		jr	nz, readsec5
-;		ld	d, 16
-;		call	newline
-;readsec5:	djnz	b, readsec4
+		ld	bc, 80h
+		call	fread
 
-
+	if DEBUG = 1
+		call	newlinedebug
+	endif
 		xor	a
+	if DEBUG = 1
+		ld	(debug), a
+	endif
 		ret
-;		jp	waitio		;to perform the actual i/o
+;		jp	waitio			;to perform the actual i/o
+
+
+;
+;
+;
+seeksectrk:	ld	de, fseeklen		;clear fseeklen
+		call	clear32
+				
+		xor	a			;seeklen = track * 26 + sector
+		ld	bc, (track)
+		ld	e, 26		
+		ld	b, a
+		ld	d, a
+		call	mul16
+		ld	bc, (sector)
+		ld	b, 0
+		add	hl, bc
+		ld	(fseeklen + 1), hl
+		
+		xor	a			;shift right one position
+		ld	b, 3
+		ld	hl, fseeklen + 2
+seeksectrk1:	rr	(hl)
+		dec	hl
+		djnz	seeksectrk1
+
+	if DEBUG = 1
+		ld	a, (debug)
+		or	a
+		jr	Z, seeksectrk2
+		
+		ld	c, 'T'
+		call	chroutdebug
+		ld	c, 'S'
+		call	chroutdebug
+		ld	a, (track)
+		ld	h, a
+		ld	a, (sector)
+		ld	l, a
+		call	printadrdebug
+			
+		ld	hl, (fseeklen + 2)
+		call	printadrdebug
+		ld	hl, (fseeklen)
+		call	printadrdebug
+	endif
+	
+seeksectrk2:	ld	hl, fseeklen
+		call	fseek			;call fseek
+
+	if DEBUG = 1		
+		ld	hl, (datsec)
+		call	printadrdebug
+		ld	hl, (datptr)
+		call	printadrdebug
+		ld	hl, (dmaad)
+		call	printadrdebug
+	endif
+		ret
+;
 ;
 bwrite:	
-		;perform a write operation
-		;ds	10h		;set up write command
-		;ld	c, 'W'
-		;call	chrout
-		;out	02h
-;;		call	cmdPutSector
-writesec:
-		ld	a, 'W'		;write
-		call	serout
-		ld	a, (diskno)	;disk 0
-		call	serout
-		ld	a, (track)	;track 2
-		call	serout
-		ld	a, (sector)	;sector 0
-		call	serout
+	if DEBUG = 1
+		ld	a, 0
+		ld	(debug), a
 		
-		ld	b, 128
-		ld	hl, (dmaad)
-writesec1:	ld	a, (hl)
-		inc	hl
-		call	serout
-		djnz	b, writesec1
-		
-		call	serin		;check ack
-		jr	C, writesec2	;timeout?, error
-		cp	a, 'A'		;ack?
-		jr	NZ, writesec2	;no error
-		
-		xor	a
-		ret
-
-writesec2:	ld	a, 1
-		ret
+		ld	c, 'W'
+		call	chroutdebug
+		call	spacedebug
+	endif
 	
-copystr:
-		ld	a, (HL)
-		or	a
-		ret	Z
-		ld	(DE), a
-		inc	HL
-		inc	DE
-		jr	copystr
+		call	seeksectrk		;compute seeklen
+			
+		ld	hl, (dmaad)		;copy data to sector buffer
+		ld	de, (datptr)
+		ld	bc, 80h
+		ldir
+		
+		ld	de, datsec
+		call	sdWriteDat
 
-printstr:	
+	if DEBUG = 1
+		call	newlinedebug
+	endif
+	
 		xor	a
-		add	a, (HL)
-		ret	Z
-		call	chrouta
-		inc	HL
-		jr	printstr
-
-space:
-		ld	c, 32
-		jp	chrout
-
-newline:
-		ld	c, 13
-		call	chrout
-		ld	c, 10
-		jp	chrout
-		
-;--------------------------------------------------------------
-; get a character in A from rs232 (2)
-; 
-;--------------------------------------------------------------
-serin:		ld	bc, 0
-serin1:		in	a, (STATB)
-		and	a, 1
-		jr	NZ, serin2
-		djnz	b, serin1
-		dec	c
-		jr	NZ, serin1
-		scf
+	if DEBUG = 1
+		ld	(debug), a
+	endif
 		ret
-serin2:		in	a, (RECB)
-		ret
+;
+;writesec2:	ld	a, 1
+;		ret
 
-;--------------------------------------------------------------
-; output a character in A over rs232 (1)
-; 
-;--------------------------------------------------------------
-serout:
-		push	AF
-serout1:	in	a, (STATB)
-		and	a, 4
-		jr	Z, serout1
-		pop	AF
-		out	(TRANSB), a
-		ret	
 
-;--------------------------------------------------------------
-; prints byte in A in hexadecimal format
-;--------------------------------------------------------------
-printhex:
-		push    AF
-		push    AF
-		rra
-		rra
-		rra
-		rra
-		call    printnib
-		pop     AF
-		call    printnib
-		pop     AF
-		ret
-printnib:
-		and     0fh
-		cp      0ah
-		jr      C, printnib1
-		add     a, 07h
-printnib1:
-		add     a, '0'
-print:
-		push    BC
-		ld      c, a
-		call    chrout
-		pop     BC
-		ret
-		
 ;
 ;waitio:	;enter	here from read	and write to perform the actual i/o
 ;		operation. return a 00h in register a if the operation completes
@@ -567,6 +487,7 @@ diskno:		ds	1		;disk number 0-15
 track:		ds	1		;two bytes for expansion
 sector:		ds	1		;two bytes for expansion
 dmaad:		ds	2		;direct memory address
+debug:		ds	1		;1 = enable debug
 ;
 ;		scratch ram area for bdos use
 begdat		equ	$	 	;beginning of data area
@@ -584,6 +505,17 @@ enddat		equ	$	 	;end of data area
 datsiz		equ	$-begdat;	;size of data area
 	
 
+		include	"fat16.asm"
+		include "common.asm"
+		
+		
+;--------------------------------------------------------------
+;--------------------------------------------------------------
+;		E N D
+;--------------------------------------------------------------
+;--------------------------------------------------------------
+				
+		
 		IFDEF NOEXCLUDE
 cmdOpenDisk:
 		ld	a, (diskno)

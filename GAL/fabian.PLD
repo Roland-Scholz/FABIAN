@@ -1,4 +1,4 @@
-Name     z80logic;
+Name     fabian;
 PartNo   00 ;
 Date     14.02.2022 ;
 Revision 01 ;
@@ -55,9 +55,11 @@ PIN 18	= RAM1CS;
 PIN 17	= RAM0CS; 
 PIN 16	= CLK_OUT; 
 PIN 15	= M1IOREQ;
+PIN 14	= WR_OUT;
 
 ROMCS	= A13 # A14 # A15 # MEMREQ # RD # !OP7 # !REFRESH;
 RAM0CS	= A15 # (OP7 & WR) # MEMREQ # !REFRESH; /*A15 # MEMREQ # !REFRESH # !(A13 # A14 # A15 # RD # !OP7);*/
 RAM1CS	= !A15 # MEMREQ # !REFRESH /*# (RD & WR)*/;
-/*M1IOREQ	= IOREQ # !M1; */
+M1IOREQ	= IOREQ # !M1;
 CLK_OUT	= CLK_IN;
+WR_OUT	= WR;

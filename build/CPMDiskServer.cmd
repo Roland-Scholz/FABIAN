@@ -1,2 +1,3 @@
-java -jar ..\CPMDiskServer\DiskServer.jar -com5 ..\release\disk00.dsk
+cd ..\release
+java -jar ..\CPMDiskServer\DiskServer.jar -com4 disk00.dsk
 pause

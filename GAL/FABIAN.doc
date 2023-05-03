@@ -1,0 +1,84 @@
+
+*******************************************************************************
+                                    fabian
+*******************************************************************************
+
+CUPL(WM)        5.0a Serial# 60008009
+Device          g16v8as  Library DLIB-h-40-2
+Created         Thu Mar 16 17:39:00 2023
+Name            fabian
+Partno          00 
+Revision        01 
+Date            14.02.2022 
+Designer        Roland 
+Company         Scholz Electronics 
+Assembly        None 
+Location        
+
+===============================================================================
+                            Expanded Product Terms
+===============================================================================
+
+CLK_OUT =>
+    CLK_IN
+
+M1IOREQ =>
+    IOREQ
+  # !M1
+
+RAM0CS =>
+    A15
+  # OP7 & WR
+  # MEMREQ
+  # !REFRESH
+
+RAM1CS =>
+    !A15
+  # MEMREQ
+  # !REFRESH
+
+ROMCS =>
+    A13
+  # A14
+  # A15
+  # MEMREQ
+  # RD
+  # !OP7
+  # !REFRESH
+
+WR_OUT =>
+    WR
+
+
+===============================================================================
+                                 Symbol Table
+===============================================================================
+
+Pin Variable                                    Pterms   Max     Min    
+Pol   Name              Ext     Pin     Type     Used   Pterms  Level   
+--- --------            ---     ---     ----    ------  ------  -----   
+
+    A13                         1        V        -       -       -     
+    A14                         2        V        -       -       -     
+    A15                         3        V        -       -       -     
+    CLK_IN                      7        V        -       -       -     
+    CLK_OUT                     16       V        1       8       1     
+    IOREQ                       5        V        -       -       -     
+    M1                          11       V        -       -       -     
+    M1IOREQ                     15       V        2       8       1     
+    MEMREQ                      4        V        -       -       -     
+    OP7                         6        V        -       -       -     
+    RAM0CS                      17       V        4       8       1     
+    RAM1CS                      18       V        3       8       1     
+    RD                          9        V        -       -       -     
+    REFRESH                     8        V        -       -       -     
+    ROMCS                       19       V        7       8       1     
+    WR                          12       V        -       -       -     
+    WR_OUT                      14       V        1       8       1     
+
+
+LEGEND    D : default variable         F : field      G : group
+          I : intermediate variable    N : node       M : extended node
+          U : undefined                V : variable   X : extended variable
+          T : function
+

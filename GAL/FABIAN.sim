@@ -1,0 +1,55 @@
+%SIGNAL
+PIN   1 =  A13 
+PIN   2 =  A14 
+PIN   3 =  A15 
+PIN   7 =  CLK_IN 
+PIN  16 =  CLK_OUT 
+PIN   5 =  IOREQ 
+PIN  11 =  M1 
+PIN  15 =  M1IOREQ 
+PIN   4 =  MEMREQ 
+PIN   6 =  OP7 
+PIN  17 =  RAM0CS 
+PIN  18 =  RAM1CS 
+PIN   9 =  RD 
+PIN   8 =  REFRESH 
+PIN  19 =  ROMCS 
+PIN  12 =  WR 
+PIN  14 =  WR_OUT 
+%END
+
+%FIELD
+%END
+
+%EQUATION
+CLK_OUT =>
+    CLK_IN
+
+M1IOREQ =>
+    IOREQ
+  # !M1
+
+RAM0CS =>
+    A15
+  # OP7 & WR
+  # MEMREQ
+  # !REFRESH
+
+RAM1CS =>
+    !A15
+  # MEMREQ
+  # !REFRESH
+
+ROMCS =>
+    A13
+  # A14
+  # A15
+  # MEMREQ
+  # RD
+  # !OP7
+  # !REFRESH
+
+WR_OUT =>
+    WR
+
+%END
