@@ -1,0 +1,193 @@
+2023-05-08 22:22:31.348 [main] INFO  Freerouting v1.7.0 (build-date: 2023-02-08)
+2023-05-08 22:22:31.348 [main] DEBUG  Version: 1.7.0,2023-02-08
+2023-05-08 22:22:31.348 [main] DEBUG  Command line arguments: ''
+2023-05-08 22:22:31.364 [main] DEBUG  Architecture: Windows 10,amd64,10.0
+2023-05-08 22:22:31.364 [main] DEBUG  Java: 17.0.7,Eclipse Adoptium
+2023-05-08 22:22:31.364 [main] DEBUG  System Language: de,de_DE
+2023-05-08 22:22:31.364 [main] DEBUG  Hardware: 8 CPU cores,4062 MB RAM
+2023-05-08 22:22:31.379 [main] DEBUG  UTC Time: 2023-05-08T20:22:31.364051400Z
+2023-05-08 22:22:31.379 [main] DEBUG  GUI Language: de_DE
+2023-05-08 22:22:31.751 [main] TRACE Method 'MainApplication.main()' was performed in 0,51 seconds.
+2023-05-08 22:23:58.983 [main] INFO  Freerouting v1.7.0 (build-date: 2023-02-08)
+2023-05-08 22:23:58.999 [main] DEBUG  Version: 1.7.0,2023-02-08
+2023-05-08 22:23:58.999 [main] DEBUG  Command line arguments: '-de VT100_MCU.dsn -do VT100_MCU.ses -mp 10'
+2023-05-08 22:23:58.999 [main] DEBUG  Architecture: Windows 10,amd64,10.0
+2023-05-08 22:23:58.999 [main] DEBUG  Java: 17.0.7,Eclipse Adoptium
+2023-05-08 22:23:58.999 [main] DEBUG  System Language: de,de_DE
+2023-05-08 22:23:58.999 [main] DEBUG  Hardware: 8 CPU cores,4062 MB RAM
+2023-05-08 22:23:59.014 [main] DEBUG  UTC Time: 2023-05-08T20:23:58.999188900Z
+2023-05-08 22:23:59.014 [main] DEBUG  GUI Language: de_DE
+2023-05-08 22:23:59.014 [main] INFO  Opening 'VT100_MCU.dsn'...
+2023-05-08 22:24:00.579 [main] INFO  Opening 'VT100_MCU.rules'...
+2023-05-08 22:24:00.579 [main] ERROR File 'VT100_MCU.rules' was not found.
+2023-05-08 22:24:00.766 [Thread-0] INFO  Starting auto-routing...
+2023-05-08 22:24:00.766 [main] TRACE Method 'MainApplication.main()' was performed in 1,88 seconds.
+2023-05-08 22:24:18.516 [Thread-0] TRACE Method 'BatchAutorouter.autoroute_pass #1 on board '6df53b7a960e841d56625c8d62c4d4f7' making 263 changes' was performed in 17,53 seconds.
+2023-05-08 22:24:38.076 [Thread-0] TRACE Method 'BatchAutorouter.autoroute_pass #2 on board 'd5245319d3741c4334c8a8ff403a4232' making 246 changes' was performed in 19,51 seconds.
+2023-05-08 22:24:59.850 [Thread-0] TRACE Method 'BatchAutorouter.autoroute_pass #3 on board '37b90871264135a949a17fd4b6442850' making 273 changes' was performed in 21,74 seconds.
+2023-05-08 22:25:25.626 [Thread-0] TRACE Method 'BatchAutorouter.autoroute_pass #4 on board 'f17a6b4c675b493c38cf6507327e02fc' making 292 changes' was performed in 25,76 seconds.
+2023-05-08 22:25:48.477 [main] INFO  Freerouting v1.7.0 (build-date: 2023-02-08)
+2023-05-08 22:25:48.492 [main] DEBUG  Version: 1.7.0,2023-02-08
+2023-05-08 22:25:48.492 [main] DEBUG  Command line arguments: '-de VT100_MCU.dsn -do VT100_MCU.ses -mp 3'
+2023-05-08 22:25:48.492 [main] DEBUG  Architecture: Windows 10,amd64,10.0
+2023-05-08 22:25:48.492 [main] DEBUG  Java: 17.0.7,Eclipse Adoptium
+2023-05-08 22:25:48.492 [main] DEBUG  System Language: de,de_DE
+2023-05-08 22:25:48.508 [main] DEBUG  Hardware: 8 CPU cores,4062 MB RAM
+2023-05-08 22:25:48.508 [main] DEBUG  UTC Time: 2023-05-08T20:25:48.508497100Z
+2023-05-08 22:25:48.508 [main] DEBUG  GUI Language: de_DE
+2023-05-08 22:25:48.524 [main] INFO  Opening 'VT100_MCU.dsn'...
+2023-05-08 22:25:50.074 [main] INFO  Opening 'VT100_MCU.rules'...
+2023-05-08 22:25:50.074 [main] ERROR File 'VT100_MCU.rules' was not found.
+2023-05-08 22:25:50.261 [main] TRACE Method 'MainApplication.main()' was performed in 1,86 seconds.
+2023-05-08 22:25:50.261 [Thread-0] INFO  Starting auto-routing...
+2023-05-08 22:26:08.096 [Thread-0] TRACE Method 'BatchAutorouter.autoroute_pass #1 on board '6df53b7a960e841d56625c8d62c4d4f7' making 263 changes' was performed in 17,64 seconds.
+2023-05-08 22:26:28.226 [Thread-0] TRACE Method 'BatchAutorouter.autoroute_pass #2 on board 'd5245319d3741c4334c8a8ff403a4232' making 246 changes' was performed in 20,08 seconds.
+2023-05-08 22:26:49.897 [Thread-0] TRACE Method 'BatchAutorouter.autoroute_pass #3 on board '37b90871264135a949a17fd4b6442850' making 273 changes' was performed in 21,64 seconds.
+2023-05-08 22:26:49.897 [Thread-0] TRACE Method 'BatchAutorouterThread.thread_action()-autorouting' was performed in 59,63 seconds.
+2023-05-08 22:26:49.897 [Thread-0] INFO  Auto-routing was completed in 59,63 seconds.
+2023-05-08 22:26:49.897 [Thread-0] INFO  Starting route optimization on 1 thread...
+2023-05-08 22:26:55.240 [Thread-0] TRACE Method 'BatchOptRoute.opt_route_pass #1 with 41 vias and 4.823.160,08 trace length.' was performed in 5,33 seconds.
+2023-05-08 22:27:00.190 [Thread-0] TRACE Method 'BatchOptRoute.opt_route_pass #2 with 41 vias and 4.823.160,08 trace length.' was performed in 4,95 seconds.
+2023-05-08 22:27:00.190 [Thread-0] TRACE Method 'BatchAutorouterThread.thread_action()-routeoptimization' was performed in 10,29 seconds.
+2023-05-08 22:27:00.190 [Thread-0] INFO  Route optimization was completed in 10,29 seconds.
+2023-05-08 22:27:00.214 [Thread-0] TRACE Method 'BatchAutorouterThread.thread_action()' was performed in 1 minute(s) 9,95 seconds.
+2023-05-08 22:27:00.214 [Thread-0] INFO  Saving 'VT100_MCU.ses'...
+2023-05-08 22:29:49.892 [main] INFO  Freerouting v1.7.0 (build-date: 2023-02-08)
+2023-05-08 22:29:49.892 [main] DEBUG  Version: 1.7.0,2023-02-08
+2023-05-08 22:29:49.908 [main] DEBUG  Command line arguments: '-de VT100_MCU.dsn -do VT100_MCU.ses -mp 3'
+2023-05-08 22:29:49.908 [main] DEBUG  Architecture: Windows 10,amd64,10.0
+2023-05-08 22:29:49.908 [main] DEBUG  Java: 17.0.7,Eclipse Adoptium
+2023-05-08 22:29:49.908 [main] DEBUG  System Language: de,de_DE
+2023-05-08 22:29:49.908 [main] DEBUG  Hardware: 8 CPU cores,4062 MB RAM
+2023-05-08 22:29:49.924 [main] DEBUG  UTC Time: 2023-05-08T20:29:49.908420200Z
+2023-05-08 22:29:49.924 [main] DEBUG  GUI Language: de_DE
+2023-05-08 22:29:49.924 [main] INFO  Opening 'VT100_MCU.dsn'...
+2023-05-08 22:29:51.530 [main] INFO  Opening 'VT100_MCU.rules'...
+2023-05-08 22:29:51.530 [main] ERROR File 'VT100_MCU.rules' was not found.
+2023-05-08 22:29:51.709 [Thread-0] INFO  Starting auto-routing...
+2023-05-08 22:29:51.709 [main] TRACE Method 'MainApplication.main()' was performed in 1,91 seconds.
+2023-05-08 22:30:11.281 [Thread-0] TRACE Method 'BatchAutorouter.autoroute_pass #1 on board '77aa8826d8e226e0b20fb47bbdd88ce5' making 276 changes' was performed in 19,35 seconds.
+2023-05-08 22:30:33.677 [Thread-0] TRACE Method 'BatchAutorouter.autoroute_pass #2 on board '29a9ba6927cdfbb4d9fb64aadec13c63' making 268 changes' was performed in 22,36 seconds.
+2023-05-08 22:30:57.936 [Thread-0] TRACE Method 'BatchAutorouter.autoroute_pass #3 on board 'ff89cb86027c4736d4c4e27042adc5d1' making 283 changes' was performed in 24,22 seconds.
+2023-05-08 22:30:57.936 [Thread-0] TRACE Method 'BatchAutorouterThread.thread_action()-autorouting' was performed in 1 minute(s) 6,21 seconds.
+2023-05-08 22:30:57.936 [Thread-0] INFO  Auto-routing was completed in 1 minute(s) 6,21 seconds.
+2023-05-08 22:30:57.936 [Thread-0] INFO  Starting route optimization on 1 thread...
+2023-05-08 22:31:03.017 [Thread-0] TRACE Method 'BatchOptRoute.opt_route_pass #1 with 43 vias and 4.879.704,86 trace length.' was performed in 5,06 seconds.
+2023-05-08 22:31:07.825 [Thread-0] TRACE Method 'BatchOptRoute.opt_route_pass #2 with 43 vias and 4.879.704,86 trace length.' was performed in 4,81 seconds.
+2023-05-08 22:31:07.825 [Thread-0] TRACE Method 'BatchAutorouterThread.thread_action()-routeoptimization' was performed in 9,89 seconds.
+2023-05-08 22:31:07.825 [Thread-0] INFO  Route optimization was completed in 9,89 seconds.
+2023-05-08 22:31:07.846 [Thread-0] TRACE Method 'BatchAutorouterThread.thread_action()' was performed in 1 minute(s) 16,14 seconds.
+2023-05-08 22:31:07.846 [Thread-0] INFO  Saving 'VT100_MCU.ses'...
+2023-05-08 22:31:48.200 [main] INFO  Freerouting v1.7.0 (build-date: 2023-02-08)
+2023-05-08 22:31:48.200 [main] DEBUG  Version: 1.7.0,2023-02-08
+2023-05-08 22:31:48.200 [main] DEBUG  Command line arguments: '-de VT100_MCU.dsn -do VT100_MCU.ses -mp 3'
+2023-05-08 22:31:48.200 [main] DEBUG  Architecture: Windows 10,amd64,10.0
+2023-05-08 22:31:48.200 [main] DEBUG  Java: 17.0.7,Eclipse Adoptium
+2023-05-08 22:31:48.200 [main] DEBUG  System Language: de,de_DE
+2023-05-08 22:31:48.218 [main] DEBUG  Hardware: 8 CPU cores,4062 MB RAM
+2023-05-08 22:31:48.218 [main] DEBUG  UTC Time: 2023-05-08T20:31:48.218166400Z
+2023-05-08 22:31:48.218 [main] DEBUG  GUI Language: de_DE
+2023-05-08 22:31:48.233 [main] INFO  Opening 'VT100_MCU.dsn'...
+2023-05-08 22:31:49.810 [main] INFO  Opening 'VT100_MCU.rules'...
+2023-05-08 22:31:49.810 [main] ERROR File 'VT100_MCU.rules' was not found.
+2023-05-08 22:31:49.994 [Thread-0] INFO  Starting auto-routing...
+2023-05-08 22:31:49.994 [main] TRACE Method 'MainApplication.main()' was performed in 1,90 seconds.
+2023-05-08 22:32:04.192 [AWT-EventQueue-0] WARN  NetIncompletes.calculate_net_items: too many items
+2023-05-08 22:32:04.195 [AWT-EventQueue-0] WARN  NetIncompletes.calculate_net_items: too many items
+2023-05-08 22:32:04.197 [AWT-EventQueue-0] WARN  NetIncompletes.calculate_net_items: too many items
+2023-05-08 22:32:04.199 [AWT-EventQueue-0] WARN  NetIncompletes.calculate_net_items: too many items
+2023-05-08 22:32:04.205 [AWT-EventQueue-0] WARN  NetIncompletes.calculate_net_items: too many items
+2023-05-08 22:32:04.207 [AWT-EventQueue-0] WARN  NetIncompletes.calculate_net_items: too many items
+2023-05-08 22:32:04.208 [AWT-EventQueue-0] WARN  NetIncompletes.calculate_net_items: too many items
+2023-05-08 22:32:04.208 [AWT-EventQueue-0] WARN  NetIncompletes.calculate_net_items: too many items
+2023-05-08 22:32:04.208 [AWT-EventQueue-0] WARN  NetIncompletes.calculate_net_items: too many items
+2023-05-08 22:32:10.130 [Thread-0] TRACE Method 'BatchAutorouter.autoroute_pass #1 on board '77aa8826d8e226e0b20fb47bbdd88ce5' making 276 changes' was performed in 19,92 seconds.
+2023-05-08 22:32:32.536 [Thread-0] TRACE Method 'BatchAutorouter.autoroute_pass #2 on board '5a42b55fe4f7172689becc115d0c5392' making 268 changes' was performed in 22,37 seconds.
+2023-05-08 22:32:57.029 [Thread-0] TRACE Method 'BatchAutorouter.autoroute_pass #3 on board '3b4f5c43c154ec331e99849f566f56ac' making 283 changes' was performed in 24,46 seconds.
+2023-05-08 22:32:57.029 [Thread-0] TRACE Method 'BatchAutorouterThread.thread_action()-autorouting' was performed in 1 minute(s) 7,02 seconds.
+2023-05-08 22:32:57.029 [Thread-0] INFO  Auto-routing was completed in 1 minute(s) 7,02 seconds.
+2023-05-08 22:32:57.029 [Thread-0] INFO  Starting route optimization on 1 thread...
+2023-05-08 22:33:02.448 [Thread-0] TRACE Method 'BatchOptRoute.opt_route_pass #1 with 43 vias and 4.879.704,86 trace length.' was performed in 5,40 seconds.
+2023-05-08 22:33:07.526 [Thread-0] TRACE Method 'BatchOptRoute.opt_route_pass #2 with 43 vias and 4.879.704,86 trace length.' was performed in 5,08 seconds.
+2023-05-08 22:33:07.526 [Thread-0] TRACE Method 'BatchAutorouterThread.thread_action()-routeoptimization' was performed in 10,50 seconds.
+2023-05-08 22:33:07.526 [Thread-0] INFO  Route optimization was completed in 10,50 seconds.
+2023-05-08 22:33:07.545 [Thread-0] TRACE Method 'BatchAutorouterThread.thread_action()' was performed in 1 minute(s) 17,55 seconds.
+2023-05-08 22:33:07.545 [Thread-0] INFO  Saving 'VT100_MCU.ses'...
+2023-05-10 08:02:26.201 [main] INFO  Freerouting v1.7.0 (build-date: 2023-02-08)
+2023-05-10 08:02:26.206 [main] DEBUG  Version: 1.7.0,2023-02-08
+2023-05-10 08:02:26.208 [main] DEBUG  Command line arguments: '-de VT100_MCU.dsn -do VT100_MCU.ses -mp 3'
+2023-05-10 08:02:26.209 [main] DEBUG  Architecture: Windows 10,amd64,10.0
+2023-05-10 08:02:26.211 [main] DEBUG  Java: 17.0.7,Eclipse Adoptium
+2023-05-10 08:02:26.212 [main] DEBUG  System Language: de,de_DE
+2023-05-10 08:02:26.217 [main] DEBUG  Hardware: 8 CPU cores,4062 MB RAM
+2023-05-10 08:02:26.223 [main] DEBUG  UTC Time: 2023-05-10T06:02:26.218459200Z
+2023-05-10 08:02:26.227 [main] DEBUG  GUI Language: de_DE
+2023-05-10 08:02:26.232 [main] INFO  Opening 'VT100_MCU.dsn'...
+2023-05-10 08:02:27.820 [main] INFO  Opening 'VT100_MCU.rules'...
+2023-05-10 08:02:27.821 [main] ERROR File 'VT100_MCU.rules' was not found.
+2023-05-10 08:02:28.033 [Thread-0] INFO  Starting auto-routing...
+2023-05-10 08:02:28.034 [main] TRACE Method 'MainApplication.main()' was performed in 1,93 seconds.
+2023-05-10 08:02:42.412 [Thread-0] TRACE Method 'BatchAutorouter.autoroute_pass #1 on board 'bebdad37165fcb429e040aad8402d2fa' making 315 changes' was performed in 14,16 seconds.
+2023-05-10 08:02:55.629 [Thread-0] TRACE Method 'BatchAutorouter.autoroute_pass #2 on board '79e6a5cec312e63fce561859bc91e652' making 232 changes' was performed in 13,18 seconds.
+2023-05-10 08:03:09.456 [Thread-0] TRACE Method 'BatchAutorouter.autoroute_pass #3 on board '14823bfe1d560ce7631ff0796ec9af26' making 211 changes' was performed in 13,79 seconds.
+2023-05-10 08:03:09.462 [Thread-0] TRACE Method 'BatchAutorouterThread.thread_action()-autorouting' was performed in 41,43 seconds.
+2023-05-10 08:03:09.463 [Thread-0] INFO  Auto-routing was completed in 41,43 seconds.
+2023-05-10 08:03:09.465 [Thread-0] INFO  Starting route optimization on 1 thread...
+2023-05-10 08:03:15.004 [Thread-0] TRACE Method 'BatchOptRoute.opt_route_pass #1 with 39 vias and 4.710.984,54 trace length.' was performed in 5,53 seconds.
+2023-05-10 08:03:20.224 [Thread-0] TRACE Method 'BatchOptRoute.opt_route_pass #2 with 39 vias and 4.710.984,54 trace length.' was performed in 5,22 seconds.
+2023-05-10 08:03:20.226 [Thread-0] TRACE Method 'BatchAutorouterThread.thread_action()-routeoptimization' was performed in 10,76 seconds.
+2023-05-10 08:03:20.227 [Thread-0] INFO  Route optimization was completed in 10,76 seconds.
+2023-05-10 08:03:20.241 [Thread-0] TRACE Method 'BatchAutorouterThread.thread_action()' was performed in 52,21 seconds.
+2023-05-10 08:03:20.243 [Thread-0] INFO  Saving 'VT100_MCU.ses'...
+2023-05-10 08:04:50.620 [main] INFO  Freerouting v1.7.0 (build-date: 2023-02-08)
+2023-05-10 08:04:50.625 [main] DEBUG  Version: 1.7.0,2023-02-08
+2023-05-10 08:04:50.626 [main] DEBUG  Command line arguments: '-de VT100_MCU.dsn -do VT100_MCU.ses -mp 3'
+2023-05-10 08:04:50.628 [main] DEBUG  Architecture: Windows 10,amd64,10.0
+2023-05-10 08:04:50.629 [main] DEBUG  Java: 17.0.7,Eclipse Adoptium
+2023-05-10 08:04:50.630 [main] DEBUG  System Language: de,de_DE
+2023-05-10 08:04:50.641 [main] DEBUG  Hardware: 8 CPU cores,4062 MB RAM
+2023-05-10 08:04:50.647 [main] DEBUG  UTC Time: 2023-05-10T06:04:50.643648400Z
+2023-05-10 08:04:50.650 [main] DEBUG  GUI Language: de_DE
+2023-05-10 08:04:50.656 [main] INFO  Opening 'VT100_MCU.dsn'...
+2023-05-10 08:04:52.256 [main] INFO  Opening 'VT100_MCU.rules'...
+2023-05-10 08:04:52.258 [main] ERROR File 'VT100_MCU.rules' was not found.
+2023-05-10 08:04:52.451 [main] TRACE Method 'MainApplication.main()' was performed in 1,92 seconds.
+2023-05-10 08:04:52.450 [Thread-0] INFO  Starting auto-routing...
+2023-05-10 08:05:07.454 [Thread-0] TRACE Method 'BatchAutorouter.autoroute_pass #1 on board '3edd78f29b3801ba6b178c68ffe512d4' making 298 changes' was performed in 14,80 seconds.
+2023-05-10 08:05:17.509 [Thread-0] TRACE Method 'BatchAutorouter.autoroute_pass #2 on board 'd256cfa3fb51a5767da288d8f8f38845' making 222 changes' was performed in 10,01 seconds.
+2023-05-10 08:05:28.675 [Thread-0] TRACE Method 'BatchAutorouter.autoroute_pass #3 on board '9632077d069faaf8da490679afd650b2' making 205 changes' was performed in 11,13 seconds.
+2023-05-10 08:05:28.680 [Thread-0] TRACE Method 'BatchAutorouterThread.thread_action()-autorouting' was performed in 36,23 seconds.
+2023-05-10 08:05:28.682 [Thread-0] INFO  Auto-routing was completed in 36,23 seconds.
+2023-05-10 08:05:28.683 [Thread-0] INFO  Starting route optimization on 1 thread...
+2023-05-10 08:05:34.342 [Thread-0] TRACE Method 'BatchOptRoute.opt_route_pass #1 with 27 vias and 4.709.769,59 trace length.' was performed in 5,65 seconds.
+2023-05-10 08:05:39.021 [Thread-0] TRACE Method 'BatchOptRoute.opt_route_pass #2 with 27 vias and 4.709.769,59 trace length.' was performed in 4,68 seconds.
+2023-05-10 08:05:39.023 [Thread-0] TRACE Method 'BatchAutorouterThread.thread_action()-routeoptimization' was performed in 10,34 seconds.
+2023-05-10 08:05:39.025 [Thread-0] INFO  Route optimization was completed in 10,34 seconds.
+2023-05-10 08:05:39.038 [Thread-0] TRACE Method 'BatchAutorouterThread.thread_action()' was performed in 46,59 seconds.
+2023-05-10 08:05:39.039 [Thread-0] INFO  Saving 'VT100_MCU.ses'...
+2023-05-10 08:07:38.988 [main] INFO  Freerouting v1.7.0 (build-date: 2023-02-08)
+2023-05-10 08:07:38.993 [main] DEBUG  Version: 1.7.0,2023-02-08
+2023-05-10 08:07:38.994 [main] DEBUG  Command line arguments: '-de VT100_MCU.dsn -do VT100_MCU.ses -mp 3'
+2023-05-10 08:07:38.996 [main] DEBUG  Architecture: Windows 10,amd64,10.0
+2023-05-10 08:07:38.997 [main] DEBUG  Java: 17.0.7,Eclipse Adoptium
+2023-05-10 08:07:38.998 [main] DEBUG  System Language: de,de_DE
+2023-05-10 08:07:39.004 [main] DEBUG  Hardware: 8 CPU cores,4062 MB RAM
+2023-05-10 08:07:39.009 [main] DEBUG  UTC Time: 2023-05-10T06:07:39.005957500Z
+2023-05-10 08:07:39.013 [main] DEBUG  GUI Language: de_DE
+2023-05-10 08:07:39.019 [main] INFO  Opening 'VT100_MCU.dsn'...
+2023-05-10 08:07:40.587 [main] INFO  Opening 'VT100_MCU.rules'...
+2023-05-10 08:07:40.589 [main] ERROR File 'VT100_MCU.rules' was not found.
+2023-05-10 08:07:40.768 [Thread-0] INFO  Starting auto-routing...
+2023-05-10 08:07:40.769 [main] TRACE Method 'MainApplication.main()' was performed in 1,87 seconds.
+2023-05-10 08:07:54.619 [Thread-0] TRACE Method 'BatchAutorouter.autoroute_pass #1 on board '95460d27872bcc7a331e62b22876bd5b' making 317 changes' was performed in 13,65 seconds.
+2023-05-10 08:08:05.502 [Thread-0] TRACE Method 'BatchAutorouter.autoroute_pass #2 on board 'b7c4c8b08c457ebf17222d4855172c12' making 205 changes' was performed in 10,82 seconds.
+2023-05-10 08:08:13.723 [Thread-0] TRACE Method 'BatchAutorouter.autoroute_pass #3 on board '4e77858c2b471a062f9d2c6434a747bc' making 216 changes' was performed in 8,19 seconds.
+2023-05-10 08:08:13.729 [Thread-0] TRACE Method 'BatchAutorouterThread.thread_action()-autorouting' was performed in 32,96 seconds.
+2023-05-10 08:08:13.730 [Thread-0] INFO  Auto-routing was completed in 32,96 seconds.
+2023-05-10 08:08:13.731 [Thread-0] INFO  Starting route optimization on 1 thread...
+2023-05-10 08:08:18.805 [Thread-0] TRACE Method 'BatchOptRoute.opt_route_pass #1 with 20 vias and 4.429.204,03 trace length.' was performed in 5,07 seconds.
+2023-05-10 08:08:23.605 [Thread-0] TRACE Method 'BatchOptRoute.opt_route_pass #2 with 20 vias and 4.429.204,03 trace length.' was performed in 4,80 seconds.
+2023-05-10 08:08:23.607 [Thread-0] TRACE Method 'BatchAutorouterThread.thread_action()-routeoptimization' was performed in 9,87 seconds.
+2023-05-10 08:08:23.608 [Thread-0] INFO  Route optimization was completed in 9,87 seconds.
+2023-05-10 08:08:23.623 [Thread-0] TRACE Method 'BatchAutorouterThread.thread_action()' was performed in 42,85 seconds.
+2023-05-10 08:08:23.624 [Thread-0] INFO  Saving 'VT100_MCU.ses'...

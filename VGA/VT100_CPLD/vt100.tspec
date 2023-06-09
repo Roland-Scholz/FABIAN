@@ -1,0 +1,13 @@
+AUTO_TS_P2P:FROM:pclk:TO:clk<1>:1
+AUTO_TS_F2P:FROM:clk_1.Q:TO:clk<1>:1
+AUTO_TS_P2P:FROM:pclk:TO:clk<2>:1
+AUTO_TS_F2P:FROM:clk_2.Q:TO:clk<2>:1
+AUTO_TS_P2P:FROM:pclk:TO:clk<3>:1
+AUTO_TS_F2P:FROM:clk_3.Q:TO:clk<3>:1
+AUTO_TS_P2P:FROM:pclk:TO:clk<0>:1
+AUTO_TS_F2F:FROM:clk_1.Q:TO:clk_2.D:1
+AUTO_TS_P2F:FROM:pclk:TO:clk_2.D:1
+AUTO_TS_F2F:FROM:clk_1.Q:TO:clk_3.D:1
+AUTO_TS_F2F:FROM:clk_2.Q:TO:clk_3.D:1
+AUTO_TS_P2F:FROM:pclk:TO:clk_3.D:1
+AUTO_TS_P2F:FROM:pclk:TO:clk_0_OBUF/FCLK:1

@@ -1,0 +1,5 @@
+NET "pclk" LOC = "P5";
+NET "clk<0>" LOC = "P6";
+NET "clk<1>" LOC = "P7";
+NET "clk<2>" LOC = "P8";
+NET "clk<3>" LOC = "P9"; 

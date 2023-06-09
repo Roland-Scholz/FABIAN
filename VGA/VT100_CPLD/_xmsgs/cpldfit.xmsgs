@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- IMPORTANT: This is an internal file that has been generated
+     by the Xilinx ISE software.  Any direct editing or
+     changes made to this file may result in unpredictable
+     behavior or data corruption.  It is strongly advised that
+     users do not edit the contents of this file. -->
+<messages>
+<msg type="warning" file="Cpld" num="0" delta="new" >Unable to retrieve the path to the iSE Project Repository. Will use the default filename of &apos;<arg fmt="%s" index="1">vt100.ise</arg>&apos;.
+</msg>
+
+<msg type="info" file="Cpld" num="0" delta="new" >Inferring BUFG constraint for signal &apos;<arg fmt="%s" index="1">pclk</arg>&apos; based upon the LOC constraint &apos;<arg fmt="%s" index="2">P5</arg>&apos;. It is recommended that you declare this BUFG explicitedly in your design. Note that for certain device families the output of a BUFG constraint can not drive a gated clock, and the BUFG constraint will be ignored.
+</msg>
+
+<msg type="warning" file="Cpld" num="936" delta="old" >The output buffer &apos;<arg fmt="%s" index="1">LOADSR_OBUF</arg>&apos; is missing an input and will be deleted.
+</msg>
+
+<msg type="warning" file="Cpld" num="936" delta="old" >The output buffer &apos;<arg fmt="%s" index="1">LOADDAT_OBUF</arg>&apos; is missing an input and will be deleted.
+</msg>
+
+<msg type="warning" file="Cpld" num="936" delta="old" >The output buffer &apos;<arg fmt="%s" index="1">LOADCOL_OBUF</arg>&apos; is missing an input and will be deleted.
+</msg>
+
+<msg type="warning" file="Cpld" num="936" delta="old" >The output buffer &apos;<arg fmt="%s" index="1">LOADCHR_OBUF</arg>&apos; is missing an input and will be deleted.
+</msg>
+
+<msg type="warning" file="Cpld" num="936" delta="old" >The output buffer &apos;<arg fmt="%s" index="1">LCHRLINE_OBUF</arg>&apos; is missing an input and will be deleted.
+</msg>
+
+<msg type="warning" file="Cpld" num="936" delta="old" >The output buffer &apos;<arg fmt="%s" index="1">GWE_OBUF</arg>&apos; is missing an input and will be deleted.
+</msg>
+
+<msg type="warning" file="Cpld" num="936" delta="old" >The output buffer &apos;<arg fmt="%s" index="1">CRTCOE_OBUF</arg>&apos; is missing an input and will be deleted.
+</msg>
+
+<msg type="warning" file="Cpld" num="936" delta="old" >The output buffer &apos;<arg fmt="%s" index="1">COLOR_OBUF</arg>&apos; is missing an input and will be deleted.
+</msg>
+
+<msg type="warning" file="Cpld" num="936" delta="old" >The output buffer &apos;<arg fmt="%s" index="1">CHAROE_OBUF</arg>&apos; is missing an input and will be deleted.
+</msg>
+
+<msg type="warning" file="Cpld" num="1007" delta="old" >Removing unused input(s) &apos;<arg fmt="%s" index="1">DE</arg>&apos;.  The input(s) are unused after optimization. Please verify functionality via simulation.
+</msg>
+
+<msg type="warning" file="Cpld" num="1007" delta="old" >Removing unused input(s) &apos;<arg fmt="%s" index="1">LOADSRIN</arg>&apos;.  The input(s) are unused after optimization. Please verify functionality via simulation.
+</msg>
+
+</messages>
+

@@ -1,0 +1,26 @@
+Pin Freeze File:  version P.20131013
+
+953644PC XC9536-15-PC44
+A15 S:PIN2
+HS S:PIN12
+pclk S:PIN5
+RD S:PIN4
+VS S:PIN13
+WR S:PIN3
+HSYNC S:PIN1
+LOADAD S:PIN8
+PIXCLKO S:PIN43
+VSYNC S:PIN44
+CCLK S:PIN9
+
+
+;The remaining section of the .gyd file is for documentation purposes only.
+;It shows where your internal equations were placed in the last successful fit.
+
+PARTITION FB1_6 LOADAD_OBUF
+PARTITION FB1_8 clk<2>
+PARTITION FB1_17 clk<1> clk<0>
+PARTITION FB2_1 HSYNC_OBUF VSYNC_OBUF
+PARTITION FB2_4 PIXCLKO_OBUF$BUF0
+
+

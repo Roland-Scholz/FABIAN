@@ -1,0 +1,39 @@
+<html><head><link type='text/css' href='style.css' rel='stylesheet'></head><body class='pgBgnd'>
+<h3 align='center'>Equations</h3>
+<table width='90%' align='center' border='1' cellpadding='0' cellspacing='0'>
+<tr><td>
+</td></tr><tr><td>
+********** Mapped Logic **********
+</td></tr><tr><td>
+FTCPE_CCLK: FTCPE port map (CCLK,CCLK_T,pclk,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CCLK_T <= (clk(0) AND clk(1));
+</td></tr><tr><td>
+</td></tr><tr><td>
+HSYNC <= NOT HS;
+</td></tr><tr><td>
+</td></tr><tr><td>
+LOADAD <= ((NOT WR AND A15)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT RD AND A15));
+</td></tr><tr><td>
+</td></tr><tr><td>
+PIXCLKO <= pclk;
+</td></tr><tr><td>
+</td></tr><tr><td>
+VSYNC <= NOT VS;
+</td></tr><tr><td>
+FTCPE_clk0: FTCPE port map (clk(0),'1',pclk,'0','0');
+</td></tr><tr><td>
+FTCPE_clk1: FTCPE port map (clk(1),clk(0),pclk,'0','0');
+</td></tr><tr><td>
+Register Legend:
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FDCPE (Q,D,C,CLR,PRE); 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FTCPE (Q,D,C,CLR,PRE); 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LDCP  (Q,D,G,CLR,PRE); 
+</td></tr><tr><td>
+</td></tr>
+</table>
+<form><span class="pgRef"><table width="90%" align="center"><tr>
+<td align="left"><input type="button" onclick="javascript:parent.leftnav.showTop()" onmouseover="window.status='goto top of page'; return true;" onmouseout="window.status=''" value="back to top"></td>
+<td align="right"><input type="button" onclick="window.print()" onmouseover="window.status='print page'; return true;" onmouseout="window.status=''" value="print page"></td>
+</tr></table></span></form>
+</body></html>

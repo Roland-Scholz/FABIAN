@@ -1,0 +1,131 @@
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script src="paths.js"></script><script src="eqns.js"></script><script>
+      var design = "vt100";
+      var device = "XC9536";
+      signals = new Array("CCLK","HSYNC","LOADAD","PIXCLKO","VSYNC","clk0_SPECSIG","clk1_SPECSIG");
+      sigNegs = new Array("OFF","OFF","OFF","OFF","OFF","OFF","OFF");
+      sigTypes = new Array("T","","","","","T","T");
+
+      
+        specSig["GCKI_SPECSIG"]=new Array("GCK/I");
+      
+        specSig["b_SPECSIG"]=new Array("(b)");
+      
+        specSig["clk1_SPECSIG"]=new Array("clk<1>");
+      
+        specSig["clk0_SPECSIG"]=new Array("clk<0>");
+      
+            pterms["FB1_6_1"]=new Array("/WR","A15");
+          
+            pterms["FB1_6_2"]=new Array("/RD","A15");
+          
+            pterms["FB1_8_1"]=new Array("clk0_SPECSIG","clk1_SPECSIG");
+          
+            pterms["FB1_17_1"]=new Array("clk0_SPECSIG");
+          
+            pterms["FB2_1_1"]=new Array("/HS");
+          
+            pterms["FB2_2_1"]=new Array("/VS");
+          
+            pterms["FB2_4_1"]=new Array("pclk");
+          
+          d2["LOADAD"]=new Array("FB1_6_1","FB1_6_2");
+          
+            d2imp["LOADAD"]=new Array("0","0");
+          
+          d2["CCLK"]=new Array("FB1_8_1");
+          
+            d2imp["CCLK"]=new Array("0");
+          
+              gblclk["CCLK"]=new Array("pclk");
+            prld["CCLK"]="GND";
+          d2["clk1_SPECSIG"]=new Array("FB1_17_1");
+          
+            d2imp["clk1_SPECSIG"]=new Array("0");
+          
+              gblclk["clk1_SPECSIG"]=new Array("pclk");
+            prld["clk1_SPECSIG"]="GND";
+          d2["clk0_SPECSIG"]=new Array("VCC");
+          
+            d2imp["clk0_SPECSIG"]=new Array("0");
+          
+              gblclk["clk0_SPECSIG"]=new Array("pclk");
+            prld["clk0_SPECSIG"]="GND";
+          d2["HSYNC"]=new Array("FB2_1_1");
+          
+            d2imp["HSYNC"]=new Array("0");
+          
+          d2["VSYNC"]=new Array("FB2_2_1");
+          
+            d2imp["VSYNC"]=new Array("0");
+          
+          d2["PIXCLKO"]=new Array("FB2_4_1");
+          
+            d2imp["PIXCLKO"]=new Array("0");
+          
+
+      uimSignals = new Array();
+
+      uimSigNegs = new Array();
+
+      uimPterms = new Array();
+      
+
+      
+        function getEqnList() {
+          var str = "<html><head><link type='text/css' href='style.css' rel='stylesheet'></head><body class='pgBgnd'>";
+          str += "<center><h3>Equations</h3></center>";
+          str += "<table width='90%' align='center' border='1' cellpadding='0' cellspacing='0'>";
+          for (s=0; s<uimSignals.length; s++) {
+            str += "<tr><td>";
+            str += retUimEqn(uimSignals[s]);
+            str += "</td></tr>";
+          }
+          for (s=0; s<signals.length; s++) {
+            str += "<tr><td>";
+            str += retEqn(signals[s]);
+            str += "</td></tr>";
+          }
+
+          var legend = retLegend();
+		      if (legend != "") {
+		        str += "<tr><td>" + legend + "</td></tr>";
+		      }
+
+          str += "</table>";
+          str += "<form><span class='pgRef'>";
+
+          if (!parent.leftnav.IsNS()) {
+            str += "<table width='90%' align='center'>";
+            str += "<tr><td align='left'><input type='button' value='back to top' ";
+            str += "onclick='javascript:parent.leftnav.showEqnAll()' ";
+            str += "onmouseover=\"window.status='goto top of page'; return true;\" ";
+            str += "onmouseout=\"window.status=''\">";
+            str += "</td>";
+            str += "<td align='right'>";
+            str += "<input type='button' value='print page' ";
+            str += "onclick='javascript:window.print()' ";
+            str += "onmouseover=\"window.status='print page'; return true;\" ";
+            str += "onmouseout=\"window.status=''\">";
+            str += "</td>";
+            str += "</tr></table>";
+          }
+          else {
+            str += "<table width='90%' align='center'>";
+            str += "<tr><td align='left'><a href='javascript:parent.leftnav.showEqnAll()'>back to top</a>";
+            str += "</td>";
+            str += "<td align='right'>";
+            str += "<a href='javascript:window.print()'>";
+            str += "print page</a>";
+            str += "</td>";
+            str += "</tr></table>";
+          }
+
+          str += "</span></form>";
+          str += "</body></html>";
+          return str;
+        }
+      
+    </script>
+</head></html>

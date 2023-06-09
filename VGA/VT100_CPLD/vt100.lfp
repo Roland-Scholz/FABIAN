@@ -1,0 +1,8 @@
+# begin LFP file G:\github\FABIAN\VGA\VT100_CPLD\vt100.lfp
+designfile vt100.ngd
+IO_GROUP "clk" IO_GROUP="vt100" ;
+INST "vt100" COLOR=15  ;
+NET "clk<3>" IO_GROUP="clk"  ;
+NET "clk<2>" IO_GROUP="clk"  ;
+NET "clk<1>" IO_GROUP="clk"  ;
+NET "clk<0>" IO_GROUP="clk"  ;

@@ -1682,7 +1682,6 @@
     )
   )
 
-
   (junction (at 86.36 40.64) (diameter 0) (color 0 0 0 0)
     (uuid 0ba9c9b8-b43f-407d-a13b-dcc0e5677c40)
   )
@@ -1758,11 +1757,11 @@
   )
   (bus_entry (at 86.36 127.635) (size 2.54 2.54)
     (stroke (width 0) (type default) (color 0 0 0 0))
-    (uuid 23374d92-8a4d-468b-9947-adcdd8ce495d)
+    (uuid 23374d92-8a4d-468b-9947-adcdd8ce495e)
   )
   (bus_entry (at 86.36 125.095) (size 2.54 2.54)
     (stroke (width 0) (type default) (color 0 0 0 0))
-    (uuid 23374d92-8a4d-468b-9947-adcdd8ce495d)
+    (uuid 23374d92-8a4d-468b-9947-adcdd8ce495f)
   )
   (bus_entry (at 86.36 52.07) (size 2.54 2.54)
     (stroke (width 0) (type default) (color 0 0 0 0))
