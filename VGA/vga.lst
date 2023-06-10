@@ -1,0 +1,1378 @@
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 1
+
+
+
+
+
+       MCS-51 Family Macro Assembler   A S E M - 5 1   V 1.3
+       =====================================================
+
+
+
+	Source File:	C:\github\FABIAN\VGA\vga.a51
+	Object File:	C:\github\FABIAN\VGA\vga.hex
+	List File:	C:\github\FABIAN\VGA\vga.lst
+
+
+
+ Line  I  Addr  Code            Source
+
+    1:						$NOMOD51
+    2:						$INCLUDE (89S52.MCU)
+    3: 1			;   AT89S52 processor definition file
+    4: 1			;   =================================
+    5: 1
+    6: 1	N	 80	P0	DATA	080H
+    7: 1	N	 81	SP	DATA	081H
+    8: 1	N	 82	DP0L	DATA	082H
+    9: 1	N	 83	DP0H	DATA	083H
+   10: 1	N	 84	DP1L	DATA	084H
+   11: 1	N	 85	DP1H	DATA	085H
+   12: 1	N	 87	PCON	DATA	087H
+   13: 1	N	 88	TCON	DATA	088H
+   14: 1	N	 89	TMOD	DATA	089H
+   15: 1	N	 8A	TL0	DATA	08AH
+   16: 1	N	 8B	TL1	DATA	08BH
+   17: 1	N	 8C	TH0	DATA	08CH
+   18: 1	N	 8D	TH1	DATA	08DH
+   19: 1	N	 8E	AUXR	DATA	08EH
+   20: 1	N	 90	P1	DATA	090H
+   21: 1	N	 98	SCON	DATA	098H
+   22: 1	N	 99	SBUF	DATA	099H
+   23: 1	N	 A0	P2	DATA	0A0H
+   24: 1	N	 A2	AUXR1	DATA	0A2H
+   25: 1	N	 A6	WDTRST	DATA	0A6H
+   26: 1	N	 A8	IE	DATA	0A8H
+   27: 1	N	 B0	P3	DATA	0B0H
+   28: 1	N	 B8	IP	DATA	0B8H
+   29: 1	N	 C8	T2CON	DATA	0C8H
+   30: 1	N	 C9	T2MOD	DATA	0C9H
+   31: 1	N	 CA	RCAP2L	DATA	0CAH
+   32: 1	N	 CB	RCAP2H	DATA	0CBH
+   33: 1	N	 CC	TL2	DATA	0CCH
+   34: 1	N	 CD	TH2	DATA	0CDH
+   35: 1	N	 D0	PSW	DATA	0D0H
+   36: 1	N	 E0	ACC	DATA	0E0H
+   37: 1	N	 F0	B	DATA	0F0H
+   38: 1
+   39: 1	N	 88	IT0	BIT	088H
+   40: 1	N	 89	IE0	BIT	089H
+   41: 1	N	 8A	IT1	BIT	08AH
+   42: 1	N	 8B	IE1	BIT	08BH
+   43: 1	N	 8C	TR0	BIT	08CH
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 2
+
+
+
+ Line  I  Addr  Code            Source
+
+   44: 1	N	 8D	TF0	BIT	08DH
+   45: 1	N	 8E	TR1	BIT	08EH
+   46: 1	N	 8F	TF1	BIT	08FH
+   47: 1	N	 90	T2	BIT	090H
+   48: 1	N	 91	T2EX	BIT	091H
+   49: 1	N	 95	MOSI	BIT	095H
+   50: 1	N	 96	MISO	BIT	096H
+   51: 1	N	 97	SCK	BIT	097H
+   52: 1	N	 98	RI	BIT	098H
+   53: 1	N	 99	TI	BIT	099H
+   54: 1	N	 9A	RB8	BIT	09AH
+   55: 1	N	 9B	TB8	BIT	09BH
+   56: 1	N	 9C	REN	BIT	09CH
+   57: 1	N	 9D	SM2	BIT	09DH
+   58: 1	N	 9E	SM1	BIT	09EH
+   59: 1	N	 9F	SM0	BIT	09FH
+   60: 1	N	 A8	EX0	BIT	0A8H
+   61: 1	N	 A9	ET0	BIT	0A9H
+   62: 1	N	 AA	EX1	BIT	0AAH
+   63: 1	N	 AB	ET1	BIT	0ABH
+   64: 1	N	 AC	ES	BIT	0ACH
+   65: 1	N	 AD	ET2	BIT	0ADH
+   66: 1	N	 AF	EA	BIT	0AFH
+   67: 1	N	 B0	RXD	BIT	0B0H
+   68: 1	N	 B1	TXD	BIT	0B1H
+   69: 1	N	 B2	INT0	BIT	0B2H
+   70: 1	N	 B3	INT1	BIT	0B3H
+   71: 1	N	 B4	T0	BIT	0B4H
+   72: 1	N	 B5	T1	BIT	0B5H
+   73: 1	N	 B6	WR	BIT	0B6H
+   74: 1	N	 B7	RD	BIT	0B7H
+   75: 1	N	 B8	PX0	BIT	0B8H
+   76: 1	N	 B9	PT0	BIT	0B9H
+   77: 1	N	 BA	PX1	BIT	0BAH
+   78: 1	N	 BB	PT1	BIT	0BBH
+   79: 1	N	 BC	PS	BIT	0BCH
+   80: 1	N	 BD	PT2	BIT	0BDH
+   81: 1	N	 C8	CPRL2	BIT	0C8H
+   82: 1	N	 C9	CT2	BIT	0C9H
+   83: 1	N	 CA	TR2	BIT	0CAH
+   84: 1	N	 CB	EXEN2	BIT	0CBH
+   85: 1	N	 CC	TCLK	BIT	0CCH
+   86: 1	N	 CD	RCLK	BIT	0CDH
+   87: 1	N	 CE	EXF2	BIT	0CEH
+   88: 1	N	 CF	TF2	BIT	0CFH
+   89: 1	N	 D0	P	BIT	0D0H
+   90: 1	N	 D2	OV	BIT	0D2H
+   91: 1	N	 D3	RS0	BIT	0D3H
+   92: 1	N	 D4	RS1	BIT	0D4H
+   93: 1	N	 D5	F0	BIT	0D5H
+   94: 1	N	 D6	AC	BIT	0D6H
+   95: 1	N	 D7	CY	BIT	0D7H
+   96: 1
+   97: 1	N      0000	RESET	CODE	000H
+   98: 1	N      0003	EXTI0	CODE	003H
+   99: 1	N      000B	TIMER0	CODE	00BH
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 3
+
+
+
+ Line  I  Addr  Code            Source
+
+  100: 1	N      0013	EXTI1	CODE	013H
+  101: 1	N      001B	TIMER1	CODE	01BH
+  102: 1	N      0023	SINT	CODE	023H
+  103: 1	N      002B	TIMER2	CODE	02BH
+  104:						$INCLUDE (PAULMON.INC)
+  105: 1	N      002E	phex1		EQU 002Eh		;print a single hex digit
+  106: 1	N      0030	cout		EQU 0030h            	;Send Acc to serial port
+  107: 1	N      0032	cin		EQU 0032h             	;Get Acc from serial port
+  108: 1	N      0034	phex		EQU 0034h            	;Print Hex value of Acc
+  109: 1	N      0036	phex16		EQU 0036h          	;Print Hex value of DPTR
+  110: 1	N      0038	pstr		EQU 0038h            	;Print string pointed to by DPTR,
+  111: 1			                                	;must be terminated by 0 or a high bit set
+  112: 1			                                	;pressing ESC will stop the printing
+  113: 1	N      003A	ghex		EQU 003Ah            	;Get Hex input into Acc
+  114: 1			                                	;Carry set if ESC has been pressed
+  115: 1	N      003C	ghex16		EQU 003Ch          	;Get Hex input into DPTR
+  116: 1			                                	;Carry set if ESC has been pressed
+  117: 1	N      003E	esc		EQU 003Eh             	;Check for ESC key
+  118: 1								;Carry set if ESC has been pressed
+  119: 1	N      0040	upper		EQU 0040h           	;Convert Acc to uppercase
+  120: 1								;Non-ASCII values are unchanged
+  121: 1	N      0042	autobaud	EQU 0042h        	;Initialize serial port
+  122: 1	N      0045	pcstr		EQU 0045h		;print string in compressed format (no docs)
+  123: 1	N      0045	pcstr_h		EQU 0045h
+  124: 1	N      0048	newline		EQU 0048h		;print CR/LF (13 and 10)
+  125: 1	N      004A	lenstr		EQU 004Ah		;return the length of a string @DPTR (in R0)
+  126: 1	N      004D	pint8u		EQU 004Dh		;print Acc at an integer, 0 to 255
+  127: 1	N      0050	pint8		EQU 0050h		;print Acc at an integer, -128 to 127
+  128: 1	N      0053	pint16u		EQU 0053h		;print DPTR as an integer, 0 to 65535
+  129: 1	N      0056	smart_wr	EQU 0056h		;write Acc @DPTR (RAM or flash), C=1 if error
+  130: 1	N      0059	prgm		EQU 0059h		;write Acc @DPTR to Flash ROM, C=1 if error
+  131: 1	N      005C	erall		EQU 005Ch		;erase the Flash ROM chip, C=1 if error
+  132: 1	N      005F	find		EQU 005Fh		;find next prog header in memory
+  133: 1	N      0062	cin_filter	EQU 0062h		;like cin, but scan for arrow keys, pgup/pgdn
+  134: 1	N      0065	asc2hex		EQU 0065h		;convert character 0-9,A-F to number 0-15.
+  135:						$INCLUDE (COMMON.INC)
+  136: 1	N      9800	MEMDUMP2	EQU	9800h
+  137: 1	N      9802	MEMDUMP4	EQU	9802h
+  138: 1	N      9804	MEMDUMP128	EQU	9804h
+  139: 1	N      9806	MEMDUMP512	EQU	9806h
+  140: 1	N      9808	MEMCLR4		EQU	9808h
+  141: 1	N      980A	MEMCLR		EQU	980Ah
+  142: 1	N      980C	MEMFILL		EQU	980Ch
+  143: 1	N      980E	MEMCMP		EQU	980Eh
+  144: 1	N      9810	MEMINTC2	EQU	9810h
+  145: 1	N      9812	MEMINTC4	EQU	9812h
+  146: 1	N      9814	MEMINTC		EQU	9814h
+  147: 1
+  148: 1	N      9816	INTDIV3		EQU	9816h
+  149: 1	N      9818	INTMUL4		EQU	9818h
+  150: 1	N      981A	INTCMP4		EQU	981Ah
+  151: 1	N      981C	INTCMP		EQU	981Ch
+  152: 1	N      981E	INTCOPY2	EQU	981Eh
+  153: 1	N      9820	INTCOPY4	EQU	9820h
+  154: 1	N      9822	INTCOPY		EQU	9822h
+  155: 1	N      9824	INTSUB2		EQU	9824h
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 4
+
+
+
+ Line  I  Addr  Code            Source
+
+  156: 1	N      9826	INTSUB4		EQU	9826h
+  157: 1	N      9828	INTSUB		EQU	9828h
+  158: 1	N      982A	INTADD4		EQU	982Ah
+  159: 1	N      982C	INTADD		EQU	982Ch
+  160: 1	N      982E	INTCLR4		EQU	982Eh
+  161: 1	N      9830	INTCLR		EQU	9830h
+  162: 1	N      9832	INTFILL		EQU	9832h
+  163: 1
+  164: 1	N      9834	MEMINTA4	EQU	9834h
+  165: 1	N      9836	MEMINTA2	EQU	9836h
+  166: 1
+  167: 1	N      9838	INTDUMP6	EQU	9838h
+  168: 1	N      983A	INTDUMP4	EQU	983Ah
+  169: 1	N      983C	INTDUMP2	EQU	983Ch
+  170: 1	N      983E	INTDUMP		EQU	983Eh
+  171: 1
+  172: 1	N      9840	ADDDPTR0	EQU	9840h
+  173: 1
+  174: 1	N      9842	MEMCOPY		EQU	9842h
+  175: 1	N      9844	MEMDUMP		EQU	9844h
+  176: 1	N      9846	MEMCOPY4	EQU	9846h
+  177: 1	N      9848	PSTRR7		EQU	9848h
+  178: 1
+  179: 1	N      984A	STRCOPY		EQU	984Ah
+  180:
+  181:		D      0090	DATABUS		EQU	P1
+  182:
+  183:		B      00B2	SYCS		EQU	P3.2
+  184:		B      00B3	SYRS		EQU	P3.3
+  185:		B      00B4	SYPHI2		EQU	P3.4
+  186:		B      00B5	SYRW		EQU	P3.5
+  187:
+  188:
+  189:		D      0082	dpl		EQU	DP0L
+  190:		D      0083	dph		EQU	DP0H
+  191:
+  192:		N      2000	LOCAT		EQU	02000h
+  193:
+  194:		N      2000			ORG    LOCAT
+  195:	  2000	A5 E5 E0 A5			DB     0A5H,0E5H,0E0H,0A5H	;SIGNITURE BYTES
+  196:	  2004	23 00 00 00			DB     35,0,0,0			;ID (35=PROG), id (253=startup)
+  197:	  2008	00 00 00 00			DB     0,0,0,0			;PROMPT CODE VECTOR
+  198:	  200C	00 00 00 00			DB     0,0,0,0			;RESERVED
+  199:	  2010	00 00 00 00			DB     0,0,0,0			;RESERVED
+  200:	  2014	00 00 00 00			DB     0,0,0,0			;RESERVED
+  201:	  2018	00 00 00 00			DB     0,0,0,0			;USER DEFINED
+  202:	  201C	FF FF FF FF			DB     255,255,255,255		;LENGTH AND CHECKSUM (255=UNUSED)
+  203:	  2020	53 59 36 38			DB     "SY6845",0		;MAX 31 CHARACTERS, PLUS THE ZERO
+	  2024	34 35 00
+  204:
+  205:		N      2040			ORG    LOCAT+64			;EXECUTABLE CODE BEGINS HERE
+  206:
+  207:				;
+  208:				;
+  209:				;
+  210:	  2040	74 AA		START:		mov	A, #0AAh
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 5
+
+
+
+ Line  I  Addr  Code            Source
+
+  211:	  2042	90 FF 00			mov	dptr, #0FF00h
+  212:	  2045	F0				movx	@dptr, A
+  213:
+  214:
+  215:	  2046	22				ret
+  216:				;
+  217:				;
+  218:				;		;setb	SYCS			;deselect
+  219:	  2047	C2 B3				clr	SYRS			;address
+  220:	  2049	C2 B4				clr	SYPHI2			;enable
+  221:						;clr	SYRW			;write
+  222:
+  223:	  204B	90 20 7D			mov	dptr, #SYDATA
+  224:	  204E	78 00				mov	R0, #0
+  225:						;clr	SYCS			; enable
+  226:
+  227:	  2050			setregs:
+  228:				;		call	PHEX
+  229:				;		call	SPACE
+  230:
+  231:	  2050	88 90				mov	DATABUS, R0		; send address
+  232:	  2052	C2 B3				clr	SYRS			; address register
+  233:	  2054	D2 B4				setb	SYPHI2			; clock high
+  234:	  2056	C2 B4				clr	SYPHI2			; clock low
+  235:
+  236:	  2058	E8				mov	A, R0
+  237:	  2059	93				movc	A, @A+DPTR
+  238:	  205A	F5 90				mov	DATABUS, A		; send data
+  239:	  205C	D2 B3				setb	SYRS			; register data
+  240:	  205E	D2 B4				setb	SYPHI2			; clock high
+  241:	  2060	C2 B4				clr	SYPHI2			; clock low
+  242:
+  243:	  2062	08				inc	R0
+  244:	  2063	B8 0F EA			cjne	R0, #15, setregs
+  245:
+  246:						;setb	SYCS
+  247:	  2066	22				ret
+  248:
+  249:	  2067	04		loop:		inc	A
+  250:	  2068	F5 90				mov	DATABUS, A		; send data
+  251:	  206A	D2 B3				setb	SYRS			; register data
+  252:	  206C	D2 B4				setb	SYPHI2			; clock high
+  253:	  206E	C2 B4				clr	SYPHI2			; clock low
+  254:	  2070	11 74				acall	time
+  255:	  2072	01 67				ajmp	loop
+  256:
+  257:	  2074	78 00		time:		mov	R0, #0
+  258:	  2076	79 00				mov	R1, #0
+  259:	  2078	D8 FE		time1:		djnz	r0, time1
+  260:	  207A	D9 FC				djnz	r1, time1
+  261:	  207C	22				ret
+  262:
+  263:				;
+  264:				; 25,333 Mhz / 8 = 3,166 Mhz
+  265:				;
+  266:				; 31468 HZ = 31,77 uS
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 6
+
+
+
+ Line  I  Addr  Code            Source
+
+  267:				;
+  268:				; 25,333 Mhz / 8 / 31468 ~ 	100 chars Horizontal Total
+  269:				;				  2 chars Fornt Porch
+  270:				;				  6 chars Back Porch
+  271:				;				 80 chars Horizontal Visible
+  272:				;				 12 chars Sync Pulse
+  273:				;Scanline part	Pixels	Time [µs]
+  274:				;Visible area	640	25.422045680238
+  275:				;Front porch	16	0.63555114200596
+  276:				;Sync pulse	96	3.8133068520357
+  277:				;Back porch	48	1.9066534260179
+  278:				;Whole line	800	31.777557100298
+  279:
+  280:				;Frame part	Lines	Time [ms]
+  281:				;Visible area	400	12.711022840119
+  282:				;Front porch	12	0.38133068520357
+  283:				;Sync pulse	2	0.063555114200596
+  284:				;Back porch	35	1.1122144985104
+  285:				;Whole frame	449	14.268123138034
+  286:				;
+  287:	  207D	63		SYDATA:		DB	99		;R0 Horizontal Total - 1
+  288:	  207E	50				DB	80		;R1 Horizontal Displayed
+  289:	  207F	52				DB	82		;R2 Horizontal Sync Position
+  290:	  2080	0C				DB	0Ch		;R3 VSYNC & HSYNC width
+  291:	  2081	1B				DB	27		;R4 Vertical total - 1			;27	32
+  292:	  2082	02				DB	2		;R5 Vertical Adjust
+  293:	  2083	19				DB	25		;R6 Vertical Displayed			;25	30
+  294:	  2084	19				DB	25			;R7 Vertical Sync Position		;25	32
+  295:	  2085	00				DB	00h		;R8 Mode Control
+  296:	  2086	0F				DB	15		;R9 Scan Lines - 1 (character lines)
+  297:	  2087	00				DB	0		;R10 Cursor Start
+  298:	  2088	00				DB	0		;R11 Cursor End
+  299:	  2089	00				DB	000h		;R12 Display Start High
+  300:	  208A	02				DB	002h		;R13 Display Start Low
+  301:	  208B	00				DB	0		;R14 Cursor Pos High
+  302:	  208C	00				DB	0		;R15 Cursor Pos Low
+  303:	  208D	00				DB	0		;R16 Light Pen High
+  304:	  208E	00				DB	0		;R17 Light Pen Low
+  305:	  208F	00				DB	0		;R18 Update Address Reg High
+  306:	  2090	00				DB	0		;R19 Update Address Reg Low
+  307:									;R31 Dummy Register
+  308:
+  309:
+  310:				;LOOP:		call	CIN
+  311:				;		call	COUT
+  312:				;
+  313:	  2091	01 67				ajmp	LOOP
+  314:
+  315:
+  316:				;		CLR	SCK_52
+  317:				;		CLR	RES_52
+  318:				;		CALL	TIME35MS
+  319:				;		SETB	RES_52
+  320:				;		MOV	R5,#7
+  321:				;START2:		CALL	TIME35MS
+  322:				;		DJNZ	R5,START2
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 7
+
+
+
+ Line  I  Addr  Code            Source
+
+  323:				;		MOV	AUXR1,#0
+  324:
+  325:				;		ACALL	ENABLE
+  326:				;		ACALL	SIGNATURE
+  327:				;		JNC	MENU
+  328:				;		JC	MENU
+  329:				;		MOV	DPTR,#MSGSIGFAIL
+  330:				;		CALL	PSTR
+  331:				;		CALL	CIN
+  332:				;		AJMP	START
+  333:
+  334:	  2093	90 23 42	MENU:		MOV	DPTR,#MSGMENU
+  335:	  2096	12 00 38			CALL	PSTR
+  336:	  2099	12 00 32	MENULOOP:	CALL	CIN
+  337:	  209C	B4 63 04	MENUC:		CJNE	A,#"c",MENUD
+  338:	  209F	11 C3				ACALL	CLEAR
+  339:	  20A1	01 93				AJMP	MENU
+  340:	  20A3	B4 64 04	MENUD:		CJNE	A,#"d",MENUP
+  341:	  20A6	11 D0				ACALL	DNLD
+  342:	  20A8	01 93				AJMP	MENU
+  343:	  20AA	B4 70 04	MENUP:		CJNE	A,#"p",MENUR
+  344:	  20AD	51 69				ACALL	PROGRAM
+  345:	  20AF	01 93				AJMP	MENU
+  346:	  20B1	B4 72 04	MENUR:		CJNE	A,#"r",MENUV
+  347:	  20B4	51 9A				ACALL	READFLASH
+  348:	  20B6	01 93				AJMP	MENU
+  349:	  20B8	B4 76 04	MENUV:		CJNE	A,#"v",MENUX
+  350:	  20BB	51 96				ACALL	VERIFY
+  351:	  20BD	01 93				AJMP	MENU
+  352:	  20BF	B4 78 D7	MENUX:		CJNE	A,#"x",MENULOOP
+  353:	  20C2	22				RET
+  354:
+  355:	  20C3	78 FC		CLEAR:		MOV	R0,#SPICMD
+  356:	  20C5	76 AC				MOV	@R0,#0ACh
+  357:	  20C7	08				INC	R0
+  358:	  20C8	76 80				MOV	@R0,#080h
+  359:	  20CA	71 2D				ACALL	COMMAND
+  360:	  20CC	71 3E				ACALL	TIME5MS
+  361:	  20CE	61 3E				AJMP	TIME5MS
+  362:	  20D0			dnld:
+  363:	  20D0	90 24 0D			mov	dptr, #dnlds1
+  364:	  20D3	12 00 45			call	pcstr_h		   ;"begin sending file <ESC> to abort"
+  365:	  20D6	51 56				acall	dnld_init
+  366:
+  367:					  ;look for begining of line marker ':'
+  368:	  20D8	12 00 32	dnld1:		call	cin
+  369:	  20DB	B4 1B 02			cjne	a, #27, dnld2	;Test for escape
+  370:	  20DE	21 66				ajmp	dnld_esc
+  371:
+  372:	  20E0	B4 3A 02	dnld2:		cjne	a, #':', dnld2b
+  373:	  20E3	80 12				sjmp	dnld2d
+  374:	  20E5			dnld2b:	  ;check to see if it's a hex digit, error if it is
+  375:	  20E5	12 00 65			call	asc2hex
+  376:	  20E8	40 EE				jc	dnld1
+  377:	  20EA	79 06				mov	r1, #6
+  378:	  20EC	31 79				acall	dnld_inc
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 8
+
+
+
+ Line  I  Addr  Code            Source
+
+  379:	  20EE	80 E8				sjmp	dnld1
+  380:
+  381:	  20F0			dnld_now: ;entry point for main menu detecting ":" character
+  382:	  20F0	74 5E				mov	a, #'^'
+  383:	  20F2	12 00 30			call	cout
+  384:	  20F5	51 56				acall	dnld_init
+  385:
+  386:	  20F7	79 00		dnld2d:		mov	r1, #0
+  387:	  20F9	31 79				acall	dnld_inc
+  388:
+  389:					  ;begin taking in the line of data
+  390:	  20FB	74 2E		dnld3:		mov	a, #'.'
+  391:	  20FD	12 00 30			call	cout
+  392:	  2100	7C 00				mov	r4, #0		;r4 will count up checksum
+  393:	  2102	31 98				acall	dnld_ghex
+  394:	  2104	F8				mov	r0, a		;R0 = # of data bytes
+  395:				;	mov	a, #'.'
+  396:				;	acall	cout
+  397:	  2105	31 98				acall	dnld_ghex
+  398:	  2107	B4 30 00			CJNE	A,#030h,dnld3_a
+  399:	  210A	50 02		dnld3_a:	JNC	dnld3_b
+  400:	  210C	24 D0				ADD	A,#0D0h
+  401:	  210E	F5 83		dnld3_b:	mov	dp0h, a		;High byte of load address
+  402:	  2110	31 98				acall	dnld_ghex
+  403:	  2112	F5 82				mov	dp0l, a		;Low byte of load address
+  404:	  2114	31 98				acall	dnld_ghex	;Record type
+  405:	  2116	B4 01 02			cjne	a, #1, dnld4	;End record?
+  406:	  2119	80 2D				sjmp	dnld_end
+  407:	  211B	70 22		dnld4:		jnz	dnld_unknown	;is it a unknown record type???
+  408:	  211D	E8		dnld5:		mov	a, r0
+  409:	  211E	60 14				jz	dnld_get_cksum
+  410:	  2120	31 98				acall	dnld_ghex	;Get data byte
+  411:	  2122	FA				mov	r2, a
+  412:	  2123	79 01				mov	r1, #1
+  413:	  2125	31 79				acall	dnld_inc	;count total data bytes received
+  414:	  2127	EA				mov	a, r2
+  415:	  2128	12 00 56			lcall	smart_wr	;c=1 if an error writing
+  416:	  212B	E4				clr	a
+  417:	  212C	34 02				addc	a, #2
+  418:	  212E	F9				mov	r1, a
+  419:				;     2 = bytes written
+  420:				;     3 = bytes unable to write
+  421:	  212F	31 79				acall	dnld_inc
+  422:	  2131	A3				inc	dptr
+  423:	  2132	D8 E9				djnz	r0, dnld5
+  424:	  2134			dnld_get_cksum:
+  425:	  2134	31 98				acall	dnld_ghex	;get checksum
+  426:	  2136	EC				mov	a, r4
+  427:	  2137	60 9F				jz	dnld1		;should always add to zero
+  428:	  2139			dnld_sumerr:
+  429:	  2139	79 04				mov	r1, #4
+  430:	  213B	31 79				acall	dnld_inc	;all we can do it count # of cksum errors
+  431:	  213D	80 99				sjmp	dnld1
+  432:
+  433:	  213F			dnld_unknown:	;handle unknown line type
+  434:	  213F	E8				mov	a, r0
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 9
+
+
+
+ Line  I  Addr  Code            Source
+
+  435:	  2140	60 F2				jz	dnld_get_cksum	;skip data if size is zero
+  436:	  2142			dnld_ukn2:
+  437:	  2142	31 98				acall	dnld_ghex	;consume all of unknown data
+  438:	  2144	D8 FC				djnz	r0, dnld_ukn2
+  439:	  2146	80 EC				sjmp	dnld_get_cksum
+  440:
+  441:	  2148			dnld_end:   ;handles the proper end-of-download marker
+  442:	  2148	E8				mov	a, r0
+  443:	  2149	60 04				jz	dnld_end_3	;should usually be zero
+  444:	  214B			dnld_end_2:
+  445:	  214B	31 98				acall	dnld_ghex	;consume all of useless data
+  446:	  214D	D8 F3				djnz	r0, dnld_ukn2
+  447:	  214F			dnld_end_3:
+  448:	  214F	31 98				acall	dnld_ghex	;get the last checksum
+  449:	  2151	EC				mov	a, r4
+  450:	  2152	70 E5				jnz	dnld_sumerr
+  451:	  2154	31 70				acall	dnld_dly
+  452:	  2156	90 24 2C			mov	dptr, #dnlds3
+  453:	  2159	12 00 45			call	pcstr_h		   ;"download went ok..."
+  454:					;consume any cr or lf character that may have been
+  455:					;on the end of the last line
+  456:	  215C	20 98 02			jb	ri, dnld_end_4
+  457:	  215F	21 E3				ajmp	dnld_sum
+  458:	  2161			dnld_end_4:
+  459:	  2161	12 00 32			call	cin
+  460:	  2164	80 7D				sjmp	dnld_sum
+  461:
+  462:
+  463:
+  464:	  2166			dnld_esc:   ;handle esc received in the download stream
+  465:	  2166	31 70				acall	dnld_dly
+  466:	  2168	90 24 24			mov	dptr, #dnlds2
+  467:	  216B	12 00 45			call	pcstr_h		   ;"download aborted."
+  468:	  216E	80 73				sjmp	dnld_sum
+  469:
+  470:	  2170			dnld_dly:   ;a short delay since most terminal emulation programs
+  471:					    ;won't be ready to receive anything immediately after
+  472:					    ;they've transmitted a file... even on a fast Pentium(tm)
+  473:					    ;machine with 16550 uarts!
+  474:	  2170	78 00				mov	R0,#0
+  475:	  2172	79 00		dnlddly2:	mov	R1,#0
+  476:	  2174	D9 FE				djnz	r1, $		;roughly 128k cycles, appox 0.1 sec
+  477:	  2176	D8 FA				djnz	r0, dnlddly2
+  478:	  2178	22				ret
+  479:
+  480:	  2179			dnld_inc:     ;increment parameter specified by R1
+  481:					      ;note, values in Acc and R1 are destroyed
+  482:	  2179	E9				mov	a, r1
+  483:	  217A	54 07				anl	a, #00000111b	;just in case
+  484:	  217C	23				rl	a
+  485:	  217D	24 EC				add	a, #dnld_parm
+  486:	  217F	F9				mov	r1, a		;now r1 points to lsb
+  487:	  2180	07				inc	@r1
+  488:	  2181	E7				mov	a, @r1
+  489:	  2182	70 02				jnz	dnldin2
+  490:	  2184	09				inc	r1
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 10
+
+
+
+ Line  I  Addr  Code            Source
+
+  491:	  2185	07				inc	@r1
+  492:	  2186	22		dnldin2:	ret
+  493:
+  494:	  2187			dnld_gp:     ;get parameter, and inc to next one (@r1)
+  495:					     ;carry clear if parameter is zero.
+  496:					     ;16 bit value returned in dptr
+  497:	  2187	D3				setb	c
+  498:	  2188	87 82				mov	dp0l, @r1
+  499:	  218A	09				inc	r1
+  500:	  218B	87 83				mov	dp0h, @r1
+  501:	  218D	09				inc	r1
+  502:	  218E	E5 82				mov	a, dp0l
+  503:	  2190	70 05				jnz	dnldgp2
+  504:	  2192	E5 83				mov	a, dph
+  505:	  2194	70 01				jnz	dnldgp2
+  506:	  2196	C3				clr	c
+  507:	  2197	22		dnldgp2:	ret
+  508:
+  509:				;a spacial version of ghex just for the download.  Does not
+  510:				;look for carriage return or backspace.	 Handles ESC key by
+  511:				;poping the return address (I know, nasty, but it saves many
+  512:				;bytes of code in this 4k ROM) and then jumps to the esc
+  513:				;key handling.	This ghex doesn't echo characters, and if it
+  514:				;sees ':', it pops the return and jumps to an error handler
+  515:				;for ':' in the middle of a line.  Non-hex digits also jump
+  516:				;to error handlers, depending on which digit.
+  517:
+  518:	  2198			dnld_ghex:
+  519:	  2198	12 00 32	dnldgh1:	call	cin
+  520:	  219B	12 00 40			call	upper
+  521:	  219E	B4 1B 06			cjne	a, #27, dnldgh3
+  522:	  21A1	D0 E0		dnldgh2:	pop	acc
+  523:	  21A3	D0 E0				pop	acc
+  524:	  21A5	80 BF				sjmp	dnld_esc
+  525:	  21A7	B4 3A 0A	dnldgh3:	cjne	a, #':', dnldgh5
+  526:	  21AA	79 05		dnldgh4:	mov	r1, #5		;handle unexpected beginning of line
+  527:	  21AC	31 79				acall	dnld_inc
+  528:	  21AE	D0 E0				pop	acc
+  529:	  21B0	D0 E0				pop	acc
+  530:	  21B2	01 FB				ajmp	dnld3		;and now we're on a new line!
+  531:	  21B4	12 00 65	dnldgh5:	call	asc2hex
+  532:	  21B7	50 06				jnc	dnldgh6
+  533:	  21B9	79 07				mov	r1, #7
+  534:	  21BB	31 79				acall	dnld_inc
+  535:	  21BD	80 D9				sjmp	dnldgh1
+  536:	  21BF	FA		dnldgh6:	mov	r2, a		;keep first digit in r2
+  537:	  21C0	12 00 32	dnldgh7:	call	cin
+  538:	  21C3	12 00 40			call	upper
+  539:	  21C6	B4 1B 02			cjne	a, #27, dnldgh8
+  540:	  21C9	80 D6				sjmp	dnldgh2
+  541:	  21CB	B4 3A 02	dnldgh8:	cjne	a, #':', dnldgh9
+  542:	  21CE	80 DA				sjmp	dnldgh4
+  543:	  21D0	12 00 65	dnldgh9:	call	asc2hex
+  544:	  21D3	50 06				jnc	dnldghA
+  545:	  21D5	79 07				mov	r1, #7
+  546:	  21D7	31 79				acall	dnld_inc
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 11
+
+
+
+ Line  I  Addr  Code            Source
+
+  547:	  21D9	80 E5				sjmp	dnldgh7
+  548:	  21DB	CA		dnldghA:	xch	a, r2
+  549:	  21DC	C4				swap	a
+  550:	  21DD	4A				orl	a, r2
+  551:	  21DE	FA				mov	r2, a
+  552:	  21DF	2C				add	a, r4		;add into checksum
+  553:	  21E0	FC				mov	r4, a
+  554:	  21E1	EA				mov	a, r2		;return value in acc
+  555:	  21E2	22				ret
+  556:
+  557:				;dnlds4 =  "Summary:"
+  558:				;dnlds5 =  " lines received"
+  559:				;dnlds6a = " bytes received"
+  560:				;dnlds6b = " bytes written"
+  561:
+  562:	  21E3			dnld_sum:    ;print out download summary
+  563:	  21E3	EE				mov	a, r6
+  564:	  21E4	C0 E0				push	acc
+  565:	  21E6	EF				mov	a, r7
+  566:	  21E7	C0 E0				push	acc
+  567:	  21E9	90 24 33			mov	dptr, #dnlds4
+  568:	  21EC	12 00 45			call	pcstr_h
+  569:	  21EF	79 EC				mov	r1, #dnld_parm
+  570:	  21F1	7E 3C				mov	r6, #LOW dnlds5
+  571:	  21F3	7F 24				mov	r7, #HIGH dnlds5
+  572:	  21F5	51 52				acall	dnld_i0
+  573:	  21F7	7E 42				mov	r6, #LOW dnlds6a
+  574:	  21F9	7F 24				mov	r7, #HIGH dnlds6a
+  575:	  21FB	51 52				acall	dnld_i0
+  576:	  21FD	7E 47				mov	r6, #LOW dnlds6b
+  577:	  21FF	7F 24				mov	r7, #HIGH dnlds6b
+  578:	  2201	51 52				acall	dnld_i0
+  579:
+  580:	  2203			dnld_err:    ;now print out error summary
+  581:	  2203	7A 05				mov	r2, #5
+  582:	  2205	31 87		dnlder2:	acall	dnld_gp
+  583:	  2207	40 0A				jc	dnlder3		;any errors?
+  584:	  2209	DA FA				djnz	r2, dnlder2
+  585:					 ;no errors, so we print the nice message
+  586:	  220B	90 24 83			mov	dptr, #dnlds13
+  587:	  220E	12 00 45			call	pcstr_h
+  588:	  2211	80 26				sjmp	dlnd_sum_done
+  589:
+  590:	  2213			dnlder3:  ;there were errors, so now we print 'em
+  591:	  2213	90 24 52			mov	dptr, #dnlds7
+  592:	  2216	12 00 45			call	pcstr_h
+  593:					  ;but let's not be nasty... only print if necessary
+  594:	  2219	79 F2				mov	r1, #(dnld_parm+6)
+  595:	  221B	7E 56				mov	r6, #LOW dnlds8
+  596:	  221D	7F 24				mov	r7, #HIGH dnlds8
+  597:	  221F	51 42				acall	dnld_item
+  598:	  2221	7E 67				mov	r6, #LOW dnlds9
+  599:	  2223	7F 24				mov	r7, #HIGH dnlds9
+  600:	  2225	51 42				acall	dnld_item
+  601:	  2227	7E 6F				mov	r6, #LOW dnlds10
+  602:	  2229	7F 24				mov	r7, #HIGH dnlds10
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 12
+
+
+
+ Line  I  Addr  Code            Source
+
+  603:	  222B	51 42				acall	dnld_item
+  604:	  222D	7E 75				mov	r6, #LOW dnlds11
+  605:	  222F	7F 24				mov	r7, #HIGH dnlds11
+  606:	  2231	51 42				acall	dnld_item
+  607:	  2233	7E 7A				mov	r6, #LOW dnlds12
+  608:	  2235	7F 24				mov	r7, #HIGH dnlds12
+  609:	  2237	51 42				acall	dnld_item
+  610:	  2239			dlnd_sum_done:
+  611:	  2239	D0 E0				pop	acc
+  612:	  223B	FF				mov	r7, a
+  613:	  223C	D0 E0				pop	acc
+  614:	  223E	FE				mov	r6, a
+  615:	  223F	02 00 48			jmp	newline
+  616:
+  617:	  2242			dnld_item:
+  618:	  2242	31 87				acall	dnld_gp		;error conditions
+  619:	  2244	50 0B				jnc	dnld_i3
+  620:	  2246	12 22 5F	dnld_i2:call	space
+  621:	  2249	12 00 53			lcall	pint16u
+  622:	  224C	51 64				acall	r6r7todptr
+  623:	  224E	12 00 45			call	pcstr_h
+  624:	  2251	22		dnld_i3:	ret
+  625:
+  626:	  2252	31 87		dnld_i0:	acall	dnld_gp		;non-error conditions
+  627:	  2254	80 F0				sjmp	dnld_i2
+  628:
+  629:
+  630:	  2256			dnld_init:
+  631:					;init all dnld parms to zero.
+  632:	  2256	78 EC				mov	r0, #dnld_parm
+  633:	  2258	76 00		dnld0:		mov	@r0, #0
+  634:	  225A	08				inc	r0
+  635:	  225B	B8 FC FA			cjne	r0, #dnld_parm + 16, dnld0
+  636:	  225E	22				ret
+  637:
+  638:	  225F	74 20		space:		mov	a, #' '
+  639:	  2261	02 00 30			JMP	COUT
+  640:
+  641:	  2264			r6r7todptr:
+  642:	  2264	8E 82				mov	dpl, r6
+  643:	  2266	8F 83				mov	dph, r7
+  644:	  2268	22				ret
+  645:
+  646:
+  647:	  2269	90 D0 00	PROGRAM:	MOV	DPTR,#0D000h
+  648:
+  649:	  226C	78 FC		PROGRAM64:	MOV	R0,#SPICMD
+  650:	  226E	76 50				MOV	@R0,#050h		; Byte Write Page
+  651:	  2270	08				INC	R0
+  652:	  2271	76 00				MOV	@R0,#0
+  653:	  2273	08				INC 	R0
+  654:	  2274	76 00				MOV	@R0,#0
+  655:
+  656:	  2276	E4		PROGRAM64B:	CLR	A
+  657:	  2277	93				MOVC	A,@A+DPTR
+  658:	  2278	78 FF				MOV	R0,#SPIDATA
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 13
+
+
+
+ Line  I  Addr  Code            Source
+
+  659:	  227A	F6				MOV	@R0,A
+  660:	  227B	71 2D				ACALL	COMMAND
+  661:	  227D	A3				INC	DPTR
+  662:
+  663:	  227E	7E 3F				MOV	R6,#63
+  664:	  2280	E4		PROGRAM64A:	CLR	A
+  665:	  2281	93				MOVC	A,@A+DPTR
+  666:				;		ACALL	SPIBYTE
+  667:	  2282	A3				INC	DPTR
+  668:	  2283	DE FB				DJNZ	R6,PROGRAM64A
+  669:
+  670:	  2285	76 FE				MOV	@R0,#SPIADRLO
+  671:	  2287	E6				MOV	A,@R0
+  672:	  2288	24 40				ADD	A,#64
+  673:	  228A	F6				MOV	@R0,A
+  674:	  228B	18				DEC	R0
+  675:	  228C	E6				MOV	A,@R0
+  676:	  228D	34 00				ADDC	A,#0
+  677:	  228F	F6				MOV	@R0,A
+  678:	  2290	71 3E				ACALL	TIME5MS
+  679:	  2292	B4 30 E1			CJNE	A,#030h,PROGRAM64B
+  680:	  2295	22		PROGRAM64EX:	RET
+  681:
+  682:	  2296	7A 01		VERIFY:		MOV	R2,#1
+  683:	  2298	41 9C				AJMP	READFLASH1
+  684:
+  685:	  229A	7A 00		READFLASH:	MOV	R2,#0
+  686:	  229C	90 D0 00	READFLASH1:	MOV	DPTR,#0D000h
+  687:
+  688:	  229F	78 FC		READ64:		MOV	R0,#SPICMD
+  689:	  22A1	76 30				MOV	@R0,#030h		; Byte Read Page
+  690:	  22A3	08				INC	R0
+  691:	  22A4	76 00				MOV	@R0,#0
+  692:	  22A6	08				INC 	R0
+  693:	  22A7	76 00				MOV	@R0,#0
+  694:	  22A9	71 2D		READ64B:	ACALL	COMMAND
+  695:	  22AB	51 FB				ACALL	READVERI
+  696:	  22AD	40 19				JC	READ64ERR
+  697:	  22AF	A3				INC	DPTR
+  698:
+  699:	  22B0	7E 3F				MOV	R6,#63
+  700:	  22B2			READ64A:	;ACALL	SPIBYTE
+  701:	  22B2	51 FB				ACALL	READVERI
+  702:	  22B4	40 12				JC	READ64ERR
+  703:	  22B6	A3				INC	DPTR
+  704:	  22B7	DE F9				DJNZ	R6,READ64A
+  705:
+  706:	  22B9	76 FE				MOV	@R0,#SPIADRLO
+  707:	  22BB	E6				MOV	A,@R0
+  708:	  22BC	24 40				ADD	A,#64
+  709:	  22BE	F6				MOV	@R0,A
+  710:	  22BF	18				DEC	R0
+  711:	  22C0	E6				MOV	A,@R0
+  712:	  22C1	34 00				ADDC	A,#0
+  713:	  22C3	F6				MOV	@R0,A
+  714:	  22C4	B4 30 E2			CJNE	A,#030h,READ64B
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 14
+
+
+
+ Line  I  Addr  Code            Source
+
+  715:	  22C7	22		READ64EX:	RET
+  716:
+  717:	  22C8	C0 E0		READ64ERR:	PUSH	ACC
+  718:	  22CA	C0 82				PUSH	DP0L
+  719:	  22CC	C0 83				PUSH	DP0H
+  720:	  22CE	90 23 F9			MOV	DPTR,#MSGVERIFAIL
+  721:	  22D1	12 00 38			CALL	PSTR
+  722:	  22D4	D0 83				POP	DP0H
+  723:	  22D6	D0 82				POP	DP0L
+  724:	  22D8	12 00 36			CALL	PHEX16
+  725:	  22DB	74 6D				MOV	A,#"m"
+  726:	  22DD	12 00 30			CALL	COUT
+  727:	  22E0	D0 E0				POP	ACC
+  728:	  22E2	12 00 34			CALL	PHEX
+  729:	  22E5	74 63				MOV	A,#"c"
+  730:	  22E7	12 00 30			CALL	COUT
+  731:	  22EA	E5 7F				MOV	A,TEMP
+  732:	  22EC	12 00 34			CALL	PHEX
+  733:	  22EF	12 00 48			CALL	NEWLINE
+  734:	  22F2	12 00 32			CALL	CIN
+  735:	  22F5	D0 E0				POP	ACC
+  736:	  22F7	D0 E0				POP	ACC
+  737:	  22F9	01 40				AJMP	START
+  738:
+  739:	  22FB	BA 00 02	READVERI:	CJNE	R2,#0,READVERI1
+  740:	  22FE	F0				MOVX	@DPTR,A
+  741:	  22FF	22				RET
+  742:
+  743:	  2300	F5 7F		READVERI1:	MOV	TEMP,A
+  744:	  2302	E4				CLR	A
+  745:	  2303	93				MOVC	A,@A+DPTR
+  746:	  2304	B5 7F 01			CJNE	A,TEMP,READVERI2
+  747:	  2307	22				RET
+  748:	  2308	D3		READVERI2:	SETB	C
+  749:	  2309	22				RET
+  750:
+  751:	  230A	78 FC		SIGNATURE:	MOV	R0,#SPICMD
+  752:	  230C	76 28				MOV	@R0,#028h
+  753:	  230E	08				INC	R0
+  754:	  230F	08				INC	R0
+  755:	  2310	76 30				MOV	@R0,#030h
+  756:	  2312	71 2D				ACALL	COMMAND
+  757:	  2314	B4 1E 0B			CJNE	A,#01Eh,SIGFAIL
+  758:	  2317	78 FE				MOV	R0,#SPIADRLO
+  759:	  2319	76 31				MOV	@R0,#031h
+  760:	  231B	71 2D				ACALL	COMMAND
+  761:	  231D	B4 73 02			CJNE	A,#073h,SIGFAIL
+  762:	  2320	C3				CLR	C
+  763:	  2321	22				RET
+  764:	  2322	D3		SIGFAIL:	SETB	C
+  765:	  2323	22				RET
+  766:
+  767:	  2324	78 FC		ENABLE:		MOV	R0,#SPICMD
+  768:	  2326	76 AC				MOV	@R0,#0ACh
+  769:	  2328	08				INC	R0
+  770:	  2329	76 53				MOV	@R0,#053h
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 15
+
+
+
+ Line  I  Addr  Code            Source
+
+  771:	  232B	61 2D				AJMP	COMMAND
+  772:
+  773:	  232D	78 FC		COMMAND:	MOV	R0,#SPICMD
+  774:	  232F	E6		COMMAND1:	MOV	A,@R0
+  775:				;		CALL	PHEX
+  776:				;		ACALL	SPIBYTE
+  777:	  2330	08				INC	R0
+  778:	  2331	B8 00 FB			CJNE	R0,#0,COMMAND1
+  779:				;		CALL	NEWLINE
+  780:	  2334	22				RET
+  781:
+  782:				;SPIBYTE:	MOV	R7,#8
+  783:				;SPIBYTE1:	RLC	A
+  784:				;		SETB	SCK_52
+  785:				;		MOV	MOSI_52,C
+  786:				;		CLR	SCK_52
+  787:				;		MOV	C,MISO_52
+  788:				;		DJNZ	R7,SPIBYTE1
+  789:				;		RLC	A
+  790:				;		CALL	PHEX
+  791:				;		RET
+  792:
+  793:	  2335	7E 00		TIME35MS:	MOV	R6,#0
+  794:	  2337	7F 00		TIME35MS2:	MOV	R7,#0
+  795:	  2339	DF FE		TIME35MS1:	DJNZ	R7,TIME35MS1
+  796:	  233B	DE FC				DJNZ	R6,TIME35MS1
+  797:	  233D	22				RET
+  798:
+  799:	  233E	7E 12		TIME5MS:	MOV	R6,#18
+  800:	  2340	61 37				AJMP	TIME35MS2
+  801:
+  802:	  2342	0D 0A 41 54	MSGMENU:	DB	13,10,"AT89S8253 - Prommer Menu",13,10
+	  2346	38 39 53 38
+	  234A	32 35 33 20
+	  234E	2D 20 50 72
+	  2352	6F 6D 6D 65
+	  2356	72 20 4D 65
+	  235A	6E 75 0D 0A
+  803:	  235E	43 20 2D 20			DB	"C - Clear Flash",13,10
+	  2362	43 6C 65 61
+	  2366	72 20 46 6C
+	  236A	61 73 68 0D
+	  236E	0A
+  804:	  236F	44 20 2D 20			DB	"D - Download Intel-Hex file at $D000",13,10
+	  2373	44 6F 77 6E
+	  2377	6C 6F 61 64
+	  237B	20 49 6E 74
+	  237F	65 6C 2D 48
+	  2383	65 78 20 66
+	  2387	69 6C 65 20
+	  238B	61 74 20 24
+	  238F	44 30 30 30
+	  2393	0D 0A
+  805:	  2395	50 20 2D 20			DB	"P - Program Chip",13,10
+	  2399	50 72 6F 67
+	  239D	72 61 6D 20
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 16
+
+
+
+ Line  I  Addr  Code            Source
+
+	  23A1	43 68 69 70
+	  23A5	0D 0A
+  806:	  23A7	52 20 2D 20			DB	"R - Read Flash",13,10
+	  23AB	52 65 61 64
+	  23AF	20 46 6C 61
+	  23B3	73 68 0D 0A
+  807:	  23B7	56 20 2D 20			DB	"V - Verify Flash",13,10
+	  23BB	56 65 72 69
+	  23BF	66 79 20 46
+	  23C3	6C 61 73 68
+	  23C7	0D 0A
+  808:	  23C9	58 20 2D 20			DB	"X - Exit"
+	  23CD	45 78 69 74
+  809:	  23D1	0D 0A 00			DB	13, 10, 0
+  810:
+  811:	  23D4	41 54 38 39	MSGSIGFAIL:	DB	"AT89S8253 signature check failure!",13,10,0
+	  23D8	53 38 32 35
+	  23DC	33 20 73 69
+	  23E0	67 6E 61 74
+	  23E4	75 72 65 20
+	  23E8	63 68 65 63
+	  23EC	6B 20 66 61
+	  23F0	69 6C 75 72
+	  23F4	65 21 0D 0A
+	  23F8	00
+  812:	  23F9	56 65 72 69	MSGVERIFAIL:	DB	"Verify failure at: ",0
+	  23FD	66 79 20 66
+	  2401	61 69 6C 75
+	  2405	72 65 20 61
+	  2409	74 3A 20 00
+  813:
+  814:	  240D	0D 0D 1F 9F	dnlds1: 	db	13,13,31,159," ascii",249,150,31,152,132,137
+	  2411	20 61 73 63
+	  2415	69 69 F9 96
+	  2419	1F 98 84 89
+  815:	  241D	2C 95 8C 80			db	",",149,140,128,160,13,14
+	  2421	A0 0D 0E
+  816:	  2424	0D 1F 8A A0	dnlds2: 	db	13,31,138,160,"ed",13,14
+	  2428	65 64 0D 0E
+  817:	  242C	0D 1F 8A C1	dnlds3: 	DB	13,31,138,193,"d",13,14
+	  2430	64 0D 0E
+  818:	  2433	53 75 6D 6D	dnlds4: 	DB	"Summary:",14
+	  2437	61 72 79 3A
+	  243B	0E
+  819:	  243C	20 C6 73 91	dnlds5: 	DB	" ",198,"s",145,"d",14
+	  2440	64 0E
+  820:	  2442	20 8B 91 64	dnlds6a:	DB	" ",139,145,"d",14
+	  2446	0E
+  821:	  2447	20 8B 20 77	dnlds6b:	DB	" ",139," written",14
+	  244B	72 69 74 74
+	  244F	65 6E 0E
+  822:	  2452	1F 9B 3A 0E	dnlds7: 	DB	31,155,":",14
+  823:	  2456	20 8B 20 75	dnlds8: 	DB	" ",139," unable",128," write",14
+	  245A	6E 61 62 6C
+	  245E	65 80 20 77
+	  2462	72 69 74 65
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 17
+
+
+
+ Line  I  Addr  Code            Source
+
+	  2466	0E
+  824:	  2467	20 20 62 61	dnlds9: 	DB	32,32,"bad",245,"s",14
+	  246B	64 F5 73 0E
+  825:	  246F	20 85 9F 96	dnlds10:	DB	" ",133,159,150,198,14
+	  2473	C6 0E
+  826:	  2475	20 85 84 9D	dnlds11:	DB	" ",133,132,157,14
+	  2479	0E
+  827:	  247A	20 85 20 6E	dnlds12:	DB	" ",133," non",132,157,14
+	  247E	6F 6E 84 9D
+	  2482	0E
+  828:	  2483	1F 97 9B 20	dnlds13:	DB	31,151,155," detected",13,14
+	  2487	64 65 74 65
+	  248B	63 74 65 64
+	  248F	0D 0E
+  829:
+  830:		N      007F	TEMP		EQU	127
+  831:		N      00EC	dnld_parm	EQU	236
+  832:		N      00FC	SPICMD		EQU	252
+  833:		N      00FD	SPIADRHI	EQU	253
+  834:		N      00FE	SPIADRLO	EQU	254
+  835:		N      00FF	SPIDATA		EQU	255
+  836:
+  837:						END
+
+
+
+
+
+                     register banks used:  ---
+
+                     no errors
+
+
+
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 18
+
+
+
+
+
+	       L I S T   O F   S Y M B O L S
+	       =============================
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+??ASEM_51			  NUMBER    8051
+??VERSION			  NUMBER    0130
+AC				  BIT	      D6	  94
+ACC				  DATA	      E0	  36
+ADDDPTR0			  NUMBER    9840	 172
+ASC2HEX				  NUMBER    0065	 134
+AUTOBAUD			  NUMBER    0042	 121
+AUXR				  DATA	      8E	  19
+AUXR1				  DATA	      A2	  24
+B				  DATA	      F0	  37
+CIN				  NUMBER    0032	 107
+CIN_FILTER			  NUMBER    0062	 133
+CLEAR				  CODE	    20C3	 355
+COMMAND				  CODE	    232D	 773
+COMMAND1			  CODE	    232F	 774
+COUT				  NUMBER    0030	 106
+CPRL2				  BIT	      C8	  81
+CT2				  BIT	      C9	  82
+CY				  BIT	      D7	  95
+DATABUS				  NUMBER    0090	 181
+DLND_SUM_DONE			  CODE	    2239	 610
+DNLD				  CODE	    20D0	 362
+DNLD0				  CODE	    2258	 633
+DNLD1				  CODE	    20D8	 368
+DNLD2				  CODE	    20E0	 372
+DNLD2B				  CODE	    20E5	 374
+DNLD2D				  CODE	    20F7	 386
+DNLD3				  CODE	    20FB	 390
+DNLD3_A				  CODE	    210A	 399
+DNLD3_B				  CODE	    210E	 401
+DNLD4				  CODE	    211B	 407
+DNLD5				  CODE	    211D	 408
+DNLDDLY2			  CODE	    2172	 475
+DNLDER2				  CODE	    2205	 582
+DNLDER3				  CODE	    2213	 590
+DNLDGH1				  CODE	    2198	 519
+DNLDGH2				  CODE	    21A1	 522
+DNLDGH3				  CODE	    21A7	 525
+DNLDGH4				  CODE	    21AA	 526
+DNLDGH5				  CODE	    21B4	 531
+DNLDGH6				  CODE	    21BF	 536
+DNLDGH7				  CODE	    21C0	 537
+DNLDGH8				  CODE	    21CB	 541
+DNLDGH9				  CODE	    21D0	 543
+DNLDGHA				  CODE	    21DB	 548
+DNLDGP2				  CODE	    2197	 507
+DNLDIN2				  CODE	    2186	 492
+DNLDS1				  CODE	    240D	 814
+DNLDS10				  CODE	    246F	 825
+DNLDS11				  CODE	    2475	 826
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 19
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+DNLDS12				  CODE	    247A	 827
+DNLDS13				  CODE	    2483	 828
+DNLDS2				  CODE	    2424	 816
+DNLDS3				  CODE	    242C	 817
+DNLDS4				  CODE	    2433	 818
+DNLDS5				  CODE	    243C	 819
+DNLDS6A				  CODE	    2442	 820
+DNLDS6B				  CODE	    2447	 821
+DNLDS7				  CODE	    2452	 822
+DNLDS8				  CODE	    2456	 823
+DNLDS9				  CODE	    2467	 824
+DNLD_DLY			  CODE	    2170	 470
+DNLD_END			  CODE	    2148	 441
+DNLD_END_2			  CODE	    214B	 444
+DNLD_END_3			  CODE	    214F	 447
+DNLD_END_4			  CODE	    2161	 458
+DNLD_ERR			  CODE	    2203	 580
+DNLD_ESC			  CODE	    2166	 464
+DNLD_GET_CKSUM			  CODE	    2134	 424
+DNLD_GHEX			  CODE	    2198	 518
+DNLD_GP				  CODE	    2187	 494
+DNLD_I0				  CODE	    2252	 626
+DNLD_I2				  CODE	    2246	 620
+DNLD_I3				  CODE	    2251	 624
+DNLD_INC			  CODE	    2179	 480
+DNLD_INIT			  CODE	    2256	 630
+DNLD_ITEM			  CODE	    2242	 617
+DNLD_NOW			  CODE	    20F0	 381
+DNLD_PARM			  NUMBER    00EC	 831
+DNLD_SUM			  CODE	    21E3	 562
+DNLD_SUMERR			  CODE	    2139	 428
+DNLD_UKN2			  CODE	    2142	 436
+DNLD_UNKNOWN			  CODE	    213F	 433
+DP0H				  DATA	      83	   9
+DP0L				  DATA	      82	   8
+DP1H				  DATA	      85	  11
+DP1L				  DATA	      84	  10
+DPH				  NUMBER    0083	 190
+DPL				  NUMBER    0082	 189
+EA				  BIT	      AF	  66
+ENABLE				  CODE	    2324	 767
+ERALL				  NUMBER    005C	 131
+ES				  BIT	      AC	  64
+ESC				  NUMBER    003E	 117
+ET0				  BIT	      A9	  61
+ET1				  BIT	      AB	  63
+ET2				  BIT	      AD	  65
+EX0				  BIT	      A8	  60
+EX1				  BIT	      AA	  62
+EXEN2				  BIT	      CB	  84
+EXF2				  BIT	      CE	  87
+EXTI0				  CODE	    0003	  98
+EXTI1				  CODE	    0013	 100
+F0				  BIT	      D5	  93
+FIND				  NUMBER    005F	 132
+GHEX				  NUMBER    003A	 113
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 20
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+GHEX16				  NUMBER    003C	 115
+IE				  DATA	      A8	  26
+IE0				  BIT	      89	  40
+IE1				  BIT	      8B	  42
+INT0				  BIT	      B2	  69
+INT1				  BIT	      B3	  70
+INTADD				  NUMBER    982C	 159
+INTADD4				  NUMBER    982A	 158
+INTCLR				  NUMBER    9830	 161
+INTCLR4				  NUMBER    982E	 160
+INTCMP				  NUMBER    981C	 151
+INTCMP4				  NUMBER    981A	 150
+INTCOPY				  NUMBER    9822	 154
+INTCOPY2			  NUMBER    981E	 152
+INTCOPY4			  NUMBER    9820	 153
+INTDIV3				  NUMBER    9816	 148
+INTDUMP				  NUMBER    983E	 170
+INTDUMP2			  NUMBER    983C	 169
+INTDUMP4			  NUMBER    983A	 168
+INTDUMP6			  NUMBER    9838	 167
+INTFILL				  NUMBER    9832	 162
+INTMUL4				  NUMBER    9818	 149
+INTSUB				  NUMBER    9828	 157
+INTSUB2				  NUMBER    9824	 155
+INTSUB4				  NUMBER    9826	 156
+IP				  DATA	      B8	  28
+IT0				  BIT	      88	  39
+IT1				  BIT	      8A	  41
+LENSTR				  NUMBER    004A	 125
+LOCAT				  NUMBER    2000	 192
+LOOP				  CODE	    2067	 249
+MEMCLR				  NUMBER    980A	 141
+MEMCLR4				  NUMBER    9808	 140
+MEMCMP				  NUMBER    980E	 143
+MEMCOPY				  NUMBER    9842	 174
+MEMCOPY4			  NUMBER    9846	 176
+MEMDUMP				  NUMBER    9844	 175
+MEMDUMP128			  NUMBER    9804	 138
+MEMDUMP2			  NUMBER    9800	 136
+MEMDUMP4			  NUMBER    9802	 137
+MEMDUMP512			  NUMBER    9806	 139
+MEMFILL				  NUMBER    980C	 142
+MEMINTA2			  NUMBER    9836	 165
+MEMINTA4			  NUMBER    9834	 164
+MEMINTC				  NUMBER    9814	 146
+MEMINTC2			  NUMBER    9810	 144
+MEMINTC4			  NUMBER    9812	 145
+MENU				  CODE	    2093	 334
+MENUC				  CODE	    209C	 337
+MENUD				  CODE	    20A3	 340
+MENULOOP			  CODE	    2099	 336
+MENUP				  CODE	    20AA	 343
+MENUR				  CODE	    20B1	 346
+MENUV				  CODE	    20B8	 349
+MENUX				  CODE	    20BF	 352
+MISO				  BIT	      96	  50
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 21
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+MOSI				  BIT	      95	  49
+MSGMENU				  CODE	    2342	 802
+MSGSIGFAIL			  CODE	    23D4	 811
+MSGVERIFAIL			  CODE	    23F9	 812
+NEWLINE				  NUMBER    0048	 124
+OV				  BIT	      D2	  90
+P				  BIT	      D0	  89
+P0				  DATA	      80	   6
+P1				  DATA	      90	  20
+P2				  DATA	      A0	  23
+P3				  DATA	      B0	  27
+PCON				  DATA	      87	  12
+PCSTR				  NUMBER    0045	 122
+PCSTR_H				  NUMBER    0045	 123
+PHEX				  NUMBER    0034	 108
+PHEX1				  NUMBER    002E	 105
+PHEX16				  NUMBER    0036	 109
+PINT16U				  NUMBER    0053	 128
+PINT8				  NUMBER    0050	 127
+PINT8U				  NUMBER    004D	 126
+PRGM				  NUMBER    0059	 130
+PROGRAM				  CODE	    2269	 647
+PROGRAM64			  CODE	    226C	 649
+PROGRAM64A			  CODE	    2280	 664
+PROGRAM64B			  CODE	    2276	 656
+PROGRAM64EX			  CODE	    2295	 680
+PS				  BIT	      BC	  79
+PSTR				  NUMBER    0038	 110
+PSTRR7				  NUMBER    9848	 177
+PSW				  DATA	      D0	  35
+PT0				  BIT	      B9	  76
+PT1				  BIT	      BB	  78
+PT2				  BIT	      BD	  80
+PX0				  BIT	      B8	  75
+PX1				  BIT	      BA	  77
+R6R7TODPTR			  CODE	    2264	 641
+RB8				  BIT	      9A	  54
+RCAP2H				  DATA	      CB	  32
+RCAP2L				  DATA	      CA	  31
+RCLK				  BIT	      CD	  86
+RD				  BIT	      B7	  74
+READ64				  CODE	    229F	 688
+READ64A				  CODE	    22B2	 700
+READ64B				  CODE	    22A9	 694
+READ64ERR			  CODE	    22C8	 717
+READ64EX			  CODE	    22C7	 715
+READFLASH			  CODE	    229A	 685
+READFLASH1			  CODE	    229C	 686
+READVERI			  CODE	    22FB	 739
+READVERI1			  CODE	    2300	 743
+READVERI2			  CODE	    2308	 748
+REN				  BIT	      9C	  56
+RESET				  CODE	    0000	  97
+RI				  BIT	      98	  52
+RS0				  BIT	      D3	  91
+RS1				  BIT	      D4	  92
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 22
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+RXD				  BIT	      B0	  67
+SBUF				  DATA	      99	  22
+SCK				  BIT	      97	  51
+SCON				  DATA	      98	  21
+SETREGS				  CODE	    2050	 227
+SIGFAIL				  CODE	    2322	 764
+SIGNATURE			  CODE	    230A	 751
+SINT				  CODE	    0023	 102
+SM0				  BIT	      9F	  59
+SM1				  BIT	      9E	  58
+SM2				  BIT	      9D	  57
+SMART_WR			  NUMBER    0056	 129
+SP				  DATA	      81	   7
+SPACE				  CODE	    225F	 638
+SPIADRHI			  NUMBER    00FD	 833
+SPIADRLO			  NUMBER    00FE	 834
+SPICMD				  NUMBER    00FC	 832
+SPIDATA				  NUMBER    00FF	 835
+START				  CODE	    2040	 210
+STRCOPY				  NUMBER    984A	 179
+SYCS				  NUMBER    00B2	 183
+SYDATA				  CODE	    207D	 287
+SYPHI2				  NUMBER    00B4	 185
+SYRS				  NUMBER    00B3	 184
+SYRW				  NUMBER    00B5	 186
+T0				  BIT	      B4	  71
+T1				  BIT	      B5	  72
+T2				  BIT	      90	  47
+T2CON				  DATA	      C8	  29
+T2EX				  BIT	      91	  48
+T2MOD				  DATA	      C9	  30
+TB8				  BIT	      9B	  55
+TCLK				  BIT	      CC	  85
+TCON				  DATA	      88	  13
+TEMP				  NUMBER    007F	 830
+TF0				  BIT	      8D	  44
+TF1				  BIT	      8F	  46
+TF2				  BIT	      CF	  88
+TH0				  DATA	      8C	  17
+TH1				  DATA	      8D	  18
+TH2				  DATA	      CD	  34
+TI				  BIT	      99	  53
+TIME				  CODE	    2074	 257
+TIME1				  CODE	    2078	 259
+TIME35MS			  CODE	    2335	 793
+TIME35MS1			  CODE	    2339	 795
+TIME35MS2			  CODE	    2337	 794
+TIME5MS				  CODE	    233E	 799
+TIMER0				  CODE	    000B	  99
+TIMER1				  CODE	    001B	 101
+TIMER2				  CODE	    002B	 103
+TL0				  DATA	      8A	  15
+TL1				  DATA	      8B	  16
+TL2				  DATA	      CC	  33
+TMOD				  DATA	      89	  14
+TR0				  BIT	      8C	  43
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 23
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+TR1				  BIT	      8E	  45
+TR2				  BIT	      CA	  83
+TXD				  BIT	      B1	  68
+UPPER				  NUMBER    0040	 119
+VERIFY				  CODE	    2296	 682
+WDTRST				  DATA	      A6	  25
+WR				  BIT	      B6	  73
