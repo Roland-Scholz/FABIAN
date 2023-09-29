@@ -30,3 +30,1328 @@ cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc
 XSLTProcess vt100_build.xml 
 tsim -intstyle ise vt100 vt100.nga 
 hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 
+xst -intstyle ise -ifn "C:/github/fabian/VGA/VT100_CPLD/vt100.xst" -ofn "C:/github/fabian/VGA/VT100_CPLD/vt100.syr" 
+ngdbuild -intstyle ise -dd _ngo -uc vt100.ucf -p xc9536-PC44-15 vt100.ngc vt100.ngd  
+cpldfit -intstyle ise -p xc9536-15-PC44 -ofmt vhdl -optimize speed -htmlrpt -loc on -slew fast -init low -inputs 36 -pterms 25 -power std -localfbk -pinfbk vt100.ngd 
+XSLTProcess vt100_build.xml 
+tsim -intstyle ise vt100 vt100.nga 
+hprep6 -s IEEE1149 -n vt100 -i vt100 

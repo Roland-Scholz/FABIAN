@@ -3,12 +3,34 @@
 <script src="paths.js"></script><script src="eqns.js"></script><script>
       var design = "vt100";
       var device = "XC9536";
-      signals = new Array("CCLK","HSYNC","LOADAD","PIXCLKO","VSYNC","clk0_SPECSIG","clk1_SPECSIG");
-      sigNegs = new Array("OFF","OFF","OFF","OFF","OFF","OFF","OFF");
-      sigTypes = new Array("T","","","","","T","T");
+      signals = new Array("CCLK","CHAROE","CRTCOE","DISPEN","HSYNC","I_CHAROE","I_CRTCOE","I_DE","I_OE_ADR","I_OE_DAT","I_OE_RAM","I_WE_RAM","LCHRLINE","LOADAD","LOADCHR","LOADCOL","LOADCOLB","LOADDAT","LOADSR","OE_ADR","OE_DAT","OE_RAM","PIXCLKO","VSYNC","WE_RAM","clk0_SPECSIG","clk1_SPECSIG","ramacc","ramstart","rw");
+      sigNegs = new Array("OFF","ON","ON","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","OFF","ON","OFF","OFF","ON","OFF","OFF","OFF","OFF","OFF");
+      sigTypes = new Array("T","","","T","T","T","T","T","T","T","T","T","T","","T","T","T","T","T","","","","","T","","T","T","T","T","T");
 
       
+        specSig["CCLKPIN_SPECSIG"]=new Array("CCLK.PIN");
+      
+        specSig["LOADDATPIN_SPECSIG"]=new Array("LOADDAT.PIN");
+      
+        specSig["DISPENPIN_SPECSIG"]=new Array("DISPEN.PIN");
+      
+        specSig["HSYNCPIN_SPECSIG"]=new Array("HSYNC.PIN");
+      
+        specSig["LCHRLINEPIN_SPECSIG"]=new Array("LCHRLINE.PIN");
+      
+        specSig["LOADCHRPIN_SPECSIG"]=new Array("LOADCHR.PIN");
+      
+        specSig["LOADCOLBPIN_SPECSIG"]=new Array("LOADCOLB.PIN");
+      
+        specSig["LOADCOLPIN_SPECSIG"]=new Array("LOADCOL.PIN");
+      
+        specSig["LOADSRPIN_SPECSIG"]=new Array("LOADSR.PIN");
+      
+        specSig["VSYNCPIN_SPECSIG"]=new Array("VSYNC.PIN");
+      
         specSig["GCKI_SPECSIG"]=new Array("GCK/I");
+      
+        specSig["IO_SPECSIG"]=new Array("I/O");
       
         specSig["b_SPECSIG"]=new Array("(b)");
       
@@ -16,31 +38,225 @@
       
         specSig["clk0_SPECSIG"]=new Array("clk<0>");
       
+            pterms["FB1_3_1"]=new Array("/WR","A15","/clk0_SPECSIG","/ramstart","/ramacc","rw");
+          
+            pterms["FB1_3_2"]=new Array("WR","/RD","A15","/clk0_SPECSIG","/ramstart","/ramacc","/rw");
+          
+            pterms["FB1_4_1"]=new Array("WR","RD","ramstart","/ramacc");
+          
+            pterms["FB1_4_2"]=new Array("clk0_SPECSIG","clk1_SPECSIG","/ramstart","ramacc","/CCLKPIN_SPECSIG");
+          
+            pterms["FB1_5_1"]=new Array("clk0_SPECSIG","clk1_SPECSIG","/CCLKPIN_SPECSIG","LOADDATPIN_SPECSIG");
+          
+            pterms["FB1_5_2"]=new Array("/clk0_SPECSIG","clk1_SPECSIG","/ramstart","ramacc","/CCLKPIN_SPECSIG","/LOADDATPIN_SPECSIG");
+          
             pterms["FB1_6_1"]=new Array("/WR","A15");
           
             pterms["FB1_6_2"]=new Array("/RD","A15");
           
+            pterms["FB1_7_1"]=new Array("clk0_SPECSIG","clk1_SPECSIG","CCLKPIN_SPECSIG","LOADCOLPIN_SPECSIG");
+          
+            pterms["FB1_7_2"]=new Array("clk0_SPECSIG","/clk1_SPECSIG","CCLKPIN_SPECSIG","/LOADCOLPIN_SPECSIG");
+          
             pterms["FB1_8_1"]=new Array("clk0_SPECSIG","clk1_SPECSIG");
           
-            pterms["FB1_17_1"]=new Array("clk0_SPECSIG");
+            pterms["FB1_9_1"]=new Array("/WR","A15","/clk0_SPECSIG","/ramstart","/ramacc");
           
-            pterms["FB2_1_1"]=new Array("/HS");
+            pterms["FB1_9_2"]=new Array("/RD","A15","/clk0_SPECSIG","/ramstart","/ramacc");
           
-            pterms["FB2_2_1"]=new Array("/VS");
+            pterms["FB1_9_3"]=new Array("clk0_SPECSIG","/clk1_SPECSIG","ramstart","ramacc","/CCLKPIN_SPECSIG");
+          
+            pterms["FB1_10_1"]=new Array("clk0_SPECSIG","clk1_SPECSIG","/I_WE_RAM","/CCLKPIN_SPECSIG");
+          
+            pterms["FB1_10_2"]=new Array("clk1_SPECSIG","/ramstart","ramacc","rw","/I_WE_RAM","/CCLKPIN_SPECSIG");
+          
+            pterms["FB1_10_3"]=new Array("/clk0_SPECSIG","clk1_SPECSIG","/ramstart","ramacc","/rw","I_WE_RAM","/CCLKPIN_SPECSIG");
+          
+            pterms["FB1_11_1"]=new Array("clk0_SPECSIG","clk1_SPECSIG","/I_OE_DAT","/CCLKPIN_SPECSIG");
+          
+            pterms["FB1_11_2"]=new Array("clk0_SPECSIG","ramstart","ramacc","rw","/I_OE_DAT","/CCLKPIN_SPECSIG");
+          
+            pterms["FB1_11_3"]=new Array("clk0_SPECSIG","/clk1_SPECSIG","ramstart","ramacc","/rw","I_OE_DAT","/CCLKPIN_SPECSIG");
+          
+            pterms["FB1_12_1"]=new Array("clk0_SPECSIG","clk1_SPECSIG","/CCLKPIN_SPECSIG","/LOADSRPIN_SPECSIG");
+          
+            pterms["FB1_12_2"]=new Array("/clk0_SPECSIG","/clk1_SPECSIG","CCLKPIN_SPECSIG","LOADSRPIN_SPECSIG");
+          
+            pterms["FB1_13_1"]=new Array("/I_CRTCOE","/T0");
+          
+            pterms["FB1_14_1"]=new Array("/I_WE_RAM","/T0");
+          
+            pterms["FB1_15_1"]=new Array("clk0_SPECSIG","clk1_SPECSIG","/CCLKPIN_SPECSIG","/LOADCHRPIN_SPECSIG");
+          
+            pterms["FB1_15_2"]=new Array("clk0_SPECSIG","/clk1_SPECSIG","CCLKPIN_SPECSIG","LOADCHRPIN_SPECSIG");
+          
+            pterms["FB1_16_1"]=new Array("/I_CHAROE","/T0");
+          
+            pterms["FB1_17_1"]=new Array("/clk0_SPECSIG","/clk1_SPECSIG","I_DE","CCLKPIN_SPECSIG","/DISPENPIN_SPECSIG");
+          
+            pterms["FB1_17_2"]=new Array("/clk0_SPECSIG","/clk1_SPECSIG","/I_DE","CCLKPIN_SPECSIG","DISPENPIN_SPECSIG");
+          
+            pterms["FB1_18_1"]=new Array("clk0_SPECSIG","clk1_SPECSIG","I_OE_RAM","/CCLKPIN_SPECSIG");
+          
+            pterms["FB1_18_2"]=new Array("clk0_SPECSIG","/clk1_SPECSIG","ramstart","ramacc","/I_OE_RAM","/CCLKPIN_SPECSIG");
+          
+            pterms["FB1_18_3"]=new Array("clk1_SPECSIG","/ramstart","ramacc","rw","I_OE_RAM","/CCLKPIN_SPECSIG");
+          
+            pterms["FB1_18_4"]=new Array("/clk0_SPECSIG","clk1_SPECSIG","/ramstart","ramacc","/rw","/I_OE_RAM","/CCLKPIN_SPECSIG");
+          
+            pterms["FB2_1_1"]=new Array("clk0_SPECSIG","clk1_SPECSIG","HS","/CCLKPIN_SPECSIG","HSYNCPIN_SPECSIG");
+          
+            pterms["FB2_1_2"]=new Array("clk0_SPECSIG","clk1_SPECSIG","/HS","/CCLKPIN_SPECSIG","/HSYNCPIN_SPECSIG");
+          
+            pterms["FB2_2_1"]=new Array("clk0_SPECSIG","clk1_SPECSIG","VS","/CCLKPIN_SPECSIG","/VSYNCPIN_SPECSIG");
+          
+            pterms["FB2_2_2"]=new Array("clk0_SPECSIG","clk1_SPECSIG","/VS","/CCLKPIN_SPECSIG","VSYNCPIN_SPECSIG");
+          
+            pterms["FB2_3_1"]=new Array("clk0_SPECSIG","clk1_SPECSIG","CCLKPIN_SPECSIG","/LCHRLINEPIN_SPECSIG");
+          
+            pterms["FB2_3_2"]=new Array("clk0_SPECSIG","/clk1_SPECSIG","/CCLKPIN_SPECSIG","LCHRLINEPIN_SPECSIG");
           
             pterms["FB2_4_1"]=new Array("pclk");
           
+            pterms["FB2_9_1"]=new Array("clk0_SPECSIG");
+          
+            pterms["FB2_11_1"]=new Array("clk0_SPECSIG","clk1_SPECSIG","/I_OE_ADR","/CCLKPIN_SPECSIG");
+          
+            pterms["FB2_11_2"]=new Array("clk0_SPECSIG","/clk1_SPECSIG","ramstart","ramacc","I_OE_ADR","/CCLKPIN_SPECSIG");
+          
+            pterms["FB2_12_1"]=new Array("/clk0_SPECSIG","/clk1_SPECSIG","I_DE","DE","CCLKPIN_SPECSIG");
+          
+            pterms["FB2_12_2"]=new Array("/clk0_SPECSIG","/clk1_SPECSIG","/I_DE","/DE","CCLKPIN_SPECSIG");
+          
+            pterms["FB2_13_1"]=new Array("clk0_SPECSIG","clk1_SPECSIG","I_CRTCOE","/CCLKPIN_SPECSIG");
+          
+            pterms["FB2_13_2"]=new Array("clk0_SPECSIG","clk1_SPECSIG","/I_CRTCOE","CCLKPIN_SPECSIG");
+          
+            pterms["FB2_14_1"]=new Array("/I_OE_RAM","/T0");
+          
+            pterms["FB2_15_1"]=new Array("I_OE_DAT","/T0");
+          
+            pterms["FB2_16_1"]=new Array("clk0_SPECSIG","/clk1_SPECSIG","CCLKPIN_SPECSIG","LOADCOLBPIN_SPECSIG");
+          
+            pterms["FB2_16_2"]=new Array("/clk0_SPECSIG","/clk1_SPECSIG","CCLKPIN_SPECSIG","/LOADCOLBPIN_SPECSIG");
+          
+            pterms["FB2_17_1"]=new Array("I_OE_ADR","/T0");
+          
+            pterms["FB2_18_1"]=new Array("clk0_SPECSIG","clk1_SPECSIG","I_CHAROE","CCLKPIN_SPECSIG");
+          
+            pterms["FB2_18_2"]=new Array("clk0_SPECSIG","/clk1_SPECSIG","/I_CHAROE","/CCLKPIN_SPECSIG");
+          
+          d2["rw"]=new Array("FB1_3_1","FB1_3_2");
+          
+            d2imp["rw"]=new Array("0","0");
+          
+              gblclk["rw"]=new Array("pclk");
+            prld["rw"]="GND";
+          d2["ramacc"]=new Array("FB1_4_1","FB1_4_2");
+          
+            d2imp["ramacc"]=new Array("0","0");
+          
+              gblclk["ramacc"]=new Array("pclk");
+            prld["ramacc"]="GND";
+          d2["LOADDAT"]=new Array("FB1_5_1","FB1_5_2");
+          
+            d2imp["LOADDAT"]=new Array("0","0");
+          
+              gblclk["LOADDAT"]=new Array("pclk");
+            prld["LOADDAT"]="GND";
           d2["LOADAD"]=new Array("FB1_6_1","FB1_6_2");
           
             d2imp["LOADAD"]=new Array("0","0");
           
+          d2["LOADCOL"]=new Array("FB1_7_1","FB1_7_2");
+          
+            d2imp["LOADCOL"]=new Array("0","0");
+          
+              gblclk["LOADCOL"]=new Array("pclk");
+            prld["LOADCOL"]="GND";
           d2["CCLK"]=new Array("FB1_8_1");
           
             d2imp["CCLK"]=new Array("0");
           
               gblclk["CCLK"]=new Array("pclk");
             prld["CCLK"]="GND";
-          d2["clk1_SPECSIG"]=new Array("FB1_17_1");
+          d2["ramstart"]=new Array("FB1_9_1","FB1_9_2","FB1_9_3");
+          
+            d2imp["ramstart"]=new Array("0","0","0");
+          
+              gblclk["ramstart"]=new Array("pclk");
+            prld["ramstart"]="GND";
+          d2["I_WE_RAM"]=new Array("FB1_10_1","FB1_10_2","FB1_10_3");
+          
+            d2imp["I_WE_RAM"]=new Array("0","0","0");
+          
+              gblclk["I_WE_RAM"]=new Array("pclk");
+            prld["I_WE_RAM"]="GND";
+          d2["I_OE_DAT"]=new Array("FB1_11_1","FB1_11_2","FB1_11_3");
+          
+            d2imp["I_OE_DAT"]=new Array("0","0","0");
+          
+              gblclk["I_OE_DAT"]=new Array("pclk");
+            prld["I_OE_DAT"]="GND";
+          d2["LOADSR"]=new Array("FB1_12_1","FB1_12_2");
+          
+            d2imp["LOADSR"]=new Array("0","0");
+          
+              gblclk["LOADSR"]=new Array("pclk");
+            prld["LOADSR"]="GND";
+          d2["CRTCOE"]=new Array("FB1_13_1");
+          
+            d2imp["CRTCOE"]=new Array("0");
+          
+          d2["WE_RAM"]=new Array("FB1_14_1");
+          
+            d2imp["WE_RAM"]=new Array("0");
+          
+          d2["LOADCHR"]=new Array("FB1_15_1","FB1_15_2");
+          
+            d2imp["LOADCHR"]=new Array("0","0");
+          
+              gblclk["LOADCHR"]=new Array("pclk");
+            prld["LOADCHR"]="GND";
+          d2["CHAROE"]=new Array("FB1_16_1");
+          
+            d2imp["CHAROE"]=new Array("0");
+          
+          d2["DISPEN"]=new Array("FB1_17_1","FB1_17_2");
+          
+            d2imp["DISPEN"]=new Array("0","0");
+          
+              gblclk["DISPEN"]=new Array("pclk");
+            prld["DISPEN"]="GND";
+          d2["I_OE_RAM"]=new Array("FB1_18_1","FB1_18_2","FB1_18_3","FB1_18_4");
+          
+            d2imp["I_OE_RAM"]=new Array("0","0","0","0");
+          
+              gblclk["I_OE_RAM"]=new Array("pclk");
+            prld["I_OE_RAM"]="GND";
+          d2["HSYNC"]=new Array("FB2_1_1","FB2_1_2");
+          
+            d2imp["HSYNC"]=new Array("0","0");
+          
+              gblclk["HSYNC"]=new Array("pclk");
+            prld["HSYNC"]="GND";
+          d2["VSYNC"]=new Array("FB2_2_1","FB2_2_2");
+          
+            d2imp["VSYNC"]=new Array("0","0");
+          
+              gblclk["VSYNC"]=new Array("pclk");
+            prld["VSYNC"]="GND";
+          d2["LCHRLINE"]=new Array("FB2_3_1","FB2_3_2");
+          
+            d2imp["LCHRLINE"]=new Array("0","0");
+          
+              gblclk["LCHRLINE"]=new Array("pclk");
+            prld["LCHRLINE"]="GND";
+          d2["PIXCLKO"]=new Array("FB2_4_1");
+          
+            d2imp["PIXCLKO"]=new Array("0");
+          
+          d2["clk1_SPECSIG"]=new Array("FB2_9_1");
           
             d2imp["clk1_SPECSIG"]=new Array("0");
           
@@ -52,18 +268,48 @@
           
               gblclk["clk0_SPECSIG"]=new Array("pclk");
             prld["clk0_SPECSIG"]="GND";
-          d2["HSYNC"]=new Array("FB2_1_1");
+          d2["I_OE_ADR"]=new Array("FB2_11_1","FB2_11_2");
           
-            d2imp["HSYNC"]=new Array("0");
+            d2imp["I_OE_ADR"]=new Array("0","0");
           
-          d2["VSYNC"]=new Array("FB2_2_1");
+              gblclk["I_OE_ADR"]=new Array("pclk");
+            prld["I_OE_ADR"]="GND";
+          d2["I_DE"]=new Array("FB2_12_1","FB2_12_2");
           
-            d2imp["VSYNC"]=new Array("0");
+            d2imp["I_DE"]=new Array("0","0");
           
-          d2["PIXCLKO"]=new Array("FB2_4_1");
+              gblclk["I_DE"]=new Array("pclk");
+            prld["I_DE"]="GND";
+          d2["I_CRTCOE"]=new Array("FB2_13_1","FB2_13_2");
           
-            d2imp["PIXCLKO"]=new Array("0");
+            d2imp["I_CRTCOE"]=new Array("0","0");
           
+              gblclk["I_CRTCOE"]=new Array("pclk");
+            prld["I_CRTCOE"]="GND";
+          d2["OE_RAM"]=new Array("FB2_14_1");
+          
+            d2imp["OE_RAM"]=new Array("0");
+          
+          d2["OE_DAT"]=new Array("FB2_15_1");
+          
+            d2imp["OE_DAT"]=new Array("0");
+          
+          d2["LOADCOLB"]=new Array("FB2_16_1","FB2_16_2");
+          
+            d2imp["LOADCOLB"]=new Array("0","0");
+          
+              gblclk["LOADCOLB"]=new Array("pclk");
+            prld["LOADCOLB"]="GND";
+          d2["OE_ADR"]=new Array("FB2_17_1");
+          
+            d2imp["OE_ADR"]=new Array("0");
+          
+          d2["I_CHAROE"]=new Array("FB2_18_1","FB2_18_2");
+          
+            d2imp["I_CHAROE"]=new Array("0","0");
+          
+              gblclk["I_CHAROE"]=new Array("pclk");
+            prld["I_CHAROE"]="GND";
 
       uimSignals = new Array();
 

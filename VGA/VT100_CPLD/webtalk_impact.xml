@@ -3,31 +3,39 @@
 <!--The data in this file is primarily intended for consumption by Xilinx tools.
 The structure and the elements are likely to change over the next few releases.
 This means code written to parse this file will need to be revisited each subsequent release.-->
-<application name="impact" timeStamp="Sun Jun 04 20:34:20 2023">
+<application name="impact" timeStamp="Mon Aug 21 08:32:15 2023">
 <section name="Project Information" visible="false">
-<property name="ProjectID" value="821063531ba84df39194e93aefa49c99"/>
+<property name="ProjectID" value="282987d2a53a4153978e47e0ec39c182"/>
 <property name="ProjectIteration" value="1"/>
 </section>
 <section name="iMPACT Project Info" visible="true">
-<property name="Use Project File" value="No"/>
+<property name="Use Project File" value="Yes"/>
 <property name="Project Entry" value="ise"/>
-<property name="OS Name" value="Microsoft Windows XP"/>
+<property name="OS Name" value="Microsoft Windows 7 (64 Bit)"/>
 <property name="User Lic. Info" value="No user information available."/>
 </section>
-<section name="iMPACT Boundary Scan Mode" visible="true">
+<section name="iMPACT One Step SVF File Mode" visible="true">
 <item name="Chain Summary">
-<property name="Number of device" value="0"/>
-<property name="Number of Xilinx device" value="0"/>
+<property name="Number of device" value="1"/>
+<property name="Number of Xilinx device" value="1"/>
 <property name="Number of Non-Xilinx device" value="0"/>
 </item>
 <item name="Chain Description">
+<property name="Device1" value="xc9500"/>
+<property name="Part1" value="xc9536"/>
 </item>
 <item name="Boundary Scan Operations Statistics">
+<property name="BSCAN Operation" value="Program -p 0 -e -v
+"/>
+<property name="BSCAN Operation" value="Program -p 0 -e -v
+"/>
+<property name="BSCAN Operation" value="Program -p 0 -e -v
+"/>
 </item>
 <item name="Cable Summary">
-<property name="Cable Type" value=""/>
-<property name="Cable Speed" value="0"/>
-<property name="Port" value="NULL"/>
+<property name="Cable Type" value="Platform Cable USB"/>
+<property name="Cable Speed" value="6 MHz"/>
+<property name="Port" value="usb-hs"/>
 <property name="Local_Server_Mode" value="Local"/>
 </item>
 </section>

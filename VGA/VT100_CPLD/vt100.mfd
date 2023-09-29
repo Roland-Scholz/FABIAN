@@ -3,30 +3,296 @@ MDF_INFO | vt100 | XC9536-15-PC44
 MACROCELL | 0 | 7 | clk<2>
 ATTRIBUTES | 4621058 | 0
 INPUTS | 2 | clk<0>  | clk<1>
-INPUTMC | 2 | 0 | 17 | 0 | 16
+INPUTMC | 2 | 1 | 9 | 1 | 8
 EQ | 2 | 
    CCLK.T = clk<0> & clk<1>;
    CCLK.CLK = pclk;	// GCK
 GLOBALS | 1 | 2 | pclk
 
-MACROCELL | 0 | 17 | clk<0>
+MACROCELL | 0 | 4 | LOADDAT_OBUF
+ATTRIBUTES | 4621058 | 0
+INPUTS | 6 | LOADDAT.PIN  | clk<0>  | clk<1>  | ramstart  | ramacc  | CCLK.PIN
+INPUTMC | 4 | 1 | 9 | 1 | 8 | 0 | 8 | 0 | 3
+INPUTP | 2 | 6 | 9
+EQ | 4 | 
+   LOADDAT.T = clk<0> & clk<1> & !CCLK.PIN & LOADDAT.PIN
+	# !clk<0> & clk<1> & !ramstart & ramacc & !CCLK.PIN & 
+	!LOADDAT.PIN;
+   LOADDAT.CLK = pclk;	// GCK
+GLOBALS | 1 | 2 | pclk
+
+MACROCELL | 0 | 16 | DISPEN_OBUF
+ATTRIBUTES | 4621058 | 0
+INPUTS | 5 | DISPEN.PIN  | clk<0>  | clk<1>  | I_DE  | CCLK.PIN
+INPUTMC | 3 | 1 | 9 | 1 | 8 | 1 | 11
+INPUTP | 2 | 24 | 9
+EQ | 3 | 
+   DISPEN.T = !clk<0> & !clk<1> & I_DE & CCLK.PIN & !DISPEN.PIN
+	# !clk<0> & !clk<1> & !I_DE & CCLK.PIN & DISPEN.PIN;
+   DISPEN.CLK = pclk;	// GCK
+GLOBALS | 1 | 2 | pclk
+
+MACROCELL | 1 | 0 | HSYNC_OBUF
+ATTRIBUTES | 4621058 | 0
+INPUTS | 5 | HSYNC.PIN  | clk<0>  | clk<1>  | HS  | CCLK.PIN
+INPUTMC | 2 | 1 | 9 | 1 | 8
+INPUTP | 3 | 1 | 12 | 9
+EQ | 3 | 
+   HSYNC.T = clk<0> & clk<1> & HS & !CCLK.PIN & HSYNC.PIN
+	# clk<0> & clk<1> & !HS & !CCLK.PIN & !HSYNC.PIN;
+   HSYNC.CLK = pclk;	// GCK
+GLOBALS | 1 | 2 | pclk
+
+MACROCELL | 1 | 2 | LCHRLINE_OBUF
+ATTRIBUTES | 4621058 | 0
+INPUTS | 4 | LCHRLINE.PIN  | clk<0>  | clk<1>  | CCLK.PIN
+INPUTMC | 2 | 1 | 9 | 1 | 8
+INPUTP | 2 | 42 | 9
+EQ | 3 | 
+   LCHRLINE.T = clk<0> & clk<1> & CCLK.PIN & !LCHRLINE.PIN
+	# clk<0> & !clk<1> & !CCLK.PIN & LCHRLINE.PIN;
+   LCHRLINE.CLK = pclk;	// GCK
+GLOBALS | 1 | 2 | pclk
+
+MACROCELL | 0 | 14 | LOADCHR_OBUF
+ATTRIBUTES | 4621058 | 0
+INPUTS | 4 | LOADCHR.PIN  | clk<0>  | clk<1>  | CCLK.PIN
+INPUTMC | 2 | 1 | 9 | 1 | 8
+INPUTP | 2 | 20 | 9
+EQ | 3 | 
+   LOADCHR.T = clk<0> & clk<1> & !CCLK.PIN & !LOADCHR.PIN
+	# clk<0> & !clk<1> & CCLK.PIN & LOADCHR.PIN;
+   LOADCHR.CLK = pclk;	// GCK
+GLOBALS | 1 | 2 | pclk
+
+MACROCELL | 1 | 15 | LOADCOLB_OBUF
+ATTRIBUTES | 4621058 | 0
+INPUTS | 4 | LOADCOLB.PIN  | clk<0>  | clk<1>  | CCLK.PIN
+INPUTMC | 2 | 1 | 9 | 1 | 8
+INPUTP | 2 | 26 | 9
+EQ | 3 | 
+   LOADCOLB.T = clk<0> & !clk<1> & CCLK.PIN & LOADCOLB.PIN
+	# !clk<0> & !clk<1> & CCLK.PIN & !LOADCOLB.PIN;
+   LOADCOLB.CLK = pclk;	// GCK
+GLOBALS | 1 | 2 | pclk
+
+MACROCELL | 0 | 6 | LOADCOL_OBUF
+ATTRIBUTES | 4621058 | 0
+INPUTS | 4 | LOADCOL.PIN  | clk<0>  | clk<1>  | CCLK.PIN
+INPUTMC | 2 | 1 | 9 | 1 | 8
+INPUTP | 2 | 7 | 9
+EQ | 3 | 
+   LOADCOL.T = clk<0> & clk<1> & CCLK.PIN & LOADCOL.PIN
+	# clk<0> & !clk<1> & CCLK.PIN & !LOADCOL.PIN;
+   LOADCOL.CLK = pclk;	// GCK
+GLOBALS | 1 | 2 | pclk
+
+MACROCELL | 0 | 11 | LOADSR_OBUF
+ATTRIBUTES | 4621058 | 0
+INPUTS | 4 | LOADSR.PIN  | clk<0>  | clk<1>  | CCLK.PIN
+INPUTMC | 2 | 1 | 9 | 1 | 8
+INPUTP | 2 | 14 | 9
+EQ | 3 | 
+   LOADSR.T = clk<0> & clk<1> & !CCLK.PIN & !LOADSR.PIN
+	# !clk<0> & !clk<1> & CCLK.PIN & LOADSR.PIN;
+   LOADSR.CLK = pclk;	// GCK
+GLOBALS | 1 | 2 | pclk
+
+MACROCELL | 1 | 1 | VSYNC_OBUF
+ATTRIBUTES | 4621058 | 0
+INPUTS | 5 | VSYNC.PIN  | clk<0>  | clk<1>  | VS  | CCLK.PIN
+INPUTMC | 2 | 1 | 9 | 1 | 8
+INPUTP | 3 | 44 | 13 | 9
+EQ | 3 | 
+   VSYNC.T = clk<0> & clk<1> & VS & !CCLK.PIN & !VSYNC.PIN
+	# clk<0> & clk<1> & !VS & !CCLK.PIN & VSYNC.PIN;
+   VSYNC.CLK = pclk;	// GCK
+GLOBALS | 1 | 2 | pclk
+
+MACROCELL | 1 | 9 | clk<0>
 ATTRIBUTES | 4358912 | 0
-OUTPUTMC | 2 | 0 | 7 | 0 | 16
+OUTPUTMC | 21 | 0 | 7 | 0 | 4 | 0 | 16 | 1 | 0 | 1 | 2 | 0 | 14 | 1 | 15 | 0 | 6 | 0 | 11 | 1 | 1 | 1 | 8 | 0 | 8 | 0 | 3 | 0 | 2 | 1 | 17 | 1 | 12 | 1 | 11 | 1 | 10 | 0 | 10 | 0 | 17 | 0 | 9
 INPUTS | 0
 EQ | 2 | 
    clk<0>.T = Vcc;
    clk<0>.CLK = pclk;	// GCK
 GLOBALS | 1 | 2 | pclk
 
-MACROCELL | 0 | 16 | clk<1>
+MACROCELL | 1 | 8 | clk<1>
 ATTRIBUTES | 4358912 | 0
-OUTPUTMC | 1 | 0 | 7
+OUTPUTMC | 19 | 0 | 7 | 0 | 4 | 0 | 16 | 1 | 0 | 1 | 2 | 0 | 14 | 1 | 15 | 0 | 6 | 0 | 11 | 1 | 1 | 0 | 8 | 0 | 3 | 1 | 17 | 1 | 12 | 1 | 11 | 1 | 10 | 0 | 10 | 0 | 17 | 0 | 9
 INPUTS | 1 | clk<0>
-INPUTMC | 1 | 0 | 17
+INPUTMC | 1 | 1 | 9
 EQ | 2 | 
    clk<1>.T = clk<0>;
    clk<1>.CLK = pclk;	// GCK
 GLOBALS | 1 | 2 | pclk
+
+MACROCELL | 0 | 8 | ramstart
+ATTRIBUTES | 4358912 | 0
+OUTPUTMC | 8 | 0 | 4 | 0 | 8 | 0 | 3 | 0 | 2 | 1 | 10 | 0 | 10 | 0 | 17 | 0 | 9
+INPUTS | 8 | WR  | A15  | clk<0>  | ramstart  | ramacc  | RD  | clk<1>  | CCLK.PIN
+INPUTMC | 4 | 1 | 9 | 0 | 8 | 0 | 3 | 1 | 8
+INPUTP | 4 | 3 | 2 | 4 | 9
+EQ | 4 | 
+   ramstart.T = !WR & A15 & !clk<0> & !ramstart & !ramacc
+	# !RD & A15 & !clk<0> & !ramstart & !ramacc
+	# clk<0> & !clk<1> & ramstart & ramacc & !CCLK.PIN;
+   ramstart.CLK = pclk;	// GCK
+GLOBALS | 1 | 2 | pclk
+
+MACROCELL | 0 | 3 | ramacc
+ATTRIBUTES | 4358912 | 0
+OUTPUTMC | 8 | 0 | 4 | 0 | 8 | 0 | 3 | 0 | 2 | 1 | 10 | 0 | 10 | 0 | 17 | 0 | 9
+INPUTS | 7 | WR  | RD  | ramstart  | ramacc  | clk<0>  | clk<1>  | CCLK.PIN
+INPUTMC | 4 | 0 | 8 | 0 | 3 | 1 | 9 | 1 | 8
+INPUTP | 3 | 3 | 4 | 9
+EQ | 3 | 
+   ramacc.T = WR & RD & ramstart & !ramacc
+	# clk<0> & clk<1> & !ramstart & ramacc & !CCLK.PIN;
+   ramacc.CLK = pclk;	// GCK
+GLOBALS | 1 | 2 | pclk
+
+MACROCELL | 0 | 2 | rw
+ATTRIBUTES | 4358912 | 0
+OUTPUTMC | 4 | 0 | 2 | 0 | 10 | 0 | 17 | 0 | 9
+INPUTS | 7 | WR  | A15  | clk<0>  | ramstart  | ramacc  | rw  | RD
+INPUTMC | 4 | 1 | 9 | 0 | 8 | 0 | 3 | 0 | 2
+INPUTP | 3 | 3 | 2 | 4
+EQ | 4 | 
+   rw.T = !WR & A15 & !clk<0> & !ramstart & !ramacc & rw
+	# WR & !RD & A15 & !clk<0> & !ramstart & !ramacc & 
+	!rw;
+   rw.CLK = pclk;	// GCK
+GLOBALS | 1 | 2 | pclk
+
+MACROCELL | 1 | 17 | I_CHAROE
+ATTRIBUTES | 4358912 | 0
+OUTPUTMC | 2 | 1 | 17 | 0 | 15
+INPUTS | 4 | clk<0>  | clk<1>  | I_CHAROE  | CCLK.PIN
+INPUTMC | 3 | 1 | 9 | 1 | 8 | 1 | 17
+INPUTP | 1 | 9
+EQ | 3 | 
+   I_CHAROE.T = clk<0> & clk<1> & I_CHAROE & CCLK.PIN
+	# clk<0> & !clk<1> & !I_CHAROE & !CCLK.PIN;
+   I_CHAROE.CLK = pclk;	// GCK
+GLOBALS | 1 | 2 | pclk
+
+MACROCELL | 1 | 12 | I_CRTCOE
+ATTRIBUTES | 4358912 | 0
+OUTPUTMC | 2 | 1 | 12 | 0 | 12
+INPUTS | 4 | clk<0>  | clk<1>  | I_CRTCOE  | CCLK.PIN
+INPUTMC | 3 | 1 | 9 | 1 | 8 | 1 | 12
+INPUTP | 1 | 9
+EQ | 3 | 
+   I_CRTCOE.T = clk<0> & clk<1> & I_CRTCOE & !CCLK.PIN
+	# clk<0> & clk<1> & !I_CRTCOE & CCLK.PIN;
+   I_CRTCOE.CLK = pclk;	// GCK
+GLOBALS | 1 | 2 | pclk
+
+MACROCELL | 1 | 11 | I_DE
+ATTRIBUTES | 4358912 | 0
+OUTPUTMC | 2 | 0 | 16 | 1 | 11
+INPUTS | 5 | clk<0>  | clk<1>  | I_DE  | DE  | CCLK.PIN
+INPUTMC | 3 | 1 | 9 | 1 | 8 | 1 | 11
+INPUTP | 2 | 11 | 9
+EQ | 3 | 
+   I_DE.T = !clk<0> & !clk<1> & I_DE & DE & CCLK.PIN
+	# !clk<0> & !clk<1> & !I_DE & !DE & CCLK.PIN;
+   I_DE.CLK = pclk;	// GCK
+GLOBALS | 1 | 2 | pclk
+
+MACROCELL | 1 | 10 | I_OE_ADR
+ATTRIBUTES | 4358912 | 0
+OUTPUTMC | 2 | 1 | 10 | 1 | 16
+INPUTS | 6 | clk<0>  | clk<1>  | I_OE_ADR  | ramstart  | ramacc  | CCLK.PIN
+INPUTMC | 5 | 1 | 9 | 1 | 8 | 1 | 10 | 0 | 8 | 0 | 3
+INPUTP | 1 | 9
+EQ | 4 | 
+   I_OE_ADR.T = clk<0> & clk<1> & !I_OE_ADR & !CCLK.PIN
+	# clk<0> & !clk<1> & ramstart & ramacc & I_OE_ADR & 
+	!CCLK.PIN;
+   I_OE_ADR.CLK = pclk;	// GCK
+GLOBALS | 1 | 2 | pclk
+
+MACROCELL | 0 | 10 | I_OE_DAT
+ATTRIBUTES | 4358912 | 0
+OUTPUTMC | 2 | 0 | 10 | 1 | 14
+INPUTS | 7 | clk<0>  | clk<1>  | I_OE_DAT  | ramstart  | ramacc  | rw  | CCLK.PIN
+INPUTMC | 6 | 1 | 9 | 1 | 8 | 0 | 10 | 0 | 8 | 0 | 3 | 0 | 2
+INPUTP | 1 | 9
+EQ | 6 | 
+   I_OE_DAT.T = clk<0> & clk<1> & !I_OE_DAT & !CCLK.PIN
+	# clk<0> & ramstart & ramacc & rw & !I_OE_DAT & 
+	!CCLK.PIN
+	# clk<0> & !clk<1> & ramstart & ramacc & !rw & 
+	I_OE_DAT & !CCLK.PIN;
+   I_OE_DAT.CLK = pclk;	// GCK
+GLOBALS | 1 | 2 | pclk
+
+MACROCELL | 0 | 17 | I_OE_RAM
+ATTRIBUTES | 4358912 | 0
+OUTPUTMC | 2 | 0 | 17 | 1 | 13
+INPUTS | 7 | clk<0>  | clk<1>  | I_OE_RAM  | ramstart  | ramacc  | rw  | CCLK.PIN
+INPUTMC | 6 | 1 | 9 | 1 | 8 | 0 | 17 | 0 | 8 | 0 | 3 | 0 | 2
+INPUTP | 1 | 9
+EQ | 8 | 
+   I_OE_RAM.T = clk<0> & clk<1> & I_OE_RAM & !CCLK.PIN
+	# clk<0> & !clk<1> & ramstart & ramacc & !I_OE_RAM & 
+	!CCLK.PIN
+	# clk<1> & !ramstart & ramacc & rw & I_OE_RAM & 
+	!CCLK.PIN
+	# !clk<0> & clk<1> & !ramstart & ramacc & !rw & 
+	!I_OE_RAM & !CCLK.PIN;
+   I_OE_RAM.CLK = pclk;	// GCK
+GLOBALS | 1 | 2 | pclk
+
+MACROCELL | 0 | 9 | I_WE_RAM
+ATTRIBUTES | 4358912 | 0
+OUTPUTMC | 2 | 0 | 9 | 0 | 13
+INPUTS | 7 | clk<0>  | clk<1>  | I_WE_RAM  | ramstart  | ramacc  | rw  | CCLK.PIN
+INPUTMC | 6 | 1 | 9 | 1 | 8 | 0 | 9 | 0 | 8 | 0 | 3 | 0 | 2
+INPUTP | 1 | 9
+EQ | 6 | 
+   I_WE_RAM.T = clk<0> & clk<1> & !I_WE_RAM & !CCLK.PIN
+	# clk<1> & !ramstart & ramacc & rw & !I_WE_RAM & 
+	!CCLK.PIN
+	# !clk<0> & clk<1> & !ramstart & ramacc & !rw & 
+	I_WE_RAM & !CCLK.PIN;
+   I_WE_RAM.CLK = pclk;	// GCK
+GLOBALS | 1 | 2 | pclk
+
+MACROCELL | 0 | 15 | CHAROE_OBUF
+ATTRIBUTES | 396034 | 0
+INPUTS | 2 | I_CHAROE  | T0
+INPUTMC | 1 | 1 | 17
+INPUTP | 1 | 29
+EQ | 1 | 
+   !CHAROE = !I_CHAROE & !T0;
+
+MACROCELL | 0 | 12 | CRTCOE_OBUF
+ATTRIBUTES | 396034 | 0
+INPUTS | 2 | I_CRTCOE  | T0
+INPUTMC | 1 | 1 | 12
+INPUTP | 1 | 29
+EQ | 1 | 
+   !CRTCOE = !I_CRTCOE & !T0;
+
+MACROCELL | 1 | 13 | OE_RAM_OBUF
+ATTRIBUTES | 396034 | 0
+INPUTS | 2 | I_OE_RAM  | T0
+INPUTMC | 1 | 0 | 17
+INPUTP | 1 | 29
+EQ | 1 | 
+   !OE_RAM = !I_OE_RAM & !T0;
+
+MACROCELL | 0 | 13 | WE_RAM_OBUF
+ATTRIBUTES | 396034 | 0
+INPUTS | 2 | I_WE_RAM  | T0
+INPUTMC | 1 | 0 | 9
+INPUTP | 1 | 29
+EQ | 1 | 
+   !WE_RAM = !I_WE_RAM & !T0;
 
 MACROCELL | 0 | 5 | LOADAD_OBUF
 ATTRIBUTES | 396034 | 0
@@ -36,12 +302,21 @@ EQ | 2 |
    LOADAD = !WR & A15
 	# !RD & A15;
 
-MACROCELL | 1 | 0 | HSYNC_OBUF
+MACROCELL | 1 | 16 | OE_ADR_OBUF
 ATTRIBUTES | 396034 | 0
-INPUTS | 1 | HS
-INPUTP | 1 | 12
+INPUTS | 2 | I_OE_ADR  | T0
+INPUTMC | 1 | 1 | 10
+INPUTP | 1 | 29
 EQ | 1 | 
-   HSYNC = !HS;
+   OE_ADR = I_OE_ADR & !T0;
+
+MACROCELL | 1 | 14 | OE_DAT_OBUF
+ATTRIBUTES | 396034 | 0
+INPUTS | 2 | I_OE_DAT  | T0
+INPUTMC | 1 | 0 | 10
+INPUTP | 1 | 29
+EQ | 1 | 
+   OE_DAT = I_OE_DAT & !T0;
 
 MACROCELL | 1 | 3 | PIXCLKO_OBUF$BUF0
 ATTRIBUTES | 396034 | 0
@@ -50,21 +325,29 @@ INPUTP | 1 | 5
 EQ | 1 | 
    PIXCLKO = pclk;
 
-MACROCELL | 1 | 1 | VSYNC_OBUF
-ATTRIBUTES | 396034 | 0
-INPUTS | 1 | VS
-INPUTP | 1 | 13
-EQ | 1 | 
-   VSYNC = !VS;
-
-PIN | pclk | 4160 | 0 | N/A | 5 | 4 | 1 | 3 | 0 | 7 | 0 | 17 | 0 | 16
-PIN | WR | 64 | 0 | N/A | 3 | 1 | 0 | 5
-PIN | RD | 64 | 0 | N/A | 4 | 1 | 0 | 5
-PIN | A15 | 64 | 0 | N/A | 2 | 1 | 0 | 5
+PIN | WR | 64 | 0 | N/A | 3 | 4 | 0 | 8 | 0 | 3 | 0 | 2 | 0 | 5
+PIN | RD | 64 | 0 | N/A | 4 | 4 | 0 | 8 | 0 | 3 | 0 | 2 | 0 | 5
+PIN | A15 | 64 | 0 | N/A | 2 | 3 | 0 | 8 | 0 | 2 | 0 | 5
+PIN | pclk | 4160 | 0 | N/A | 5 | 23 | 1 | 3 | 0 | 7 | 0 | 4 | 0 | 16 | 1 | 0 | 1 | 2 | 0 | 14 | 1 | 15 | 0 | 6 | 0 | 11 | 1 | 1 | 1 | 9 | 1 | 8 | 0 | 8 | 0 | 3 | 0 | 2 | 1 | 17 | 1 | 12 | 1 | 11 | 1 | 10 | 0 | 10 | 0 | 17 | 0 | 9
 PIN | HS | 64 | 0 | N/A | 12 | 1 | 1 | 0
 PIN | VS | 64 | 0 | N/A | 13 | 1 | 1 | 1
-PIN | CCLK | 536871040 | 0 | N/A | 9
+PIN | DE | 64 | 0 | N/A | 11 | 1 | 1 | 11
+PIN | T0 | 64 | 0 | N/A | 29 | 6 | 0 | 15 | 0 | 12 | 1 | 13 | 0 | 13 | 1 | 16 | 1 | 14
+PIN | CHAROE | 536871040 | 0 | N/A | 22
+PIN | CRTCOE | 536871040 | 0 | N/A | 18
+PIN | OE_RAM | 536871040 | 0 | N/A | 28
+PIN | WE_RAM | 536871040 | 0 | N/A | 19
 PIN | LOADAD | 536871040 | 0 | N/A | 8
-PIN | HSYNC | 536871040 | 0 | N/A | 1
+PIN | OE_ADR | 536871040 | 0 | N/A | 25
+PIN | OE_DAT | 536871040 | 0 | N/A | 27
 PIN | PIXCLKO | 536871040 | 0 | N/A | 43
-PIN | VSYNC | 536871040 | 0 | N/A | 44
+PIN | CCLK | 536870976 | 0 | N/A | 9 | 18 | 0 | 4 | 0 | 9 | 0 | 17 | 0 | 10 | 1 | 10 | 1 | 11 | 1 | 12 | 1 | 17 | 0 | 3 | 0 | 8 | 1 | 1 | 0 | 11 | 0 | 6 | 1 | 15 | 0 | 14 | 1 | 2 | 1 | 0 | 0 | 16
+PIN | LOADDAT | 536870976 | 0 | N/A | 6 | 1 | 0 | 4
+PIN | DISPEN | 536870976 | 0 | N/A | 24 | 1 | 0 | 16
+PIN | HSYNC | 536870976 | 0 | N/A | 1 | 1 | 1 | 0
+PIN | LCHRLINE | 536870976 | 0 | N/A | 42 | 1 | 1 | 2
+PIN | LOADCHR | 536870976 | 0 | N/A | 20 | 1 | 0 | 14
+PIN | LOADCOLB | 536870976 | 0 | N/A | 26 | 1 | 1 | 15
+PIN | LOADCOL | 536870976 | 0 | N/A | 7 | 1 | 0 | 6
+PIN | LOADSR | 536870976 | 0 | N/A | 14 | 1 | 0 | 11
+PIN | VSYNC | 536870976 | 0 | N/A | 44 | 1 | 1 | 1

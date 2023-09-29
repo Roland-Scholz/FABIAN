@@ -1,8 +1,8 @@
 INTSTYLE=impact
-INFILE=G:\github\FABIAN\VGA\VT100_CPLD\impact.xsl
-OUTFILE=G:\github\FABIAN\VGA\VT100_CPLD\impact.xsl
-FAMILY=None
-PART=None
-WORKINGDIR=G:\github\FABIAN\VGA\VT100_CPLD
+INFILE=C:\github\fabian\VGA\VT100_CPLD\impact.xsl
+OUTFILE=C:\github\fabian\VGA\VT100_CPLD\impact.xsl
+FAMILY=Single
+PART=Single
+WORKINGDIR=C:\github\fabian\VGA\VT100_CPLD
 LICENSE=iMPACT
 USER_INFO=iMPACT

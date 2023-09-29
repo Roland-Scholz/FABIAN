@@ -14,7 +14,7 @@ SYRW		EQU	P3.5
 dpl		EQU	DP0L
 dph		EQU	DP0H
 
-LOCAT		EQU	02000h
+LOCAT		EQU	06000h
 		
 		ORG    LOCAT
 		DB     0A5H,0E5H,0E0H,0A5H	;SIGNITURE BYTES
@@ -32,59 +32,207 @@ LOCAT		EQU	02000h
 ;
 ;
 ;		
-START:		mov	A, #0AAh
-		mov	dptr, #0FF00h
-		movx	@dptr, A
+START:		;sjmp	START1
+		clr	T1			;E 6845 = low
+		clr	T0
+		clr	INT0			;charset 0
+		clr	INT1			;screen 0
+		mov	AUXR1, #0		
+;		call	init6845
+;		call	copyFont
 		
 
-		ret
-;
-;
-;		;setb	SYCS			;deselect
-		clr	SYRS			;address
-		clr	SYPHI2			;enable
-		;clr	SYRW			;write
+;START2:		inc	A
+;		mov	DPTR, #8000h
+;		movx	@DPTR, A
+;		cjne	A, P1, ERROR1
+;		inc	A
+;		inc	DPTR
+;		movx	@DPTR, A
+;		cjne	A, P1, ERROR1
+;		sjmp	START2
 
-		mov	dptr, #SYDATA
+;ERROR1:		call	PHEX
+;		mov	A, P1
+;		call	PHEX
+;		ret
+;
+;
+;
+START1:		clr	T1			;E 6845 = low
+		clr	INT0			;charset 0
+		clr	INT1			;screen 0
+		mov	AUXR1, #0
+		
+		call	init6845
+		;call	CIN
+		call	copyFont
+		ljmp	02000h
+		
+		;call	CIN
+		call	testScreen
+		call	dumpRam
+		;call	CIN
+		;setb	INT0
+		;call	CIN
+		
+		
+regs:		call	CIN
+		cjne	A, #13, regs4
+		call	testram
+		ret
+
+regs4:		clr	C
+		subb	A, #'0'
+		mov	R0, A
+		call	PHEX
+		mov	DPTR, #SYDATA
+		movc	A, @A+DPTR
+		mov	R1, A
+		call	PHEX
+		
+regs3:		call	CIN
+		cjne	A, #'-',regs1
+		dec	R1
+		ajmp	regsset
+regs1:		cjne	A, #'+', regs2
+		inc	R1
+		ajmp	regsset
+regs2:		cjne	A, #'x', regs3
+		ljmp	regs	
+		
+regsset:	mov	A, #LOW SYDATA
+		add	A, R0
+		mov	DP0L, A
+		mov	A, #HIGH SYDATA
+		addc	A, #0
+		mov	DP0H, A
+		mov	A, R1
+		call	PHEX
+		movx	@DPTR, A
+		
+		setb	T0
+		mov	DPTR, #8000h
+		mov	A, R0
+		movx	@DPTR, A
+		setb	T1
+		clr	T1
+		inc	DPTR
+		mov	A, R1
+		movx	@DPTR, A
+		setb	T1
+		clr	T1
+		clr	T0
+		ajmp	regs3
+					
+		ret
+		
+		
+dumpRam:	mov	DPTR, #8000h
+dumpRam2:	movx	A, @DPTR
+		mov	A, P1
+		call	PHEX
+		call	SPACE
+		inc	DPTR
+		mov	A, DP0L
+		anl	A, #0fh
+		cjne	A, #0, dumpRam1
+		call	newline
+dumpram1:	mov	A, DP0H
+		cjne	A, #81h, dumpram2
+		ret
+		
+testScreen:	mov	DPTR, #8000h
+		mov	R0, #10
+
+testScreen3:	mov	R1, #80
+		mov	R2, #'0'		
+testScreen1:	mov	A, R2
+		movx	@DPTR, A
+		inc	DPTR
+		mov	A, #70h
+		;anl	A, #3
+		;orl	A, #0f0h
+		;inc	A
+		movx	@DPTR, A
+		inc	DPTR
+		inc	R2
+		cjne	R2, #'9'+1, testScreen2
+		mov	R2, #'0'
+testScreen2:	djnz	R1, testScreen1
+		djnz	R0, testScreen3		
+		ret
+;	
+;
+;	
+copyFont:	
+		mov	DPTR, #7000h
+		inc	AUXR1
+		mov	DPTR, #(8000h+2000h) ;+4000h+1000h
+		inc	AUXR1
+
+copyFont1:	clr	A
+		movc	A, @A+DPTR
+		inc	DPTR
+		inc	AUXR1
+		movx	@DPTR, A
+		inc	DPTR
+		inc	AUXR1
+		
+		mov	A, DP0H
+		;call	PHEX
+		cjne	A, #80h, copyFont1
+		
+		mov	A, AUXR1
+		call	PHEX
+		call	newline
+		ret
+		
+		
+
+;
+;
+;
+init6845:	setb	T0			;enable ADR + DAT
+		mov	DPTR, #8000h
+		inc	AUXR1
+		mov	DPTR, #SYDATA
+		inc	AUXR1
 		mov	R0, #0
-		;clr	SYCS			; enable
 		
 setregs:	
 ;		call	PHEX
 ;		call	SPACE
 		
-		mov	DATABUS, R0		; send address
-		clr	SYRS			; address register
-		setb	SYPHI2			; clock high
-		clr	SYPHI2			; clock low
-		
-		mov	A, R0
+		mov	A, R0			; send address
+		call	PHEX
+		movx	@DPTR,A			; address register
+		setb	T1			; clock high
+		clr	T1			; clock low
+		inc	DPTR			; data reg
+
+		inc	AUXR1			;data pointer
 		movc	A, @A+DPTR
-		mov	DATABUS, A		; send data
-		setb	SYRS			; register data
-		setb	SYPHI2			; clock high
-		clr	SYPHI2			; clock low
+		call	PHEX
+		inc	AUXR1			; address pointer
+		movx	@DPTR, A		; send data
+		setb	T1			; clock high
+		clr	T1			; clock low
 		
+
+		call	SPACE
+		inc	DPTR
 		inc	R0
 		cjne	R0, #15, setregs
 		
-		;setb	SYCS
+		clr	T0
+		call	newline
+;		call	CIN
+;		
+;		setb	INT0
+;		call	CIN
 		ret
-			
-loop:		inc	A
-		mov	DATABUS, A		; send data
-		setb	SYRS			; register data
-		setb	SYPHI2			; clock high
-		clr	SYPHI2			; clock low
-		acall	time
-		ajmp	loop					
-		
-time:		mov	R0, #0
-		mov	R1, #0
-time1:		djnz	r0, time1
-		djnz	r1, time1
-		ret
-			
+
 ;
 ; 25,333 Mhz / 8 = 3,166 Mhz
 ;
@@ -109,20 +257,20 @@ time1:		djnz	r0, time1
 ;Back porch	35	1.1122144985104
 ;Whole frame	449	14.268123138034
 ;
-SYDATA:		DB	99		;R0 Horizontal Total - 1
+SYDATA:		DB	100		;R0 Horizontal Total - 1
 		DB	80		;R1 Horizontal Displayed	
-		DB	82		;R2 Horizontal Sync Position
-		DB	0Ch		;R3 VSYNC & HSYNC width
-		DB	27		;R4 Vertical total - 1			;27	32
-		DB	2		;R5 Vertical Adjust
+		DB	84		;R2 Horizontal Sync Position
+		DB	0ch		;R3 VSYNC & HSYNC width
+		DB	28		;R4 Vertical total - 1			;27	32
+		DB	5		;R5 Vertical Adjust
 		DB	25		;R6 Vertical Displayed			;25	30
-		DB	25			;R7 Vertical Sync Position		;25	32
+		DB	27		;R7 Vertical Sync Position		;25	32
 		DB	00h		;R8 Mode Control
 		DB	15		;R9 Scan Lines - 1 (character lines)
 		DB	0		;R10 Cursor Start
 		DB	0		;R11 Cursor End
 		DB	000h		;R12 Display Start High
-		DB	002h		;R13 Display Start Low
+		DB	000h		;R13 Display Start Low
 		DB	0		;R14 Cursor Pos High
 		DB	0		;R15 Cursor Pos Low
 		DB	0		;R16 Light Pen High
@@ -131,6 +279,99 @@ SYDATA:		DB	99		;R0 Horizontal Total - 1
 		DB	0		;R19 Update Address Reg Low
 					;R31 Dummy Register
 				 
+
+testram:		
+		mov	R0, #00h
+		mov	R1, #00h
+		mov	R2, #80h
+		
+testloop:	call	writepage
+		mov	R4, A
+testloop1:	call	readpage
+		cjne	A, 4, testloop1
+		call	newline
+
+		inc	R1
+;		inc	R2
+		cjne	R1, #20h, testloop	
+		ajmp	testram
+				
+error:		ret
+		
+		
+				
+writepage:	mov	A, R1
+		call	PHEX
+		mov	A, R0
+		call	PHEX
+		call	space
+		mov	A, R2
+		call	PHEX
+		call	space
+			
+		mov	R3, #00h
+tp0:		clr	A
+		mov	DP0L, R0
+		mov	DP0H, R1
+		movc	A, @A+DPTR
+;		push	ACC
+;		call	PHEX
+;		call	SPACE
+;		pop	ACC
+		mov	DP0H, R2
+		movx	@dptr, A
+		add	A, R3
+		mov	R3, A
+		djnz	R0, tp0
+		
+;		call	newline
+		mov	A, R3
+		call	PHEX
+		ret
+		
+		
+readpage:	mov	R3, #00h
+ 		mov	DP0H, R2
+tp1: 		mov	DP0L, R0
+ 		
+		movx	A, @dptr
+;		nop
+;		nop
+		mov	A, P1
+;		push	ACC
+;		call	PHEX
+;		call	SPACE
+;		pop	ACC
+		add	A, R3
+		mov	R3, A
+		djnz	R0, tp1
+	
+		call	space
+		mov	A, R3
+		call	PHEX
+		
+		ret
+;
+;
+;		;setb	SYCS			;deselect
+		clr	SYRS			;address
+		clr	SYPHI2			;enable
+		;clr	SYRW			;write
+			
+loop:		inc	A
+		mov	DATABUS, A		; send data
+		setb	SYRS			; register data
+		setb	SYPHI2			; clock high
+		clr	SYPHI2			; clock low
+		acall	time
+		ajmp	loop					
+		
+time:		mov	R0, #0
+		mov	R1, #0
+time1:		djnz	r0, time1
+		djnz	r1, time1
+		ret
+			
 		
 ;LOOP:		call	CIN
 ;		call	COUT

@@ -1,7 +1,7 @@
 Release 8.1i - Fit P.20131013
 Copyright(c) 1995-2003 Xilinx Inc. All rights reserved
 
- 6- 2-2023  2:50PM
+ 9-24-2023 11:05PM
 
 NOTE: This file is designed to be imported into a spreadsheet program
 such as Microsoft Excel for viewing, printing and sorting. The pipe '|'
@@ -18,35 +18,35 @@ Pinout by Pin Number:
 
 -----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
 Pin Number|Signal Name|Pin Usage|Pin Name|Direction|IO Standard|IO Bank Number|{blank}|Slew Rate|Termination|{blank}|Voltage|Constraint|
-P1|HSYNC|O|I/O|OUTPUT|||||||||
+P1|HSYNC|I/O|I/O|BIDIR|||||||||
 P2|A15|I|I/O|INPUT|||||||||
 P3|WR|I|I/O|INPUT|||||||||
 P4|RD|I|I/O|INPUT|||||||||
 P5|pclk|GCK/I|I/O/GCK1||||||||||
-P6|TIE||I/O/GCK2||||||||||
-P7|TIE||I/O/GCK3||||||||||
+P6|LOADDAT|I/O|I/O/GCK2|BIDIR|||||||||
+P7|LOADCOL|I/O|I/O/GCK3|BIDIR|||||||||
 P8|LOADAD|O|I/O|OUTPUT|||||||||
-P9|CCLK|O|I/O|OUTPUT|||||||||
+P9|CCLK|I/O|I/O|BIDIR|||||||||
 P10|GND||GND||||||||||
-P11|TIE||I/O||||||||||
+P11|DE|I|I/O|INPUT|||||||||
 P12|HS|I|I/O|INPUT|||||||||
 P13|VS|I|I/O|INPUT|||||||||
-P14|TIE||I/O||||||||||
+P14|LOADSR|I/O|I/O|BIDIR|||||||||
 P15|TDI||TDI||||||||||
 P16|TMS||TMS||||||||||
 P17|TCK||TCK||||||||||
-P18|TIE||I/O||||||||||
-P19|TIE||I/O||||||||||
-P20|TIE||I/O||||||||||
+P18|CRTCOE|O|I/O|OUTPUT|||||||||
+P19|WE_RAM|O|I/O|OUTPUT|||||||||
+P20|LOADCHR|I/O|I/O|BIDIR|||||||||
 P21|VCC||VCCINT||||||||||
-P22|TIE||I/O||||||||||
+P22|CHAROE|O|I/O|OUTPUT|||||||||
 P23|GND||GND||||||||||
-P24|TIE||I/O||||||||||
-P25|TIE||I/O||||||||||
-P26|TIE||I/O||||||||||
-P27|TIE||I/O||||||||||
-P28|TIE||I/O||||||||||
-P29|TIE||I/O||||||||||
+P24|DISPEN|I/O|I/O|BIDIR|||||||||
+P25|OE_ADR|O|I/O|OUTPUT|||||||||
+P26|LOADCOLB|I/O|I/O|BIDIR|||||||||
+P27|OE_DAT|O|I/O|OUTPUT|||||||||
+P28|OE_RAM|O|I/O|OUTPUT|||||||||
+P29|T0|I|I/O|INPUT|||||||||
 P30|TDO||TDO||||||||||
 P31|GND||GND||||||||||
 P32|VCC||VCCIO||||||||||
@@ -59,9 +59,9 @@ P38|TIE||I/O||||||||||
 P39|TIE||I/O/GSR||||||||||
 P40|TIE||I/O/GTS2||||||||||
 P41|VCC||VCCINT||||||||||
-P42|TIE||I/O/GTS1||||||||||
+P42|LCHRLINE|I/O|I/O/GTS1|BIDIR|||||||||
 P43|PIXCLKO|O|I/O|OUTPUT|||||||||
-P44|VSYNC|O|I/O|OUTPUT|||||||||
+P44|VSYNC|I/O|I/O|BIDIR|||||||||
 
 To preserve the pinout above for future design iterations in
 Project Navigator simply execute the (Lock Pins) process

@@ -9,21 +9,124 @@ FTCPE_CCLK: FTCPE port map (CCLK,CCLK_T,pclk,'0','0');
 <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CCLK_T <= (clk(0) AND clk(1));
 </td></tr><tr><td>
 </td></tr><tr><td>
-HSYNC <= NOT HS;
+CHAROE <= NOT ((NOT I_CHAROE AND NOT T0));
+</td></tr><tr><td>
+</td></tr><tr><td>
+CRTCOE <= NOT ((NOT I_CRTCOE AND NOT T0));
+</td></tr><tr><td>
+FTCPE_DISPEN: FTCPE port map (DISPEN,DISPEN_T,pclk,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DISPEN_T <= ((NOT clk(0) AND NOT clk(1) AND I_DE AND CCLK.PIN AND NOT DISPEN.PIN)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT clk(0) AND NOT clk(1) AND NOT I_DE AND CCLK.PIN AND DISPEN.PIN));
+</td></tr><tr><td>
+FTCPE_HSYNC: FTCPE port map (HSYNC,HSYNC_T,pclk,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;HSYNC_T <= ((clk(0) AND clk(1) AND HS AND NOT CCLK.PIN AND HSYNC.PIN)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (clk(0) AND clk(1) AND NOT HS AND NOT CCLK.PIN AND NOT HSYNC.PIN));
+</td></tr><tr><td>
+FTCPE_I_CHAROE: FTCPE port map (I_CHAROE,I_CHAROE_T,pclk,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_CHAROE_T <= ((clk(0) AND clk(1) AND I_CHAROE AND CCLK.PIN)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (clk(0) AND NOT clk(1) AND NOT I_CHAROE AND NOT CCLK.PIN));
+</td></tr><tr><td>
+FTCPE_I_CRTCOE: FTCPE port map (I_CRTCOE,I_CRTCOE_T,pclk,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_CRTCOE_T <= ((clk(0) AND clk(1) AND I_CRTCOE AND NOT CCLK.PIN)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (clk(0) AND clk(1) AND NOT I_CRTCOE AND CCLK.PIN));
+</td></tr><tr><td>
+FTCPE_I_DE: FTCPE port map (I_DE,I_DE_T,pclk,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_DE_T <= ((NOT clk(0) AND NOT clk(1) AND I_DE AND DE AND CCLK.PIN)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT clk(0) AND NOT clk(1) AND NOT I_DE AND NOT DE AND CCLK.PIN));
+</td></tr><tr><td>
+FTCPE_I_OE_ADR: FTCPE port map (I_OE_ADR,I_OE_ADR_T,pclk,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_OE_ADR_T <= ((clk(0) AND clk(1) AND NOT I_OE_ADR AND NOT CCLK.PIN)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (clk(0) AND NOT clk(1) AND ramstart AND ramacc AND I_OE_ADR AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT CCLK.PIN));
+</td></tr><tr><td>
+FTCPE_I_OE_DAT: FTCPE port map (I_OE_DAT,I_OE_DAT_T,pclk,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_OE_DAT_T <= ((clk(0) AND clk(1) AND NOT I_OE_DAT AND NOT CCLK.PIN)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (clk(0) AND ramstart AND ramacc AND rw AND NOT I_OE_DAT AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT CCLK.PIN)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (clk(0) AND NOT clk(1) AND ramstart AND ramacc AND NOT rw AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_OE_DAT AND NOT CCLK.PIN));
+</td></tr><tr><td>
+FTCPE_I_OE_RAM: FTCPE port map (I_OE_RAM,I_OE_RAM_T,pclk,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_OE_RAM_T <= ((clk(0) AND clk(1) AND I_OE_RAM AND NOT CCLK.PIN)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (clk(0) AND NOT clk(1) AND ramstart AND ramacc AND NOT I_OE_RAM AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT CCLK.PIN)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (clk(1) AND NOT ramstart AND ramacc AND rw AND I_OE_RAM AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT CCLK.PIN)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT clk(0) AND clk(1) AND NOT ramstart AND ramacc AND NOT rw AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT I_OE_RAM AND NOT CCLK.PIN));
+</td></tr><tr><td>
+FTCPE_I_WE_RAM: FTCPE port map (I_WE_RAM,I_WE_RAM_T,pclk,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I_WE_RAM_T <= ((clk(0) AND clk(1) AND NOT I_WE_RAM AND NOT CCLK.PIN)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (clk(1) AND NOT ramstart AND ramacc AND rw AND NOT I_WE_RAM AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT CCLK.PIN)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT clk(0) AND clk(1) AND NOT ramstart AND ramacc AND NOT rw AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	I_WE_RAM AND NOT CCLK.PIN));
+</td></tr><tr><td>
+FTCPE_LCHRLINE: FTCPE port map (LCHRLINE,LCHRLINE_T,pclk,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LCHRLINE_T <= ((clk(0) AND clk(1) AND CCLK.PIN AND NOT LCHRLINE.PIN)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (clk(0) AND NOT clk(1) AND NOT CCLK.PIN AND LCHRLINE.PIN));
 </td></tr><tr><td>
 </td></tr><tr><td>
 LOADAD <= ((NOT WR AND A15)
 <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT RD AND A15));
 </td></tr><tr><td>
+FTCPE_LOADCHR: FTCPE port map (LOADCHR,LOADCHR_T,pclk,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOADCHR_T <= ((clk(0) AND clk(1) AND NOT CCLK.PIN AND NOT LOADCHR.PIN)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (clk(0) AND NOT clk(1) AND CCLK.PIN AND LOADCHR.PIN));
+</td></tr><tr><td>
+FTCPE_LOADCOL: FTCPE port map (LOADCOL,LOADCOL_T,pclk,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOADCOL_T <= ((clk(0) AND clk(1) AND CCLK.PIN AND LOADCOL.PIN)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (clk(0) AND NOT clk(1) AND CCLK.PIN AND NOT LOADCOL.PIN));
+</td></tr><tr><td>
+FTCPE_LOADCOLB: FTCPE port map (LOADCOLB,LOADCOLB_T,pclk,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOADCOLB_T <= ((clk(0) AND NOT clk(1) AND CCLK.PIN AND LOADCOLB.PIN)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT clk(0) AND NOT clk(1) AND CCLK.PIN AND NOT LOADCOLB.PIN));
+</td></tr><tr><td>
+FTCPE_LOADDAT: FTCPE port map (LOADDAT,LOADDAT_T,pclk,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOADDAT_T <= ((clk(0) AND clk(1) AND NOT CCLK.PIN AND LOADDAT.PIN)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT clk(0) AND clk(1) AND NOT ramstart AND ramacc AND NOT CCLK.PIN AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT LOADDAT.PIN));
+</td></tr><tr><td>
+FTCPE_LOADSR: FTCPE port map (LOADSR,LOADSR_T,pclk,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LOADSR_T <= ((clk(0) AND clk(1) AND NOT CCLK.PIN AND NOT LOADSR.PIN)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT clk(0) AND NOT clk(1) AND CCLK.PIN AND LOADSR.PIN));
+</td></tr><tr><td>
+</td></tr><tr><td>
+OE_ADR <= (I_OE_ADR AND NOT T0);
+</td></tr><tr><td>
+</td></tr><tr><td>
+OE_DAT <= (I_OE_DAT AND NOT T0);
+</td></tr><tr><td>
+</td></tr><tr><td>
+OE_RAM <= NOT ((NOT I_OE_RAM AND NOT T0));
+</td></tr><tr><td>
 </td></tr><tr><td>
 PIXCLKO <= pclk;
 </td></tr><tr><td>
+FTCPE_VSYNC: FTCPE port map (VSYNC,VSYNC_T,pclk,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VSYNC_T <= ((clk(0) AND clk(1) AND VS AND NOT CCLK.PIN AND NOT VSYNC.PIN)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (clk(0) AND clk(1) AND NOT VS AND NOT CCLK.PIN AND VSYNC.PIN));
 </td></tr><tr><td>
-VSYNC <= NOT VS;
+</td></tr><tr><td>
+WE_RAM <= NOT ((NOT I_WE_RAM AND NOT T0));
 </td></tr><tr><td>
 FTCPE_clk0: FTCPE port map (clk(0),'1',pclk,'0','0');
 </td></tr><tr><td>
 FTCPE_clk1: FTCPE port map (clk(1),clk(0),pclk,'0','0');
+</td></tr><tr><td>
+FTCPE_ramacc: FTCPE port map (ramacc,ramacc_T,pclk,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ramacc_T <= ((WR AND RD AND ramstart AND NOT ramacc)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (clk(0) AND clk(1) AND NOT ramstart AND ramacc AND NOT CCLK.PIN));
+</td></tr><tr><td>
+FTCPE_ramstart: FTCPE port map (ramstart,ramstart_T,pclk,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ramstart_T <= ((NOT WR AND A15 AND NOT clk(0) AND NOT ramstart AND NOT ramacc)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (NOT RD AND A15 AND NOT clk(0) AND NOT ramstart AND NOT ramacc)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (clk(0) AND NOT clk(1) AND ramstart AND ramacc AND NOT CCLK.PIN));
+</td></tr><tr><td>
+FTCPE_rw: FTCPE port map (rw,rw_T,pclk,'0','0');
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;rw_T <= ((NOT WR AND A15 AND NOT clk(0) AND NOT ramstart AND NOT ramacc AND rw)
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	OR (WR AND NOT RD AND A15 AND NOT clk(0) AND NOT ramstart AND NOT ramacc AND 
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	NOT rw));
 </td></tr><tr><td>
 Register Legend:
 <br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FDCPE (Q,D,C,CLR,PRE); 
