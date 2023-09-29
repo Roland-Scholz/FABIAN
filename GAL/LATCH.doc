@@ -1,0 +1,87 @@
+
+*******************************************************************************
+                                     latch
+*******************************************************************************
+
+CUPL(WM)        5.0a Serial# 60008009
+Device          g16v8ms  Library DLIB-h-40-11
+Created         Wed Sep 06 11:56:24 2023
+Name            latch
+Partno          00 
+Revision        01 
+Date            14.02.2022 
+Designer        Roland 
+Company         Scholz Electronics 
+Assembly        None 
+Location        
+
+===============================================================================
+                            Expanded Product Terms
+===============================================================================
+
+Q0.d  =>
+    D0
+
+Q1.d  =>
+    D1
+
+Q2.d  =>
+    D2
+
+Q3.d  =>
+    D3
+
+Q4.d  =>
+    D4
+
+Q5.d  =>
+    D5
+
+Q6.d  =>
+    D6
+
+Q7.d  =>
+    D7
+
+
+===============================================================================
+                                 Symbol Table
+===============================================================================
+
+Pin Variable                                    Pterms   Max     Min    
+Pol   Name              Ext     Pin     Type     Used   Pterms  Level   
+--- --------            ---     ---     ----    ------  ------  -----   
+
+    D0                          2        V        -       -       -     
+    D1                          3        V        -       -       -     
+    D2                          4        V        -       -       -     
+    D3                          5        V        -       -       -     
+    D4                          6        V        -       -       -     
+    D5                          7        V        -       -       -     
+    D6                          8        V        -       -       -     
+    D7                          9        V        -       -       -     
+    Q0                          19       V        -       -       -     
+    Q0                  d       19       X        1       8       1     
+    Q1                          18       V        -       -       -     
+    Q1                  d       18       X        1       8       1     
+    Q2                          17       V        -       -       -     
+    Q2                  d       17       X        1       8       1     
+    Q3                          16       V        -       -       -     
+    Q3                  d       16       X        1       8       1     
+    Q4                          15       V        -       -       -     
+    Q4                  d       15       X        1       8       1     
+    Q5                          14       V        -       -       -     
+    Q5                  d       14       X        1       8       1     
+    Q6                          13       V        -       -       -     
+    Q6                  d       13       X        1       8       1     
+    Q7                          12       V        -       -       -     
+    Q7                  d       12       X        1       8       1     
+    clk                         1        V        -       -       -     
+    oe                          11       V        -       -       -     
+
+
+LEGEND    D : default variable         F : field      G : group
+          I : intermediate variable    N : node       M : extended node
+          U : undefined                V : variable   X : extended variable
+          T : function
+

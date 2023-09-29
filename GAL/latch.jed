@@ -1,8 +1,8 @@
 
 CUPL(WM)        5.0a  Serial# 60008009
 Device          g16v8ms  Library DLIB-h-40-11
-Created         Wed Sep 06 11:46:03 2023
-Name            fabian
+Created         Wed Sep 06 11:56:24 2023
+Name            latch
 Partno          00 
 Revision        01 
 Date            14.02.2022 
@@ -27,4 +27,4 @@ Location
 *L02144 11111111111111111111111111111111
 *L02176 111111111111111101
 *C28B1
-*AF72
+*AF21

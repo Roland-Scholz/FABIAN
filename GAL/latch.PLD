@@ -1,0 +1,68 @@
+Name     latch;
+PartNo   00 ;
+Date     14.02.2022 ;
+Revision 01 ;
+Designer Roland ;
+Company  Scholz Electronics ;
+Assembly None ;
+Location  ;
+Device   g16v8a;
+
+/*
+**************************************************
+Pin#     Function
+     1     CLK/IN
+     2     IN
+     3     IN
+     4     IN
+     5     IN
+     6     IN
+     7     IN
+     8     IN
+     9     IN
+    10     GND
+    11     OE/IN
+    12     IO
+    13     IO
+    14     IO
+    15     IO
+    16     IO
+    17     IO
+    18     IO
+    19     IO
+    20     VCC
+
+**************************************************
+Device Notes:
+*/
+
+/* *************** INPUT PINS *********************/
+PIN 1	= clk;
+PIN 2	= D0; 
+PIN 3	= D1;
+PIN 4 	= D2; 
+PIN 5	= D3; 
+PIN 6	= D4; 
+PIN 7	= D5;
+PIN 8	= D6;
+PIN 9	= D7;
+
+PIN 11	= oe;
+/* *************** OUTPUT PINS *********************/
+PIN 19	= Q0;
+PIN 18	= Q1; 
+PIN 17	= Q2; 
+PIN 16	= Q3; 
+PIN 15	= Q4;
+PIN 14	= Q5;
+PIN 13	= Q6;
+PIN 12	= Q7;
+
+Q0.D = D0;
+Q1.D = D1;
+Q2.D = D2;
+Q3.D = D3;
+Q4.D = D4;
+Q5.D = D5;
+Q6.D = D6;
+Q7.D = D7;
