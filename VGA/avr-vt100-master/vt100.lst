@@ -1,6 +1,6 @@
                                       1 ;--------------------------------------------------------
                                       2 ; File Created by SDCC : free open source ISO C Compiler 
-                                      3 ; Version 4.3.0 #14184 (MINGW32)
+                                      3 ; Version 4.3.0 #14184 (MINGW64)
                                       4 ;--------------------------------------------------------
                                       5 	.module vt100
                                       6 	.optsdcc -mmcs51 --model-small
@@ -2359,7 +2359,7 @@
       000A02 86 02            [24] 2359 	mov	ar2,@r0
       000A04 08               [12] 2360 	inc	r0
       000A05 86 07            [24] 2361 	mov	ar7,@r0
-                                   2362 ;	c:\program files (x86)\mide-51\sdcc_new\include\ctype.h:62: return ((unsigned char)c >= '0' && (unsigned char)c <= '9');
+                                   2362 ;	c:\program files\sdcc\include\ctype.h:62: return ((unsigned char)c >= '0' && (unsigned char)c <= '9');
       000A07 BA 30 00         [24] 2363 	cjne	r2,#0x30,00139$
       000A0A                       2364 00139$:
       000A0A 92*00            [24] 2365 	mov	b0,c
@@ -2675,7 +2675,7 @@
       000BCA 24 FC            [12] 2675 	add	a,#0xfc
       000BCC F8               [12] 2676 	mov	r0,a
       000BCD 86 04            [24] 2677 	mov	ar4,@r0
-                                   2678 ;	c:\program files (x86)\mide-51\sdcc_new\include\ctype.h:62: return ((unsigned char)c >= '0' && (unsigned char)c <= '9');
+                                   2678 ;	c:\program files\sdcc\include\ctype.h:62: return ((unsigned char)c >= '0' && (unsigned char)c <= '9');
       000BCF BC 30 00         [24] 2679 	cjne	r4,#0x30,00174$
       000BD2                       2680 00174$:
       000BD2 92*00            [24] 2681 	mov	b0,c
@@ -3021,7 +3021,7 @@
       000D9F 24 FC            [12] 3021 	add	a,#0xfc
       000DA1 F8               [12] 3022 	mov	r0,a
       000DA2 86 04            [24] 3023 	mov	ar4,@r0
-                                   3024 ;	c:\program files (x86)\mide-51\sdcc_new\include\ctype.h:62: return ((unsigned char)c >= '0' && (unsigned char)c <= '9');
+                                   3024 ;	c:\program files\sdcc\include\ctype.h:62: return ((unsigned char)c >= '0' && (unsigned char)c <= '9');
       000DA4 BC 30 00         [24] 3025 	cjne	r4,#0x30,00401$
       000DA7                       3026 00401$:
       000DA7 92*00            [24] 3027 	mov	b0,c

@@ -412,33 +412,33 @@ vt100.rel                                 [  ]
 
 Libraries Linked                          [ object file ]
 
-C:\Program Files (x86)\Mide-51\sdcc_new\bin\..\lib\small-stack-auto/mcs51.lib
+C:\Program Files\SDCC\bin\..\lib\small-stack-auto/mcs51.lib
                                           [ crtclear.rel ]
-C:\Program Files (x86)\Mide-51\sdcc_new\bin\..\lib\small-stack-auto/mcs51.lib
+C:\Program Files\SDCC\bin\..\lib\small-stack-auto/mcs51.lib
                                           [ crtxinit.rel ]
-C:\Program Files (x86)\Mide-51\sdcc_new\bin\..\lib\small-stack-auto/libsdcc.lib
+C:\Program Files\SDCC\bin\..\lib\small-stack-auto/libsdcc.lib
                                           [ _gptrput.rel ]
-C:\Program Files (x86)\Mide-51\sdcc_new\bin\..\lib\small-stack-auto/libint.lib
+C:\Program Files\SDCC\bin\..\lib\small-stack-auto/libint.lib
                                           [ _mulint.rel ]
-C:\Program Files (x86)\Mide-51\sdcc_new\bin\..\lib\small-stack-auto/mcs51.lib
+C:\Program Files\SDCC\bin\..\lib\small-stack-auto/mcs51.lib
                                           [ crtxclear.rel ]
-C:\Program Files (x86)\Mide-51\sdcc_new\bin\..\lib\small-stack-auto/libsdcc.lib
+C:\Program Files\SDCC\bin\..\lib\small-stack-auto/libsdcc.lib
                                           [ _bp.rel ]
-C:\Program Files (x86)\Mide-51\sdcc_new\bin\..\lib\small-stack-auto/mcs51.lib
+C:\Program Files\SDCC\bin\..\lib\small-stack-auto/mcs51.lib
                                           [ crtpagesfr.rel ]
-C:\Program Files (x86)\Mide-51\sdcc_new\bin\..\lib\small-stack-auto/mcs51.lib
+C:\Program Files\SDCC\bin\..\lib\small-stack-auto/mcs51.lib
                                           [ crtstart.rel ]
-C:\Program Files (x86)\Mide-51\sdcc_new\bin\..\lib\small-stack-auto/libsdcc.lib
+C:\Program Files\SDCC\bin\..\lib\small-stack-auto/libsdcc.lib
                                           [ _gptrget.rel ]
-C:\Program Files (x86)\Mide-51\sdcc_new\bin\..\lib\small-stack-auto/libint.lib
+C:\Program Files\SDCC\bin\..\lib\small-stack-auto/libint.lib
                                           [ _modsint.rel ]
-C:\Program Files (x86)\Mide-51\sdcc_new\bin\..\lib\small-stack-auto/libint.lib
+C:\Program Files\SDCC\bin\..\lib\small-stack-auto/libint.lib
                                           [ _moduint.rel ]
-C:\Program Files (x86)\Mide-51\sdcc_new\bin\..\lib\small-stack-auto/libint.lib
+C:\Program Files\SDCC\bin\..\lib\small-stack-auto/libint.lib
                                           [ _divsint.rel ]
-C:\Program Files (x86)\Mide-51\sdcc_new\bin\..\lib\small-stack-auto/libint.lib
+C:\Program Files\SDCC\bin\..\lib\small-stack-auto/libint.lib
                                           [ _divuint.rel ]
-C:\Program Files (x86)\Mide-51\sdcc_new\bin\..\lib\small-stack-auto/libsdcc.lib
+C:\Program Files\SDCC\bin\..\lib\small-stack-auto/libsdcc.lib
                                           [ _startup.rel ]
 
 ASxxxx Linker V03.00/V05.40 + sdld,  page 19.

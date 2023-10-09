@@ -1,6 +1,6 @@
 ;--------------------------------------------------------
 ; File Created by SDCC : free open source ISO C Compiler 
-; Version 4.3.0 #14184 (MINGW32)
+; Version 4.3.0 #14184 (MINGW64)
 ;--------------------------------------------------------
 	.module vt100
 	.optsdcc -mmcs51 --model-small
@@ -2359,7 +2359,7 @@ __st_command_arg:
 	mov	ar2,@r0
 	inc	r0
 	mov	ar7,@r0
-;	c:\program files (x86)\mide-51\sdcc_new\include\ctype.h:62: return ((unsigned char)c >= '0' && (unsigned char)c <= '9');
+;	c:\program files\sdcc\include\ctype.h:62: return ((unsigned char)c >= '0' && (unsigned char)c <= '9');
 	cjne	r2,#0x30,00139$
 00139$:
 	mov	b0,c
@@ -2675,7 +2675,7 @@ __st_esc_question:
 	add	a,#0xfc
 	mov	r0,a
 	mov	ar4,@r0
-;	c:\program files (x86)\mide-51\sdcc_new\include\ctype.h:62: return ((unsigned char)c >= '0' && (unsigned char)c <= '9');
+;	c:\program files\sdcc\include\ctype.h:62: return ((unsigned char)c >= '0' && (unsigned char)c <= '9');
 	cjne	r4,#0x30,00174$
 00174$:
 	mov	b0,c
@@ -3021,7 +3021,7 @@ __st_esc_sq_bracket:
 	add	a,#0xfc
 	mov	r0,a
 	mov	ar4,@r0
-;	c:\program files (x86)\mide-51\sdcc_new\include\ctype.h:62: return ((unsigned char)c >= '0' && (unsigned char)c <= '9');
+;	c:\program files\sdcc\include\ctype.h:62: return ((unsigned char)c >= '0' && (unsigned char)c <= '9');
 	cjne	r4,#0x30,00401$
 00401$:
 	mov	b0,c
