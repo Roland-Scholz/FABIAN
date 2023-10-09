@@ -80,9 +80,9 @@ C:   0000205F  s_GSFINAL
 C:   0000205F  s_GSINIT                        
 C:   0000205F  s_GSINIT5                       
 C:   00002062  s_CSEG                          
-C:   00002D43  l_CSEG                          
-C:   00004DA5  s_CONST                         
-C:   00004FAD  s_XINIT                         
+C:   00002D65  l_CSEG                          
+C:   00004DC7  s_CONST                         
+C:   00004FCF  s_XINIT                         
 
 ASxxxx Linker V03.00/V05.40 + sdld,  page 3.
 Hexadecimal  [32-Bits]
@@ -348,7 +348,7 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-CSEG                                00002062    00002D43 =       11587. bytes (REL,CON,CODE)
+CSEG                                00002062    00002D65 =       11621. bytes (REL,CON,CODE)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
@@ -380,26 +380,26 @@ C:   00003E1B  __st_escape                        vt100
 C:   00004485  __st_idle                          vt100
 C:   0000467D  _vt100_init                        vt100
 C:   00004688  _vt100_putc                        vt100
-C:   0000468F  _vt100_puts                        vt100
-C:   000046BA  _spf                               vt100
-C:   000047E4  _main                              vt100
-C:   00004C58  __gptrput                          _gptrput
-C:   00004C73  __mulint                           _mulint
-C:   00004C73  __mulint_dummy                     _mulint
-C:   00004C95  __gptrget                          _gptrget
-C:   00004CB1  __modsint                          _modsint
-C:   00004CEE  __moduint                          _moduint
-C:   00004CF8  __modint                           _moduint
-C:   00004D33  __divsint                          _divsint
-C:   00004D70  __divuint                          _divuint
-C:   00004D7A  __divint                           _divuint
-C:   00004DA1  ___sdcc_external_startup           _startup
+C:   000046B1  _vt100_puts                        vt100
+C:   000046DC  _spf                               vt100
+C:   00004806  _main                              vt100
+C:   00004C7A  __gptrput                          _gptrput
+C:   00004C95  __mulint                           _mulint
+C:   00004C95  __mulint_dummy                     _mulint
+C:   00004CB7  __gptrget                          _gptrget
+C:   00004CD3  __modsint                          _modsint
+C:   00004D10  __moduint                          _moduint
+C:   00004D1A  __modint                           _moduint
+C:   00004D55  __divsint                          _divsint
+C:   00004D92  __divuint                          _divuint
+C:   00004D9C  __divint                           _divuint
+C:   00004DC3  ___sdcc_external_startup           _startup
 ASxxxx Linker V03.00/V05.40 + sdld,  page 17.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-CONST                               00004DA5    00000208 =         520. bytes (REL,CON,CODE)
+CONST                               00004DC7    00000208 =         520. bytes (REL,CON,CODE)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------

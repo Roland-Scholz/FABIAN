@@ -1,7 +1,7 @@
 Release 8.1i - Fit P.20131013
 Copyright(c) 1995-2003 Xilinx Inc. All rights reserved
 
- 9-24-2023 11:05PM
+10- 9-2023 10:55AM
 
 NOTE: This file is designed to be imported into a spreadsheet program
 such as Microsoft Excel for viewing, printing and sorting. The comma ','
@@ -24,9 +24,9 @@ P3,WR,I,I/O,INPUT,,,,,,,,,
 P4,RD,I,I/O,INPUT,,,,,,,,,
 P5,pclk,GCK/I,I/O/GCK1,,,,,,,,,,
 P6,LOADDAT,I/O,I/O/GCK2,BIDIR,,,,,,,,,
-P7,LOADCOL,I/O,I/O/GCK3,BIDIR,,,,,,,,,
-P8,LOADAD,O,I/O,OUTPUT,,,,,,,,,
-P9,CCLK,I/O,I/O,BIDIR,,,,,,,,,
+P7,LOADCOLB,I/O,I/O/GCK3,BIDIR,,,,,,,,,
+P8,LOADAD,I/O,I/O,BIDIR,,,,,,,,,
+P9,CCLK,O,I/O,OUTPUT,,,,,,,,,
 P10,GND,,GND,,,,,,,,,,
 P11,DE,I,I/O,INPUT,,,,,,,,,
 P12,HS,I,I/O,INPUT,,,,,,,,,
@@ -43,10 +43,10 @@ P22,CHAROE,O,I/O,OUTPUT,,,,,,,,,
 P23,GND,,GND,,,,,,,,,,
 P24,DISPEN,I/O,I/O,BIDIR,,,,,,,,,
 P25,OE_ADR,O,I/O,OUTPUT,,,,,,,,,
-P26,LOADCOLB,I/O,I/O,BIDIR,,,,,,,,,
+P26,LOADCOL,I/O,I/O,BIDIR,,,,,,,,,
 P27,OE_DAT,O,I/O,OUTPUT,,,,,,,,,
 P28,OE_RAM,O,I/O,OUTPUT,,,,,,,,,
-P29,T0,I,I/O,INPUT,,,,,,,,,
+P29,TIE,,I/O,,,,,,,,,,
 P30,TDO,,TDO,,,,,,,,,,
 P31,GND,,GND,,,,,,,,,,
 P32,VCC,,VCCIO,,,,,,,,,,

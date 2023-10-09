@@ -39,7 +39,7 @@ port(
 		HS			: in	std_logic;
 		VS			: in	std_logic;
 		LOADSRIN	: in	std_logic;
-		T0			: in  std_logic;
+--		T0			: in  std_logic;
 
 		PIXCLKO	: out std_logic;
 		HSYNC		: out std_logic;
@@ -48,7 +48,7 @@ port(
 		LOADDAT	: out std_logic;
 		LOADCOL	: out std_logic;
 		LOADCOLB	: out std_logic;
-		LOADAD	: out std_logic;
+		LOADAD	: inout std_logic;
 		CCLK		: out std_logic;
 		LOADSR	: out std_logic;		
 		CRTCOE	: out std_logic;		
@@ -60,6 +60,7 @@ port(
 		LCHRLINE	: out std_logic;
 		OE_RAM	: out std_logic;
 		OE_ADR	: out std_logic
+--		CE_RAM	: out std_logic
 		
 );
 end vt100;
@@ -74,11 +75,12 @@ end vt100;
 
 architecture Behavioral of vt100 is
 
-signal clk : std_logic_vector (2 downto 0);
-signal ramacc : std_logic;
-alias ramclk : std_logic is clk(0);
+signal clk : std_logic_vector (3 downto 0);
+signal ramacc : std_logic := '0';
 signal rw : std_logic;
-signal ramstart : std_logic;
+signal ramstart : std_logic := '0';
+signal ramwait : std_logic_vector (1 downto 0);
+signal mode : std_logic_vector (1 downto 0) := "00";
 
 signal I_OE_DAT : std_logic;
 signal I_OE_ADR : std_logic;
@@ -87,42 +89,58 @@ signal I_CRTCOE : std_logic;
 signal I_CHAROE : std_logic;
 signal I_WE_RAM : std_logic;
 signal I_DE : std_logic;
-signal I_LOADAD : std_logic;
+signal I_WR : std_logic;
+
+--signal I_LOADAD : std_logic;
 
 begin
 	PIXCLKO	<= pclk;
-	CCLK		<=	clk(2);
+	CCLK		<=	clk(2) when mode(0) = '0' else clk(3);
 		
-	LOADAD	<=  A15 and not (RD and WR);
+	--LOADAD	<=  A15 and not (RD and WR);
 	
-	OE_DAT	<= '0' when T0 = '1' else I_OE_DAT;
-	OE_ADR	<= '0' when T0 = '1' else I_OE_ADR;
-	OE_RAM	<= '1' when T0 = '1' else I_OE_RAM;
-	CRTCOE	<= '1' when T0 = '1' else I_CRTCOE;
-	CHAROE	<= '1' when T0 = '1' else I_CHAROE;
-	WE_RAM	<= '1' when T0 = '1' else I_WE_RAM;
+	OE_DAT	<= '0' when mode(1) = '1' else I_OE_DAT;
+	OE_ADR	<= '0' when mode(1) = '1' else I_OE_ADR;
 	
-	--LCHRLINE <= '0';
+	OE_RAM	<= '1' when mode(1) = '1' else I_OE_RAM;
+	CRTCOE	<= '1' when mode(1) = '1' else I_CRTCOE;
+	CHAROE	<= '1' when mode(1) = '1' else I_CHAROE;
+	WE_RAM	<= '1' when mode(1) = '1' else I_WE_RAM;
+
+	process (RD)
+	begin
+		if rising_edge(RD) then
+			if A15 = '0' then
+				mode <= mode + 1;
+			end if;
+		end if;
+	end process;
 	
 	process (pclk)
-	begin 
+	begin
+		
 		if rising_edge(pclk) then	
 			clk <= clk + 1;
-
-			--LOADAD <= I_LOADAD;
-			if clk(0) = '0' then
-				if ramstart = '0' and ramacc = '0' and A15 = '1' and (RD = '0' or WR = '0') then
-					ramstart <= '1';
-					rw <= WR;
-					--LOADAD <= '1';
-				--else
-					--LOADAD <= '0';
-				end if;
+			
+			if ramstart = '0' and ramacc = '0' and A15 = '1' and (RD = '0' or WR = '0') then
+				ramstart <= '1';
+				LOADAD <= '1';
+				ramwait <= "00";
+			end if;
+				
+			if LOADAD = '1' then
+				ramwait <= ramwait + 1;
+			end if;
+			
+			if ramwait = "10" then
+				LOADAD <= '0';
+				rw <= WR;
 			end if;
 			
 			if ramstart = '1' and ramacc = '0' and RD = '1' and WR = '1' then
 				ramacc <= '1';
 			end if;
+
 			
 			-- 1-3 : RAM
 			-- 3-5 : load char
@@ -131,11 +149,7 @@ begin
 
 			case clk is
 
-				--when "000" =>
-				--	I_CHAROE <= '1';
-					
-				when "001" =>
-					
+				when "-001" =>	
 					I_CHAROE <= '1';
 					LCHRLINE <= '0';
 					
@@ -143,67 +157,55 @@ begin
 						I_OE_ADR <= '0';
 						I_OE_DAT <= rw;	
 						I_OE_RAM <= '1';
-						
 						ramstart <= '0';						
 					end if;
-						
-				when "010" =>
-				
+					
+				when "-010" =>
 					if ramacc = '1' and ramstart = '0' then
-							
 						I_OE_RAM <= not rw;
 						I_WE_RAM <= rw;
-						LOADDAT <= '1'  ;
-					end if;
-				
-				
-				when "011" =>
-				
-					LOADSR <= '1';			-- load shift register at next clock
-					
-					VSYNC		<= VS;
-					HSYNC		<= not HS;
-
-					if ramacc = '1' and ramstart = '0' then
+						LOADDAT <= '1';
 						ramacc <= '0';
 					end if;
+					
+				when "-011" =>
+								
+					LOADSR <= '1';					-- load shift register at next clock
 					
 					LOADDAT <= '0';
 					I_WE_RAM <= '1';
 					I_OE_ADR <= '1';
 					I_OE_DAT <= '1';
-					I_OE_RAM <= '0';			
+					I_OE_RAM <= '0';
 					
 					I_CRTCOE <= '0';
-					LOADCHR <= '1';
+					LOADCHR <= '1';			
+
+	
+				when "-100" =>
+					VSYNC		<= VS;
+					HSYNC		<= not HS;
 					
-					
-				when "100" =>
-				
 					DISPEN	<= I_DE;
 					I_DE		<= not DE;
-					
-					LOADCOLB <= '1';		-- load color for display
-					LOADSR <= '0';			
-					
-					
-				when "101" =>
-				
-					LOADCOLB <= '0';
-				
-					LOADCHR <= '0';
+
 					LOADCOL <= '1';
-
-
-				when "111" =>				
-				
-					LOADCOL <= '0';
-					I_CRTCOE <= '1';			
+					LOADSR <= '0';	
 					
+				when "-101" =>
+					LOADCOL <= '0';
+				
+					LOADCHR <= '0';	
+					LOADCOLB <= '1';
+									
+				when "-111" =>
+					
+					I_CRTCOE <= '1';	
+					LOADCOLB <= '0';
+								
 					I_CHAROE <= '0';
 					LCHRLINE <= '1';
-
-
+	
 				when others =>
 					null;
 					

@@ -7344,11 +7344,30 @@ _vt100_init:
 ;	 function vt100_putc
 ;	-----------------------------------------
 _vt100_putc:
-;	vt100.c:900: putchar(c);
-	mov	r6,#0x00
-	mov	dph,r6
+	mov	r7,dpl
+;	vt100.c:901: term.state(&term, EV_CHAR, 0x0000 | c);
+	mov	r5,((_term + 0x0016) + 0)
+	mov	r6,((_term + 0x0016) + 1)
+	push	ar6
+	push	ar5
+	push	ar7
+	mov	a,#0x01
+	push	acc
+	lcall	00103$
+	sjmp	00104$
+00103$:
+	push	ar5
+	push	ar6
+	mov	dptr,#_term
+	mov	b,#0x40
+	ret
+00104$:
+	dec	sp
+	dec	sp
+	pop	ar5
+	pop	ar6
 ;	vt100.c:902: }
-	ljmp	_putchar
+	ret
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'vt100_puts'
 ;------------------------------------------------------------

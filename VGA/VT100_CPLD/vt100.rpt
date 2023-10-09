@@ -1,7 +1,7 @@
  
 cpldfit:  version P.20131013                        Xilinx Inc.
                                   Fitter Report
-Design Name: vt100                               Date:  9-24-2023, 11:05PM
+Design Name: vt100                               Date: 10- 9-2023, 10:55AM
 Device Used: XC9536-15-PC44
 Fitting Status: Successful
 
@@ -9,16 +9,16 @@ Fitting Status: Successful
 
 Macrocells     Product Terms    Function Block   Registers      Pins           
 Used/Tot       Used/Tot         Inps Used/Tot    Used/Tot       Used/Tot       
-30 /36  ( 83%) 54  /180  ( 30%) 41 /72  ( 57%)   22 /36  ( 61%) 26 /34  ( 76%)
+36 /36  (100%) 70  /180  ( 39%) 49 /72  ( 68%)   28 /36  ( 78%) 25 /34  ( 74%)
 
 ** Function Block Resources **
 
 Function    Mcells      FB Inps     Signals     Pterms      IO          
 Block       Used/Tot    Used/Tot    Used        Used/Tot    Used/Tot    
-FB1          16/18       21/36       21          33/90      10/17
-FB2          14/18       20/36       20          21/90       8/17
+FB1          18/18*      25/36       25          42/90      10/17
+FB2          18/18*      24/36       24          28/90       8/17
              -----       -----                   -----       -----     
-             30/36       41/72                   54/180     18/34 
+             36/36       49/72                   70/180     18/34 
 
 * - Resource is exhausted
 
@@ -32,18 +32,18 @@ Global set/reset net(s) unused.
 
 Signal Type    Required     Mapped  |  Pin Type            Used    Total 
 ------------------------------------|------------------------------------
-Input         :    7           7    |  I/O              :    22      28
+Input         :    6           6    |  I/O              :    21      28
 Output        :    8           8    |  GCK/IO           :     3       3
 Bidirectional :   10          10    |  GTS/IO           :     1       2
 GCK           :    1           1    |  GSR/IO           :     0       1
 GTS           :    0           0    |
 GSR           :    0           0    |
                  ----        ----
-        Total     26          26
+        Total     25          25
 
 ** Power Data **
 
-There are 30 macrocells in high performance mode (MCHP).
+There are 36 macrocells in high performance mode (MCHP).
 There are 0 macrocells in low power mode (MCLP).
 End of Mapped Resource Summary
 **************************  Errors and Warnings  ***************************
@@ -64,9 +64,9 @@ WARNING:Cpld:1007 - Removing unused input(s) 'LOADSRIN'.  The input(s) are
 Signal              Total Total Loc     Pin  Pin     Pin     Pwr  Slew Reg Init
 Name                Pts   Inps          No.  Type    Use     Mode Rate State
 LOADDAT             2     6     FB1_5   6    GCK/I/O I/O     STD  FAST RESET
-LOADAD              2     3     FB1_6   8    I/O     O       STD  FAST 
-LOADCOL             2     4     FB1_7   7    GCK/I/O I/O     STD  FAST RESET
-CCLK                1     2     FB1_8   9    I/O     I/O     STD  FAST RESET
+LOADAD              5     8     FB1_6   8    I/O     I/O     STD  FAST RESET
+LOADCOLB            2     4     FB1_7   7    GCK/I/O I/O     STD  FAST RESET
+CCLK                2     3     FB1_8   9    I/O     O       STD  FAST 
 LOADSR              2     4     FB1_12  14   I/O     I/O     STD  FAST RESET
 CRTCOE              1     2     FB1_13  18   I/O     O       STD  FAST 
 WE_RAM              1     2     FB1_14  19   I/O     O       STD  FAST 
@@ -79,27 +79,33 @@ LCHRLINE            2     4     FB2_3   42   GTS/I/O I/O     STD  FAST RESET
 PIXCLKO             1     1     FB2_4   43   I/O     O       STD  FAST 
 OE_RAM              1     2     FB2_14  28   I/O     O       STD  FAST 
 OE_DAT              1     2     FB2_15  27   I/O     O       STD  FAST 
-LOADCOLB            2     4     FB2_16  26   I/O     I/O     STD  FAST RESET
+LOADCOL             2     4     FB2_16  26   I/O     I/O     STD  FAST RESET
 OE_ADR              1     2     FB2_17  25   I/O     O       STD  FAST 
 
-** 12 Buried Nodes **
+** 18 Buried Nodes **
 
 Signal              Total Total Loc     Pwr  Reg Init
 Name                Pts   Inps          Mode State
-rw                  2     7     FB1_3   STD  RESET
-ramacc              2     7     FB1_4   STD  RESET
-ramstart            3     8     FB1_9   STD  RESET
-I_WE_RAM            3     7     FB1_10  STD  RESET
-I_OE_DAT            3     7     FB1_11  STD  RESET
+ramacc              2     7     FB1_1   STD  RESET
+mode<1>             2     3     FB1_2   STD  RESET
+mode<0>             2     2     FB1_3   STD  RESET
+ramwait<1>          3     8     FB1_4   STD  RESET
+ramwait<0>          3     7     FB1_9   STD  RESET
+ramstart            3     8     FB1_10  STD  RESET
+I_WE_RAM            3     7     FB1_11  STD  RESET
 I_OE_RAM            4     7     FB1_18  STD  RESET
-clk<1>              1     1     FB2_9   STD  RESET
-clk<0>              0     0     FB2_10  STD  RESET
-I_OE_ADR            2     6     FB2_11  STD  RESET
-I_DE                2     5     FB2_12  STD  RESET
-I_CRTCOE            2     4     FB2_13  STD  RESET
-I_CHAROE            2     4     FB2_18  STD  RESET
+clk<3>              1     3     FB2_5   STD  RESET
+clk<2>              1     2     FB2_6   STD  RESET
+clk<1>              1     1     FB2_7   STD  RESET
+clk<0>              0     0     FB2_8   STD  RESET
+rw                  2     4     FB2_9   STD  RESET
+I_OE_ADR            2     6     FB2_10  STD  RESET
+I_DE                2     5     FB2_11  STD  RESET
+I_CRTCOE            2     4     FB2_12  STD  RESET
+I_CHAROE            2     4     FB2_13  STD  RESET
+I_OE_DAT            3     7     FB2_18  STD  RESET
 
-** 8 Inputs **
+** 7 Inputs **
 
 Signal              Loc     Pin  Pin     Pin     
 Name                        No.  Type    Use     
@@ -110,7 +116,6 @@ RD                  FB1_4   4    I/O     I
 DE                  FB1_9   11   I/O     I
 HS                  FB1_10  12   I/O     I
 VS                  FB1_11  13   I/O     I
-T0                  FB2_13  29   I/O     I
 
 Legend:
 Pin No. - ~ - User Assigned
@@ -130,21 +135,21 @@ X(@)         - Signal used as input (wire-AND input) to the macrocell logic.
                Used due to wire-ANDing in the switch matrix.
 Pin No.      - ~  - User Assigned
 *********************************** FB1  ***********************************
-Number of function block inputs used/remaining:               21/15
-Number of signals used by logic mapping into function block:  21
+Number of function block inputs used/remaining:               25/11
+Number of signals used by logic mapping into function block:  25
 Signal              Total   Imp   Exp Unused  Loc     Pin   Pin     Pin
 Name                Pt      Pt    Pt  Pt               #    Type    Use
-(unused)              0       0     0   5     FB1_1   2     I/O     I
-(unused)              0       0     0   5     FB1_2   3     I/O     I
-rw                    2       0     0   3     FB1_3   5     GCK/I/O GCK/I
-ramacc                2       0     0   3     FB1_4   4     I/O     I
+ramacc                2       0     0   3     FB1_1   2     I/O     I
+mode<1>               2       0     0   3     FB1_2   3     I/O     I
+mode<0>               2       0     0   3     FB1_3   5     GCK/I/O GCK/I
+ramwait<1>            3       0     0   2     FB1_4   4     I/O     I
 LOADDAT               2       0     0   3     FB1_5   6     GCK/I/O I/O
-LOADAD                2       0     0   3     FB1_6   8     I/O     O
-LOADCOL               2       0     0   3     FB1_7   7     GCK/I/O I/O
-CCLK                  1       0     0   4     FB1_8   9     I/O     I/O
-ramstart              3       0     0   2     FB1_9   11    I/O     I
-I_WE_RAM              3       0     0   2     FB1_10  12    I/O     I
-I_OE_DAT              3       0     0   2     FB1_11  13    I/O     I
+LOADAD                5       0     0   0     FB1_6   8     I/O     I/O
+LOADCOLB              2       0     0   3     FB1_7   7     GCK/I/O I/O
+CCLK                  2       0     0   3     FB1_8   9     I/O     O
+ramwait<0>            3       0     0   2     FB1_9   11    I/O     I
+ramstart              3       0     0   2     FB1_10  12    I/O     I
+I_WE_RAM              3       0     0   2     FB1_11  13    I/O     I
 LOADSR                2       0     0   3     FB1_12  14    I/O     I/O
 CRTCOE                1       0     0   4     FB1_13  18    I/O     O
 WE_RAM                1       0     0   4     FB1_14  19    I/O     O
@@ -154,211 +159,246 @@ DISPEN                2       0     0   3     FB1_17  24    I/O     I/O
 I_OE_RAM              4       0     0   1     FB1_18        (b)     (b)
 
 Signals Used by Logic in Function Block
-  1: A15                8: I_OE_RAM          15: T0 
-  2: CCLK.PIN           9: I_WE_RAM          16: WR 
-  3: DISPEN.PIN        10: LOADCHR.PIN       17: clk<0> 
-  4: I_CHAROE          11: LOADCOL.PIN       18: clk<1> 
-  5: I_CRTCOE          12: LOADDAT.PIN       19: ramacc 
-  6: I_DE              13: LOADSR.PIN        20: ramstart 
-  7: I_OE_DAT          14: RD                21: rw 
+  1: A15               10: LOADCOLB.PIN      18: clk<3> 
+  2: DISPEN.PIN        11: LOADDAT.PIN       19: mode<0> 
+  3: I_CHAROE          12: LOADSR.PIN        20: mode<1> 
+  4: I_CRTCOE          13: RD                21: ramacc 
+  5: I_DE              14: WR                22: ramstart 
+  6: I_OE_RAM          15: clk<0>            23: ramwait<0> 
+  7: I_WE_RAM          16: clk<1>            24: ramwait<1> 
+  8: LOADAD.PIN        17: clk<2>            25: rw 
+  9: LOADCHR.PIN      
 
 Signal                        1         2         3         4 Signals FB
 Name                0----+----0----+----0----+----0----+----0 Used    Inputs
-rw                   X............X.XX.XXX................... 7       7
-ramacc               .X...........X.XXXXX.................... 7       7
-LOADDAT              .X.........X....XXXX.................... 6       6
-LOADAD               X............X.X........................ 3       3
-LOADCOL              .X........X.....XX...................... 4       4
-CCLK                 ................XX...................... 2       2
-ramstart             XX...........X.XXXXX.................... 8       8
-I_WE_RAM             .X......X.......XXXXX................... 7       7
-I_OE_DAT             .X....X.........XXXXX................... 7       7
-LOADSR               .X..........X...XX...................... 4       4
-CRTCOE               ....X.........X......................... 2       2
-WE_RAM               ........X.....X......................... 2       2
-LOADCHR              .X.......X......XX...................... 4       4
-CHAROE               ...X..........X......................... 2       2
-DISPEN               .XX..X..........XX...................... 5       5
-I_OE_RAM             .X.....X........XXXXX................... 7       7
+ramacc               ............XXXXX...XX.................. 7       7
+mode<1>              X...........X.....X..................... 3       3
+mode<0>              X...........X........................... 2       2
+ramwait<1>           X......X....XX......XXXX................ 8       8
+LOADDAT              ..........X...XXX...XX.................. 6       6
+LOADAD               X......X....XX......XXXX................ 8       8
+LOADCOLB             .........X....XXX....................... 4       4
+CCLK                 ................XXX..................... 3       3
+ramwait<0>           X......X....XX......XXX................. 7       7
+ramstart             X...........XXXXX...XX.................. 8       8
+I_WE_RAM             ......X.......XXX...XX..X............... 7       7
+LOADSR               ...........X..XXX....................... 4       4
+CRTCOE               ...X...............X.................... 2       2
+WE_RAM               ......X............X.................... 2       2
+LOADCHR              ........X.....XXX....................... 4       4
+CHAROE               ..X................X.................... 2       2
+DISPEN               .X..X.........XXX....................... 5       5
+I_OE_RAM             .....X........XXX...XX..X............... 7       7
                     0----+----1----+----2----+----3----+----4
                               0         0         0         0
 *********************************** FB2  ***********************************
-Number of function block inputs used/remaining:               20/16
-Number of signals used by logic mapping into function block:  20
+Number of function block inputs used/remaining:               24/12
+Number of signals used by logic mapping into function block:  24
 Signal              Total   Imp   Exp Unused  Loc     Pin   Pin     Pin
 Name                Pt      Pt    Pt  Pt               #    Type    Use
 HSYNC                 2       0     0   3     FB2_1   1     I/O     I/O
 VSYNC                 2       0     0   3     FB2_2   44    I/O     I/O
 LCHRLINE              2       0     0   3     FB2_3   42    GTS/I/O I/O
 PIXCLKO               1       0     0   4     FB2_4   43    I/O     O
-(unused)              0       0     0   5     FB2_5   40    GTS/I/O 
-(unused)              0       0     0   5     FB2_6   39    GSR/I/O 
-(unused)              0       0     0   5     FB2_7   38    I/O     
-(unused)              0       0     0   5     FB2_8   37    I/O     
-clk<1>                1       0     0   4     FB2_9   36    I/O     (b)
-clk<0>                0       0     0   5     FB2_10  35    I/O     (b)
-I_OE_ADR              2       0     0   3     FB2_11  34    I/O     (b)
-I_DE                  2       0     0   3     FB2_12  33    I/O     (b)
-I_CRTCOE              2       0     0   3     FB2_13  29    I/O     I
+clk<3>                1       0     0   4     FB2_5   40    GTS/I/O (b)
+clk<2>                1       0     0   4     FB2_6   39    GSR/I/O (b)
+clk<1>                1       0     0   4     FB2_7   38    I/O     (b)
+clk<0>                0       0     0   5     FB2_8   37    I/O     (b)
+rw                    2       0     0   3     FB2_9   36    I/O     (b)
+I_OE_ADR              2       0     0   3     FB2_10  35    I/O     (b)
+I_DE                  2       0     0   3     FB2_11  34    I/O     (b)
+I_CRTCOE              2       0     0   3     FB2_12  33    I/O     (b)
+I_CHAROE              2       0     0   3     FB2_13  29    I/O     (b)
 OE_RAM                1       0     0   4     FB2_14  28    I/O     O
 OE_DAT                1       0     0   4     FB2_15  27    I/O     O
-LOADCOLB              2       0     0   3     FB2_16  26    I/O     I/O
+LOADCOL               2       0     0   3     FB2_16  26    I/O     I/O
 OE_ADR                1       0     0   4     FB2_17  25    I/O     O
-I_CHAROE              2       0     0   3     FB2_18        (b)     (b)
+I_OE_DAT              3       0     0   2     FB2_18        (b)     (b)
 
 Signals Used by Logic in Function Block
-  1: CCLK.PIN           8: I_OE_ADR          15: VSYNC.PIN 
-  2: DE                 9: I_OE_DAT          16: VS 
-  3: HSYNC.PIN         10: I_OE_RAM          17: clk<0> 
-  4: HS                11: LCHRLINE.PIN      18: clk<1> 
-  5: I_CHAROE          12: LOADCOLB.PIN      19: ramacc 
-  6: I_CRTCOE          13: pclk              20: ramstart 
-  7: I_DE              14: T0               
+  1: DE                 9: I_OE_RAM          17: clk<1> 
+  2: HSYNC.PIN         10: LCHRLINE.PIN      18: clk<2> 
+  3: HS                11: LOADCOL.PIN       19: mode<1> 
+  4: I_CHAROE          12: pclk              20: ramacc 
+  5: I_CRTCOE          13: VSYNC.PIN         21: ramstart 
+  6: I_DE              14: VS                22: ramwait<0> 
+  7: I_OE_ADR          15: WR                23: ramwait<1> 
+  8: I_OE_DAT          16: clk<0>            24: rw 
 
 Signal                        1         2         3         4 Signals FB
 Name                0----+----0----+----0----+----0----+----0 Used    Inputs
-HSYNC                X.XX............XX...................... 5       5
-VSYNC                X.............XXXX...................... 5       5
-LCHRLINE             X.........X.....XX...................... 4       4
-PIXCLKO              ............X........................... 1       1
-clk<1>               ................X....................... 1       1
+HSYNC                .XX............XXX...................... 5       5
+VSYNC                ............XX.XXX...................... 5       5
+LCHRLINE             .........X.....XXX...................... 4       4
+PIXCLKO              ...........X............................ 1       1
+clk<3>               ...............XXX...................... 3       3
+clk<2>               ...............XX....................... 2       2
+clk<1>               ...............X........................ 1       1
 clk<0>               ........................................ 0       0
-I_OE_ADR             X......X........XXXX.................... 6       6
-I_DE                 XX....X.........XX...................... 5       5
-I_CRTCOE             X....X..........XX...................... 4       4
-OE_RAM               .........X...X.......................... 2       2
-OE_DAT               ........X....X.......................... 2       2
-LOADCOLB             X..........X....XX...................... 4       4
-OE_ADR               .......X.....X.......................... 2       2
-I_CHAROE             X...X...........XX...................... 4       4
+rw                   ..............X......XXX................ 4       4
+I_OE_ADR             ......X........XXX.XX................... 6       6
+I_DE                 X....X.........XXX...................... 5       5
+I_CRTCOE             ....X..........XXX...................... 4       4
+I_CHAROE             ...X...........XXX...................... 4       4
+OE_RAM               ........X.........X..................... 2       2
+OE_DAT               .......X..........X..................... 2       2
+LOADCOL              ..........X....XXX...................... 4       4
+OE_ADR               ......X...........X..................... 2       2
+I_OE_DAT             .......X.......XXX.XX..X................ 7       7
                     0----+----1----+----2----+----3----+----4
                               0         0         0         0
 *******************************  Equations  ********************************
 
 ********** Mapped Logic **********
 
-FTCPE_CCLK: FTCPE port map (CCLK,CCLK_T,pclk,'0','0');
-CCLK_T <= (clk(0) AND clk(1));
+
+CCLK <= ((clk(2) AND NOT mode(0))
+	OR (mode(0) AND clk(3)));
 
 
-CHAROE <= NOT ((NOT I_CHAROE AND NOT T0));
+CHAROE <= NOT ((NOT mode(1) AND NOT I_CHAROE));
 
 
-CRTCOE <= NOT ((NOT I_CRTCOE AND NOT T0));
+CRTCOE <= NOT ((NOT mode(1) AND NOT I_CRTCOE));
 
 FTCPE_DISPEN: FTCPE port map (DISPEN,DISPEN_T,pclk,'0','0');
-DISPEN_T <= ((NOT clk(0) AND NOT clk(1) AND I_DE AND CCLK.PIN AND NOT DISPEN.PIN)
-	OR (NOT clk(0) AND NOT clk(1) AND NOT I_DE AND CCLK.PIN AND DISPEN.PIN));
+DISPEN_T <= ((clk(2) AND NOT clk(0) AND NOT clk(1) AND I_DE AND NOT DISPEN.PIN)
+	OR (clk(2) AND NOT clk(0) AND NOT clk(1) AND NOT I_DE AND DISPEN.PIN));
 
 FTCPE_HSYNC: FTCPE port map (HSYNC,HSYNC_T,pclk,'0','0');
-HSYNC_T <= ((clk(0) AND clk(1) AND HS AND NOT CCLK.PIN AND HSYNC.PIN)
-	OR (clk(0) AND clk(1) AND NOT HS AND NOT CCLK.PIN AND NOT HSYNC.PIN));
+HSYNC_T <= ((clk(2) AND NOT clk(0) AND NOT clk(1) AND HS AND HSYNC.PIN)
+	OR (clk(2) AND NOT clk(0) AND NOT clk(1) AND NOT HS AND NOT HSYNC.PIN));
 
 FTCPE_I_CHAROE: FTCPE port map (I_CHAROE,I_CHAROE_T,pclk,'0','0');
-I_CHAROE_T <= ((clk(0) AND clk(1) AND I_CHAROE AND CCLK.PIN)
-	OR (clk(0) AND NOT clk(1) AND NOT I_CHAROE AND NOT CCLK.PIN));
+I_CHAROE_T <= ((clk(2) AND clk(0) AND clk(1) AND I_CHAROE)
+	OR (NOT clk(2) AND clk(0) AND NOT clk(1) AND NOT I_CHAROE));
 
 FTCPE_I_CRTCOE: FTCPE port map (I_CRTCOE,I_CRTCOE_T,pclk,'0','0');
-I_CRTCOE_T <= ((clk(0) AND clk(1) AND I_CRTCOE AND NOT CCLK.PIN)
-	OR (clk(0) AND clk(1) AND NOT I_CRTCOE AND CCLK.PIN));
+I_CRTCOE_T <= ((clk(2) AND clk(0) AND clk(1) AND NOT I_CRTCOE)
+	OR (NOT clk(2) AND clk(0) AND clk(1) AND I_CRTCOE));
 
 FTCPE_I_DE: FTCPE port map (I_DE,I_DE_T,pclk,'0','0');
-I_DE_T <= ((NOT clk(0) AND NOT clk(1) AND I_DE AND DE AND CCLK.PIN)
-	OR (NOT clk(0) AND NOT clk(1) AND NOT I_DE AND NOT DE AND CCLK.PIN));
+I_DE_T <= ((clk(2) AND NOT clk(0) AND NOT clk(1) AND I_DE AND DE)
+	OR (clk(2) AND NOT clk(0) AND NOT clk(1) AND NOT I_DE AND NOT DE));
 
 FTCPE_I_OE_ADR: FTCPE port map (I_OE_ADR,I_OE_ADR_T,pclk,'0','0');
-I_OE_ADR_T <= ((clk(0) AND clk(1) AND NOT I_OE_ADR AND NOT CCLK.PIN)
-	OR (clk(0) AND NOT clk(1) AND ramstart AND ramacc AND I_OE_ADR AND 
-	NOT CCLK.PIN));
+I_OE_ADR_T <= ((NOT clk(2) AND clk(0) AND clk(1) AND NOT I_OE_ADR)
+	OR (NOT clk(2) AND clk(0) AND NOT clk(1) AND ramstart AND ramacc AND 
+	I_OE_ADR));
 
 FTCPE_I_OE_DAT: FTCPE port map (I_OE_DAT,I_OE_DAT_T,pclk,'0','0');
-I_OE_DAT_T <= ((clk(0) AND clk(1) AND NOT I_OE_DAT AND NOT CCLK.PIN)
-	OR (clk(0) AND ramstart AND ramacc AND rw AND NOT I_OE_DAT AND 
-	NOT CCLK.PIN)
-	OR (clk(0) AND NOT clk(1) AND ramstart AND ramacc AND NOT rw AND 
-	I_OE_DAT AND NOT CCLK.PIN));
+I_OE_DAT_T <= ((NOT clk(2) AND clk(0) AND clk(1) AND NOT I_OE_DAT)
+	OR (NOT clk(2) AND clk(0) AND ramstart AND ramacc AND rw AND 
+	NOT I_OE_DAT)
+	OR (NOT clk(2) AND clk(0) AND NOT clk(1) AND ramstart AND ramacc AND 
+	NOT rw AND I_OE_DAT));
 
 FTCPE_I_OE_RAM: FTCPE port map (I_OE_RAM,I_OE_RAM_T,pclk,'0','0');
-I_OE_RAM_T <= ((clk(0) AND clk(1) AND I_OE_RAM AND NOT CCLK.PIN)
-	OR (clk(0) AND NOT clk(1) AND ramstart AND ramacc AND NOT I_OE_RAM AND 
-	NOT CCLK.PIN)
-	OR (clk(1) AND NOT ramstart AND ramacc AND rw AND I_OE_RAM AND 
-	NOT CCLK.PIN)
-	OR (NOT clk(0) AND clk(1) AND NOT ramstart AND ramacc AND NOT rw AND 
-	NOT I_OE_RAM AND NOT CCLK.PIN));
+I_OE_RAM_T <= ((NOT clk(2) AND clk(0) AND clk(1) AND I_OE_RAM)
+	OR (NOT clk(2) AND clk(0) AND NOT clk(1) AND ramstart AND ramacc AND 
+	NOT I_OE_RAM)
+	OR (NOT clk(2) AND clk(1) AND NOT ramstart AND ramacc AND rw AND 
+	I_OE_RAM)
+	OR (NOT clk(2) AND NOT clk(0) AND clk(1) AND NOT ramstart AND ramacc AND 
+	NOT rw AND NOT I_OE_RAM));
 
 FTCPE_I_WE_RAM: FTCPE port map (I_WE_RAM,I_WE_RAM_T,pclk,'0','0');
-I_WE_RAM_T <= ((clk(0) AND clk(1) AND NOT I_WE_RAM AND NOT CCLK.PIN)
-	OR (clk(1) AND NOT ramstart AND ramacc AND rw AND NOT I_WE_RAM AND 
-	NOT CCLK.PIN)
-	OR (NOT clk(0) AND clk(1) AND NOT ramstart AND ramacc AND NOT rw AND 
-	I_WE_RAM AND NOT CCLK.PIN));
+I_WE_RAM_T <= ((NOT clk(2) AND clk(0) AND clk(1) AND NOT I_WE_RAM)
+	OR (NOT clk(2) AND clk(1) AND NOT ramstart AND ramacc AND rw AND 
+	NOT I_WE_RAM)
+	OR (NOT clk(2) AND NOT clk(0) AND clk(1) AND NOT ramstart AND ramacc AND 
+	NOT rw AND I_WE_RAM));
 
 FTCPE_LCHRLINE: FTCPE port map (LCHRLINE,LCHRLINE_T,pclk,'0','0');
-LCHRLINE_T <= ((clk(0) AND clk(1) AND CCLK.PIN AND NOT LCHRLINE.PIN)
-	OR (clk(0) AND NOT clk(1) AND NOT CCLK.PIN AND LCHRLINE.PIN));
+LCHRLINE_T <= ((clk(2) AND clk(0) AND clk(1) AND NOT LCHRLINE.PIN)
+	OR (NOT clk(2) AND clk(0) AND NOT clk(1) AND LCHRLINE.PIN));
 
-
-LOADAD <= ((NOT WR AND A15)
-	OR (NOT RD AND A15));
+FDCPE_LOADAD: FDCPE port map (LOADAD,LOADAD_D,pclk,'0','0');
+LOADAD_D <= ((NOT A15 AND NOT LOADAD.PIN)
+	OR (ramstart AND NOT LOADAD.PIN)
+	OR (ramacc AND NOT LOADAD.PIN)
+	OR (NOT ramwait(0) AND ramwait(1))
+	OR (WR AND RD AND NOT LOADAD.PIN));
 
 FTCPE_LOADCHR: FTCPE port map (LOADCHR,LOADCHR_T,pclk,'0','0');
-LOADCHR_T <= ((clk(0) AND clk(1) AND NOT CCLK.PIN AND NOT LOADCHR.PIN)
-	OR (clk(0) AND NOT clk(1) AND CCLK.PIN AND LOADCHR.PIN));
+LOADCHR_T <= ((clk(2) AND clk(0) AND NOT clk(1) AND LOADCHR.PIN)
+	OR (NOT clk(2) AND clk(0) AND clk(1) AND NOT LOADCHR.PIN));
 
 FTCPE_LOADCOL: FTCPE port map (LOADCOL,LOADCOL_T,pclk,'0','0');
-LOADCOL_T <= ((clk(0) AND clk(1) AND CCLK.PIN AND LOADCOL.PIN)
-	OR (clk(0) AND NOT clk(1) AND CCLK.PIN AND NOT LOADCOL.PIN));
+LOADCOL_T <= ((clk(2) AND clk(0) AND NOT clk(1) AND LOADCOL.PIN)
+	OR (clk(2) AND NOT clk(0) AND NOT clk(1) AND NOT LOADCOL.PIN));
 
 FTCPE_LOADCOLB: FTCPE port map (LOADCOLB,LOADCOLB_T,pclk,'0','0');
-LOADCOLB_T <= ((clk(0) AND NOT clk(1) AND CCLK.PIN AND LOADCOLB.PIN)
-	OR (NOT clk(0) AND NOT clk(1) AND CCLK.PIN AND NOT LOADCOLB.PIN));
+LOADCOLB_T <= ((clk(2) AND clk(0) AND clk(1) AND LOADCOLB.PIN)
+	OR (clk(2) AND clk(0) AND NOT clk(1) AND NOT LOADCOLB.PIN));
 
 FTCPE_LOADDAT: FTCPE port map (LOADDAT,LOADDAT_T,pclk,'0','0');
-LOADDAT_T <= ((clk(0) AND clk(1) AND NOT CCLK.PIN AND LOADDAT.PIN)
-	OR (NOT clk(0) AND clk(1) AND NOT ramstart AND ramacc AND NOT CCLK.PIN AND 
+LOADDAT_T <= ((NOT clk(2) AND clk(0) AND clk(1) AND LOADDAT.PIN)
+	OR (NOT clk(2) AND NOT clk(0) AND clk(1) AND NOT ramstart AND ramacc AND 
 	NOT LOADDAT.PIN));
 
 FTCPE_LOADSR: FTCPE port map (LOADSR,LOADSR_T,pclk,'0','0');
-LOADSR_T <= ((clk(0) AND clk(1) AND NOT CCLK.PIN AND NOT LOADSR.PIN)
-	OR (NOT clk(0) AND NOT clk(1) AND CCLK.PIN AND LOADSR.PIN));
+LOADSR_T <= ((clk(2) AND NOT clk(0) AND NOT clk(1) AND LOADSR.PIN)
+	OR (NOT clk(2) AND clk(0) AND clk(1) AND NOT LOADSR.PIN));
 
 
-OE_ADR <= (I_OE_ADR AND NOT T0);
+OE_ADR <= (NOT mode(1) AND I_OE_ADR);
 
 
-OE_DAT <= (I_OE_DAT AND NOT T0);
+OE_DAT <= (NOT mode(1) AND I_OE_DAT);
 
 
-OE_RAM <= NOT ((NOT I_OE_RAM AND NOT T0));
+OE_RAM <= NOT ((NOT mode(1) AND NOT I_OE_RAM));
 
 
 PIXCLKO <= pclk;
 
 FTCPE_VSYNC: FTCPE port map (VSYNC,VSYNC_T,pclk,'0','0');
-VSYNC_T <= ((clk(0) AND clk(1) AND VS AND NOT CCLK.PIN AND NOT VSYNC.PIN)
-	OR (clk(0) AND clk(1) AND NOT VS AND NOT CCLK.PIN AND VSYNC.PIN));
+VSYNC_T <= ((clk(2) AND NOT clk(0) AND NOT clk(1) AND VS AND NOT VSYNC.PIN)
+	OR (clk(2) AND NOT clk(0) AND NOT clk(1) AND NOT VS AND VSYNC.PIN));
 
 
-WE_RAM <= NOT ((NOT I_WE_RAM AND NOT T0));
+WE_RAM <= NOT ((NOT mode(1) AND NOT I_WE_RAM));
 
 FTCPE_clk0: FTCPE port map (clk(0),'1',pclk,'0','0');
 
 FTCPE_clk1: FTCPE port map (clk(1),clk(0),pclk,'0','0');
 
+FTCPE_clk2: FTCPE port map (clk(2),clk_T(2),pclk,'0','0');
+clk_T(2) <= (clk(0) AND clk(1));
+
+FTCPE_clk3: FTCPE port map (clk(3),clk_T(3),pclk,'0','0');
+clk_T(3) <= (clk(2) AND clk(0) AND clk(1));
+
+FTCPE_mode0: FTCPE port map (mode(0),A15,RD,'0','0');
+
+FTCPE_mode1: FTCPE port map (mode(1),mode_T(1),RD,'0','0');
+mode_T(1) <= (NOT A15 AND mode(0));
+
 FTCPE_ramacc: FTCPE port map (ramacc,ramacc_T,pclk,'0','0');
 ramacc_T <= ((WR AND RD AND ramstart AND NOT ramacc)
-	OR (clk(0) AND clk(1) AND NOT ramstart AND ramacc AND NOT CCLK.PIN));
+	OR (NOT clk(2) AND NOT clk(0) AND clk(1) AND NOT ramstart AND ramacc));
 
 FTCPE_ramstart: FTCPE port map (ramstart,ramstart_T,pclk,'0','0');
-ramstart_T <= ((NOT WR AND A15 AND NOT clk(0) AND NOT ramstart AND NOT ramacc)
-	OR (NOT RD AND A15 AND NOT clk(0) AND NOT ramstart AND NOT ramacc)
-	OR (clk(0) AND NOT clk(1) AND ramstart AND ramacc AND NOT CCLK.PIN));
+ramstart_T <= ((A15 AND NOT WR AND NOT ramstart AND NOT ramacc)
+	OR (A15 AND NOT RD AND NOT ramstart AND NOT ramacc)
+	OR (NOT clk(2) AND clk(0) AND NOT clk(1) AND ramstart AND ramacc));
+
+FTCPE_ramwait0: FTCPE port map (ramwait(0),ramwait_T(0),pclk,'0','0');
+ramwait_T(0) <= ((LOADAD.PIN)
+	OR (A15 AND NOT WR AND NOT ramstart AND NOT ramacc AND ramwait(0))
+	OR (A15 AND NOT RD AND NOT ramstart AND NOT ramacc AND ramwait(0)));
+
+FTCPE_ramwait1: FTCPE port map (ramwait(1),ramwait_T(1),pclk,'0','0');
+ramwait_T(1) <= ((ramwait(0) AND LOADAD.PIN)
+	OR (A15 AND NOT WR AND NOT ramstart AND NOT ramacc AND ramwait(1) AND 
+	NOT LOADAD.PIN)
+	OR (A15 AND NOT RD AND NOT ramstart AND NOT ramacc AND ramwait(1) AND 
+	NOT LOADAD.PIN));
 
 FTCPE_rw: FTCPE port map (rw,rw_T,pclk,'0','0');
-rw_T <= ((NOT WR AND A15 AND NOT clk(0) AND NOT ramstart AND NOT ramacc AND rw)
-	OR (WR AND NOT RD AND A15 AND NOT clk(0) AND NOT ramstart AND NOT ramacc AND 
-	NOT rw));
+rw_T <= ((WR AND NOT ramwait(0) AND NOT rw AND ramwait(1))
+	OR (NOT WR AND NOT ramwait(0) AND rw AND ramwait(1)));
 
 Register Legend:
  FDCPE (Q,D,C,CLR,PRE); 
@@ -392,10 +432,10 @@ No. Name                           No. Name
   1 HSYNC                            23 GND                           
   2 A15                              24 DISPEN                        
   3 WR                               25 OE_ADR                        
-  4 RD                               26 LOADCOLB                      
+  4 RD                               26 LOADCOL                       
   5 pclk                             27 OE_DAT                        
   6 LOADDAT                          28 OE_RAM                        
-  7 LOADCOL                          29 T0                            
+  7 LOADCOLB                         29 TIE                           
   8 LOADAD                           30 TDO                           
   9 CCLK                             31 GND                           
  10 GND                              32 VCC                           

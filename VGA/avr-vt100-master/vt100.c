@@ -897,8 +897,8 @@ void vt100_putc(uint8_t c){
 	} else {
 		term.state(&term, EV_CHAR, 0x0000 | c);
 	}*/
-	putchar(c);
-	//term.state(&term, EV_CHAR, 0x0000 | c);
+	//tchar(c);
+	term.state(&term, EV_CHAR, 0x0000 | c);
 }
 
 void vt100_puts(const char *str){

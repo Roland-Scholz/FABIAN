@@ -404,12 +404,12 @@ Symbol Table
     _bp                                                            ****** GX
   6 _buf                                                           000020 R
  18 _getchar                                                       000166 GR
- 18 _main                                                          002782 GR
+ 18 _main                                                          0027A4 GR
  18 _putchar                                                       000143 GR
   6 _scroll_bottom                                                 000003 R
   6 _scroll_start                                                  000001 R
   6 _scroll_top                                                    000002 R
- 18 _spf                                                           002658 GR
+ 18 _spf                                                           00267A GR
   6 _term                                                          000004 R
   6 _vga_color                                                     000000 R
  18 _vga_drawChar                                                  000001 GR
@@ -426,7 +426,7 @@ Symbol Table
  18 _vga_setScrollStart                                            00012D GR
  18 _vt100_init                                                    00261B GR
  18 _vt100_putc                                                    002626 GR
- 18 _vt100_puts                                                    00262D GR
+ 18 _vt100_puts                                                    00264F GR
     a                                                           =  0000E0 L
     a.0                                                         =  0000E0 L
     a.1                                                         =  0000E1 L
@@ -665,7 +665,7 @@ Area Table
   15 GSINIT5                                    size      0   flags   20
   16 GSINIT                                     size      0   flags   20
   17 GSFINAL                                    size      3   flags   20
-  18 CSEG                                       size   2BF6   flags   20
+  18 CSEG                                       size   2C18   flags   20
   19 CONST                                      size    208   flags   20
   1A XINIT                                      size      0   flags   20
   1B CABS                                       size      0   flags   28
