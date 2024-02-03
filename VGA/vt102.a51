@@ -122,7 +122,7 @@ keyrxaltgr	equ	flags1.4
 keyrxstrg	equ	flags1.5
 
 flags2		equ	022h
-nowrap		equ	flags2.0
+wrap		equ	flags2.0
 origin		equ	flags2.1
 newlinemode	equ	flags2.2
 insert		equ	flags2.3
@@ -489,7 +489,7 @@ draw_char:	push	ar7				;save r7 (received byte)
 							
 		inc	r2				;with scroll
 		jnb	lchartmp, char_out		;last char in line?
-		jb	nowrap, char_out
+		jnb	wrap, char_out			;wrap turned on?
 		acall	do_newline
 
 ;===============================================	
@@ -1021,7 +1021,7 @@ do_csi_q_h:	mov	state, #ST_IDLE
 		cjne	r1, #0, do_csi_q_h1		;>= 1 arg
 		ret
 do_csi_q_h1:	cjne	@r0, #DECAWM, do_csi_q_h2	;set auto wrap
-		clr	nowrap
+		setb	wrap
 do_csi_q_h2:	cjne	@r0, #DECOM, do_csi_q_hx	;set origin
 		setb	origin
 		ajmp	do_csi_rc			;position cursor home
@@ -1035,7 +1035,7 @@ do_csi_q_l:	cjne	a, #'l', do_csi_q_end		;reset mode
 		cjne	r1, #0, do_csi_q_l1
 		sjmp	do_csi_end
 do_csi_q_l1:	cjne	@r0, #DECAWM, do_csi_q_l2	;reset auto wrap
-		setb	nowrap
+		clr	wrap
 do_csi_q_l2:	cjne	@r0, #DECOM, do_csi_q_lx	;reset origin
 		clr	origin
 		ajmp	do_csi_rc			;position cursor home
@@ -1836,7 +1836,7 @@ prtstatus2:	jnb	insert	, prtstatus3
 prtstatus3:	jnb	origin, prtstatus4
 		mov	dptr, #08000h + 24 * WIDTH * 2 + 50 * 2
 		movx	@dptr, a
-prtstatus4:	jb	nowrap, prtstatus5
+prtstatus4:	jnb	wrap, prtstatus5
 		mov	dptr, #08000h + 24 * WIDTH * 2 + 60 * 2
 		movx	@dptr, a
 prtstatus5:	ret
