@@ -1,0 +1,66 @@
+;
+;		RunCPM - Execute 8bit CP/M applications on modern computers
+;		Copyright (c) 2016 - Marcelo Dantas
+;
+;		Extensive debugging/testing by Tom L. Burnett
+;		Debugging/testing and new features by Krzysztof Klis
+;
+; PTEST - Test program for the display library
+
+	org	0100h
+;
+	ld	hl, start
+	push	hl
+	ret
+;
+;;;;;;;;;;
+	include bdosequ.lib
+	include	display.lib
+;;;;;;;;;;
+;
+val	dw	0a07fh	; Value in memory for HL printing
+val2	db	0c9h	; Value in memory for L printing
+;
+start	call	dspnxt
+	db	'Message printing test.',cr,lf,0
+	call	dspnxt
+	db	'----------------------',cr,lf,0
+	call	dspnxt
+	db	'Number printing test.',cr,lf,0
+; Display (val) as unsigned 16 bits word
+	ld	hl,(val)
+	call	dsphlu
+	call	dspnxt
+	db	' (',0
+	ld	hl,(val)
+	call	dsp4hex
+	call	dspnxt
+	db	'h) is a good number to display.',cr,lf,0
+; Display (val) as a signed 16 bits word
+	ld	hl,(val)
+	call	dsphls
+	call	dspnxt
+	db	' is a good number as well.',cr,lf,0
+	
+; Display (val2) as unsigned 8 bits char
+	ld	a, (val2)
+	call	dspau
+	call	dspnxt
+	db	' (',0
+	ld	a, (val2)
+	call	dsp2hex
+	call	dspnxt
+	db	'h) is also a good one.',cr,lf,0
+; Display (val2) as signed 8 bits char
+	call	dspnxt
+	db	'Not to mention ',0
+	ld	a,(val2)
+	call	dspas
+	call	dspnxt
+	db	'.',cr,lf,0
+	call	dspnxt
+	db	'----------------------',cr,lf,0
+	jp	boot
+;
+	end
+;

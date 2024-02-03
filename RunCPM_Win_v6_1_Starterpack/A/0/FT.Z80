@@ -1,0 +1,200 @@
+;
+;FC80: 0138h
+;
+          org  08000h
+;
+start:    ld   hl, 0100h
+          ld   de, 8000h
+          ld   bc, 1000h
+          ldir
+          jp   skipvar
+          ret
+
+conout:   jp   0
+counte2:  db   0
+
+newcono:  push af
+          push bc
+          push de
+          push hl
+
+          ld   a, (counte2)
+          or   a
+          jr   Z, newcono1
+          dec  a
+          ld   (counte2), a
+          cp   1
+          jr   NZ, poscol
+          push bc
+          ld   c, 27
+          call conout
+          ld   c, '['
+          call conout
+          pop  bc
+          ld   a, c
+          and  127
+          inc  a
+          ld   c, a
+          call bin2dez
+          ld   c, ';'
+          call conout
+          jr   newconex1
+poscol:   ld   a, c
+          and  127
+          inc  a
+          ld   c, a
+          call bin2dez
+          ld   c, 'H'
+          call conout
+          jr   newconex1
+
+newcono1: ld   a, c
+
+          cp   1            ;cursor home
+          jr   Z, curhome
+          cp   11           ;cursor up
+          jr   Z, curup
+          cp   12           ;Clearscreen Home
+          jr   Z, clrhome
+          cp   22           ;clear line
+          jr   Z, clrln
+          cp   27
+          jr   Z, doESC
+          cp   84h
+          jr   Z, invoff
+          cp   85h
+          jr   Z, invon
+          cp   32
+          jr   C, hex
+
+newconex: pop  hl
+          pop  de
+          pop  bc
+          pop  af
+          jp   conout
+
+invoff:   ld   a, 'm'
+          call csi
+          jr   newconex1
+
+invon:    ld   a, '7'
+          call csi
+          ld   c, 'm'
+          call newcono
+          jr   newconex1
+
+hex:      call prthex
+newconex1:pop  hl
+          pop  de
+          pop  bc
+          pop  af
+          ret
+
+doESC:    ld   a, 2
+          ld   (counte2), a
+          jr   newconex1
+
+curhome:  ld   a, 'H'
+          call csi
+          jr   newconex1
+
+curdown:  ld   c, 27
+          call conout
+          ld   c, 'D'
+          call conout
+          jr   newconex1
+
+curup:    ld   c, 27
+          call conout
+          ld   c, 'M'
+          call conout
+          jr   newconex1
+
+clrhome:  ld   a, '2'
+          call csi
+          ld   c, 'J'
+          call conout
+          jr   curhome
+
+clrln:    ld   a, 'K'
+          call csi
+          jr   newconex1
+
+csi:      push af
+          ld   c, 27
+          call conout
+          ld   c, '['
+          call conout
+          pop  af
+          ld   c, a
+          jp   conout
+;
+;
+;
+skipvar:
+          ld   bc, 10
+          ld   hl, (1)
+          add  hl, bc
+
+          ld   a, (hl)
+          ld   (conout+1), a
+          ld   a, low newcono
+          ld   (hl), a
+          inc  hl
+          ld   a, (hl)
+          ld   (conout+2), a
+          ld   a, high newcono
+          ld  (hl), a
+
+
+          ld   c, '*'
+          call conout
+
+          ld   a, 9ah
+          call prthex
+
+          ld   c, 87
+          call bin2dez
+          ret
+
+prthex:   push af
+          rra
+          rra
+          rra
+          rra
+          and  a, 15
+          call prtnib
+          pop  af
+          and  a, 15
+
+prtnib:   cp   a, 10
+          jr   C, prtnib1
+          add  a, 7
+prtnib1:  add  '0'
+          ld   c, a
+          jp   conout
+
+
+bin2dez:  xor  a
+          ld   b, 8
+bin2dez1: rl   c
+          adc  a, a
+          daa
+          djnz bin2dez1
+
+          push af
+          rra
+          rra
+          rra
+          rra
+          and  15
+          add  '0'
+          ld   c, a
+          call conout
+          pop  af
+          and  15
+          add  '0'
+          ld  c, a
+          call conout
+          ret
+

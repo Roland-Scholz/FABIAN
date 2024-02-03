@@ -1,0 +1,17 @@
+termio.asm:
+     1                          ;
+     2                          ;
+     3                          ;
+     4                          BDOS		EQU 0005H	;STANDARD CP/M ENTRY
+     5                          CONIN		EQU 1		;CONSOLE INPUT FUNCTION
+     6                          ;
+     7                          		ORG 0100H	;BASE OF TPA
+     8                          ;
+     9   000000 0e01            NEXTC:		MVI C, CONIN	;READ NEXT CHARACTER
+    10   000002 cd0500          		CALL	BDOS	;RETURN CHARACTER IN <A>
+    11   000005 fe2a            		CPI	'*'	;END OF PROCESSING?
+    12   000007 c20000          		JNZ	NEXTC	;LOOP IF NOT
+    13   00000a c9              		RET		;RETURN TO CCP
+    14                          
+    15                          ;		END
+    16                          

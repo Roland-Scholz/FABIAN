@@ -14,6 +14,7 @@ PIN  18 =  RAM1CS
 PIN   9 =  RD 
 PIN   8 =  REFRESH 
 PIN  19 =  ROMCS 
+PIN  13 =  SDCLK 
 PIN  12 =  WR 
 PIN  14 =  WR_OUT 
 %END
@@ -48,6 +49,11 @@ ROMCS =>
   # RD
   # !OP7
   # !REFRESH
+
+!SDCLK =>
+    IOREQ
+  # !M1
+  # RD
 
 WR_OUT =>
     WR

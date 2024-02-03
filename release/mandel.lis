@@ -1,0 +1,326 @@
+mandel.asm:
+     1                          ;
+     2                          ;  Compute a Mandelbrot set on a simple Z80 computer.
+     3                          ;
+     4                          ; From https://rosettacode.org/wiki/Mandelbrot_set#Z80_Assembly
+     5                          ; Adapted to CP/M and colorzied by J.B. Langston
+     6                          ; Latest version at https://gist.github.com/jblang/3b17598ccfa0f7e5cca79ad826a399a9
+     7                          ; Assemble with sjasm
+     8                          ;
+     9                          ; Porting this program to another Z80 platform should be easy and straight-
+    10                          ; forward: The only dependencies on my homebrew machine are the system-calls
+    11                          ; used to print strings and characters. These calls are performed by loading
+    12                          ; IX with the number of the system-call and performing an RST 08. To port this
+    13                          ; program to another operating system just replace these system-calls with
+    14                          ; the appropriate versions. Only three system-calls are used in the following:
+    15                          ; _crlf: Prints a CR/LF, _puts: Prints a 0-terminated string (the adress of
+    16                          ; which is expected in HL), and _putc: Print a single character which is
+    17                          ; expected in A. RST 0 give control back to the monitor.
+    18                          ;
+    19                          
+    20                                          org     100h
+    21                          
+    22   000000 c39100                          jp      start
+    23                          
+    24                          bdos		equ	05h                     ; bdos vector
+    25                          conout		equ	2                       ; console output bdos call
+    26                          prints		equ	9                       ; print string bdos call
+    27                          cr		equ	13                      ; carriage return
+    28                          lf		equ	10                      ; line feed
+    29                          esc             equ     27                      ; escape
+    30                          eos		equ	'$'                     ; end of string marker
+    31                          pixel           equ     219                     ; character to output for pixel
+    32                          scale           equ     256                     ; Do NOT change this - the
+    33                                                                          ; arithmetic routines rely on
+    34                                                                          ; this scaling factor! :-)
+    35                          divergent       equ     scale * 4
+    36                          
+    37   000003 1e              iteration_max:   db    30                      ; How many iterations
+    38   000004 0000            x:               dw    0                       ; x-coordinate
+    39   000006 00fe            x_start:         dw    -2 * scale              ; Minimum x-coordinate
+    40   000008 0001            x_end:           dw    1 * scale               ; Maximum x-coordinate
+    41   00000a 0300            x_step:          dw    scale / 80              ; x-coordinate step-width
+    42   00000c c0fe            y:               dw    -5 * scale / 4          ; Minimum y-coordinate
+    43   00000e 4001            y_end:           dw    5 * scale / 4           ; Maximum y-coordinate
+    44   000010 0400            y_step:          dw    scale / 60              ; y-coordinate step-width
+    45   000012 0000            z_0:             dw    0
+    46   000014 0000            z_1:             dw    0
+    47   000016 0000            scratch_0:       dw    0
+    48   000018 0000            z_0_square_high: dw    0
+    49   00001a 0000            z_0_square_low:  dw    0
+    50   00001c 0000            z_1_square_high: dw    0
+    51   00001e 0000            z_1_square_low:  dw    0
+    52   000020 202e2d2b2a3d2340display:         db    " .-+*=#@"              ; 8 characters for the display
+    53                          
+    54   000028 00              hsv:             db 0                          ; hsv color table
+    55   000029 c9c8c7c6c5                      db 201, 200, 199, 198, 197
+    56   00002e c4cad0d6dc                      db 196, 202, 208, 214, 220
+    57   000033 e2be9a7652                      db 226, 190, 154, 118, 82
+    58   000038 2e2f303132                      db 46, 47, 48, 49, 50
+    59   00003d 332d27211b                      db 51, 45, 39, 33, 27
+    60   000042 15395d81a5                      db 21, 57, 93, 129, 165
+    61                          
+    62   000047 47656e6572617469welcome:         db    "Generating a Mandelbrot set"
+                6e672061204d616e
+                64656c62726f7420
+                736574          
+    63   000062 0d0a24          crlf:            db    cr, lf, eos
+    64   000065 1b5b306d436f6d70finished:        db    esc, "[0mComputation finished.", cr, lf, eos
+                75746174696f6e20
+                66696e6973686564
+                2e0d0a24        
+    65   000081 1b5b33383b353b24ansifg:          db    esc, "[38;5;", eos
+    66   000089 1b5b34383b353b24ansibg:          db    esc, "[48;5;", eos
+    67                          
+    68                          
+    69   000091 114700          start:           ld      de, welcome             ; Print a welcome message
+    70   000094 0e09                            ld      c, prints
+    71   000096 cd0500          		call	bdos
+    72                          
+    73                          ; for (y = <initial_value> ; y <= y_end; y += y_step)
+    74                          ; {
+    75   000099 2a0e00          outer_loop:      ld      hl, (y_end)             ; Is y <= y_end?
+    76   00009c ed5b0c00                        ld      de, (y)
+    77   0000a0 a7                              and     a                       ; Clear carry
+    78   0000a1 ed52                            sbc     hl, de                  ; Perform the comparison
+    79   0000a3 fa6e01                          jp      m, mandel_end           ; End of outer loop reached
+    80                          
+    81                          ;    for (x = x_start; x <= x_end; x += x_step)
+    82                          ;    {
+    83   0000a6 2a0600                          ld      hl, (x_start)           ; x = x_start
+    84   0000a9 220400                          ld      (x), hl
+    85   0000ac 2a0800          inner_loop:      ld      hl, (x_end)             ; Is x <= x_end?
+    86   0000af ed5b0400                        ld      de, (x)
+    87   0000b3 a7                              and     a
+    88   0000b4 ed52                            sbc     hl, de
+    89   0000b6 fa5801                          jp      m, inner_loop_end       ; End of inner loop reached
+    90                          
+    91                          ;      z_0 = z_1 = 0;
+    92   0000b9 210000                          ld      hl, 0
+    93   0000bc 221200                          ld      (z_0), hl
+    94   0000bf 221400                          ld      (z_1), hl
+    95                          
+    96                          ;      for (iteration = iteration_max; iteration; iteration--)
+    97                          ;      {
+    98   0000c2 3a0300                          ld      a, (iteration_max)
+    99   0000c5 47                              ld      b, a
+   100   0000c6 c5              iteration_loop:  push    bc                      ; iteration -> stack
+   101                          ;        z2 = (z_0 * z_0 - z_1 * z_1) / SCALE;
+   102   0000c7 ed5b1400                        ld      de, (z_1)               ; Compute DE HL = z_1 * z_1
+   103   0000cb 42                              ld      b, d
+   104   0000cc 4b              		ld	c, e
+   105   0000cd cdcb01                          call    mul_16
+   106   0000d0 221a00                          ld      (z_0_square_low), hl    ; z_0 ** 2 is needed later again
+   107   0000d3 ed531800                        ld      (z_0_square_high), de
+   108                          
+   109   0000d7 ed5b1200                        ld      de, (z_0)               ; Compute DE HL = z_0 * z_0
+   110   0000db 42                              ld      b, d
+   111   0000dc 4b              		ld	c, e
+   112   0000dd cdcb01                          call    mul_16
+   113   0000e0 221e00                          ld      (z_1_square_low), hl    ; z_1 ** 2 will be also needed
+   114   0000e3 ed531c00                        ld      (z_1_square_high), de
+   115                          
+   116   0000e7 a7                              and     a                       ; Compute subtraction
+   117   0000e8 ed4b1a00                        ld      bc, (z_0_square_low)
+   118   0000ec ed42                            sbc     hl, bc
+   119   0000ee 221600                          ld      (scratch_0), hl         ; Save lower 16 bit of result
+   120   0000f1 62                              ld      h, d
+   121   0000f2 6b              		ld	l, e
+   122   0000f3 ed4b1800                        ld      bc, (z_0_square_high)
+   123   0000f7 ed42                            sbc     hl, bc
+   124   0000f9 ed4b1600                        ld      bc, (scratch_0)         ; HL BC = z_0 ** 2 - z_1 ** 2
+   125                          
+   126   0000fd 48                              ld      c, b                    ; Divide by scale = 256
+   127   0000fe 45                              ld      b, l                    ; Discard the rest
+   128   0000ff c5                              push    bc                      ; We need BC later
+   129                          
+   130                          ;        z3 = 2 * z0 * z1 / SCALE;
+   131   000100 2a1200                          ld      hl, (z_0)               ; Compute DE HL = 2 * z_0 * z_1
+   132   000103 29                              add     hl, hl
+   133   000104 54                              ld      d, h
+   134   000105 5d              		ld	e, l
+   135   000106 ed4b1400                        ld      bc, (z_1)
+   136   00010a cdcb01                          call    mul_16
+   137                          
+   138   00010d 43                              ld      b, e                    ; Divide by scale (= 256)
+   139   00010e 4c                              ld      c, h                    ; BC contains now z_3
+   140                          
+   141                          ;        z1 = z3 + y;
+   142   00010f 2a0c00                          ld      hl, (y)
+   143   000112 09                              add     hl, bc
+   144   000113 221400                          ld      (z_1), hl
+   145                          
+   146                          ;        z_0 = z_2 + x;
+   147   000116 c1                              pop     bc                      ; Here BC is needed again :-)
+   148   000117 2a0400                          ld      hl, (x)
+   149   00011a 09                              add     hl, bc
+   150   00011b 221200                          ld      (z_0), hl
+   151                          
+   152                          ;        if (z0 * z0 / SCALE + z1 * z1 / SCALE > 4 * SCALE)
+   153   00011e 2a1a00                          ld      hl, (z_0_square_low)    ; Use the squares computed
+   154   000121 ed5b1e00                        ld      de, (z_1_square_low)    ; above
+   155   000125 19                              add     hl, de
+   156   000126 44                              ld      b, h                  ; BC contains lower word of sum
+   157   000127 4d              		ld	c, l
+   158                          
+   159   000128 2a1800                          ld      hl, (z_0_square_high)
+   160   00012b ed5b1c00                        ld      de, (z_1_square_high)
+   161   00012f ed5a                            adc     hl, de
+   162                          
+   163   000131 65                              ld      h, l                    ; HL now contains (z_0 ** 2 +
+   164   000132 68                              ld      l, b                    ; z_1 ** 2) / scale
+   165                          
+   166   000133 010004                          ld      bc, divergent
+   167   000136 a7                              and     a
+   168   000137 ed42                            sbc     hl, bc
+   169                          
+   170                          ;          break;
+   171   000139 da3f01                          jp      c, iteration_dec        ; No break
+   172   00013c c1                              pop     bc                      ; Get latest iteration counter
+   173   00013d 1803                            jr      iteration_end           ; Exit loop
+   174                          
+   175                          ;        iteration++;
+   176   00013f c1              iteration_dec:   pop     bc                      ; Get iteration counter
+   177   000140 1084                            djnz    iteration_loop          ; We might fall through!
+   178                          ;      }
+   179                          iteration_end:
+   180                          ;      printf("%c", display[iteration % 7]);
+   181   000142 cd7701                          call    colorpixel
+   182   000145 0e02                            ld      c, conout               ; Print the character
+   183   000147 cd0500          		call	bdos
+   184                          
+   185   00014a ed5b0a00                        ld      de, (x_step)            ; x += x_step
+   186   00014e 2a0400                          ld      hl, (x)
+   187   000151 19                              add     hl, de
+   188   000152 220400                          ld      (x), hl
+   189                          
+   190   000155 c3ac00                          jp      inner_loop
+   191                          ;    }
+   192                          ;    printf("\n");
+   193                          inner_loop_end:
+   194   000158 116200          		ld	de, crlf
+   195   00015b 0e09            		ld      c, prints              ; Print a CR/LF pair
+   196   00015d cd0500                          call	bdos
+   197                          
+   198   000160 ed5b1000                        ld      de, (y_step)            ; y += y_step
+   199   000164 2a0c00                          ld      hl, (y)
+   200   000167 19                              add     hl, de
+   201   000168 220c00                          ld      (y), hl                 ; Store new y-value
+   202                          
+   203   00016b c39900                          jp      outer_loop
+   204                          ; }
+   205                          
+   206   00016e 116500          mandel_end:     ld      de, finished            ; Print finished-message
+   207   000171 0e09                            ld      c, prints
+   208   000173 cd0500          		call bdos
+   209                          
+   210   000176 c9                              ret 			        ; Return to CP/M
+   211                          
+   212   000177 48              colorpixel:      ld      c,b                     ; iter count in BC
+   213   000178 0600                            ld      b,0
+   214   00017a 212800                          ld      hl, hsv                 ; get ANSI color code
+   215   00017d 09                              add     hl, bc
+   216   00017e 7e                              ld      a,(hl)
+   217   00017f cd9101                          call    setcolor
+   218   000182 1edb                            ld      e, pixel                ; show pixel
+   219   000184 c9                              ret
+   220                          
+   221   000185 78              asciipixel:      ld      a, b
+   222   000186 e607                            and     $7                      ; lower three bits only (c = 0)
+   223   000188 ed62                            sbc     hl, hl
+   224   00018a 6f                              ld      l, a
+   225   00018b 112000                          ld      de, display             ; Get start of character array
+   226   00018e 19                              add     hl, de                  ; address and load the
+   227   00018f 5e                              ld      e, (hl)                 ; character to be printed
+   228   000190 c9                              ret
+   229                          
+   230   000191 f5              setcolor:       push    af                      ; save accumulator
+   231   000192 118100                          ld      de,ansifg               ; start ANSI control sequence
+   232   000195 0e09                            ld      c,prints                ; to set foreground color
+   233   000197 cd0500                          call    bdos
+   234   00019a f1                              pop     af
+   235   00019b cda601                          call    printdec                ; print ANSI color code
+   236   00019e 0e02                            ld      c,conout
+   237   0001a0 1e6d                            ld      e,'m'                   ; finish control sequence
+   238   0001a2 cd0500                          call    bdos
+   239   0001a5 c9                              ret
+   240                          
+   241   0001a6 0e9c            printdec:        ld      c,-100                  ; print 100s place
+   242   0001a8 cdb201                          call    pd1
+   243   0001ab 0ef6                            ld      c,-10                   ; 10s place
+   244   0001ad cdb201                          call    pd1
+   245   0001b0 0eff                            ld      c,-1                    ; 1s place
+   246   0001b2 1e2f            pd1:             ld      e,'0'-1                 ; start ASCII right before 0
+   247   0001b4 1c              pd2:             inc     e                       ; increment ASCII code
+   248   0001b5 81                              add     a,c                     ; subtract 1 place value
+   249   0001b6 38fc                            jr      c,pd2                   ; loop until negative
+   250   0001b8 91                              sub     c                       ; add back the last value
+   251   0001b9 f5                              push    af                      ; save accumulator
+   252   0001ba 3eff                            ld      a,-1                    ; are we in the ones place?
+   253   0001bc b9                              cp      c
+   254   0001bd 2805                            jr      z,pd3                   ; if so, skip to output
+   255   0001bf 3e30                            ld      a,'0'                   ; don't print leading 0s
+   256   0001c1 bb                              cp      e
+   257   0001c2 2805                            jr      z,pd4
+   258   0001c4 0e02            pd3:             ld      c,conout
+   259   0001c6 cd0500                          call    bdos
+   260   0001c9 f1              pd4:             pop     af                      ; restore accumulator
+   261   0001ca c9                              ret
+   262                          
+   263                          
+   264                          ;
+   265                          ;   Compute DEHL = BC * DE (signed): This routine is not too clever but it
+   266                          ; works. It is based on a standard 16-by-16 multiplication routine for unsigned
+   267                          ; integers. At the beginning the sign of the result is determined based on the
+   268                          ; signs of the operands which are negated if necessary. Then the unsigned
+   269                          ; multiplication takes place, followed by negating the result if necessary.
+   270                          ;
+   271   0001cb af              mul_16:          xor     a                       ; Clear carry and A (-> +)
+   272   0001cc cb78                            bit     7, b                    ; Is BC negative?
+   273   0001ce 2807                            jr      z, bc_positive          ; No
+   274   0001d0 91                              sub     c                       ; A is still zero, complement
+   275   0001d1 4f                              ld      c, a
+   276   0001d2 3e00                            ld      a, 0
+   277   0001d4 98                              sbc     a, b
+   278   0001d5 47                              ld      b, a
+   279   0001d6 37                              scf                             ; Set carry (-> -)
+   280   0001d7 cb7a            bc_positive:     bit     7, D                    ; Is DE negative?
+   281   0001d9 280a                            jr      z, de_positive          ; No
+   282   0001db f5                              push    af                      ; Remember carry for later!
+   283   0001dc af                              xor     a
+   284   0001dd 93                              sub     e
+   285   0001de 5f                              ld      e, a
+   286   0001df 3e00                            ld      a, 0
+   287   0001e1 9a                              sbc     a, d
+   288   0001e2 57                              ld      d, a
+   289   0001e3 f1                              pop     af                      ; Restore carry for complement
+   290   0001e4 3f                              ccf                             ; Complement Carry (-> +/-?)
+   291   0001e5 f5              de_positive:     push    af                      ; Remember state of carry
+   292   0001e6 a7                              and     a                       ; Start multiplication
+   293   0001e7 ed62                            sbc     hl, hl
+   294   0001e9 3e10                            ld      a, 16                   ; 16 rounds
+   295   0001eb 29              mul_16_loop:    add     hl, hl
+   296   0001ec cb13                            rl      e
+   297   0001ee cb12                            rl      d
+   298   0001f0 3004                            jr      nc, mul_16_exit
+   299   0001f2 09                              add     hl, bc
+   300   0001f3 3001                            jr      nc, mul_16_exit
+   301   0001f5 13                              inc     de
+   302   0001f6 3d              mul_16_exit:     dec     a
+   303   0001f7 20f2                            jr      nz, mul_16_loop
+   304   0001f9 f1                              pop     af                      ; Restore carry from beginning
+   305   0001fa d0                              ret     nc                      ; No sign inversion necessary
+   306   0001fb af                              xor     a                       ; Complement DE HL
+   307   0001fc 95                              sub     l
+   308   0001fd 6f                              ld      l, a
+   309   0001fe 3e00                            ld      a, 0
+   310   000200 9c                              sbc     a, h
+   311   000201 67                              ld      h, a
+   312   000202 3e00                            ld      a, 0
+   313   000204 9b                              sbc     a, e
+   314   000205 5f                              ld      e, a
+   315   000206 3e00                            ld      a, 0
+   316   000208 9a                              sbc     a, d
+   317   000209 57                              ld      d, a
+   318   00020a c9                              ret
+   319                          

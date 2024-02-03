@@ -5,7 +5,7 @@
 
 CUPL(WM)        5.0a Serial# 60008009
 Device          g16v8as  Library DLIB-h-40-2
-Created         Mon Sep 04 22:47:23 2023
+Created         Sun Jan 07 16:46:45 2024
 Name            fabian
 Partno          00 
 Revision        01 
@@ -46,6 +46,11 @@ ROMCS =>
   # !OP7
   # !REFRESH
 
+!SDCLK =>
+    IOREQ
+  # !M1
+  # RD
+
 WR_OUT =>
     WR
 
@@ -73,6 +78,7 @@ Pol   Name              Ext     Pin     Type     Used   Pterms  Level
     RD                          9        V        -       -       -     
     REFRESH                     8        V        -       -       -     
     ROMCS                       19       V        7       8       1     
+    SDCLK                       13       V        3       8       1     
     WR                          12       V        -       -       -     
     WR_OUT                      14       V        1       8       1     
 

@@ -1,0 +1,59 @@
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+^Q^Q
+?
+
+a>turbo
+[0m[1m[f[2J---------------------------------------
+TURBO Pascal system[0m       Version 3.01A
+                           CP/M-80, Z80
+
+Copyright (C) 1983,84,85   [1mBORLAND Inc.
+---------------------------------------
+
+Terminal: ANSI
+
+
+
+Include error messages (Y/N)? Y
+
+Loading A:TURBO.MSG[f[2JL[0mogged drive:[1m A
+
+W[0mork file:[1m 
+M[0main file:[1m 
+
+E[0mdit     [1mC[0mompile  [1mR[0mun   [1mS[0mave
+
+e[1mX[0mecute  [1mD[0mir      [1mQ[0muit  compiler [1mO[0mptions
+
+Text:     0 bytes (8118-8118)
+Free: 24301 bytes (8119-E006)
+[1m
+>
+
+Work file name: test.pas
+
+Loading A:TEST.PAS[f[2J[02;01Hprogram hanoi;[K[01;01H      [03;01H  {$A-}[K[04;01H[K[05;01H  procedure hanoi(n, a, b, h:integer);[K[06;01H  begin[K[07;01H    if n > 0 then[K[08;01H    begin[K[09;01H         hanoi(n-1, a, h, b);[K[10;01H         writeln(a, ' --> ', b);[K[11;01H         hanoi(n-1, h, b, a);[K[12;01H    end;[K[13;01H  end;[K[14;01H[K[15;01Hbegin[K[16;01H  hanoi(3, 1, 2, 3);[K[17;01Hend.[K[18;01H[K[19;01H[K[20;01H[K[21;01H[K[22;01H[K[23;01H[K[24;01H[K[02;01H[01;01H[K[0m[01;43HA:TEST.PAS[01;07HLine [01;17HCol [01;25HInsert    Indent[01;21H1  [02;01H[01;12H1    [02;01H[03;01H[03;01H[01;12H2    [03;01H
+[1L[03;01H[1m [K[04;01H  {$A-}[K[04;01H[04;01H[04;01H[01;12H[0m3    [04;01H

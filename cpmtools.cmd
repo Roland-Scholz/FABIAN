@@ -1,0 +1,1 @@
+PATH=C:\github\FABIAN\tools\cpmimage\debug;%PATH%

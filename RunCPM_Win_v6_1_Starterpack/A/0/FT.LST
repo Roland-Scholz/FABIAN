@@ -1,0 +1,176 @@
+Z80ASM SuperFast Relocating Macro Assembler     	    Z80ASM 1.32 Page   1
+FT      Z80
+
+    1                   ;
+    2                   ;FC80: 0138h
+    3                   ;
+    4         8000                org  08000h
+    5                   ;
+    6 8000  21 0100     start:    ld   hl, 0100h
+    7 8003  11 8000               ld   de, 8000h
+    8 8006  01 1000               ld   bc, 1000h
+    9 8009  ED B0                 ldir
+   10 800B  C3 0000#              jp   skipvar
+   11 800E  C9                    ret
+   12                   
+   13 800F  C3 0000     conout:   jp   0
+   14 8012  00          counte2:  db   0
+   15                   
+   16 8013  F5          newcono:  push af
+   17 8014  C5                    push bc
+   18 8015  D5                    push de
+   19 8016  E5                    push hl
+   20                   
+   21 8017  3A 8012               ld   a, (counte2)
+   22 801A  B7                    or   a
+   23 801B  28 ??                 jr   Z, newcono1
+   24 801D  3D                    dec  a
+   25 801E  32 8012               ld   (counte2), a
+   26 8021  0E 2A                 ld   c, '*'
+   27 8023  CD 800F               call conout
+   28 8026  18 ??                 jr   newconex1
+   29                   
+   30 8028  79          newcono1: ld   a, c
+   31 8029  FE 01                 cp   1            ;cursor home
+   32 802B  28 ??                 jr   Z, curhome
+   33 802D  FE 0B                 cp   11           ;cursor up
+   34 802F  28 ??                 jr   Z, curup
+   35 8031  FE 0C                 cp   12           ;Clearscreen Home
+   36 8033  28 ??                 jr   Z, clrhome
+   37 8035  FE 18                 cp   24           ;clear line
+   38 8037  28 ??                 jr   Z, clrln
+   39 8039  FE E2                 cp   0e2h
+   40 803B  28 ??                 jr   Z, doE2
+   41                   
+   42 803D  E1          newconex: pop  hl
+   43 803E  D1                    pop  de
+   44 803F  C1                    pop  bc
+   45 8040  F1                    pop  af
+   46 8041  C3 800F               jp   conout
+   47                   
+   48 8044  3E 02       doE2:     ld   a, 2
+   49 8046  32 8012               ld   (counte2), a
+   50 8049  0E 2A                 ld   c, '*'
+   51 804B  CD 800F               call conout
+   52 804E  C3 8044               jp   doE2
+   53                   
+   54 8051  E1          newconex1:pop  hl
+   55 8052  D1                    pop  de
+   56 8053  C1                    pop  bc
+   57 8054  F1                    pop  af
+   58 8055  C9                    ret
+Z80ASM SuperFast Relocating Macro Assembler     	    Z80ASM 1.32 Page   2
+FT      Z80
+
+   59                   
+   60 8056  3E 48       curhome:  ld   a, 'H'
+   61 8058  CD 0000#              call csi
+   62 805B  18 E0                 jr   newconex
+   63                   
+   64 805D  0E 1B       curdown:  ld   c, 27
+   65 805F  CD 800F               call conout
+   66 8062  0E 44                 ld   c, 'D'
+   67 8064  CD 800F               call conout
+   68 8067  18 D4                 jr   newconex
+   69                   
+   70 8069  0E 1B       curup:    ld   c, 27
+   71 806B  CD 800F               call conout
+   72 806E  0E 4D                 ld   c, 'M'
+   73 8070  CD 800F               call conout
+   74 8073  18 C8                 jr   newconex
+   75                   
+   76 8075  3E 32       clrhome:  ld   a, '2'
+   77 8077  CD 0000#              call csi
+   78 807A  0E 4A                 ld   c, 'J'
+   79 807C  CD 800F               call conout
+   80 807F  18 D5                 jr   curhome
+   81                   
+   82 8081  3E 4B       clrln:    ld   a, 'K'
+   83 8083  CD 0000#              call csi
+   84 8086  18 B5                 jr   newconex
+   85                   
+   86 8088  F5          csi:      push af
+   87 8089  0E 1B                 ld   c, 27
+   88 808B  CD 800F               call conout
+   89 808E  0E 5B                 ld   c, '['
+   90 8090  CD 800F               call conout
+   91 8093  F1                    pop  af
+   92 8094  4F                    ld   c, a
+   93 8095  C3 800F               jp   conout
+   94                   ;
+   95                   ;
+   96                   ;
+   97 8098              skipvar:
+   98 8098  01 000A               ld   bc, 10
+   99 809B  2A 0001               ld   hl, (1)
+  100 809E  09                    add  hl, bc
+  101                   
+  102 809F  7E                    ld   a, (hl)
+  103 80A0  32 8010               ld   (conout+1), a
+  104 80A3  3E 13                 ld   a, low newcono
+  105 80A5  77                    ld   (hl), a
+  106 80A6  23                    inc  hl
+  107 80A7  7E                    ld   a, (hl)
+  108 80A8  32 8011               ld   (conout+2), a
+  109 80AB  3E 80                 ld   a, high newcono
+  110 80AD  77                    ld  (hl), a
+  111                   
+  112                   
+  113 80AE  0E 2A                 ld   c, '*'
+  114 80B0  CD 800F               call conout
+  115                   
+  116 80B3  3E 9A                 ld   a, 9ah
+Z80ASM SuperFast Relocating Macro Assembler     	    Z80ASM 1.32 Page   3
+FT      Z80
+
+  117 80B5  CD 0000#              call prthex
+  118                   
+  119 80B8  0E 57                 ld   c, 87
+  120 80BA  CD 0000#              call bin2dez
+  121 80BD  C9                    ret
+  122                   
+  123 80BE  F5          prthex:   push af
+  124 80BF  1F                    rra
+  125 80C0  1F                    rra
+  126 80C1  1F                    rra
+  127 80C2  1F                    rra
+  128 80C3  E6 0F                 and  a, 15
+  129 80C5  CD 0000#              call prtnib
+  130 80C8  F1                    pop  af
+  131 80C9  E6 0F                 and  a, 15
+  132                   
+  133 80CB  FE 0A       prtnib:   cp   a, 10
+  134 80CD  38 ??                 jr   C, prtnib1
+  135 80CF  C6 07                 add  a, 7
+  136 80D1  C6 30       prtnib1:  add  '0'
+  137 80D3  4F                    ld   c, a
+  138 80D4  C3 800F               jp   conout
+  139                   
+  140                   
+  141 80D7  AF          bin2dez:  xor  a
+  142 80D8  06 08                 ld   b, 8
+  143 80DA  CB 11       bin2dez1: rl   c
+  144 80DC  8F                    adc  a, a
+  145 80DD  27                    daa
+  146 80DE  10 FA                 djnz bin2dez1
+  147                   
+  148 80E0  F5                    push af
+  149 80E1  1F                    rra
+  150 80E2  1F                    rra
+  151 80E3  1F                    rra
+  152 80E4  1F                    rra
+  153 80E5  E6 0F                 and  15
+  154 80E7  C6 30                 add  '0'
+  155 80E9  4F                    ld   c, a
+  156 80EA  CD 800F               call conout
+  157 80ED  F1                    pop  af
+  158 80EE  E6 0F                 and  15
+  159 80F0  C6 30                 add  '0'
+  160 80F2  4F                    ld  c, a
+  161 80F3  CD 800F               call conout
+  162 80F6  C9                    ret
+ 0 Error(s) Detected.
+ 247 Absolute Bytes. 20 Symbols Detected.
+ 
+  140                   
+  141 80D7  AF          bin2de

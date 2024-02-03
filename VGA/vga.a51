@@ -67,11 +67,11 @@ START1:		clr	T1			;E 6845 = low
 		call	init6845
 		;call	CIN
 		call	copyFont
-		ljmp	02000h
+		;ljmp	02000h
 		
 		;call	CIN
 		call	testScreen
-		call	dumpRam
+		call	testRam
 		;call	CIN
 		;setb	INT0
 		;call	CIN
@@ -193,7 +193,10 @@ copyFont1:	clr	A
 ;
 ;
 ;
-init6845:	setb	T0			;enable ADR + DAT
+init6845:	mov	dptr, #0		;enable ADR + DAT
+		movx	a, @dptr
+		movx	a, @dptr
+		
 		mov	DPTR, #8000h
 		inc	AUXR1
 		mov	DPTR, #SYDATA
@@ -225,7 +228,9 @@ setregs:
 		inc	R0
 		cjne	R0, #15, setregs
 		
-		clr	T0
+		mov	dptr, #0		;enable ADR + DAT
+		movx	a, @dptr
+		movx	a, @dptr
 		call	newline
 ;		call	CIN
 ;		

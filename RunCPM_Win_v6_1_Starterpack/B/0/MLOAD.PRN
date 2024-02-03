@@ -1,0 +1,1496 @@
+
+
+N               	title	'MLOAD MULTI-FILE HEX LOAD UTILITY'
+                ;
+                ;		*********************************
+                ;		*	   MLOAD.ASM		*
+                ;		*   Multi-file Hex Load Utility *
+                ;		*	   for CP/M		*
+                ;		*********************************
+                ;
+                ;
+                ;	Replacement for the cp/m "LOAD" program: this program
+                ;	fixes many of the problems associated with the "CP/M"
+                ;	load program, and adds many new features.
+                ;
+                ; ----------------
+                ;
+                ;	Rev 2.5
+                ;	03/10/88
+                ;	Property of NightOwl Software, Inc. Fort Atkinson, WI 53538
+                ;	Written by Ron Fowler, Nightowl Software, Inc.
+                ;
+                ; ----------------
+                ; Notice: this program is NOT public domain; copyright is retained by
+                ; NightOwl Software, Inc. of Fort Atkinson, WI ... All Rights Reserved.
+                ;
+                ; License is granted for free use and re-distribution this program, as
+                ; long as such use and re-distribution is done without profit.
+                ;
+                ; ----------------
+                ;
+                ; modification history:
+                ;
+                ; 2.5	(WOD)	This version corrects a bug that overlayed the first six
+                ;		bytes of the CCP.  The error did not show up unless a
+                ;		jump to the CCP was done without a warm boot since MLOAD
+                ;		used.  This source file has been modified here with
+                ;		concurrence of the author of MLOAD, Ron Fowler.
+                ;
+                ; 2.4	(RGF)	We apologize for this relatively insubstantial update,
+                ;		but someone has caused what we consider to be a problem,
+                ;		by making changes to the program, and re-releasing under
+                ;		the same version number.  The changes in this case were
+                ;		conversion of the opcode fields (but not the comments,
+                ;		can you believe that??) of every line to upper case! That
+                ;		totally invalidated the CRC of the source file, since there
+                ;		are now two different MLOAD 2.3's running around.
+                ;
+                ;		We DO NOT want these stupid mixed upper/lower case changes.
+                ;		Someone somewhere has decided that this is the way assembly
+                ;		language source should be, and we most VEHEMENTLY disagree.
+                ;		It's a pain in the neck to make changes to and we don't
+                ;		care to run our programs through conversion programs every
+                ;		time we make changes.
+                ;
+                ;		So ... leave the case of this file AS IS.  Any changes made
+                ;		to this program and not co-ordinated through us may very
+                ;		well endanger availability of source code when we make
+                ;		future updates.  'nuff said		--NightOwl Software
+                ;
+                ; 2.3	(RGF)	Trivial cosmetic changes
+                ; 2.2	(RGF)	Modified copyright notice to show new owner of the
+                ;		program.
+                ; 2.1	(RGF)	Fixed problem on disk-full when writing output file
+                ;		(mload previously didn't error out on a full disk)
+                ; 2.0	(RGF)	Added the ability to pre-load a non-hex file, allowing
+                ;		mload to be used to load hex file patches (obviating any
+                ;		need to use DDT).  The normal mload syntax is preserved.
+                ;		the first (and only the first) filespec (after the "=",
+                ;		if used) may be non-hex; the filetype must be specified.
+                ;		Examples:
+                ;
+                ;			1)	mload ws.com,wspatch
+                ;			2)	mload MEXTEST=MEX112.COM,MXO-US13
+                ;			3)	mload ws.ovr,ovrpatch
+                ;
+                ;		The first example loads WS.COM, overlays it with
+                ;		wspatch.hex, and writes the output to WS.COM.  The
+                ;		second example loads MEX112.COM, overlays it with
+                ;		MXO-US13.HEX, and writes the output file to MEXTEST.COM.
+                ;		(note that the second example is the recommended technique,
+                ;		since it preserves the original file). The third example
+                ;		loads WS.OVR and patches it with the file "OVRPATCH.HEX".
+                ;
+                ;		Also added this rev: ZCPR2-style du specs are now fully
+                ;		supported, for both input and output files.  Thus, the
+                ;		following command lines are permissable:
+                ;
+                ;			b3>mload a4:myfile.com=0:bigfil,b6:patch1,c9:patch2
+                ;			a6>mload b5:=c3:mdm717.com,mdmpatch
+                ;
+                ;		After loading, an additional information line is now printed
+                ;		in the statistics report, which displays the true size of the
+                ;		saved image (the previous report was technically correct, but
+                ;		could result in confusion for certain kinds of files with
+                ;		imbedded "DS" and "ORG" statements in the original source code).
+                ;
+                ; 1.0 - 1.4	(RGF) change log removed to conserve space
+                ;
+                ;	originally written by ron fowler, fort atkinson, wisconsin
+                ;
+                ;
+                ;
+                ; For assembly with asm.com or mac (delete above title line if
+                ; assembling with asm.com).
+                ;
+                ; This program is a replacement for the cp/m "LOAD" program.
+                ; Why replace "LOAD"?  well... LOAD.COM has a few deficiencies.
+                ; For example, if your hex file's origin is above 100h, LOAD.COM
+                ; prepends blank space to the output file to insure it will work
+                ; as a CP/M transient.	It cares not if the file is not intended
+                ; as a CP/M transient.	it also doesn't like hex records with mixed
+                ; load addresses  (for example, one that loads below a previous record --
+                ; which is a perfectly legitimate happenstance).  Also, LOAD.COM
+                ; can load only one program at a time, and has no provision for
+                ; a load bias in the command specification. Finally, there is no
+                ; provision for user specification of the output file name.
+                ;
+                ;
+                ; Hence, this program....
+                ;
+                ;------------------------------------------------------------
+                ;
+                ; Syntax is as follows:
+                ;
+                ;	mload [<outnam=] <filename>[,<filename>...] [bias]
+                ;
+                ; where <outnam> is the (optional!;) output file name (only the drive
+                ; spec and primary filename may be specified; the output filetype is
+                ; derived exclusively from the 3-byte string at 103h within MLOAD),
+                ; <filename> specifies files to load and <bias> is the offset within
+                ; the saved image to apply when loading the file.
+                ;
+                ; MLOAD with no arguments prints a small help message -- this message
+                ; is also printed whenever a command line syntax error occurs.
+                ;
+                ; Filenames may contain drive/user specs, and must not contain wildcards.
+                ; Input filenames must be separated by commas, and a space is required
+                ; between the last filename and the optional bias.
+                ;
+                ; A load information summary is printed at the successful conclusion
+                ; of the load.	Any errors in loading will generally include the name
+                ; of the file in question.
+                ;
+                ; If no output filename is specified, it will be derived from the first
+                ; input filename, with filetype of 'COM', if not otherwise specified
+                ; (this default filetype may be patched directly into mload via DDT
+                ; (or with MLOAD itself, using a patch file) -- its location is at 103H
+                ; in MLOAD.COM). Note that a command line of the form "C:=<FILENAME>"
+                ; will place the output file on the "C" drive with the same primary
+                ; filename as the input file.
+                ;
+                ; In its simplest form, MLOAD's syntax is identical to LOAD.COM; thus
+                ; there should be no problem in learning to use the new program.  The
+                ; only significant difference here is that, under LOAD.COM, all files
+                ; are output starting at 100h, even if they originate elsewhere.  MLOAD
+                ; outputs starting at the hex file origin (actually, the first hex rec-
+                ; ord specifies the output load address).  The bias option may be used
+                ; to override this.
+                ;
+                ; An example should clarify this.  Suppose you have a file that loads
+                ; at 1000h.  LOAD.COM would save an output file that begins at 100h and
+                ; loads past 1000h (to wherever the program ends).  MLOAD will save an
+                ; output file starting from 1000h only.  If, for some reason you need the
+                ; file to start at 100h in spite of its 1000h origin (i can think of sev-
+                ; eral circumstances where this would be necessary), you'd have to specify
+                ; a bias to mload.  thus, using this example, "MLOAD MYFILE 0F00" would do.
+                ;
+                ; Note that this program re-initializes itself each time it is run.
+                ; Thus, if your system supports a direct branch to the tpa (via a zero-length
+                ; .COM file, or the ZCPR "GO" command), you may safely re-execute MLOAD.
+                ;
+                ; Please report any bugs, bug fixes, or enhancements to
+                ;
+                ;		"FORT FONE FILE FOLDER" rcpm/cbbs
+                ;		Fort Atkinson, Wisconsin
+                ;		(414) 563-9932 (no ring back)
+                ;
+                ;				--Ron Fowler
+                ;				  03/08/84   updated 1/31/85
+                ;
+                ;------------------------------------------------------------
+                ;
+                ; CP/M equates
+                ;
+ 0000 =         warmbt	equ	0		;warm boot
+ 0005 =         system	equ	5		;system entry (also top of mem pntr)
+ 005C =         dfcb	equ	5ch		;default file control block
+ 0009 =         ft	equ	9		;fcb offset to filetype
+ 0080 =         tbuf	equ	80h		;default buffer
+ 0100 =         tpa	equ	100h		;transient program area
+ 001A =         eof	equ	1ah		;cp/m end-of-file mark
+ 0021 =         fcbsiz	equ	33		;size of file control block
+                ;
+                ; CP/M system calls
+                ;
+ 0002 =         pcharf	equ	2		;print char
+ 000E =         seldf	equ	14		;select disk drive
+ 000F =         openf	equ	15		;open file
+ 0010 =         closef	equ	16		;close file
+ 0011 =         fsrchf	equ	17		;search for first
+ 0012 =         fsrchn	equ	18		;search for next
+ 0013 =         erasef	equ	19		;delete file
+ 0014 =         readf	equ	20		;read record
+ 0015 =         writef	equ	21		;write record
+ 0016 =         creatf	equ	22		;create file
+ 0019 =         getdrf	equ	25		;return dflt drive #
+ 001A =         sdmaf	equ	26		;set dma address
+ 0020 =         gsuser	equ	32		;get/set user #
+ 0021 =         rrand	equ	33		;read random
+ 0022 =         wrand	equ	34		;write random
+ 0023 =         filszf	equ	35		;compute file size
+ 0024 =         srand	equ	36		;set random
+                ;
+                ; ASCII character constants
+                ;
+ 000D =         cr	equ	13
+ 000A =         lf	equ	10
+ 0007 =         bel	equ	7
+ 0009 =         tab	equ	9
+                ;
+                ; without further ado...
+                ;
+ 0100           	org	tpa
+                ;
+ 0100 C30601    	jmp	begin		;jump over default output filetype
+                ;
+                ; the default output filetype is located at 103h for easy patching
+                ;
+ 0103 434F4D    outtyp:	db	'COM'
+                ;
+ 0106 210000    begin:	lxi	h,0		;save system stackpointer
+ 0109 39        	dad	sp
+ 010A 22E30B    	shld	spsave
+ 010D 31490C    	lxi	sp,stack	;load local stack
+ 0110 CD8705    	call	ilprnt		;sign on
+ 0113 4D4C4F4144	db	'MLOAD ver. 2.5   Copyright (C) 1983, 1984, 1985'
+ 0142 0D0A      	db	cr,lf
+ 0144 6279204E69	db	'by NightOwl Software, Inc.'
+ 015E 0D0A00    	db	cr,lf,0
+ 0161 CD8F01    	call	setup		;initialize
+ 0164 CD0A02    main:	call	nxtfil		;parse and read next input file
+ 0167 DA7301    	jc	done		;no more...
+ 016A CD8B02    	call	lodfil		;yep, load it
+ 016D CD7A05    	call	closfl		;close it (in case MP/M or TurboDOS)
+ 0170 C36401    	jmp	main		;maybe more
+ 0173 CDBF03    done:	call	wrtfil		;write the output file
+                ;
+                ; exit to cp/m
+                ;
+ 0176 118000    exit:	lxi	d,tbuf		;restore dma address
+ 0179 0E1A      	mvi	c,sdmaf
+ 017B CDBD0A    	call	bdos
+ 017E 3A0700    	lda	system+2	;get top of memory pointer
+ 0181 D609      	sui	9		;allow for ccp+slop
+ 0183 21C00B    	lxi	h,hiload+1	;highest load address
+ 0186 96        	sub	m		;above ccp?
+ 0187 DA0000    	jc	warmbt		;then warm-boot
+ 018A 2AE30B    	lhld	spsave		;nope, ccp still in memory
+ 018D F9        	sphl			;restore its stack
+ 018E C9        	ret			;return to ccp
+                ;
+                ; load program initialization
+                ;
+ 018F 21970B    setup:	lxi	h,varset	;initialize variables
+ 0192 11BD0B    	lxi	d,vars
+ 0195 0626      	mvi	b,varlen	;by moving in default values
+ 0197 CD3C06    	call	move
+ 019A 2AC40B    	lhld	cmdptr		;get first free mem pointer
+ 019D EB        	xchg			;in de
+ 019E 218000    	lxi	h,tbuf		;point to command tail bufr
+ 01A1 7E        	mov	a,m		;get its length
+ 01A2 23        	inx	h
+ 01A3 B7        	ora	a		;does it have any length?
+ 01A4 CA8F07    	jz	help		;nope, go give usage help
+ 01A7 47        	mov	b,a		;yep, get length to b
+ 01A8 CD3C06    	call	move		;move cmd tail to buffer
+ 01AB EB        	xchg			;end of dest to hl
+ 01AC 3600      	mvi	m,0		;stuff a terminator
+ 01AE 23        	inx	h		;point to first free memory
+ 01AF 22C80B    	shld	filbuf		;set up file buffer
+ 01B2 EB        	xchg			;file bufr adrs to de
+ 01B3 2A0600    	lhld	system+1	;get top of memory pointer
+ 01B6 AF        	xra	a		;round system to page boundary
+ 01B7 93        	sub	e
+ 01B8 4F        	mov	c,a		;with result in bc
+ 01B9 7C        	mov	a,h
+ 01BA D609      	sui	9		;allow for ccp
+ 01BC 9A        	sbb	d
+ 01BD 47        	mov	b,a
+ 01BE EB        	xchg			;buffer pointer to hl
+ 01BF 3600      nitmem:	mvi	m,0		;clear buffer
+ 01C1 23        	inx	h
+ 01C2 0B        	dcx	b
+ 01C3 78        	mov	a,b
+ 01C4 B1        	ora	c
+ 01C5 C2BF01    	jnz	nitmem
+                ;
+                ; look for a bias specification in command line
+                ;
+ 01C8 2AC40B    	lhld	cmdptr		;point to command buffer-1
+ 01CB 2B        	dcx	h
+ 01CC CD4606    	call	scanbk		;scan past blanks
+ 01CF B7        	ora	a		;no non-blank chars?
+ 01D0 CA8F07    	jz	help		;then go print help text
+ 01D3 23        fndspc:	inx	h		;point to next
+ 01D4 7E        	mov	a,m		;fetch it
+ 01D5 B7        	ora	a		;test it
+ 01D6 C8        	rz			;line ended, return
+ 01D7 FE20      	cpi	' '		;nope, test for blank
+ 01D9 C2D301    	jnz	fndspc		;not blank, continue
+ 01DC CD4606    	call	scanbk		;skip blanks
+ 01DF B7        	ora	a		;end-of-line?
+ 01E0 C8        	rz			;return if so
+                ;
+                ; hl points to bias in command line
+                ;
+ 01E1 110000    	lxi	d,0		;init bias
+ 01E4 CD5506    	call	hexdig		;insure a hex digit
+ 01E7 DA6906    	jc	synerr		;bad...
+ 01EA 7E        hexlp:	mov	a,m		;no.  get next char
+ 01EB 23        	inx	h		;skip over it
+ 01EC CD5506    	call	hexdig		;test for hex digit
+ 01EF D2FB01    	jnc	digok		;jump if good hex digit
+ 01F2 B7        	ora	a		;must end on null terminator
+ 01F3 C26906    	jnz	synerr
+ 01F6 EB        	xchg			;good end, get bias to hl
+ 01F7 22BD0B    	shld	bias		;stuff it
+ 01FA C9        	ret			;done
+ 01FB EB        digok:	xchg			;bias to hl
+ 01FC 29        	dad	h		;skift left 4 to make room
+ 01FD 29        	dad	h		;   for new hex digit
+ 01FE 29        	dad	h
+ 01FF 29        	dad	h
+ 0200 EB        	xchg			;back to de
+ 0201 83        	add	e		;add in new digit
+ 0202 5F        	mov	e,a
+ 0203 D2EA01    	jnc	hexlp		;jump if no 8-bit ovfl
+ 0206 14        	inr	d		;carry
+ 0207 C3EA01    	jmp	hexlp
+                ;
+                ; parse next input name, and open resultant file
+                ;
+ 020A 2AC40B    nxtfil:	lhld	cmdptr		;get command line pointer
+ 020D 115C00    next2:	lxi	d,dfcb		;destination fcb
+ 0210 CDDF09    	call	fparse		;parse a filename
+ 0213 FE3D      	cpi	'='		;stopped on output specifier?
+ 0215 C24102    	jnz	noteq
+ 0218 3AD00B    	lda	outnam+2	;insure no name yet specified
+ 021B FE20      	cpi	' '
+ 021D C26906    	jnz	synerr		;syntax error if already named
+ 0220 3AE20B    	lda	outflg		;already been here?
+ 0223 B7        	ora	a
+ 0224 C26906    	jnz	synerr		;can't be here twice
+ 0227 3C        	inr	a		;flag that we've been here
+ 0228 32E20B    	sta	outflg
+ 022B 04        	inr	b		;insure no ambiguous output name
+ 022C 05        	dcr	b
+ 022D C29606    	jnz	afnerr
+ 0230 23        	inx	h		;skip over '='
+ 0231 E5        	push	h		;save cmd line pointer
+ 0232 215B00    	lxi	h,dfcb-1	;move the name to output name hold
+ 0235 11CE0B    	lxi	d,outnam
+ 0238 060D      	mvi	b,13		;drive spec too
+ 023A CD3C06    	call	move
+ 023D E1        	pop	h		;restore command line pointer
+ 023E C30D02    	jmp	next2		;go parse another
+ 0241 FE2C      noteq:	cpi	','		;stopped on comma?
+ 0243 CA4B02    	jz	gcomma		;jump if so
+ 0246 3600      	mvi	m,0		;nope, insure end of input
+ 0248 C34C02    	jmp	nxt2		;don't advance over fake end
+ 024B 23        gcomma:	inx	h		;skip over comma
+ 024C 22C40B    nxt2:	shld	cmdptr		;save new command line pntr
+ 024F 78        	mov	a,b		;get ambig char count
+ 0250 B7        	ora	a		;test it
+ 0251 C29606    	jnz	afnerr		;allow no ambig characters
+ 0254 32C60B    	sta	bufptr		;force a disk read
+ 0257 115D00    	lxi	d,dfcb+1	;look at parsed filename
+ 025A 1A        	ldax	d
+ 025B FE20      	cpi	' '		;blank? (input ended?)
+ 025D 37        	stc			;get carry ready in case so
+ 025E C8        	rz			;return cy if input gone
+ 025F 1B        	dcx	d		;nope, point de to start of fcb
+ 0260 D5        open2:	push	d		;try to open the file
+ 0261 0E0F      	mvi	c,openf
+ 0263 CDBD0A    	call	bdos
+ 0266 D1        	pop	d
+ 0267 3C        	inr	a		;return=0ffh?
+ 0268 C27F02    	jnz	openok		;jump if not
+                ;
+                ; file not found: if filetype blank, set to 'hex' and try again
+                ;
+ 026B 216500    	lxi	h,dfcb+ft	;point to file type
+ 026E 7E        	mov	a,m		;anything there?
+ 026F FE20      	cpi	' '
+ 0271 C2BD06    	jnz	fnferr		;yes, so file not found
+ 0274 3648      	mvi	m,'H'		;nope, fill in 'hex'
+ 0276 23        	inx	h
+ 0277 3645      	mvi	m,'E'
+ 0279 23        	inx	h
+ 027A 3658      	mvi	m,'X'
+ 027C C36002    	jmp	open2		;go try again
+                ;
+                ; here after a good file open
+                ;
+ 027F CD5E0B    openok:	call	hexchk		;is this a hex file?
+ 0282 C8        	rz			;if so, all done
+ 0283 21DF0B    	lxi	h,comflg	;no, get pointer to flag
+ 0286 7E        	mov	a,m		;loading first file?
+ 0287 B7        	ora	a
+ 0288 C0        	rnz			;if not, ignore type, consider hex
+ 0289 34        	inr	m		;else, set the flag
+ 028A C9        	ret
+                ;
+                ; load current file
+                ;
+ 028B 21DF0B    lodfil:	lxi	h,comflg	;loading a com file?
+ 028E 7E        	mov	a,m		;get flag
+ 028F E601      	ani	1
+ 0291 C26403    	jnz	lodcom		;jump if so
+ 0294 2ABD0B    	lhld	bias		;else get bias on top of stack
+ 0297 E5        	push	h
+                ;
+                ; load a hex record
+                ;
+ 0298 CD3103    loadlp:	call	gnb		;get next file byte
+ 029B DE3A      	sbi	':'		;look for start-record mark
+ 029D C29802    	jnz	loadlp		;scan until found
+ 02A0 32C30B    	sta	cksum		;got it, init checksum to zero
+ 02A3 57        	mov	d,a		;upper byte of rec cnt=0
+ 02A4 C1        	pop	b		;retrieve bias adrs
+ 02A5 C5        	push	b		;save it again
+ 02A6 CD0903    	call	ghbcks		;get hex byte w/checksum
+ 02A9 5F        	mov	e,a		;de now has record length
+ 02AA B7        	ora	a		;test it
+ 02AB C2B002    	jnz	notend		;jump if len<>0 (not eof rec)
+ 02AE E1        	pop	h		;all done
+ 02AF C9        	ret
+ 02B0 CD0903    notend:	call	ghbcks		;hi byte of rec ld adrs
+ 02B3 67        	mov	h,a		;accumulate in hl
+ 02B4 CD0903    	call	ghbcks		;get lo byte
+ 02B7 6F        	mov	l,a		;put lo in l
+ 02B8 3AC70B    	lda	lodflg		;test load flag
+ 02BB B7        	ora	a
+ 02BC CC9609    	cz	lodnit		;not first record, initialize
+ 02BF E5        	push	h		;save load address
+ 02C0 19        	dad	d		;add in record length
+ 02C1 2B        	dcx	h		;make highest, not next
+ 02C2 3AC10B    	lda	hipc		;a new high?
+ 02C5 95        	sub	l
+ 02C6 3AC20B    	lda	hipc+1
+ 02C9 9C        	sbb	h
+ 02CA D2E202    	jnc	notgt		;jump if not
+ 02CD 22C10B    	shld	hipc		;yep, update hipc
+ 02D0 D5        	push	d		;save reclen
+ 02D1 EB        	xchg			;load adrs to de
+ 02D2 2ACA0B    	lhld	offset		;get offset to form true memory adrs
+ 02D5 19        	dad	d		;add in offset
+ 02D6 09        	dad	b		;and bias
+ 02D7 22BF0B    	shld	hiload		;mark highest true memory load adrs
+ 02DA 3A0700    	lda	system+2	;validate against top-mem pointer
+ 02DD BC        	cmp	h
+ 02DE DA3907    	jc	memful		;jump if out of memory
+ 02E1 D1        	pop	d		;restore reclen
+ 02E2 E1        notgt:	pop	h		;restore load address
+ 02E3 09        	dad	b		;add bias to load adrs
+ 02E4 D5        	push	d		;save record length
+ 02E5 E5        	push	h
+ 02E6 2ADD0B    	lhld	bytcnt		;add record length to byte count
+ 02E9 19        	dad	d
+ 02EA 22DD0B    	shld	bytcnt
+ 02ED E1        	pop	h
+ 02EE EB        	xchg
+ 02EF 2ACA0B    	lhld	offset		;calculate true memory adrs
+ 02F2 19        	dad	d		;hl=true loading adrs
+ 02F3 D1        	pop	d		;restore record length
+ 02F4 CD0903    	call	ghbcks		;skip unused byte of intel format
+                ;
+                ; move the record into memory
+                ;
+ 02F7 CD0903    reclp:	call	ghbcks		;get hex byte
+ 02FA 77        	mov	m,a		;store it in buffer
+ 02FB 23        	inx	h		;point to next
+ 02FC 1D        	dcr	e		;count down
+ 02FD C2F702    	jnz	reclp		;until record all read
+ 0300 CD0903    	call	ghbcks		;get checksum byte
+ 0303 C21107    	jnz	cserr		;final add cksum should sum 0
+ 0306 C39802    	jmp	loadlp		;good load, go do nxt record
+                ;
+                ; get next hex byte from input, and
+                ; accumulate a checksum
+                ;
+ 0309 C5        ghbcks:	push	b		;save em all
+ 030A E5        	push	h
+ 030B D5        	push	d
+ 030C CD1B03    	call	hexin		;get hex byte
+ 030F 47        	mov	b,a		;save in b
+ 0310 21C30B    	lxi	h,cksum		;add to checksum
+ 0313 7E        	mov	a,m
+ 0314 80        	add	b
+ 0315 77        	mov	m,a
+ 0316 78        	mov	a,b		;get byte back
+ 0317 D1        	pop	d		;restore checksum
+ 0318 E1        	pop	h		;restore other regs
+ 0319 C1        	pop	b
+ 031A C9        	ret
+                ;
+                ; routine to get next byte from input...forms
+                ; byte from two ascii hex characters
+                ;
+ 031B CD3103    hexin:	call	gnb		;get next input file byte
+ 031E CD4E06    	call	hexval		;convert to binary w/validation
+ 0321 07        	rlc			;move into ms nybble
+ 0322 07        	rlc
+ 0323 07        	rlc
+ 0324 07        	rlc
+ 0325 E6F0      	ani	0f0h		;kill possible garbage
+ 0327 F5        	push	psw		;save it
+ 0328 CD3103    	call	gnb		;get next byte
+ 032B CD4E06    	call	hexval		;convert it, w/validation
+ 032E C1        	pop	b		;get back first
+ 032F B0        	ora	b		;or in second
+ 0330 C9        	ret			;good byte in a
+                ;
+                ; gnb - utility subroutine to get next
+                ;	byte from disk file
+ 0331 E5        gnb:	push	h		;save all regs
+ 0332 D5        	push	d
+ 0333 C5        	push	b
+ 0334 3AC60B    	lda	bufptr		;get input bufr pointer
+ 0337 E67F      	ani	7fh		;wound back to 0?
+ 0339 CA5203    	jz	diskrd		;go read sector if so
+ 033C 1600      gnb1:	mvi	d,0		;else form 16 bit offset
+ 033E 5F        	mov	e,a
+ 033F 218000    	lxi	h,tbuf		;from tbuf
+ 0342 19        	dad	d		;add in offset
+ 0343 7E        	mov	a,m		;get next byte
+ 0344 FE1A      	cpi	eof		;end of file?
+ 0346 CAF306    	jz	eoferr		;error if so
+ 0349 21C60B    	lxi	h,bufptr	;else bump buf ptr
+ 034C 34        	inr	m
+ 034D B7        	ora	a		;return carry clear
+ 034E C1        	pop	b		;restore and return
+ 034F D1        	pop	d
+ 0350 E1        	pop	h
+ 0351 C9        	ret
+                ;
+                ; read next sector from disk
+                ;
+ 0352 0E14      diskrd:	mvi	c,readf		;bdos "READ SEC" function
+ 0354 115C00    	lxi	d,dfcb
+ 0357 CDBD0A    	call	bdos		;read sector
+ 035A B7        	ora	a
+ 035B C2F306    	jnz	eoferr		;error if phys end of file
+ 035E 32C60B    	sta	bufptr		;store 0 as new buf ptr
+ 0361 C33C03    	jmp	gnb1		;go re-join gnb code
+                ;
+                ; load a com file
+                ;
+ 0364 34        lodcom:	inr	m		;bump the comfile flag
+ 0365 210001    	lxi	h,tpa		;set origin
+ 0368 CD9609    	call	lodnit		;and initialize
+ 036B EB        	xchg			;load address in de
+ 036C 2ABD0B    	lhld	bias		;add in bias
+ 036F 19        	dad	d
+ 0370 EB        	xchg
+ 0371 2ACA0B    	lhld	offset		;and offset
+ 0374 19        	dad	d
+ 0375 EB        	xchg			;de has absolute mem adrs of load
+                ;
+ 0376 218000    comlp:	lxi	h,128		;calculate next dma
+ 0379 19        	dad	d
+ 037A 3A0700    	lda	system+2	;check for space
+ 037D BC        	cmp	h
+ 037E DA3907    	jc	memful		;jump if none
+ 0381 E5        	push	h		;else save next dma
+ 0382 D5        	push	d		;and this dma
+ 0383 0E1A      	mvi	c,sdmaf		;set this dma
+ 0385 CDBD0A    	call	bdos
+ 0388 115C00    	lxi	d,dfcb		;read next record
+ 038B 0E14      	mvi	c,readf
+ 038D CDBD0A    	call	bdos
+ 0390 E1        	pop	h		;recall this dma
+ 0391 D1        	pop	d		;de=next dma
+ 0392 B7        	ora	a		;end of read?
+ 0393 C2A303    	jnz	lodend		;jump if so
+ 0396 2AE00B    	lhld	comsiz		;no, advance com byte count
+ 0399 018000    	lxi	b,128
+ 039C 09        	dad	b
+ 039D 22E00B    	shld	comsiz
+ 03A0 C37603    	jmp	comlp		;continue
+                ;
+ 03A3 2B        lodend:	dcx	h		;one less byte is highest
+ 03A4 22BF0B    	shld	hiload		;set a new high
+ 03A7 2AE00B    	lhld	comsiz		;hi pc=bytecount+100h
+ 03AA 110001    	lxi	d,tpa
+ 03AD 19        	dad	d
+ 03AE EB        	xchg			;to de
+ 03AF 2ABD0B    	lhld	bias		;add in bias
+ 03B2 19        	dad	d
+ 03B3 22C10B    	shld	hipc
+ 03B6 118000    	lxi	d,tbuf		;reset dma for hex files
+ 03B9 0E1A      	mvi	c,sdmaf
+ 03BB CDBD0A    	call	bdos
+ 03BE C9        	ret
+                ;
+                ; write output file
+                ;
+ 03BF 115C00    wrtfil:	lxi	d,dfcb		;point to fcb
+ 03C2 D5        	push	d		;save 2 copies of pointer
+ 03C3 D5        	push	d
+ 03C4 CDF709    	call	nitfcb		;initialize output fcb
+ 03C7 21CE0B    	lxi	h,outnam	;move output name in
+ 03CA 1B        	dcx	d		;point to user # (prior to fcb)
+ 03CB 060A      	mvi	b,10		;move user, drive, primary name
+ 03CD CD3C06    	call	move
+ 03D0 7E        	mov	a,m		;output type blank?
+ 03D1 FE20      	cpi	' '
+ 03D3 C2D903    	jnz	wrtnb		;jump if not
+ 03D6 210301    	lxi	h,outtyp	;yes, move dflt output filetype in
+ 03D9 0603      wrtnb:	mvi	b,3
+ 03DB CD3C06    	call	move
+ 03DE D1        	pop	d		;restore fcb pointer
+ 03DF 0E13      	mvi	c,erasef	;erase any existing file
+ 03E1 CDBD0A    	call	bdos
+ 03E4 D1        	pop	d		;restore fcb pointer
+ 03E5 0E16      	mvi	c,creatf	;create a new file
+ 03E7 CDBD0A    	call	bdos
+ 03EA 3C        	inr	a		;good create?
+ 03EB CAE006    	jz	dirful		;goto directory full error if not
+ 03EE 2ABF0B    	lhld	hiload		;yep, get top of bufr pntr
+ 03F1 EB        	xchg			;in de
+ 03F2 2AC80B    	lhld	filbuf		;get start of bufr adrs
+ 03F5 7B        	mov	a,e		;calculate output file size
+ 03F6 95        	sub	l
+ 03F7 4F        	mov	c,a		;with result in bc
+ 03F8 7A        	mov	a,d
+ 03F9 9C        	sbb	h
+ 03FA 47        	mov	b,a
+ 03FB 78        	mov	a,b		;test length
+ 03FC B1        	ora	c
+ 03FD CA7207    	jz	loderr		;nothing to write???
+ 0400 115C00    	lxi	d,dfcb		;get fcb pointer
+ 0403 C5        wrlp:	push	b		;save count
+ 0404 D5        	push	d		;and fcb pointer
+ 0405 EB        	xchg			;get memory pointer to de
+ 0406 218000    	lxi	h,128		;add in sector length for next pass
+ 0409 19        	dad	d
+ 040A E3        	xthl			;save next dma
+ 040B E5        	push	h		;above fcb
+ 040C 0E1A      	mvi	c,sdmaf		;set transfer address
+ 040E CDBD0A    	call	bdos
+ 0411 D1        	pop	d		;fetch fcb pointer
+ 0412 D5        	push	d		;save it again
+ 0413 0E15      	mvi	c,writef	;write a sector
+ 0415 CDBD0A    	call	bdos
+ 0418 B7        	ora	a		;test result
+ 0419 C2D206    	jnz	dskful		;disk full error...
+ 041C 2ADB0B    	lhld	reccnt		;no,increment count of records
+ 041F 23        	inx	h
+ 0420 22DB0B    	shld	reccnt
+ 0423 D1        	pop	d		;restore fcb pointer
+ 0424 E1        	pop	h		;and memory write pointer
+ 0425 C1        	pop	b		;and count
+ 0426 79        	mov	a,c		;subtract 128 (sec size) from count
+ 0427 D680      	sui	128
+ 0429 4F        	mov	c,a
+ 042A D20304    	jnc	wrlp		;jump if some left
+ 042D 78        	mov	a,b		;hi-order borrow
+ 042E D601      	sui	1		;do it (can't "DCR B", doesn't affect cy)
+ 0430 47        	mov	b,a		;restore
+ 0431 D20304    	jnc	wrlp		;jump if more left
+ 0434 CD7A05    	call	closfl		;close output file
+                ;
+                ; report statistics to console
+                ;
+ 0437 CD8705    	call	ilprnt
+ 043A 4C6F616465	db	'Loaded ',0
+ 0442 2ADD0B    	lhld	bytcnt		;print # bytes
+ 0445 CDED05    	call	decout
+ 0448 CD8705    	call	ilprnt
+ 044B 2062797465	db	' bytes (',0
+ 0454 CD1906    	call	hexout
+ 0457 CD8705    	call	ilprnt
+ 045A 482900    	db	'H)',0
+ 045D CD8705    	call	ilprnt
+ 0460 20746F2066	db	' to file %',0
+ 046B 3ADF0B    	lda	comflg		;did we load a comfile too?
+ 046E B7        	ora	a
+ 046F CA9A04    	jz	notcom		;jump if not
+ 0472 CD8705    	call	ilprnt
+ 0475 0D0A4F7665	db	cr,lf,'Over a ',0
+ 047F 2AE00B    	lhld	comsiz
+ 0482 CDED05    	call	decout
+ 0485 CD8705    	call	ilprnt
+ 0488 2062797465	db	' byte binary file',0
+ 049A CD8705    notcom:	call	ilprnt
+ 049D 0D0A537461	db	cr,lf,'Start address: ',0
+ 04AF 2ACC0B    	lhld	lodadr		;print loading address
+ 04B2 CD1906    	call	hexout
+ 04B5 CD8705    	call	ilprnt
+ 04B8 482020456E	db	'H  Ending address: ',0
+ 04CC 2AC10B    	lhld	hipc		;print ending load address
+ 04CF CD1906    	call	hexout
+ 04D2 CD8705    	call	ilprnt
+ 04D5 4820204269	db	'H  Bias: ',0
+ 04DF 2ABD0B    	lhld	bias
+ 04E2 CD1906    	call	hexout
+ 04E5 CD8705    	call	ilprnt
+ 04E8 480D0A00  	db	'H',cr,lf,0
+ 04EC CD8705    	call	ilprnt
+ 04EF 5361766564	db	'Saved image size: ',0
+ 0502 2ADB0B    	lhld	reccnt		;get count of image records
+ 0505 E5        	push	h		;save it
+ 0506 0607      	mvi	b,7		;convert to bytes
+ 0508 29        xlp:	dad	h
+ 0509 05        	dcr	b
+ 050A C20805    	jnz	xlp
+ 050D CDED05    	call	decout		;print it
+ 0510 CD8705    	call	ilprnt
+ 0513 2062797465	db	' bytes (',0
+ 051C CD1906    	call	hexout		;now in hex
+ 051F CD8705    	call	ilprnt
+ 0522 482C202D20	db	'H, - ',0
+ 0528 E1        	pop	h		;recall record count
+ 0529 CDED05    	call	decout		;print it
+ 052C CD8705    	call	ilprnt
+ 052F 207265636F	db	' records)',cr,lf,0
+ 053B 2ACC0B    	lhld	lodadr		;fetch loading address
+ 053E 7D        	mov	a,l		;test if =tpa
+ 053F B7        	ora	a
+ 0540 C24705    	jnz	nottpa		;tpa always on page boundary
+ 0543 7C        	mov	a,h		;lo ok, test hi
+ 0544 FE01      	cpi	(tpa shr 8) and	0ffh
+ 0546 C8        	rz			;return if tpa
+ 0547 CD8705    nottpa:	call	ilprnt		;not, so print warning msg
+ 054A 0D0A07    	db	cr,lf,bel
+ 054D 2B2B205761	db	'++ Warning: program origin NOT at 100H ++'
+ 0576 0D0A00    	db	cr,lf,0
+ 0579 C9        	ret			;done
+                ;
+                ;	***********************
+                ;	* utility subroutines *
+                ;	***********************
+                ;
+                ;
+                ; routine to close any open file
+                ;
+ 057A 115C00    closfl:	lxi	d,dfcb
+ 057D 0E10      	mvi	c,closef
+ 057F CDBD0A    	call	bdos
+ 0582 3C        	inr	a		;test close result
+ 0583 CA2807    	jz	clserr		;jump if error
+ 0586 C9        	ret
+                ;
+                ; print message in-line with code
+                ;
+ 0587 E3        ilprnt:	xthl			;message pntr to hl
+ 0588 CD8D05    	call	prathl		;print it
+ 058B E3        	xthl			;restore and return
+ 058C C9        	ret
+                ;
+                ; print msg pointed to by hl until null.  expand
+                ; '%' char to current filename.
+                ;
+ 058D 7E        prathl:	mov	a,m		;fetch char
+ 058E 23        	inx	h		;point to next
+ 058F B7        	ora	a		;terminator?
+ 0590 C8        	rz			;then done
+ 0591 FE25      	cpi	'%'		;want filename?
+ 0593 CA9C05    	jz	prtfn		;go do it if so
+ 0596 CD2F06    	call	type		;nope, just print char
+ 0599 C38D05    	jmp	prathl		;continue
+                ;
+ 059C E5        prtfn:	push	h		;save pointer
+ 059D C5        	push	b
+ 059E 3A5C00    	lda	dfcb		;fetch dr field of dfcb
+ 05A1 B7        	ora	a		;default drive?
+ 05A2 C2A905    	jnz	prndf		;jump if not
+ 05A5 CD8B0B    	call	getdsk		;get logged-in drive #
+ 05A8 3C        	inr	a		;make it one-relative (as in fcb)
+ 05A9 C640      prndf:	adi	'A'-1		;make drive name printable
+ 05AB CD2F06    	call	type		;print it
+ 05AE 3A5B00    	lda	dfcb-1		;get user #
+ 05B1 FEFF      	cpi	0ffh		;null?
+ 05B3 CC7D0B    	cz	getusr		;iff so, get current user
+ 05B6 6F        	mov	l,a		;to hl
+ 05B7 2600      	mvi	h,0
+ 05B9 CDED05    	call	decout		;print it
+ 05BC 3E3A      	mvi	a,':'		;drive names followed by colon
+ 05BE CD2F06    	call	type
+ 05C1 215D00    	lxi	h,dfcb+1	;setup for name
+ 05C4 0608      	mvi	b,8		;print up to 8
+ 05C6 CDD805    	call	prtnam
+ 05C9 3E2E      	mvi	a,'.'		;print dot
+ 05CB CD2F06    	call	type
+ 05CE 0603      	mvi	b,3		;print filetype field
+ 05D0 CDD805    	call	prtnam
+ 05D3 C1        	pop	b
+ 05D4 E1        	pop	h		;restore and continue
+ 05D5 C38D05    	jmp	prathl
+                ;
+                ; print file name .HL max length in b.	don't print spaces
+                ;
+ 05D8 7E        prtnam:	mov	a,m		;fetch a char
+ 05D9 FE20      	cpi	' '		;blank?
+ 05DB CAE705    	jz	pwind		;go wind if so
+ 05DE 23        	inx	h		;nope, move to next
+ 05DF CD2F06    	call	type		;print it
+ 05E2 05        	dcr	b		;count down
+ 05E3 C2D805    	jnz	prtnam		;continue
+ 05E6 C9        	ret
+ 05E7 23        pwind:	inx	h		;skip remainder of blank name
+ 05E8 05        	dcr	b
+ 05E9 C2E705    	jnz	pwind
+ 05EC C9        	ret
+                ;
+                ; print HL in decimal on console
+                ;
+ 05ED E5        decout:	push	h		;save everybody
+ 05EE D5        	push	d
+ 05EF C5        	push	b
+ 05F0 01F6FF    	lxi	b,-10		;conversion radix
+ 05F3 11FFFF    	lxi	d,-1
+ 05F6 09        declp:	dad	b
+ 05F7 13        	inx	d
+ 05F8 DAF605    	jc	declp
+ 05FB 010A00    	lxi	b,10
+ 05FE 09        	dad	b
+ 05FF EB        	xchg
+ 0600 7C        	mov	a,h
+ 0601 B5        	ora	l
+ 0602 C4ED05    	cnz	decout		;this is recursive
+ 0605 7B        	mov	a,e
+ 0606 C630      	adi	'0'
+ 0608 CD2F06    	call	type
+ 060B C1        	pop	b
+ 060C D1        	pop	d
+ 060D E1        	pop	h
+ 060E C9        	ret
+                ;
+                ; newline on console
+                ;
+ 060F 3E0D      crlf:	mvi	a,cr
+ 0611 CD2F06    	call	type
+ 0614 3E0A      	mvi	a,lf
+ 0616 C32F06    	jmp	type
+                ;
+                ; print hl on console in hex
+                ;
+ 0619 7C        hexout:	mov	a,h		;get hi
+ 061A CD1E06    	call	hexbyt		;print it
+ 061D 7D        	mov	a,l		;get lo, fall into hexbyt
+                ;
+                ; type accumulator on console in hex
+                ;
+ 061E F5        hexbyt:	push	psw		;save byte
+ 061F 1F        	rar			;get ms nybble..
+ 0620 1F        	rar			;..into lo 4 bits
+ 0621 1F        	rar
+ 0622 1F        	rar
+ 0623 CD2706    	call	nybble
+ 0626 F1        	pop	psw		;get back byte
+ 0627 E60F      nybble:	ani	0fh		;mask ms nybble
+ 0629 C690      	adi	90h		;add offset
+ 062B 27        	daa			;decimal adjust a-reg
+ 062C CE40      	aci	40h		;add offset
+ 062E 27        	daa			;fall into type
+                ;
+                ; type char in a on console
+                ;
+ 062F E5        type:	push	h		;save all
+ 0630 D5        	push	d
+ 0631 C5        	push	b
+ 0632 5F        	mov	e,a		;cp/m outputs from e
+ 0633 0E02      	mvi	c,pcharf
+ 0635 CDBD0A    	call	bdos
+ 0638 C1        	pop	b
+ 0639 D1        	pop	d
+ 063A E1        	pop	h
+ 063B C9        	ret
+                ;
+                ; move: from @hl to @de, count in b
+                ;
+ 063C 04        move:	inr	b		;up one
+ 063D 05        movlp:	dcr	b		;count down
+ 063E C8        	rz			;return if done
+ 063F 7E        	mov	a,m		;not done, continue
+ 0640 12        	stax	d
+ 0641 23        	inx	h		;pointers=pointers+1
+ 0642 13        	inx	d
+ 0643 C33D06    	jmp	movlp
+                ;
+                ; scan to first non-blank char in string @hl
+                ;
+ 0646 23        scanbk:	inx	h		;next
+ 0647 7E        	mov	a,m		;fetch it
+ 0648 FE20      	cpi	' '
+ 064A CA4606    	jz	scanbk
+ 064D C9        	ret
+                ;
+                ; get hex digit and validate
+                ;
+ 064E CD5506    hexval:	call	hexdig		;get hex digit
+ 0651 DA5807    	jc	formerr		;jump if bad
+ 0654 C9        	ret
+                ;
+                ; get hex digit, return cy=1 if bad digit
+                ;
+ 0655 FE30      hexdig:	cpi	'0'		;lo boundary test
+ 0657 D8        	rc			;bad already?
+ 0658 FE3A      	cpi	'9'+1		;no, test hi
+ 065A DA6606    	jc	hexcvt		;jump if numeric
+ 065D FE41      	cpi	'A'		;test alpha
+ 065F D8        	rc			;bad?
+ 0660 FE47      	cpi	'F'+1		;no, upper alpha bound
+ 0662 3F        	cmc			;pervert carry
+ 0663 D8        	rc			;bad?
+ 0664 D607      	sui	7		;no, adjust to 0-f
+ 0666 E60F      hexcvt:	ani	0fh		;make it binary
+ 0668 C9        	ret
+                ;
+                ;	******************
+                ;	* error handlers *
+                ;	******************
+                ;
+ 0669 CD0F06    synerr:	call	crlf
+ 066C CD8705    	call	ilprnt
+ 066F 2020202020	db	'      Command line syntax error',cr,lf,cr,lf,0
+ 0693 C38F07    	jmp	help		;give help msg too
+                ;
+ 0696 CD8909    afnerr:	call	errxit		;exit with message
+ 0699 416D626967	db	'Ambiguous file name: % not allowed.',0
+                ;
+ 06BD CD8909    fnferr:	call	errxit
+ 06C0 46696C6520	db	'File % not found.',0
+                ;
+ 06D2 CD8909    dskful:	call	errxit
+ 06D5 4469736B20	db	'Disk full.',0
+                ;
+ 06E0 CD8909    dirful:	call	errxit
+ 06E3 4469726563	db	'Directory full.',0
+                ;
+ 06F3 CD8909    eoferr:	call	errxit
+ 06F6 5072656D61	db	'Premature end-of-file in %',0
+                ;
+ 0711 CD8909    cserr:	call	errxit
+ 0714 436865636B	db	'Checksum error in %',0
+                ;
+ 0728 CD8909    clserr:	call	errxit
+ 072B 43616E2774	db	'Can''t close %',0
+                ;
+ 0739 CD8909    memful:	call	errxit
+ 073C 4D656D6F72	db	'Memory full while loading %',0
+                ;
+ 0758 CD8909    formerr:call	errxit
+ 075B 466F726D61	db	'Format error in file %',0
+                ;
+ 0772 CD8909    loderr:	call	errxit
+ 0775 5772697469	db	'Writing %, nothing loaded',0
+                ;
+ 078F CD8909    help:	call	errxit		;print help text
+ 0792 4D4C4F4144	db	'MLOAD syntax:',cr,lf,cr,lf
+ 07A3 4D4C4F4144	db	'MLOAD [<OUTFIL>=] <FILE1>[,<FILE2>...] [<BIAS>]',cr,lf
+ 07D4 0920202020	db	tab,'    (brackets denote optional items)',cr,lf,cr,lf
+ 07FD 093C4F5554	db	tab,'<OUTFIL> is the optional output filename',cr,lf
+ 0828 093C46494C	db	tab,'<FILEn>  are input file(s)',cr,lf
+ 0845 093C424941	db	tab,'<BIAS>   is a hex load offset within the output file'
+ 087A 0D0A0D0A  	db	cr,lf,cr,lf
+ 087E 093C46494C	db	tab,'<FILE1> may be an optional non-HEX file to be patched',cr,lf
+ 08B6 0962792073	db	tab,'by subsequently named HEX files (specifying',cr,lf
+ 08E4 0954686520	db	tab,'The filetype enables this function).'
+ 0909 0D0A0D0A  	db	cr,lf,cr,lf
+ 090D 4E6F746520	db	'Note that ZCPR2-style drive/user notation may be used in all'
+ 0949 0D0A      	db	cr,lf
+ 094B 66696C6520	db	'file specifications (e.g., "B3:MYFILE.COM, "A14:MDM7.HEX").'
+ 0986 0D0A00    	db	cr,lf,0
+                ;
+                ; general error handler
+                ;
+ 0989 CD0F06    errxit:	call	crlf		;new line
+ 098C E1        	pop	h		;fetch error msg pointer
+ 098D CD8D05    	call	prathl		;print it
+ 0990 CD0F06    	call	crlf
+ 0993 C37601    	jmp	exit		;done
+                ;
+                ; initialize load parameters
+                ;
+ 0996 3E01      lodnit:	mvi	a,1		;first record, set load flag
+ 0998 32C70B    	sta	lodflg
+ 099B 22CC0B    	shld	lodadr		;save load address
+ 099E 22C10B    	shld	hipc		;and hi load
+ 09A1 D5        	push	d		;save record length
+ 09A2 EB        	xchg			;de=load address
+ 09A3 2AC80B    	lhld	filbuf		;get address of file buffer
+ 09A6 7D        	mov	a,l		;subtract load adrs from file buffer
+ 09A7 93        	sub	e
+ 09A8 6F        	mov	l,a
+ 09A9 7C        	mov	a,h
+ 09AA 9A        	sbb	d
+ 09AB 67        	mov	h,a
+ 09AC 22CA0B    	shld	offset		;save as load offset
+ 09AF D5        	push	d		;save load address on stack
+ 09B0 C5        	push	b		;save bias
+ 09B1 11D00B    	lxi	d,outnam+2	;check output filename
+ 09B4 1A        	ldax	d		;(first char)
+ 09B5 FE20      	cpi	' '
+ 09B7 C2D609    	jnz	namskp		;jump if so
+ 09BA 215D00    	lxi	h,dfcb+1	;get first name pointer
+ 09BD 0608      	mvi	b,8		;(don't include drive spec)
+ 09BF CD3C06    	call	move
+                ;
+                ; check for outflg=1 (presence of an "=").  note that the
+                ; filename may well be blank, and yet outflg <>0, for example
+                ; in the case of "A:=<FILENAME>" or "C4:=<FILENAME>". in
+                ; this case, we want to remember the drive/user specified, but
+                ; use the first input file to form the output name. otherwise,
+                ; we use the current drive/user.
+                ;
+ 09C2 3AE20B    	lda	outflg		;was there an "="?
+ 09C5 B7        	ora	a
+ 09C6 C2D609    	jnz	namskp		;jump if so
+ 09C9 21CE0B    	lxi	h,outnam	;get destination pointer
+ 09CC CD7D0B    	call	getusr		;get current user #
+ 09CF 77        	mov	m,a
+ 09D0 23        	inx	h		;point to drive
+ 09D1 CD8B0B    	call	getdsk		;get it
+ 09D4 3C        	inr	a		;fcb's drive is 1-relative
+ 09D5 77        	mov	m,a
+ 09D6 3E01      namskp:	mvi	a,1		;insure "=" cannot occur anymore
+ 09D8 32E20B    	sta	outflg
+ 09DB C1        	pop	b		;restore bias
+ 09DC E1        	pop	h		;load address to hl
+ 09DD D1        	pop	d		;restore record length
+ 09DE C9        	ret
+                ;
+                ;	*********************************
+                ;	* file name parsing subroutines *
+                ;	*********************************
+                ;
+                ; credit where credit's due:
+                ; --------------------------
+                ; these routines were lifted from bob van valzah's
+                ; "FAST" program.
+                ;
+                ;
+                ;
+                ;	*********************************
+                ;	* file name parsing subroutines *
+                ;	*********************************
+                ;
+                ;
+                ; getfn gets a file name from text pointed to by reg hl into
+                ; an fcb pointed to by reg de.	leading delimeters are
+                ; ignored. allows drive spec of the form <du:> (drive/user).
+                ; this routine formats all 33 bytes of the fcb (but not ran rec).
+                ;
+                ; entry de	first byte of fcb
+                ; exit b=# of '?' in name
+                ; fcb-1= user # parsed (if specified) or 255
+                ;
+                ;
+ 09DF CDF709    fparse:	call	nitfcb		;init 1st half of fcb
+ 09E2 CD1B0A    	call	gstart		;scan to first character of name
+ 09E5 CD250A    	call	getdrv		;get drive/user spec. if present
+ 09E8 78        	mov	a,b		;get user # or 255
+ 09E9 FEFF      	cpi	0ffh		;255?
+ 09EB CAF309    	jz	fpars1		;jump if so
+ 09EE 1B        	dcx	d		;back up to byte preceeding fcb
+ 09EF 1B        	dcx	d
+ 09F0 12        	stax	d		;stuff user #
+ 09F1 13        	inx	d		;onward
+ 09F2 13        	inx	d
+ 09F3 CD5F0A    fpars1:	call	getps		;get primary and secondary name
+ 09F6 C9        	ret
+                ;
+                ; nitfcb fills the fcb with dflt info - 0 in drive field
+                ; all-blank in name field, and 0 in ex,s1,s2,rc, disk
+                ; allocation map, and random record # fields
+                ;
+ 09F7 E5        nitfcb:	push	h
+ 09F8 D5        	push	d
+ 09F9 CD7D0B    	call	getusr		;init user field
+ 09FC D1        	pop	d
+ 09FD E1        	pop	h
+ 09FE D5        	push	d		;save fcb loc
+ 09FF 1B        	dcx	d
+ 0A00 12        	stax	d		;init user # to currnt user #
+ 0A01 13        	inx	d
+ 0A02 EB        	xchg			;move it to hl
+ 0A03 3600      	mvi	m,0		;drive=default
+ 0A05 23        	inx	h		;bump to name field
+ 0A06 060B      	mvi	b,11		;zap all of name fld
+ 0A08 3620      nitlp:	mvi	m,' '
+ 0A0A 23        	inx	h
+ 0A0B 05        	dcr	b
+ 0A0C C2080A    	jnz	nitlp
+ 0A0F 0616      	mvi	b,33-11		;zero others, up to nr field
+ 0A11 3600      zlp:	mvi	m,0
+ 0A13 23        	inx	h
+ 0A14 05        	dcr	b
+ 0A15 C2110A    	jnz	zlp
+ 0A18 EB        	xchg			;restore hl
+ 0A19 D1        	pop	d		;restore fcb pointer
+ 0A1A C9        	ret
+                ;
+                ; gstart advances the text pointer (reg hl) to the first
+                ; non delimiter character (i.e. ignores blanks).  returns a
+                ; flag if end of line (00h or ';') is found while scaning.
+                ; exit	hl	pointing to first non delimiter
+                ;	a	clobbered
+                ;	zero	set if end of line was found
+                ;
+ 0A1B CDA80A    gstart:	call	getch		;see if pointing to delim?
+ 0A1E C0        	rnz			;nope - return
+ 0A1F B7        	ora	a		;physical end?
+ 0A20 C8        	rz			;yes - return w/flag
+ 0A21 23        	inx	h		;nope - move over it
+ 0A22 C31B0A    	jmp	gstart		;and try next char
+                ;
+                ; getdrv checks for the presence of a du: spec at the text
+                ; pointer, and if present formats drive into fcb and returns
+                ; user # in b.
+                ;
+                ; entry hl	text pointer
+                ;	de	pointer to first byte of fcb
+                ; exit	hl	possibly updated text pointer
+                ;	de	pointer to second (primary name) byte of fcb
+                ;	b	user # if specified or 0ffh
+                ;
+ 0A25 06FF      getdrv:	mvi	b,0ffh		;default no user #
+ 0A27 E5        	push	h		;save text pointer
+ 0A28 CDA80A    dscan:	call	getch		;get next char
+ 0A2B 23        	inx	h		;skip pointer over it
+ 0A2C C2280A    	jnz	dscan		;scan until delimiter
+ 0A2F FE3A      	cpi	':'		;delimiter a colon?
+ 0A31 13        	inx	d		;skip dr field in fcb in case not
+ 0A32 E1        	pop	h		;and restore text pointer
+ 0A33 C0        	rnz			;return if no du: spec
+ 0A34 7E        	mov	a,m		;got one, get first char
+ 0A35 CD550B    	call	cvtuc		;may be drive name, cvt to upper case
+ 0A38 FE41      	cpi	'A'		;alpha?
+ 0A3A DA430A    	jc	isnum		;jump to get user # if not
+ 0A3D D640      	sui	'A'-1		;yes, convert from ascii to #
+ 0A3F 1B        	dcx	d		;back up fcb pointer to dr field
+ 0A40 12        	stax	d		;store drive # into fcb
+ 0A41 13        	inx	d		;pass pointer over drv
+ 0A42 23        	inx	h		;skip drive spec in text
+ 0A43 7E        isnum:	mov	a,m		;fetch next
+ 0A44 23        	inx	h
+ 0A45 FE3A      	cpi	':'		;du delimiter?
+ 0A47 C8        	rz			;done then
+ 0A48 2B        	dcx	h		;nope, back up text pointer
+ 0A49 0600      	mvi	b,0		;got a digit, init user value
+ 0A4B 78        uloop:	mov	a,b		;get accumulated user #
+ 0A4C 87        	add	a		;* 10 for new digit
+ 0A4D 87        	add	a
+ 0A4E 80        	add	b
+ 0A4F 87        	add	a
+ 0A50 47        	mov	b,a		;back to b
+ 0A51 7E        	mov	a,m		;get text char
+ 0A52 D630      	sui	'0'		;make binary
+ 0A54 80        	add	b		;add to user #
+ 0A55 47        	mov	b,a		;updated user #
+ 0A56 23        	inx	h		;skip over it
+ 0A57 7E        	mov	a,m		;get next
+ 0A58 FE3A      	cpi	':'		;end of spec?
+ 0A5A C24B0A    	jnz	uloop		;jump if not
+ 0A5D 23        	inx	h		;yep, return txt pointer past du:
+ 0A5E C9        	ret
+                ;
+                ; getps gets the primary and secondary names into the fcb.
+                ; entry hl	text pointer
+                ; exit	hl	character following secondary name (if present)
+                ;
+ 0A5F 0E08      getps:	mvi	c,8		;max length of primary name
+ 0A61 0600      	mvi	b,0		;init count of '?'
+ 0A63 CD7B0A    	call	getnam		;pack primary name into fcb
+ 0A66 7E        	mov	a,m		;see if terminated by a period
+ 0A67 FE2E      	cpi	'.'
+ 0A69 C0        	rnz			;nope - secondary name not given
+                				;return default (blanks)
+ 0A6A 23        	inx	h		;yup - move text pointer over period
+ 0A6B 79        ftpoint:mov	a,c		;yup - update fcb pointer to secondary
+ 0A6C B7        	ora	a
+ 0A6D CA750A    	jz	getft
+ 0A70 13        	inx	d
+ 0A71 0D        	dcr	c
+ 0A72 C36B0A    	jmp	ftpoint
+ 0A75 0E03      getft:	mvi	c,3		;max length of secondary name
+ 0A77 CD7B0A    	call	getnam		;pack secondary name into fcb
+ 0A7A C9        	ret
+                ;
+                ; getnam copies a name from the text pointer into the fcb for
+                ; a given maximum length or until a delimiter is found, which
+                ; ever occurs first.  if more than the maximum number of
+                ; characters is present, character are ignored until a
+                ; a delimiter is found.
+                ; entry hl	first character of name to be scanned
+                ;	de	pointer into fcb name field
+                ;	c	maximum length
+                ; exit	hl	pointing to terminating delimiter
+                ;	de	next empty byte in fcb name field
+                ;	c	max length - number of characters transfered
+                ;
+ 0A7B CDA80A    getnam:	call	getch		;are we pointing to a delimiter yet?
+ 0A7E C8        	rz			;if so, name is transfered
+ 0A7F 23        	inx	h		;if not, move over character
+ 0A80 FE2A      	cpi	'*'		;ambigious file reference?
+ 0A82 CA970A    	jz	ambig		;if so, fill the rest of field with '?'
+ 0A85 FE3F      	cpi	'?'		;afn reference?
+ 0A87 C28B0A    	jnz	notqm		;skip if not
+ 0A8A 04        	inr	b		;else bump afn count
+ 0A8B CD550B    notqm:	call	cvtuc		;if not, convert to upper case
+ 0A8E 12        	stax	d		;and copy into name field
+ 0A8F 13        	inx	d		;increment name field pointer
+ 0A90 0D        	dcr	c		;if name field full?
+ 0A91 C27B0A    	jnz	getnam		;nope - keep filling
+ 0A94 C3A00A    	jmp	getdel		;yup - ignore until delimiter
+ 0A97 3E3F      ambig:	mvi	a,'?'		;fill character for wild card match
+ 0A99 12        fillq:	stax	d		;fill until field is full
+ 0A9A 13        	inx	d
+ 0A9B 04        	inr	b		;increment count of '?'
+ 0A9C 0D        	dcr	c
+ 0A9D C2990A    	jnz	fillq		;fall thru to ingore rest of name
+ 0AA0 CDA80A    getdel:	call	getch		;pointing to a delimiter?
+ 0AA3 C8        	rz			;yup - all done
+ 0AA4 23        	inx	h		;nope - ignore antoher one
+ 0AA5 C3A00A    	jmp	getdel
+                ;
+                ; getch gets the character pointed to by the text pointer
+                ; and sets the zero flag if it is a delimiter.
+                ; entry hl	text pointer
+                ; exit	hl	preserved
+                ;	a	character at text pointer
+                ;	z	set if a delimiter
+                ;
+ 0AA8 7E        getch:	mov	a,m		;get the character, test for delim
+                ;
+                ; global entry: test char in a for filename delimiter
+                ;
+ 0AA9 FE2F      fndelm:	cpi	'/'
+ 0AAB C8        	rz
+ 0AAC FE2E      	cpi	'.'
+ 0AAE C8        	rz
+ 0AAF FE2C      	cpi	','
+ 0AB1 C8        	rz
+ 0AB2 FE20      	cpi	' '
+ 0AB4 C8        	rz
+ 0AB5 FE3A      	cpi	':'
+ 0AB7 C8        	rz
+ 0AB8 FE3D      	cpi	'='
+ 0ABA C8        	rz
+ 0ABB B7        	ora	a		;set zero flag on end of text
+ 0ABC C9        	ret
+                ;
+                ; bdos entry: preserves bc, de.  if system call is a file
+                ;	      function, this routine logs into the drive/
+                ;	      user area specified, then logs back after
+                ;	      the call.
+                ;
+ 0ABD CD2F0B    bdos:	call	filfck		;check for a file function
+ 0AC0 C2F20A    	jnz	bdos1		;jump if not a file function
+ 0AC3 CD050B    	call	getdu		;get drive/user
+ 0AC6 22ED0A    	shld	savedu
+ 0AC9 1A        	ldax	d		;get fcb's drive
+ 0ACA 32EF0A    	sta	fcbdrv		;save it
+ 0ACD 3D        	dcr	a		;make 0-relative
+ 0ACE FAD20A    	jm	bdos0		;if not default drive, jump
+ 0AD1 67        	mov	h,a		;copy to h
+ 0AD2 AF        bdos0:	xra	a		;set fcb to default
+ 0AD3 12        	stax	d
+ 0AD4 1B        	dcx	d		;get fcb's user #
+ 0AD5 1A        	ldax	d
+ 0AD6 6F        	mov	l,a
+ 0AD7 13        	inx	d		;restore de
+ 0AD8 CD1A0B    	call	setdu		;set fcb's user
+                ;
+                ; note that unspecified user # (value=0ffh) becomes
+                ; a getusr call, preventing ambiguity.
+                ;
+ 0ADB CDF20A    	call	bdos1		;do user's system call
+ 0ADE F5        	push	psw		;save result
+ 0ADF E5        	push	h
+ 0AE0 3AEF0A    	lda	fcbdrv		;restore fcb's drive
+ 0AE3 12        	stax	d
+ 0AE4 2AED0A    	lhld	savedu		;restore prior drive/user
+ 0AE7 CD1A0B    	call	setdu
+ 0AEA E1        	pop	h		;restore bdos result registers
+ 0AEB F1        	pop	psw
+ 0AEC C9        	ret
+                ;
+                ; local variables for bdos replacement routine
+                ;
+ 0AED 0000      savedu:	dw	0		;saved drive,user
+ 0AEF 00        fcbdrv:	db	0		;fcb's drive
+ 0AF0 8000      dmadr:	dw	80h		;current dma adrs
+                ;
+ 0AF2 D5        bdos1:	push	d
+ 0AF3 C5        	push	b
+ 0AF4 79        	mov	a,c		;doing setdma?
+ 0AF5 FE1A      	cpi	sdmaf
+ 0AF7 C2FF0A    	jnz	bdos1a		;jump if not
+ 0AFA EB        	xchg			;yep, keep a record of dma addresses
+ 0AFB 22F00A    	shld	dmadr
+ 0AFE EB        	xchg
+ 0AFF CD0500    bdos1a:	call	system
+ 0B02 C1        	pop	b
+ 0B03 D1        	pop	d
+ 0B04 C9        	ret
+                ;
+                ; get drive, user: h=drv, l=user
+                ;
+ 0B05 C5        getdu:	push	b		;don't modify bc
+ 0B06 D5        	push	d
+ 0B07 0E20      	mvi	c,gsuser	;get user #
+ 0B09 1EFF      	mvi	e,0ffh
+ 0B0B CDF20A    	call	bdos1
+ 0B0E F5        	push	psw		;save it
+ 0B0F 0E19      	mvi	c,getdrf	;get drive
+ 0B11 CDF20A    	call	bdos1
+ 0B14 67        	mov	h,a		;drive returned in h
+ 0B15 F1        	pop	psw
+ 0B16 6F        	mov	l,a		;user in l
+ 0B17 D1        	pop	d
+ 0B18 C1        	pop	b		;restore caller's bc
+ 0B19 C9        	ret
+                ;
+                ; set drive, user: h=drv, l=user
+                ;
+ 0B1A C5        setdu:	push	b		;don't modify bc
+ 0B1B D5        	push	d
+ 0B1C E5        	push	h		;save info
+ 0B1D 5C        	mov	e,h		;drive to e
+ 0B1E 0E0E      	mvi	c,seldf		;set it
+ 0B20 CDF20A    	call	bdos1
+ 0B23 E1        	pop	h		;recall info
+ 0B24 E5        	push	h
+ 0B25 5D        	mov	e,l		;user # to e
+ 0B26 0E20      	mvi	c,gsuser
+ 0B28 CDF20A    	call	bdos1		;set it
+ 0B2B E1        	pop	h
+ 0B2C D1        	pop	d
+ 0B2D C1        	pop	b
+ 0B2E C9        	ret
+                ;
+                ; check for file-function: open, close, read random, write
+                ;	random, read sequential, write sequential.
+                ;
+ 0B2F 79        filfck:	mov	a,c		;get function #
+ 0B30 FE0F      	cpi	openf
+ 0B32 C8        	rz
+ 0B33 D8        	rc			;ignore lower function #'s
+ 0B34 FE10      	cpi	closef		;(they're not file-related)
+ 0B36 C8        	rz
+ 0B37 FE14      	cpi	readf
+ 0B39 C8        	rz
+ 0B3A FE15      	cpi	writef
+ 0B3C C8        	rz
+ 0B3D FE21      	cpi	rrand
+ 0B3F C8        	rz
+ 0B40 FE22      	cpi	wrand
+ 0B42 C8        	rz
+ 0B43 FE11      	cpi	fsrchf
+ 0B45 C8        	rz
+ 0B46 FE12      	cpi	fsrchn
+ 0B48 C8        	rz
+ 0B49 FE13      	cpi	erasef
+ 0B4B C8        	rz
+ 0B4C FE16      	cpi	creatf
+ 0B4E C8        	rz
+ 0B4F FE23      	cpi	filszf
+ 0B51 C8        	rz
+ 0B52 FE24      	cpi	srand
+ 0B54 C9        	ret
+                ;
+                ; convert char to upper case
+                ;
+ 0B55 FE61      cvtuc:	cpi	'a'		;check lo bound
+ 0B57 D8        	rc
+ 0B58 FE7B      	cpi	'z'+1		;check hi
+ 0B5A D0        	rnc
+ 0B5B D620      	sui	20h		;convert
+ 0B5D C9        	ret
+                ;
+                ; check for hex filetype in fcb name
+                ;
+ 0B5E E5        hexchk:	push	h
+ 0B5F D5        	push	d
+ 0B60 C5        	push	b
+ 0B61 0603      	mvi	b,3		;type is 3 chars
+ 0B63 116500    	lxi	d,dfcb+9	;point de to type field
+ 0B66 217A0B    	lxi	h,hextyp	;point hl to "COM"
+ 0B69 1A        hexlop:	ldax	d
+ 0B6A E67F      	ani	7fh		;ignore attributes
+ 0B6C BE        	cmp	m
+ 0B6D 23        	inx	h
+ 0B6E 13        	inx	d
+ 0B6F C2760B    	jnz	hexit		;jump if not com
+ 0B72 05        	dcr	b
+ 0B73 C2690B    	jnz	hexlop
+ 0B76 C1        hexit:	pop	b		;z reg has result
+ 0B77 D1        	pop	d
+ 0B78 E1        	pop	h
+ 0B79 C9        	ret
+                ;
+ 0B7A 484558    hextyp:	db	'HEX'
+                ;
+                ; routine to return user # without disturbing registers
+                ;
+ 0B7D E5        getusr:	push	h
+ 0B7E D5        	push	d
+ 0B7F C5        	push	b
+ 0B80 0E20      	mvi	c,gsuser
+ 0B82 1EFF      	mvi	e,0ffh
+ 0B84 CDBD0A    	call	bdos
+ 0B87 C1        	pop	b
+ 0B88 D1        	pop	d
+ 0B89 E1        	pop	h
+ 0B8A C9        	ret
+                ;
+                ; routine to return drive # without disturbing registers
+                ;
+ 0B8B E5        getdsk:	push	h
+ 0B8C D5        	push	d
+ 0B8D C5        	push	b
+ 0B8E 0E19      	mvi	c,getdrf
+ 0B90 CDBD0A    	call	bdos
+ 0B93 C1        	pop	b
+ 0B94 D1        	pop	d
+ 0B95 E1        	pop	h
+ 0B96 C9        	ret
+                ;
+                ; these are the initial values of the variables, and
+                ; are moved into the variables area by the setup routine.
+                ; if you add variables, be sure to add their intial value
+                ; into this table in the order corresponding to their
+                ; occurance in the variables section.
+                ;
+ 0B97 0000      varset:	dw	0			;bias
+ 0B99 0000      	dw	0			;hiload
+ 0B9B 0000      	dw	0			;hipc
+ 0B9D 00        	db	0			;cksum
+ 0B9E 490C      	dw	cmdbuf			;cmdptr
+ 0BA0 00        	db	0			;bufptr
+ 0BA1 00        	db	0			;lodflg
+ 0BA2 490C      	dw	cmdbuf			;filbuf
+ 0BA4 0000      	dw	0			;offset
+ 0BA6 0000      	dw	0			;lodadr
+ 0BA8 0000202020	db	0,0,'           '	;outnam
+ 0BB5 0000      	dw	0			;reccnt
+ 0BB7 0000      	dw	0			;bytcnt
+ 0BB9 00        	db	0			;comflg
+ 0BBA 0000      	dw	0			;comsiz
+ 0BBC 00        	db	0			;outflg
+                ;
+ 0026 =         varlen	equ	$-varset	;define length of init table
+                ;
+                ; working variables
+                ;
+ 0BBD =         vars	equ	$		;define variables area start
+                ;
+ 0BBD           bias:	ds	2		;load offset
+ 0BBF           hiload:	ds	2		;highest true load address
+ 0BC1           hipc:	ds	2		;highest pc
+ 0BC3           cksum:	ds	1		;record checksum
+ 0BC4           cmdptr:	ds	2		;command line pointer
+ 0BC6           bufptr:	ds	1		;input buffer pointer
+ 0BC7           lodflg:	ds	1		;something-loaded flag
+ 0BC8           filbuf:	ds	2		;file buffer location
+ 0BCA           offset:	ds	2		;load offset into buffer
+ 0BCC           lodadr:	ds	2		;load address
+ 0BCE           outnam:	ds	13		;output drive+name
+ 0BDB           reccnt:	ds	2		;output file record count
+ 0BDD           bytcnt:	ds	2		;output file bytes loaded  count
+ 0BDF           comflg:	ds	1		;flags com file encountered
+ 0BE0           comsiz:	ds	2		;size of a loaded com file
+ 0BE2           outflg:	ds	1		;flags an "=" present in cmd line
+                ;
+                ; end of working variables
+                ;
+                ;
+                ;
+                ; stack stuff
+                ;
+ 0BE3           spsave:	ds	2		;system stack pntr save
+                ;
+                ;
+ 0BE5           	ds	100		;50-level stack
+                ;
+ 0C49 =         stack	equ	$
+ 0C49 =         cmdbuf	equ	$		;command buffer location
+                ;
+                ;
+ 0C49           	end
+

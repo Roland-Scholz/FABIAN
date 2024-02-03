@@ -1,0 +1,3214 @@
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 1
+
+
+
+
+
+       MCS-51 Family Macro Assembler   A S E M - 5 1   V 1.3
+       =====================================================
+
+
+
+	Source File:	C:\github\FABIAN\VGA\sim.a51
+	Object File:	C:\github\FABIAN\VGA\sim.hex
+	List File:	C:\github\FABIAN\VGA\sim.lst
+
+
+
+ Line  I  Addr  Code            Source
+
+    1:						$NOMOD51
+    2:						$INCLUDE (89S52.MCU)
+    3: 1			;   AT89S52 processor definition file
+    4: 1			;   =================================
+    5: 1
+    6: 1	N	 80	P0	DATA	080H
+    7: 1	N	 81	SP	DATA	081H
+    8: 1	N	 82	DP0L	DATA	082H
+    9: 1	N	 83	DP0H	DATA	083H
+   10: 1	N	 84	DP1L	DATA	084H
+   11: 1	N	 85	DP1H	DATA	085H
+   12: 1	N	 87	PCON	DATA	087H
+   13: 1	N	 88	TCON	DATA	088H
+   14: 1	N	 89	TMOD	DATA	089H
+   15: 1	N	 8A	TL0	DATA	08AH
+   16: 1	N	 8B	TL1	DATA	08BH
+   17: 1	N	 8C	TH0	DATA	08CH
+   18: 1	N	 8D	TH1	DATA	08DH
+   19: 1	N	 8E	AUXR	DATA	08EH
+   20: 1	N	 90	P1	DATA	090H
+   21: 1	N	 98	SCON	DATA	098H
+   22: 1	N	 99	SBUF	DATA	099H
+   23: 1	N	 A0	P2	DATA	0A0H
+   24: 1	N	 A2	AUXR1	DATA	0A2H
+   25: 1	N	 A6	WDTRST	DATA	0A6H
+   26: 1	N	 A8	IE	DATA	0A8H
+   27: 1	N	 B0	P3	DATA	0B0H
+   28: 1	N	 B8	IP	DATA	0B8H
+   29: 1	N	 C8	T2CON	DATA	0C8H
+   30: 1	N	 C9	T2MOD	DATA	0C9H
+   31: 1	N	 CA	RCAP2L	DATA	0CAH
+   32: 1	N	 CB	RCAP2H	DATA	0CBH
+   33: 1	N	 CC	TL2	DATA	0CCH
+   34: 1	N	 CD	TH2	DATA	0CDH
+   35: 1	N	 D0	PSW	DATA	0D0H
+   36: 1	N	 E0	ACC	DATA	0E0H
+   37: 1	N	 F0	B	DATA	0F0H
+   38: 1
+   39: 1	N	 88	IT0	BIT	088H
+   40: 1	N	 89	IE0	BIT	089H
+   41: 1	N	 8A	IT1	BIT	08AH
+   42: 1	N	 8B	IE1	BIT	08BH
+   43: 1	N	 8C	TR0	BIT	08CH
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 2
+
+
+
+ Line  I  Addr  Code            Source
+
+   44: 1	N	 8D	TF0	BIT	08DH
+   45: 1	N	 8E	TR1	BIT	08EH
+   46: 1	N	 8F	TF1	BIT	08FH
+   47: 1	N	 90	T2	BIT	090H
+   48: 1	N	 91	T2EX	BIT	091H
+   49: 1	N	 95	MOSI	BIT	095H
+   50: 1	N	 96	MISO	BIT	096H
+   51: 1	N	 97	SCK	BIT	097H
+   52: 1	N	 98	RI	BIT	098H
+   53: 1	N	 99	TI	BIT	099H
+   54: 1	N	 9A	RB8	BIT	09AH
+   55: 1	N	 9B	TB8	BIT	09BH
+   56: 1	N	 9C	REN	BIT	09CH
+   57: 1	N	 9D	SM2	BIT	09DH
+   58: 1	N	 9E	SM1	BIT	09EH
+   59: 1	N	 9F	SM0	BIT	09FH
+   60: 1	N	 A8	EX0	BIT	0A8H
+   61: 1	N	 A9	ET0	BIT	0A9H
+   62: 1	N	 AA	EX1	BIT	0AAH
+   63: 1	N	 AB	ET1	BIT	0ABH
+   64: 1	N	 AC	ES	BIT	0ACH
+   65: 1	N	 AD	ET2	BIT	0ADH
+   66: 1	N	 AF	EA	BIT	0AFH
+   67: 1	N	 B0	RXD	BIT	0B0H
+   68: 1	N	 B1	TXD	BIT	0B1H
+   69: 1	N	 B2	INT0	BIT	0B2H
+   70: 1	N	 B3	INT1	BIT	0B3H
+   71: 1	N	 B4	T0	BIT	0B4H
+   72: 1	N	 B5	T1	BIT	0B5H
+   73: 1	N	 B6	WR	BIT	0B6H
+   74: 1	N	 B7	RD	BIT	0B7H
+   75: 1	N	 B8	PX0	BIT	0B8H
+   76: 1	N	 B9	PT0	BIT	0B9H
+   77: 1	N	 BA	PX1	BIT	0BAH
+   78: 1	N	 BB	PT1	BIT	0BBH
+   79: 1	N	 BC	PS	BIT	0BCH
+   80: 1	N	 BD	PT2	BIT	0BDH
+   81: 1	N	 C8	CPRL2	BIT	0C8H
+   82: 1	N	 C9	CT2	BIT	0C9H
+   83: 1	N	 CA	TR2	BIT	0CAH
+   84: 1	N	 CB	EXEN2	BIT	0CBH
+   85: 1	N	 CC	TCLK	BIT	0CCH
+   86: 1	N	 CD	RCLK	BIT	0CDH
+   87: 1	N	 CE	EXF2	BIT	0CEH
+   88: 1	N	 CF	TF2	BIT	0CFH
+   89: 1	N	 D0	P	BIT	0D0H
+   90: 1	N	 D2	OV	BIT	0D2H
+   91: 1	N	 D3	RS0	BIT	0D3H
+   92: 1	N	 D4	RS1	BIT	0D4H
+   93: 1	N	 D5	F0	BIT	0D5H
+   94: 1	N	 D6	AC	BIT	0D6H
+   95: 1	N	 D7	CY	BIT	0D7H
+   96: 1
+   97: 1	N      0000	RESET	CODE	000H
+   98: 1	N      0003	EXTI0	CODE	003H
+   99: 1	N      000B	TIMER0	CODE	00BH
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 3
+
+
+
+ Line  I  Addr  Code            Source
+
+  100: 1	N      0013	EXTI1	CODE	013H
+  101: 1	N      001B	TIMER1	CODE	01BH
+  102: 1	N      0023	SINT	CODE	023H
+  103: 1	N      002B	TIMER2	CODE	02BH
+  104:
+  105:		N      0001	HARDWARE	equ	1
+  106:
+  107:		N      0080	stack		equ	80h
+  108:		D      0083	dph		equ	DP0H
+  109:		D      0082	dpl		equ	DP0L
+  110:
+  111:		N      0050	WIDTH		equ	80
+  112:		N      0018	HEIGHT		equ	24
+  113:
+  114:		N      0000	ST_IDLE		equ	0
+  115:		N      0002	ST_ESC		equ	2
+  116:		N      0004	ST_CSI		equ	4
+  117:		N      0006	ST_ESC_Q	equ	6
+  118:		N      0008	ST_ESC_HASH	equ	8
+  119:		N      000A	ST_CMD_ARG	equ	10
+  120:		N      000C	ST_ESC_LBRACK	equ	12
+  121:		N      000E	ST_CSI_Q	equ	14
+  122:		N      0010	ST_ESC_RBRACK	equ	16
+  123:
+  124:		N      000A	C_TIME		equ	10
+  125:
+  126:		N      0007	C_BELL		equ	7
+  127:		N      0008	C_BACKSP	equ	8
+  128:		N      0009	C_TAB		equ	9
+  129:		N      000A	C_NEWLINE	equ	10
+  130:		N      000B	C_VT		equ	11
+  131:		N      000C	C_FF		equ	12
+  132:		N      000D	C_CR		equ	13
+  133:		N      000E	C_SO		equ	14
+  134:		N      000F	C_SI		equ	15
+  135:		N      0011	C_XON		equ	17
+  136:		N      0013	C_XOFF		equ	19
+  137:		N      001B	C_ESC		equ	27
+  138:		N      007F	C_DEL		equ	07fh
+  139:
+  140:		N      001C	CCHM		equ	01Ch	;move cursor home
+  141:		N      001D	CCBT		equ	01Dh	;move cursor to bottom
+  142:		N      001E	CCLM		equ	01Eh	;move cursor to left margin
+  143:		N      001F	CCRM		equ	01Fh	;move cursor to right margin
+  144:
+  145:								;SUPERF equ 0
+  146:
+  147:		N      0001	CLS		equ	001h	;clear screen
+  148:		N      0008	BACK		equ	008h	;backspace
+  149:		N      0009	TABU		equ	009h	;tabulator
+  150:		N      000A	LF		equ	00Ah	;$9B	;end of line (RETURN)
+  151:		N      001B	ESC		equ	01Bh	;escape key
+  152:		N      001C	CCUP		equ	01Ch	;cursor up
+  153:		N      001D	CCDN		equ	01Dh	;cursor down
+  154:		N      001E	CCLF		equ	01Eh	;cursor left
+  155:		N      001F	CCRT		equ	01Fh	;cursor right
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 4
+
+
+
+ Line  I  Addr  Code            Source
+
+  156:		N      0020	CSPACE		equ	020h	;space
+  157:		N      009D	CILN		equ	09Dh	;insert line
+  158:		N      00FE	CDCH		equ	0FEh	;delete character
+  159:		N      00FF	CICH		equ	0FFh	;insert character
+  160:
+  161:		N      0080	F1		equ	080h	;key code for F1
+  162:		N      0081	F2		equ	081h	;key code for F2
+  163:		N      0082	F3		equ	082h	;key code for F3
+  164:		N      0083	F4		equ	083h	;key code for F4
+  165:		N      0084	F5		equ	084h	;key code for F5
+  166:		N      0085	F6		equ	085h	;key code for F6
+  167:		N      0086	F7		equ	086h	;key code for F7
+  168:		N      0087	F8		equ	087h	;key code for F8
+  169:		N      0088	F9		equ	088h	;key code for F9
+  170:		N      0089	F10		equ	089h	;key code for F10
+  171:		N      008A	F11		equ	08ah	;key code for F11
+  172:		N      008B	F12		equ	08bh	;key code for F12
+  173:
+  174:				;	special key scan-codes
+  175:		N      0011	ALTGR		equ	011h	;extended!
+  176:		N      0011	ALR		equ	011h
+  177:		N      0012	CLSHIFT		equ	012h
+  178:		N      0014	CLSTRG		equ	014h
+  179:		N      0059	CRSHIFT		equ	059h
+  180:		N      0058	CCAPS		equ	058h
+  181:
+  182:		N      00E0	EXTENDED	equ	0e0h
+  183:		N      00F0	BREAK		equ	0f0h
+  184:
+  185:						;	0	;Error (ignored)
+  186:		N      0001	DECCKM		equ	1	;Cursor key
+  187:		N      0002	DECANM		equ	2	;ANSI/VT52
+  188:		N      0003	DECCOLM		equ	3	;Column
+  189:		N      0004	DECSCLM		equ	4	;Scrolling
+  190:		N      0005	DECSCNM		equ	5	;Screen
+  191:		N      0006	DECOM		equ	6	;Origin
+  192:		N      0007	DECAWM		equ	7	;Auto wrap
+  193:		N      0008	DECARM		equ	8	;Auto repeating
+  194:		N      0009	DECINLM		equ	9	;Interlace
+  195:		N      0004	IRM		equ	4	;Insert Replace mode
+  196:		N      0014	LNM		equ	20	;new line mode
+  197:
+  198:
+  199:		N      0020	VARS		equ	020h
+  200:
+  201:		N      0020	flags		equ	020h
+  202:		B      0000	special		equ	flags.0
+  203:		B      0001	lastchar	equ	flags.1
+  204:		B      0002	lchartmp	equ	flags.2
+  205:		B      0003	inverse		equ	flags.3
+  206:		B      0004	xonoff		equ	flags.4
+  207:		B      0005	serbusy		equ	flags.5
+  208:
+  209:		N      0021	flags1		equ	021h
+  210:		B      0008	keyavail	equ	flags1.0
+  211:		B      0009	keyrxextended	equ	flags1.1
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 5
+
+
+
+ Line  I  Addr  Code            Source
+
+  212:		B      000A	keyrxbreak	equ	flags1.2
+  213:		B      000B	keyrxshift	equ	flags1.3
+  214:		B      000C	keyrxaltgr	equ	flags1.4
+  215:		B      000D	keyrxstrg	equ	flags1.5
+  216:
+  217:		N      0022	flags2		equ	022h
+  218:		B      0010	nowrap		equ	flags2.0
+  219:		B      0011	origin		equ	flags2.1
+  220:		B      0012	newlinemode	equ	flags2.2
+  221:		B      0013	insert		equ	flags2.3
+  222:		B      0014	baudflag	equ	flags2.4
+  223:
+  224:		N      0023	retstate	equ	023h
+  225:		N      0025	nargs		equ	025h
+  226:		N      0026	arg0		equ	026h
+  227:		N      0027	arg1		equ	027h
+  228:		N      0028	arg2		equ	028h
+  229:		N      0029	arg3		equ	029h
+  230:		N      002A	dummy		equ	02ah
+  231:		N      002B	scursorx	equ	02bh
+  232:		N      002C	scursory	equ	02ch
+  233:		N      002D	color		equ	02dh
+  234:		N      002E	cursorpos	equ	02eh
+  235:		N      002F	cursorpos1	equ	02fh
+  236:		N      0030	cursorsave	equ	030h
+  237:		N      0031	top		equ	031h
+  238:		N      0032	bottom		equ	032h
+  239:		N      0033	state		equ	033h
+  240:		N      0034	serstart	equ	034h
+  241:		N      0035	serend		equ	035h
+  242:		N      0036	sercount	equ	036h
+  243:		N      0037	cursorx		equ	037h
+  244:		N      0038	cursory		equ	038h
+  245:		N      0039	t0cnt		equ	039h
+  246:		N      003A	keyrxcnt	equ	03ah
+  247:		N      003B	keyrxval	equ	03bh
+  248:		N      003C	oldstatus	equ	03ch
+  249:		N      003D	baudidx		equ	03dh
+  250:
+  251:		N      0040	serbuf		equ	040h
+  252:
+  253:		N      0050	tabutab		equ	050h	;10-bytes tabulator
+  254:
+  255:		N      005A	free0		equ	05ah
+  256:		N      005B	free1		equ	05bh
+  257:		N      005C	free2		equ	05ch
+  258:		N      005D	free3		equ	05dh
+  259:		N      005E	free4		equ	05eh
+  260:		N      005F	free5		equ	05fh
+  261:
+  262:		N      0000			org	0
+  263:
+  264:		N      0000		IF HARDWARE = 0
+  265:						ljmp	start
+  266:					ENDIF
+  267:		N      2003			org	2003h
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 6
+
+
+
+ Line  I  Addr  Code            Source
+
+  268:	  2003	01 79				ajmp	exint0
+  269:
+  270:		N      200B			org	200bh
+  271:	  200B	01 5C				ajmp	timer0int
+  272:
+  273:		N      2023			org	02023h
+  274:
+  275:	  2023	C0 D0		serint:		push	psw
+  276:	  2025	C0 E0				push	acc
+  277:	  2027	C0 00				push	0
+  278:
+  279:	  2029	30 98 22			jnb	ri, serintti	;ri active?
+  280:	  202C	C2 98				clr	ri		;yes
+  281:
+  282:	  202E	A8 35				mov	r0, serend
+  283:	  2030	08				inc	r0
+  284:	  2031	B8 50 00			cjne	r0, #serbuf+16, $+3
+  285:	  2034	40 02				jc	serint1
+  286:	  2036	78 40				mov	r0, #serbuf
+  287:	  2038	A6 99		serint1:	mov	@r0, sbuf
+  288:	  203A	88 35				mov	serend, r0
+  289:	  203C	05 36				inc	sercount
+  290:	  203E	E5 36				mov	a, sercount
+  291:	  2040	B4 08 0B			cjne	a, #8, serintti
+  292:	  2043	75 99 13			mov	SBUF, #C_XOFF
+  293:	  2046	D2 04				setb	xonoff
+  294:	  2048	78 50				mov	r0, #80
+  295:	  204A	D8 FE				djnz	r0, $
+  296:	  204C	C2 99				clr	ti
+  297:
+  298:	  204E	30 99 04	serintti:	jnb 	ti, serintex
+  299:	  2051	C2 99				clr	ti
+  300:	  2053	C2 05				clr	serbusy
+  301:
+  302:	  2055	D0 00		serintex:	pop	0
+  303:	  2057	D0 E0				pop	acc
+  304:	  2059	D0 D0				pop	psw
+  305:	  205B	32				reti
+  306:
+  307:
+  308:
+  309:				;===============================================
+  310:				; Timer 0 Interrupt 0
+  311:				;===============================================
+  312:	  205C	D5 39 19	timer0int:	djnz	t0cnt, timer0int_ex
+  313:	  205F	75 39 0A			mov	t0cnt, #C_TIME
+  314:	  2062	C0 D0				push	psw
+  315:	  2064	C0 E0				push	acc
+  316:	  2066	C0 00				push	ar0
+  317:
+  318:	  2068	85 2F A0			mov	p2, cursorpos+1
+  319:	  206B	A8 2E				mov	r0, cursorpos
+  320:	  206D	E2				movx	a, @r0
+  321:	  206E	E5 90				mov	a, p1
+  322:	  2070	F4				cpl	a
+  323:	  2071	F2				movx	@r0, a
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 7
+
+
+
+ Line  I  Addr  Code            Source
+
+  324:
+  325:	  2072	D0 00				pop	ar0
+  326:	  2074	D0 E0				pop	acc
+  327:	  2076	D0 D0				pop	psw
+  328:	  2078	32		timer0int_ex:	reti
+  329:
+  330:
+  331:
+  332:				;===============================================
+  333:				; External Interrupt 0 (falling edge)
+  334:				; collect bits sent from keyboard
+  335:				; lsb first
+  336:				; 8E1, start-bit (low), 8 data-bits, even-parity, stop-bit (high)
+  337:				;===============================================
+  338:	  2079	C0 D0		exint0:		push	psw
+  339:	  207B	C0 E0				push	acc
+  340:
+  341:	  207D	E5 3A				mov	a, keyrxcnt
+  342:	  207F	70 03				jnz	exint0b			;first bit?
+  343:	  2081	20 B4 1D			jb	t0, exint0ex		;not zero, no startbit
+  344:
+  345:	  2084	04		exint0b:	inc	a
+  346:	  2085	F5 3A				mov	keyrxcnt, a
+  347:	  2087	B4 0A 00			cjne	a, #10, $+3
+  348:	  208A	40 0E				jc	exint0a			;< 10, collect bits
+  349:	  208C	B4 0B 12			cjne	a, #11, exint0ex	;skip parity-bit
+  350:	  208F	75 3A 00			mov	keyrxcnt, #0
+  351:	  2092	30 B4 0C			jnb	t0, exint0ex		;no stop bit?
+  352:	  2095	12 29 AE			call	keydecode
+  353:	  2098	80 07				sjmp 	exint0ex
+  354:
+  355:	  209A	E5 3B		exint0a:	mov	a, keyrxval
+  356:	  209C	A2 B4				mov	c, t0
+  357:	  209E	13				rrc	a
+  358:	  209F	F5 3B				mov	keyrxval, a
+  359:
+  360:	  20A1	D0 E0		exint0ex:	pop	acc
+  361:	  20A3	D0 D0				pop	psw
+  362:	  20A5	32				reti
+  363:
+  364:
+  365:
+  366:		N      2100	LOCAT		equ	02100h
+  367:
+  368:		N      2100			org	LOCAT
+  369:
+  370:		N      2100			ORG    LOCAT
+  371:	  2100	A5 E5 E0 A5			DB     0A5H,0E5H,0E0H,0A5H	;SIGNITURE BYTES
+  372:	  2104	23 00 00 00			DB     35,0,0,0			;ID (35=PROG), id (253=startup)
+  373:	  2108	00 00 00 00			DB     0,0,0,0			;PROMPT CODE VECTOR
+  374:	  210C	00 00 00 00			DB     0,0,0,0			;RESERVED
+  375:	  2110	00 00 00 00			DB     0,0,0,0			;RESERVED
+  376:	  2114	00 00 00 00			DB     0,0,0,0			;RESERVED
+  377:	  2118	00 00 00 00			DB     0,0,0,0			;USER DEFINED
+  378:	  211C	FF FF FF FF			DB     255,255,255,255		;LENGTH AND CHECKSUM (255=UNUSED)
+  379:	  2120	56 54 31 30			DB     "VT100",0		;MAX 31 CHARACTERS, PLUS THE ZERO
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 8
+
+
+
+ Line  I  Addr  Code            Source
+
+	  2124	30 00
+  380:
+  381:		N      2140			ORG    LOCAT+64			;EXECUTABLE CODE BEGINS HERE
+  382:
+  383:	  2140			start:
+  384:	  2140	75 81 80			mov	sp, #stack		;set stack
+  385:										;1  1  0  1	0    1    1   1
+  386:	  2143	75 B0 D7			mov	p3, #0d7h		;RD WR T1 T0	INT1 INT0 TXD RXD
+  387:				;		clr	T0
+  388:				;		clr	T1			;E 6845 = low
+  389:				;		clr	INT0			;charset 0
+  390:				;		clr	INT1			;screen 0
+  391:	  2146	E4				clr	a
+  392:	  2147	F5 A2				mov	AUXR1, a
+  393:	  2149	F5 A8				mov	ie, a
+  394:
+  395:
+  396:				;		setb	PS			;make PS high priority
+  397:										;enbale all, serial, timer0, extint0
+  398:	  214B	75 A8 93			mov	ie, #093h		;ea - ET2 ES  ET1 EX1 ET0 EX0
+  399:	  214E	D2 88				setb	it0			;set int0 to falling edge
+  400:
+  401:	  2150	F1 0E				acall	term_reset
+  402:
+  403:	  2152	74 11				mov	a, #C_XON
+  404:	  2154	12 29 40			call	cout
+  405:
+  406:	  2157	12 28 A2	init:		call	init6845
+  407:	  215A	12 28 ED			call	copyFont
+  408:	  215D	12 29 06			call	testScreen
+  409:
+  410:	  2160	90 80 00			mov	dptr, #8000h
+  411:	  2163	E0				movx	a, @dptr
+  412:	  2164	E5 90				mov	a, p1
+  413:	  2166	14				dec	a
+  414:	  2167	60 06				jz	init_loop
+  415:	  2169	90 00 00			mov	dptr, #0h
+  416:	  216C	E0				movx	a, @dptr
+  417:	  216D	80 E8				sjmp	init
+  418:
+  419:	  216F	12 29 50	init_loop:	call	cin
+  420:	  2172	B4 78 02			cjne	a, #'x', init_1
+  421:	  2175	80 0B				sjmp	init_2
+  422:
+  423:	  2177	B4 79 F5	init_1:		cjne	a, #'y', init_loop
+  424:
+  425:	  217A	12 29 50	loop_test:	call	cin
+  426:	  217D	12 29 40			call	cout
+  427:	  2180	80 F8				sjmp	loop_test
+  428:
+  429:
+  430:	  2182	D2 8C		init_2:		setb	tr0				;start timer0
+  431:	  2184	F1 0E				acall	term_reset
+  432:
+  433:				;		mov	dptr, #msg1
+  434:				;		call	print
+
+ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 9
+
+
+
+ Line  I  Addr  Code            Source
+
+  435:
+  436:	  2186	30 08 31	main_loop:	jnb	keyavail, main_serin		;key available?
+  437:	  2189	C2 08				clr	keyavail			;clear key available
+  438:	  218B	E5 3B				mov	a, keyrxval
+  439:	  218D	B4 84 02			cjne	a, #F5, main_F6			;F5 ?
+  440:	  2190	21 82				ajmp	init_2				;reset terminal
+  441:	  2192	B4 85 17	main_F6:	cjne	a, #F6, main_cout		;F6 ?
+  442:	  2195	A8 3D				mov	r0, baudidx			;switch baud
+  443:	  2197	08				inc	r0
+  444:	  2198	B8 05 02			cjne	r0, #5, main_F6a
+  445:	  219B	78 00				mov	r0, #0
+  446:	  219D	88 3D		main_F6a:	mov	baudidx, r0
+  447:	  219F	12 2B 97			call	getbaud
+  448:	  21A2	C2 8E				clr	tr1
+  449:	  21A4	F5 8D				mov	TH1, a
+  450:	  21A6	F5 8C				mov	TH0, a
+  451:	  21A8	D2 8E				setb	tr1
+  452:	  21AA	80 24				sjmp	main_status
+  453:
+  454:	  21AC	12 29 40	main_cout:	call	cout				;send out over serial
+  455:	  21AF	B4 0D 08			cjne	a, #C_CR, main_serin		;CR sent?
+  456:	  21B2	30 12 05			jnb	newlinemode, main_serin
+  457:	  21B5	74 0A				mov	a, #C_NEWLINE			;send LF, too
+  458:	  21B7	12 29 40			call	cout
+  459:
+  460:	  21BA	E5 34		main_serin:	mov	a, serstart			;serin available?
+  461:	  21BC	B5 35 02			cjne	a, serend, loop_cin
+  462:	  21BF	80 C5				sjmp	main_loop			;no serin available
+  463:
+  464:	  21C1	12 29 50	loop_cin:	call	cin				;read from serial
+  465:	  21C4	12 21 D5			call	ansiout				;output to terminal's CRT
+  466:
+  467:	  21C7	E5 22				mov	a, flags2			;have flags changed?
+  468:	  21C9	65 3C				xrl	a, oldstatus
+  469:	  21CB	60 B9				jz	main_loop			;no
+  470:	  21CD	85 22 3C			mov	oldstatus, flags2
+  471:	  21D0	12 2B B6	main_status:	call	prtstatus			;print status-line
+  472:	  21D3	80 B1				sjmp	main_loop
+  473:
+  474:
+  475:				;===============================================
+  476:				; ansiout: dispatch according to state
+  477:				;===============================================
+  478:	  21D5	FF		ansiout:	mov	r7, a			;save acc in r7
+  479:
+  480:	  21D6	E5 33				mov	a, state
+  481:	  21D8	60 20				jz	do_idle			;speed up
+  482:	  21DA	24 0C				add	a, #ansi_tab-ansiout1+1	;fetch low-byte
+  483:	  21DC	83				movc	a, @a+pc
+  484:	  21DD	C0 E0		ansiout1:	push	acc			;2
+  485:	  21DF	E5 33				mov	a, state		;2
+  486:	  21E1	24 04				add	a, #ansi_tab-ansiout2	;2
+  487:	  21E3	83				movc	a, @a+pc		;1 fetch, high-byte
+  488:	  21E4	C0 E0		ansiout2:	push	acc			;2
+  489:	  21E6	EF				mov	a, r7			;1
+  490:	  21E7	22				ret				;1
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 10
+
+
+
+ Line  I  Addr  Code            Source
+
+  491:
+  492:	  21E8	21 FA 22 F3	ansi_tab:	dw	do_idle, do_esc, do_csi, do_esc_q, do_esc_hash, do_cmd_arg, do_esc_lbrack, d
+	  21EC	23 53 26 49	o_csi_q
+	  21F0	26 4D 26 65
+	  21F4	26 59 26 00
+  493:	  21F8	26 59				dw	do_esc_rbrack
+  494:
+  495:
+  496:				;===============================================
+  497:				; state IDLE
+  498:				;===============================================
+  499:	  21FA	A2 01		do_idle:	mov	C, lastchar
+  500:	  21FC	92 02				mov	lchartmp, C
+  501:	  21FE	C2 01				clr	lastchar
+  502:
+  503:	  2200	E4				clr	a
+  504:	  2201	F8				mov	r0, a				;x-offset
+  505:	  2202	F9				mov	r1, a				;y-offset
+  506:	  2203	FA				mov	r2, a				;scrolling, 0 = no
+  507:
+  508:	  2204	BF 7F 03	do_idle_del:	cjne	r7, #C_DEL, do_idle_pre
+  509:	  2207	18				dec	r0
+  510:	  2208	C1 A2				ajmp	ansi_move
+  511:
+  512:	  220A	BF 20 00	do_idle_pre:	cjne	r7, #32, $+3			;speed up
+  513:	  220D	50 62				jnc	draw_char
+  514:
+  515:	  220F	BF 07 01			cjne	r7, #C_BELL, do_idle_bs
+  516:	  2212	22				ret					;no bell yet
+  517:
+  518:	  2213	BF 08 03	do_idle_bs:	cjne	r7, #C_BACKSP, do_idle_tab	;backspace
+  519:	  2216	18				dec	r0
+  520:	  2217	C1 A2				ajmp	ansi_move
+  521:
+  522:	  2219	BF 09 21	do_idle_tab:	cjne	r7, #C_TAB, do_idle_nl		;tabulator
+  523:	  221C	F1 53				acall	tab_set_r0_r1
+  524:	  221E	E4		do_idle_tab3:	clr	a
+  525:	  221F	09				inc	r1
+  526:	  2220	05 37				inc	cursorx
+  527:	  2222	B9 08 0E			cjne	r1, #8, do_idle_tab1
+  528:	  2225	08				inc	r0
+  529:	  2226	F9				mov	r1, a
+  530:	  2227	B8 5A 09			cjne	r0, #tabutab+10, do_idle_tab1
+  531:	  222A	F8				mov	r0, a
+  532:	  222B	F5 37				mov	cursorx, a
+  533:	  222D	09				inc	r1
+  534:	  222E	0A				inc	r2				;scroll on
+  535:	  222F	D1 A2				acall	ansi_move
+  536:	  2231	F1 53				acall	tab_set_r0_r1
+  537:	  2233	F1 63		do_idle_tab1:	acall	getbit
+  538:	  2235	56				anl	a, @r0
+  539:	  2236	60 E6				jz	do_idle_tab3			;bit not found
+  540:	  2238	E4		do_idle_tab2:	clr	a
+  541:	  2239	F8				mov	r0, a
+  542:	  223A	F9				mov	r1, a
+  543:	  223B	C1 A2				ajmp	ansi_move
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 11
+
+
+
+ Line  I  Addr  Code            Source
+
+  544:
+  545:
+  546:	  223D	BF 0A 07	do_idle_nl:	cjne	r7, #C_NEWLINE, do_idle_cr
+  547:	  2240	75 37 00	do_newline:	mov	cursorx, #0
+  548:	  2243	09				inc	r1
+  549:	  2244	0A				inc	r2
+  550:	  2245	C1 A2				ajmp	ansi_move
+  551:
+  552:	  2247	BF 0D 09	do_idle_cr:	cjne	r7, #C_CR, do_idle_esc
+  553:	  224A	75 37 00	do_cr:		mov	cursorx, #0
+  554:	  224D	D1 A2				acall	ansi_move
+  555:	  224F	20 12 EE			jb	newlinemode, do_newline		;per default, CR
+  556:	  2252	22				ret
+  557:
+  558:	  2253	BF 1B 05	do_idle_esc:	cjne	r7, #C_ESC, do_idle_so
+  559:	  2256	75 33 02			mov	state, #ST_ESC
+  560:	  2259	E1 6F				ajmp	clearargs
+  561:
+  562:	  225B	BF 0E 03	do_idle_so:	cjne	r7, #C_SO, do_idle_si
+  563:	  225E	D2 00				setb	special
+  564:	  2260	22				ret
+  565:
+  566:	  2261	BF 0F 03	do_idle_si:	cjne	r7, #C_SI, do_idle_vt
+  567:	  2264	C2 00				clr	special
+  568:	  2266	22				ret
+  569:
+  570:	  2267	BF 0B 02	do_idle_vt:	cjne	r7, #C_VT, do_idle_ff
+  571:	  226A	80 D4				sjmp	do_newline
+  572:
+  573:	  226C	BF 0C 02	do_idle_ff:	cjne	r7, #C_FF, do_idle_end
+  574:	  226F	80 CF				sjmp	do_newline
+  575:
+  576:	  2271			do_idle_end:	;ajmp	draw_char
+  577:
+  578:
+  579:
+  580:	  2271	C0 07		draw_char:	push	ar7				;save r7 (received byte)
+  581:	  2273	12 28 6B			call	cursor_off			;reset + disable cursor
+  582:
+  583:	  2276	0A				inc	r2				;with scroll
+  584:	  2277	30 02 05			jnb	lchartmp, char_out		;last char in line?
+  585:	  227A	20 10 02			jb	nowrap, char_out
+  586:	  227D	51 40				acall	do_newline
+  587:
+  588:				;===============================================
+  589:				; draws a char in ACC at cursor position
+  590:				;===============================================
+  591:	  227F	12 28 8E	char_out:	call	comp_dptr
+  592:
+  593:	  2282	D0 01				pop	ar1
+  594:
+  595:	  2284	30 00 0E			jnb	special, char_out_3	;special not set?
+  596:	  2287	B9 60 00			cjne	r1, #060h, $+3
+  597:	  228A	40 09				jc	char_out_3		;<60h, do nothing
+  598:	  228C	B9 7F 00			cjne	r1, #07fh, $+3
+  599:	  228F	50 04				jnc	char_out_3		;>=7fh, do nothing
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 12
+
+
+
+ Line  I  Addr  Code            Source
+
+  600:	  2291	E9				mov	a, r1
+  601:	  2292	94 5E				subb	a, #5eh			;carry set! subtract 5fh
+  602:	  2294	F9				mov	r1, a
+  603:	  2295	30 13 3D	char_out_3:	jnb	insert, char_out_4	;insert mode?
+  604:
+  605:	  2298	C3				clr	c
+  606:	  2299	74 4F				mov	a, #WIDTH-1
+  607:	  229B	95 37				subb	a, cursorx
+  608:	  229D	33				rlc	a			;* 2
+  609:	  229E	60 35				jz	char_out_4
+  610:	  22A0	F8				mov	r0, a			;R0: number of chars to copy in
+  611:	  22A1	04				inc	a
+  612:
+  613:	  22A2	25 84				add	a, dp1l			;add r0, to dptr1 (destination)
+  614:	  22A4	F5 84				mov	dp1l, a
+  615:	  22A6	E5 85				mov	a, dp1h
+  616:	  22A8	34 00				addc	a, #0
+  617:	  22AA	F5 85				mov	dp1h, a
+  618:
+  619:	  22AC	E5 84				mov	a, dp1l			;dptr0 = dptr1 - 2 (source)
+  620:	  22AE	94 02				subb	a, #2
+  621:	  22B0	F5 82				mov	dp0l, a
+  622:	  22B2	E5 85				mov	a, dp1h
+  623:	  22B4	94 00				subb	a, #0
+  624:	  22B6	F5 83				mov	dp0h, a
+  625:
+  626:
+  627:
+  628:
+  629:	  22B8	E0		char_out_2:	movx	a, @dptr		;copy r0 bytes from right to left
+  630:	  22B9	05 A2				inc	auxr1
+  631:	  22BB	E5 90				mov	a, p1
+  632:	  22BD	F0				movx	@dptr, a
+  633:	  22BE	05 A2				inc	auxr1
+  634:	  22C0	E5 82				mov	a, dp0l
+  635:	  22C2	70 02				jnz	char_out_2a
+  636:	  22C4	15 83				dec	dp0h
+  637:	  22C6	15 82		char_out_2a:	dec	dp0l
+  638:	  22C8	E5 84				mov	a, dp1l
+  639:	  22CA	70 02				jnz	char_out_2b
+  640:	  22CC	15 85				dec	dp1h
+  641:	  22CE	15 84		char_out_2b:	dec	dp1l
+  642:	  22D0	D8 E6				djnz	r0, char_out_2
+  643:	  22D2	12 28 8E			call	comp_dptr
+  644:
+  645:	  22D5	E9		char_out_4:	mov	a, r1
+  646:	  22D6	05 A2				inc	auxr1
+  647:	  22D8	F0				movx	@dptr, a
+  648:	  22D9	A3				inc	dptr
+  649:	  22DA	E5 2D				mov	a, color
+  650:	  22DC	30 03 01			jnb	inverse, char_out_1
+  651:	  22DF	C4				swap	a
+  652:	  22E0	F0		char_out_1:	movx	@dptr, a
+  653:	  22E1	05 A2				inc	auxr1
+  654:
+  655:	  22E3	E5 37				mov	a, cursorx
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 13
+
+
+
+ Line  I  Addr  Code            Source
+
+  656:	  22E5	B4 4F 02			cjne	a, #WIDTH-1, draw_char_1
+  657:	  22E8	D2 01				setb	lastchar
+  658:
+  659:	  22EA	78 01		draw_char_1:	mov	r0, #1
+  660:	  22EC	79 00				mov	r1, #0
+  661:	  22EE	12 28 4B			call	draw_cursor
+  662:	  22F1	C1 A2				ajmp	ansi_move
+  663:
+  664:				;===============================================
+  665:				; state ESC
+  666:				;===============================================
+  667:	  22F3	75 33 00	do_esc:		mov	state, #ST_IDLE
+  668:	  22F6	B4 1B 03			cjne	a, #C_ESC, do_esc_csi
+  669:	  22F9	02 00 00			jmp	0h
+  670:
+  671:	  22FC	B4 5B 04	do_esc_csi:	cjne	a, #'[', do_esc_7	;switch to CSI state
+  672:	  22FF	75 33 04			mov	state, #ST_CSI
+  673:	  2302	22				ret
+  674:
+  675:	  2303	B4 37 07	do_esc_7:	cjne	a, #'7', do_esc_8	;save cursor
+  676:	  2306	85 37 2B			mov	scursorx, cursorx
+  677:	  2309	85 38 2C			mov	scursory, cursory
+  678:	  230C	22				ret
+  679:
+  680:	  230D	B4 38 09	do_esc_8:	cjne	a, #'8', do_esc_D	;restore cursor
+  681:	  2310	85 2B 37			mov	cursorx, scursorx
+  682:	  2313	85 2C 38			mov	cursory, scursory
+  683:	  2316	02 28 48			jmp	move_cursor
+  684:
+  685:	  2319	B4 44 05	do_esc_D:	cjne	a, #'D', do_esc_M	;move cursor down and scroll
+  686:	  231C	0A				inc	r2			;with scrolling
+  687:	  231D	74 42				mov	a, #'B'
+  688:	  231F	61 60				ajmp	do_csi_keys		;do cursor down
+  689:
+  690:	  2321	B4 4D 05	do_esc_M:	cjne	a, #'M', do_esc_ha	;move cursor up and scroll
+  691:	  2324	0A				inc	r2			;with scrolling
+  692:	  2325	74 41				mov	a, #'A'
+  693:	  2327	61 60				ajmp	do_csi_keys		;do cursor up
+  694:
+  695:	  2329	B4 23 04	do_esc_ha:	cjne	a, #'#', do_esc_lbr
+  696:	  232C	75 33 08			mov	state, #ST_ESC_HASH
+  697:	  232F	22				ret
+  698:
+  699:	  2330	B4 28 04	do_esc_lbr:	cjne	a, #'(', do_esc_rbr
+  700:	  2333	75 33 0C			mov	state, #ST_ESC_LBRACK
+  701:	  2336	22				ret
+  702:
+  703:	  2337	B4 29 04	do_esc_rbr:	cjne	a, #')', do_esc_c
+  704:	  233A	75 33 10			mov	state, #ST_ESC_RBRACK
+  705:	  233D	22				ret
+  706:
+  707:	  233E	B4 63 02	do_esc_c:	cjne	a, #'c', do_esc_H
+  708:	  2341	E1 0E				ajmp	term_reset
+  709:
+  710:	  2343	B4 48 07	do_esc_H:	cjne	a, #'H', do_esc_Z
+  711:	  2346	F1 53				acall	tab_set_r0_r1
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 14
+
+
+
+ Line  I  Addr  Code            Source
+
+  712:	  2348	F1 63				acall	getbit
+  713:	  234A	46				orl	a, @r0
+  714:	  234B	F6				mov	@r0, a
+  715:	  234C	22				ret
+  716:
+  717:	  234D	B4 5A 02	do_esc_Z:	cjne	a, #'Z', do_esc_ex
+  718:	  2350	81 72				ajmp	do_csi_cc2
+  719:
+  720:	  2352	22		do_esc_ex:	ret
+  721:
+  722:				;===============================================
+  723:				; state CSI
+  724:				;===============================================
+  725:	  2353			do_csi:
+  726:	  2353	D1 F8				acall	isparm			;is parameter?
+  727:	  2355	50 09				jnc	do_csi_keys		;no
+  728:	  2357	85 33 23			mov	retstate, state
+  729:	  235A	75 33 0A			mov	state, #ST_CMD_ARG
+  730:	  235D	02 26 65			jmp	do_cmd_arg
+  731:
+  732:	  2360	78 00		do_csi_keys:	mov	r0, #0			;x (column)
+  733:	  2362	79 00				mov	r1, #0			;y (row
+  734:	  2364	75 33 00			mov	state, #ST_IDLE
+  735:
+  736:	  2367	B4 41 09			cjne	a, #'A', do_csi_B	;cursor up
+  737:	  236A	D1 8E				acall	args_gr_zero
+  738:	  236C	E5 26				mov	a, arg0
+  739:	  236E	F4				cpl	a
+  740:	  236F	04				inc	a
+  741:	  2370	F9				mov	r1, a
+  742:	  2371	C1 A2				ajmp	ansi_move
+  743:
+  744:
+  745:	  2373	B4 42 06	do_csi_B: 	cjne	a, #'B', do_csi_C	;cursor down
+  746:	  2376	D1 8E				acall	args_gr_zero
+  747:	  2378	A9 26				mov	r1, arg0
+  748:	  237A	C1 A2				ajmp	ansi_move
+  749:
+  750:
+  751:	  237C	B4 43 06	do_csi_C:	cjne	a, #'C', do_csi_D	;cursor right
+  752:	  237F	D1 8E				acall	args_gr_zero
+  753:	  2381	A8 26				mov	r0, arg0
+  754:	  2383	C1 A2				ajmp	ansi_move
+  755:
+  756:
+  757:	  2385	B4 44 09	do_csi_D:	cjne	a, #'D', do_csi_H 	;cursor left
+  758:	  2388	D1 8E				acall	args_gr_zero
+  759:	  238A	E5 26				mov	a, arg0
+  760:	  238C	F4				cpl	a
+  761:	  238D	04				inc	a
+  762:	  238E	F8				mov	r0, a
+  763:	  238F	C1 A2				ajmp	ansi_move
+  764:
+  765:
+  766:	  2391	B4 48 02	do_csi_H:	cjne	a, #'H', do_csi_H1	;position cursor
+  767:	  2394	80 03				sjmp	do_csi_H2
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 15
+
+
+
+ Line  I  Addr  Code            Source
+
+  768:	  2396	B4 66 0E	do_csi_H1:	cjne	a, #'f', do_csi_s
+  769:	  2399	D1 8E		do_csi_H2:	acall	args_gr_zero
+  770:	  239B	E5 26				mov	a, arg0
+  771:	  239D	14				dec	a
+  772:	  239E	F5 38				mov	cursory, a
+  773:	  23A0	E5 27				mov	a, arg1
+  774:	  23A2	14				dec	a
+  775:	  23A3	F5 37				mov	cursorx, a
+  776:	  23A5	C1 A2				ajmp	ansi_move
+  777:
+  778:
+  779:	  23A7	B4 73 07	do_csi_s:	cjne	a, #'s', do_csi_u	;save cursor
+  780:	  23AA	85 37 2B			mov	scursorx, cursorx
+  781:	  23AD	85 38 2C			mov	scursory, cursory
+  782:	  23B0	22				ret
+  783:
+  784:
+  785:	  23B1	B4 75 08	do_csi_u:	cjne	a, #'u', do_csi_m	;restore cursor
+  786:	  23B4	85 2B 37			mov	cursorx, scursorx
+  787:	  23B7	85 2C 38			mov	cursory, scursory
+  788:	  23BA	C1 A2				ajmp	ansi_move
+  789:
+  790:
+  791:	  23BC	B4 6D 5E	do_csi_m:	cjne	a, #'m', do_csi_n	;color handling
+  792:	  23BF	A9 25				mov	r1, nargs
+  793:	  23C1	B9 00 06			cjne	r1, #0, do_csi_ma
+  794:	  23C4	75 2D F0			mov	color, #0f0h		;no args, reset
+  795:	  23C7	C2 03				clr	inverse
+  796:	  23C9	22				ret
+  797:	  23CA	78 26		do_csi_ma:	mov	r0, #arg0
+  798:	  23CC	E6		do_csi_mc:	mov	a, @r0
+  799:	  23CD	B4 00 07			cjne	a, #0, do_csi_md	;if arg = 0, all attrs off
+  800:	  23D0	75 2D F0			mov	color, #0f0h
+  801:	  23D3	C2 03				clr	inverse
+  802:	  23D5	81 19				ajmp	do_csi_mx3		;loop nargs
+  803:	  23D7	B4 1E 00	do_csi_md:	cjne	a, #30, do_csi_mb
+  804:	  23DA	50 02		do_csi_mb:	jnc	do_csi_me		;arg >= 30
+  805:	  23DC	80 2A				sjmp	do_csi_mx		;loop nargs
+  806:	  23DE	B4 26 00	do_csi_me:	cjne	a, #38, do_csi_mf
+  807:	  23E1	50 36		do_csi_mf:	jnc	do_csi_mx3		;>= 38	loop nargs
+  808:	  23E3	94 1D				subb	a, #29			; - 30 (carry set!)
+  809:	  23E5	C4				swap	a
+  810:	  23E6	FA				mov	r2, a
+  811:	  23E7	E5 2D				mov	a, color
+  812:	  23E9	54 0F				anl	a, #0fh
+  813:	  23EB	4A				orl	a, r2
+  814:	  23EC	F5 2D				mov	color, a
+  815:	  23EE	81 19				ajmp	do_csi_mx3		;loop nargs
+  816:	  23F0	B4 28 00	do_csi_mg:	cjne	a, #40, $+3
+  817:	  23F3	50 02				jnc	do_csi_mh		;>= 40
+  818:	  23F5	81 08				ajmp	do_csi_mx		;loop nargs
+  819:	  23F7	B4 30 00	do_csi_mh:	cjne	a, #48, $+3
+  820:	  23FA	50 0C				jnc	do_csi_mx		;>= 48 loop
+  821:	  23FC	94 27				subb	a, #39			;- 40 (carry set!)
+  822:	  23FE	FA				mov	r2, a
+  823:	  23FF	F5 2D				mov	color, a
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 16
+
+
+
+ Line  I  Addr  Code            Source
+
+  824:	  2401	54 F0				anl	a, #0f0h
+  825:	  2403	4A				orl	a, r2
+  826:	  2404	F5 2D				mov	color, a
+  827:	  2406	81 19				ajmp	do_csi_mx3		; loop nargs
+  828:	  2408	B4 07 02	do_csi_mx:	cjne	a, #7, do_csi_mx1	; inverse
+  829:	  240B	D2 03				setb	inverse
+  830:	  240D	B4 01 03	do_csi_mx1:	cjne	a, #1, do_csi_mx2	; bold
+  831:	  2410	75 2D 30			mov	color, #30h
+  832:	  2413	B4 05 03	do_csi_mx2:	cjne	a, #5, do_csi_mx3
+  833:	  2416	75 2D 10			mov	color, #10h
+  834:	  2419	08		do_csi_mx3:	inc	r0
+  835:	  241A	D9 B0				djnz	r1, do_csi_mc
+  836:	  241C	22				ret
+  837:
+  838:	  241D	B4 6E 4F	do_csi_n:	cjne	a, #'n', do_csi_cc	;terminal status report
+  839:	  2420	E5 26				mov	a, arg0
+  840:	  2422	B4 05 0E			cjne	a, #5, do_csi_n6
+  841:	  2425	78 01				mov	r0, #1			;always OK: "ESC [ 0 n"
+  842:	  2427	E8		do_csi_n1:	mov	a, r0
+  843:	  2428	12 24 62			call	getreport
+  844:	  242B	12 29 40			call	cout
+  845:	  242E	08				inc	r0
+  846:	  242F	B8 05 F5			cjne	r0, #5, do_csi_n1
+  847:	  2432	22				ret
+  848:	  2433	B4 06 39	do_csi_n6:	cjne	a, #6, do_csi_cc		;report cursor position
+  849:	  2436	74 1B				mov	a, #ESC
+  850:	  2438	12 29 40			call	cout
+  851:	  243B	74 5B				mov	a, #'['
+  852:	  243D	12 29 40			call	cout
+  853:	  2440	E5 38				mov	a, cursory
+  854:	  2442	95 31				subb	a, top
+  855:	  2444	12 24 56			call	sendpos
+  856:	  2447	74 3B				mov	a, #';'
+  857:	  2449	12 29 40			call	cout
+  858:	  244C	E5 37				mov	a, cursorx
+  859:	  244E	12 24 56			call	sendpos
+  860:	  2451	74 52				mov	a, #'R'
+  861:	  2453	02 29 40			jmp	cout
+  862:
+  863:	  2456	04		sendpos:	inc	a
+  864:	  2457	12 28 81			call	hex2dez
+  865:	  245A	E8				mov	a, r0
+  866:	  245B	12 29 40			call	cout
+  867:	  245E	E9				mov	a, r1
+  868:	  245F	02 29 40			jmp	cout
+  869:
+  870:	  2462	83		getreport:	movc	a, @a+pc
+  871:	  2463	22				ret
+  872:	  2464	1B 5B 30 6E	reportok:	db	ESC, "[0n"		;terminal OK
+  873:	  2468	1B 5B 3F 31	reportda:	db	ESC, "[?1;0c"		;device attributes (VT100, no options)
+	  246C	3B 30 63
+  874:
+  875:	  246F	B4 63 0D	do_csi_cc:	cjne	a, #'c', do_csi_r
+  876:	  2472	78 05		do_csi_cc2:	mov	r0, #5			;reportda
+  877:	  2474	E8		do_csi_cc1:	mov	a, r0
+  878:	  2475	91 62				call	getreport
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 17
+
+
+
+ Line  I  Addr  Code            Source
+
+  879:	  2477	12 29 40			call	cout
+  880:	  247A	08				inc	r0
+  881:	  247B	B8 0C F6			cjne	r0, #5+7, do_csi_cc1
+  882:	  247E	22				ret
+  883:
+  884:	  247F	B4 72 43	do_csi_r:	cjne	a, #'r', do_csi_J	;set scroll margins
+  885:	  2482	E5 25				mov	a, nargs
+  886:	  2484	70 08				jnz	do_csi_ra		;nargs > 0
+  887:	  2486	75 31 00			mov	top, #0
+  888:	  2489	75 32 17			mov	bottom, #HEIGHT-1
+  889:	  248C	80 28				sjmp	do_csi_rc
+  890:	  248E	D1 8E		do_csi_ra:	acall	args_gr_zero
+  891:	  2490	B4 02 00			cjne	a, #2, $+3
+  892:	  2493	50 0A				jnc	do_csi_rb		;>= 2 args
+  893:	  2495	85 26 31			mov	top, arg0
+  894:	  2498	15 31				dec	top
+  895:	  249A	75 32 17			mov	bottom, #HEIGHT-1
+  896:	  249D	80 17				sjmp	do_csi_rc
+  897:	  249F	E5 26		do_csi_rb:	mov	a, arg0
+  898:	  24A1	95 27				subb	a, arg1			;carry clear!
+  899:	  24A3	50 20				jnc	do_csi_J		; a >= b
+  900:	  24A5	85 26 31			mov	top, arg0
+  901:	  24A8	15 31				dec	top
+  902:
+  903:	  24AA	E5 27				mov	a, arg1
+  904:	  24AC	B4 19 00			cjne	a, #HEIGHT+1, $+3
+  905:	  24AF	40 02				jc	do_csi_re
+  906:	  24B1	74 18				mov	a, #HEIGHT
+  907:	  24B3	14		do_csi_re:	dec	a
+  908:	  24B4	F5 32				mov	bottom, a
+  909:
+  910:	  24B6	E4		do_csi_rc:	clr	a			;cursor home
+  911:	  24B7	F8				mov	r0, a
+  912:	  24B8	F9				mov	r1, a
+  913:	  24B9	F5 37				mov	cursorx, a
+  914:	  24BB	F5 38				mov	cursory, a
+  915:	  24BD	30 11 03			jnb	origin, do_csi_rd
+  916:	  24C0	85 31 38			mov	cursory, top
+  917:	  24C3	C1 A2		do_csi_rd:	ajmp	ansi_move
+  918:
+  919:
+  920:	  24C5	B4 4A 35	do_csi_J:	cjne	a, #'J', do_csi_ques		;ED – Erase In Display
+  921:	  24C8	A8 26				mov	r0, arg0
+  922:	  24CA	B8 00 0F	do_csi_Ja:	cjne	r0, #0, do_csi_Jb
+  923:	  24CD	A8 38		do_csi_Jc:	mov	r0, cursory			;Erase from the active position to the end o
+				f the screen, inclusive (default)
+  924:	  24CF	79 17				mov	r1, #HEIGHT-1			;y from cursory to HEIGHT-1
+  925:	  24D1	AA 37				mov	r2, cursorx			;start position x
+  926:	  24D3	74 50				mov	a, #WIDTH			;chars to erase first line
+  927:	  24D5	9A				subb	a, r2
+  928:	  24D6	FB				mov	r3, a
+  929:	  24D7	7D 50				mov	r5, #WIDTH			;chars to erase last line
+  930:	  24D9	02 28 17			jmp	clear_lines
+  931:
+  932:	  24DC	B8 01 0E	do_csi_Jb:	cjne	r0, #1, do_csi_Jd
+  933:	  24DF	78 00				mov	r0, #0				;Erase from start of the screen to the activ
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 18
+
+
+
+ Line  I  Addr  Code            Source
+
+				e position, inclusive
+  934:	  24E1	A9 38				mov	r1, cursory
+  935:	  24E3	7A 00				mov	r2, #0
+  936:	  24E5	7B 50				mov	r3, #WIDTH			;chars to erase first line
+  937:	  24E7	AD 37				mov	r5, cursorx
+  938:	  24E9	0D				inc	r5				;chars to erase last line
+  939:	  24EA	02 28 17			jmp	clear_lines
+  940:
+  941:	  24ED	B8 02 0D	do_csi_Jd:	cjne	r0, #2, do_csi_ques
+  942:	  24F0	78 00				mov	r0, #0				;Erase all of the display – all lines are er
+				ased and the cursor does not move.
+  943:	  24F2	79 17				mov	r1, #HEIGHT-1
+  944:	  24F4	7A 00				mov	r2, #0
+  945:	  24F6	7B 50				mov	r3, #WIDTH			;chars to erase first line
+  946:	  24F8	7D 50				mov	r5, #WIDTH			;chars to erase first line
+  947:	  24FA	02 28 17			jmp	clear_lines
+  948:
+  949:	  24FD	B4 3F 04	do_csi_ques:	cjne	a, #'?', do_csi_K
+  950:	  2500	75 33 0E			mov	state, #ST_CSI_Q
+  951:	  2503	22				ret
+  952:
+  953:	  2504	B4 4B 29	do_csi_K:	cjne	a, #'K', do_csi_g
+  954:	  2507	A8 38				mov	r0, cursory
+  955:	  2509	A9 38				mov	r1, cursory
+  956:	  250B	E5 26				mov	a, arg0
+  957:	  250D	B4 00 09			cjne	a, #0, do_csi_Ka		;Erase from the active position to the end o
+				f the line, inclusive (default)
+  958:	  2510	AA 37				mov	r2, cursorx
+  959:	  2512	74 50				mov	a, #WIDTH
+  960:	  2514	9A				subb	a, r2
+  961:	  2515	FD				mov	r5, a
+  962:	  2516	02 28 17			jmp	clear_lines
+  963:	  2519	B4 01 08	do_csi_Ka:	cjne	a, #1, do_csi_Kb		;Erase from the start of the screen to the a
+				ctive position, inclusive
+  964:	  251C	7A 00				mov	r2, #0
+  965:	  251E	AD 37				mov	r5, cursorx
+  966:	  2520	0D				inc	r5
+  967:	  2521	02 28 17			jmp	clear_lines
+  968:	  2524	B4 02 07	do_csi_Kb:	cjne	a, #2, do_csi_end1		;Erase all of the line, inclusive
+  969:	  2527	7A 00				mov	r2, #0
+  970:	  2529	7D 50				mov	r5, #WIDTH
+  971:	  252B	02 28 17			jmp	clear_lines
+  972:	  252E	A1 FF		do_csi_end1:	ajmp	do_csi_end
+  973:
+  974:	  2530	B4 67 10	do_csi_g:	cjne	a, #'g', do_csi_L
+  975:	  2533	E5 26				mov	a, arg0
+  976:	  2535	B4 03 02			cjne	a, #3, do_csi_g1
+  977:	  2538	E1 47				ajmp	cleartabu			;clear all tabs
+  978:	  253A	F1 53		do_csi_g1:	acall	tab_set_r0_r1
+  979:	  253C	F1 63				acall	getbit
+  980:	  253E	F4				cpl	a
+  981:	  253F	56				anl	a, @r0
+  982:	  2540	F6				mov	@r0, a
+  983:	  2541	A1 FF				ajmp	do_csi_end
+  984:
+  985:	  2543	B4 4C 24	do_csi_L:	cjne	a, #'L', do_csi_MM		;insert line
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 19
+
+
+
+ Line  I  Addr  Code            Source
+
+  986:	  2546	D1 8E				acall	args_gr_zero
+  987:	  2548	E5 38				mov	a, cursory			;check if within bounds
+  988:	  254A	B5 31 00			cjne	a, top, $+3
+  989:	  254D	40 DF				jc	do_csi_end1
+  990:	  254F	B5 32 00			cjne	a, bottom, $+3
+  991:	  2552	80 02				sjmp	do_csi_L1
+  992:	  2554	50 D8				jnc	do_csi_end1
+  993:	  2556	12 28 6B	do_csi_L1:	call	cursor_off
+  994:	  2559	A8 26				mov	r0, arg0
+  995:	  255B	7B FF		do_csi_L2:	mov	r3, #-1
+  996:	  255D	C3				clr	c
+  997:	  255E	E5 32				mov	a, bottom
+  998:	  2560	95 38				subb	a, cursory
+  999:	  2562	FC				mov	r4, a
+ 1000:	  2563	F1 89				acall	scroll_r4
+ 1001:	  2565	D8 F4				djnz	r0, do_csi_L2
+ 1002:	  2567	02 28 59			jmp	cursor_on
+ 1003:
+ 1004:	  256A	B4 4D 2B	do_csi_MM:	cjne	a, #'M', do_csi_hh		;delete line
+ 1005:	  256D	D1 8E				acall	args_gr_zero
+ 1006:	  256F	E5 38				mov	a, cursory			;check if within bounds
+ 1007:	  2571	B5 31 00			cjne	a, top, $+3
+ 1008:	  2574	40 B8				jc	do_csi_end1
+ 1009:	  2576	B5 32 00			cjne	a, bottom, $+3
+ 1010:	  2579	80 02				sjmp	do_csi_MM1
+ 1011:	  257B	50 B1				jnc	do_csi_end1
+ 1012:	  257D	12 28 6B	do_csi_MM1:	call	cursor_off
+ 1013:	  2580	A8 26				mov	r0, arg0
+ 1014:	  2582	C0 31				push	top
+ 1015:	  2584	7B 01		do_csi_MM2:	mov	r3, #1
+ 1016:	  2586	C3				clr	c
+ 1017:	  2587	E5 32				mov	a, bottom
+ 1018:	  2589	95 38				subb	a, cursory
+ 1019:	  258B	FC				mov	r4, a
+ 1020:	  258C	85 38 31			mov	top, cursory
+ 1021:	  258F	F1 89				acall	scroll_r4
+ 1022:	  2591	D8 F1				djnz	r0, do_csi_MM2
+ 1023:	  2593	D0 31				pop	top
+ 1024:	  2595	02 28 59			jmp	cursor_on
+ 1025:
+ 1026:	  2598	75 33 00	do_csi_hh:	mov	state, #ST_IDLE			;h set NEWLINE / INSERT
+ 1027:	  259B	85 22 3C			mov	oldstatus, flags2
+ 1028:
+ 1029:	  259E	B4 68 16			cjne	a, #'h', do_csi_ll		;set mode
+ 1030:	  25A1	78 26				mov	r0, #arg0
+ 1031:	  25A3	A9 25				mov	r1, nargs
+ 1032:	  25A5	B9 00 01			cjne	r1, #0, do_csi_hh1		;>= 1 arg
+ 1033:	  25A8	22				ret
+ 1034:	  25A9	B6 14 02	do_csi_hh1:	cjne	@r0, #LNM, do_csi_hh2
+ 1035:	  25AC	D2 12				setb	newlinemode			;set newlinemode
+ 1036:	  25AE	B6 04 02	do_csi_hh2:	cjne	@r0, #IRM, do_csi_hhx
+ 1037:	  25B1	D2 13				setb	insert				;set insert mode
+ 1038:	  25B3	08		do_csi_hhx:	inc	r0
+ 1039:	  25B4	D9 F3				djnz	r1, do_csi_hh1
+ 1040:	  25B6	22				ret
+ 1041:
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 20
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1042:	  25B7	B4 6C 16	do_csi_ll:	cjne	a, #'l', do_csi_P		;h reset NEWLINE / INSERT
+ 1043:	  25BA	78 26				mov	r0, #arg0
+ 1044:	  25BC	A9 25				mov	r1, nargs
+ 1045:	  25BE	B9 00 01			cjne	r1, #0, do_csi_ll1
+ 1046:	  25C1	22				ret
+ 1047:	  25C2	B6 14 02	do_csi_ll1:	cjne	@r0, #LNM, do_csi_ll2
+ 1048:	  25C5	C2 12				clr	newlinemode			;clear newlinemode
+ 1049:	  25C7	B6 04 02	do_csi_ll2:	cjne	@r0, #IRM, do_csi_llx
+ 1050:	  25CA	C2 13				clr	insert				;clear insert mode
+ 1051:	  25CC	08		do_csi_llx:	inc	r0
+ 1052:	  25CD	D9 F3				djnz	r1, do_csi_ll1
+ 1053:	  25CF	22				ret
+ 1054:
+ 1055:	  25D0	B4 50 2C	do_csi_P:	cjne	a, #'P', do_csi_end		;Delete Character (DCH)
+ 1056:	  25D3	D1 8E				acall	args_gr_zero
+ 1057:	  25D5	A9 26				mov	r1, arg0
+ 1058:	  25D7	C3		do_csi_P2:	clr	c
+ 1059:	  25D8	74 4F				mov	a, #WIDTH-1
+ 1060:	  25DA	95 37				subb	a, cursorx
+ 1061:	  25DC	60 21				jz	do_csi_end			;nothing to do
+ 1062:	  25DE	23				rl	a
+ 1063:	  25DF	F8				mov	r0, a
+ 1064:	  25E0	12 28 8E			call	comp_dptr			;compute dptr1
+ 1065:	  25E3	85 84 82			mov	dp0l, dp1l			;copy to dptr0
+ 1066:	  25E6	85 85 83			mov	dp0h, dp1h
+ 1067:	  25E9	A3				inc	dptr				;
+ 1068:	  25EA	A3				inc	dptr				;dptr0 = dptr1 + 2
+ 1069:
+ 1070:	  25EB	E0		do_csi_P1:	movx	a, @dptr
+ 1071:	  25EC	E5 90				mov	a, P1
+ 1072:	  25EE	A3				inc	dptr
+ 1073:	  25EF	05 A2				inc	auxr1
+ 1074:	  25F1	F0				movx	@dptr, a
+ 1075:	  25F2	A3				inc	dptr
+ 1076:	  25F3	05 A2				inc	auxr1
+ 1077:	  25F5	D8 F4				djnz	r0, do_csi_P1
+ 1078:	  25F7	05 A2				inc	auxr1
+ 1079:	  25F9	E4				clr	a
+ 1080:	  25FA	F0				movx	@dptr, a
+ 1081:	  25FB	05 A2				inc	auxr1
+ 1082:	  25FD	D9 D8				djnz	r1, do_csi_P2
+ 1083:	  25FF	22		do_csi_end:	ret
+ 1084:
+ 1085:				;		mov	a, r0
+ 1086:				;		call	phex
+ 1087:				;		mov	a, dp0h
+ 1088:				;		call	phex
+ 1089:				;		mov	a, dp0l
+ 1090:				;		call	phex
+ 1091:				;		call	space
+ 1092:				;		mov	a, dp1h
+ 1093:				;		call	phex
+ 1094:				;		mov	a, dp1l
+ 1095:				;		call	phex
+ 1096:				;		call	space
+ 1097:				;		call	space
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 21
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1098:
+ 1099:				;===============================================
+ 1100:				; state CSI_questionmark "ESC [ ?"
+ 1101:				;===============================================
+ 1102:	  2600	D1 F8		do_csi_q:	acall	isparm				;is parameter?
+ 1103:	  2602	50 08				jnc	do_csi_q_h			;no
+ 1104:	  2604	85 33 23			mov	retstate, state
+ 1105:	  2607	75 33 0A			mov	state, #ST_CMD_ARG
+ 1106:	  260A	C1 65				ajmp	do_cmd_arg
+ 1107:
+ 1108:	  260C	75 33 00	do_csi_q_h:	mov	state, #ST_IDLE
+ 1109:	  260F	85 22 3C			mov	oldstatus, flags2
+ 1110:
+ 1111:	  2612	B4 68 18			cjne	a, #'h', do_csi_q_l		;set mode
+ 1112:	  2615	78 26				mov	r0, #arg0
+ 1113:	  2617	A9 25				mov	r1, nargs
+ 1114:	  2619	B9 00 01			cjne	r1, #0, do_csi_q_h1		;>= 1 arg
+ 1115:	  261C	22				ret
+ 1116:	  261D	B6 07 02	do_csi_q_h1:	cjne	@r0, #DECAWM, do_csi_q_h2	;set auto wrap
+ 1117:	  2620	C2 10				clr	nowrap
+ 1118:	  2622	B6 06 04	do_csi_q_h2:	cjne	@r0, #DECOM, do_csi_q_hx	;set origin
+ 1119:	  2625	D2 11				setb	origin
+ 1120:	  2627	81 B6				ajmp	do_csi_rc			;position cursor home
+ 1121:	  2629	08		do_csi_q_hx:	inc	r0
+ 1122:	  262A	D9 F1				djnz	r1, do_csi_q_h1
+ 1123:	  262C	22				ret
+ 1124:
+ 1125:	  262D	B4 6C 18	do_csi_q_l:	cjne	a, #'l', do_csi_q_end		;reset mode
+ 1126:	  2630	78 26				mov	r0, #arg0
+ 1127:	  2632	A9 25				mov	r1, nargs
+ 1128:	  2634	B9 00 02			cjne	r1, #0, do_csi_q_l1
+ 1129:	  2637	80 C6				sjmp	do_csi_end
+ 1130:	  2639	B6 07 02	do_csi_q_l1:	cjne	@r0, #DECAWM, do_csi_q_l2	;reset auto wrap
+ 1131:	  263C	D2 10				setb	nowrap
+ 1132:	  263E	B6 06 04	do_csi_q_l2:	cjne	@r0, #DECOM, do_csi_q_lx	;reset origin
+ 1133:	  2641	C2 11				clr	origin
+ 1134:	  2643	81 B6				ajmp	do_csi_rc			;position cursor home
+ 1135:	  2645	08		do_csi_q_lx:	inc	r0
+ 1136:	  2646	D9 F1				djnz	r1, do_csi_q_l1
+ 1137:	  2648	22		do_csi_q_end:	ret
+ 1138:
+ 1139:
+ 1140:				;===============================================
+ 1141:				; state ESC_questionmark "ESC ?"
+ 1142:				;===============================================
+ 1143:	  2649			do_esc_q:
+ 1144:	  2649	75 33 00			mov	state, #ST_IDLE
+ 1145:	  264C	22				ret
+ 1146:
+ 1147:				;===============================================
+ 1148:				; state ESC_hash "ESC #"
+ 1149:				;===============================================
+ 1150:	  264D	75 33 00	do_esc_hash:	mov	state, #ST_IDLE
+ 1151:
+ 1152:	  2650	B4 38 05			cjne	a, #'8', do_esc_hash_end
+ 1153:	  2653	7C 45				mov	r4, #'E'
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 22
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1154:	  2655	02 28 0C			jmp	fill_screen
+ 1155:
+ 1156:	  2658			do_esc_hash_end:
+ 1157:	  2658	22				ret
+ 1158:
+ 1159:
+ 1160:				;===============================================
+ 1161:				; state ESC right-bracket "ESC )"
+ 1162:				;===============================================
+ 1163:	  2659			do_esc_rbrack:
+ 1164:				;===============================================
+ 1165:				; state ESC left-bracket "ESC ("
+ 1166:				;===============================================
+ 1167:	  2659	75 33 00	do_esc_lbrack:	mov	state, #ST_IDLE
+ 1168:
+ 1169:	  265C	B4 30 03			cjne	a, #'0', do_esc_lb_1
+ 1170:	  265F	D2 00				setb	special
+ 1171:	  2661	22				ret
+ 1172:	  2662	C2 00		do_esc_lb_1:	clr	special
+ 1173:	  2664	22				ret
+ 1174:
+ 1175:
+ 1176:				;===============================================
+ 1177:				; state command arg
+ 1178:				;===============================================
+ 1179:	  2665			do_cmd_arg:
+ 1180:	  2665	F9				mov	r1, a			;save a
+ 1181:	  2666	74 26				mov	a, #arg0		;pointer to vars
+ 1182:	  2668	25 25				add	a, nargs
+ 1183:	  266A	F8				mov	r0, a
+ 1184:	  266B	E9				mov	a, r1
+ 1185:	  266C	F1 03				acall	isdigit
+ 1186:	  266E	50 0A				jnc	do_cmd_arg_1		;no digit
+ 1187:				;		inc	argcnt
+ 1188:	  2670	E6				mov	a, @r0
+ 1189:	  2671	75 F0 0A			mov	b, #10
+ 1190:	  2674	A4				mul	ab
+ 1191:	  2675	29				add	a, r1
+ 1192:	  2676	94 30				subb	a, #'0'
+ 1193:	  2678	F6				mov	@r0, a
+ 1194:	  2679	22				ret
+ 1195:	  267A	B4 3B 03	do_cmd_arg_1:	cjne	a, #';', do_cmd_arg_2
+ 1196:	  267D	05 25				inc	nargs
+ 1197:				;		mov	a, argcnt
+ 1198:				;		jnz	do_cmd_arg_3
+ 1199:				;		mov	@r0, #1
+ 1200:				;do_cmd_arg_3:	mov	argcnt, #0
+ 1201:	  267F	22				ret
+ 1202:	  2680	B4 1B 04	do_cmd_arg_2:	cjne	a, #C_ESC, do_cmd_arg_3
+ 1203:	  2683	75 33 02			mov	state, #ST_ESC
+ 1204:	  2686	22				ret
+ 1205:	  2687	05 25		do_cmd_arg_3:	inc	nargs
+ 1206:	  2689	85 23 33			mov	state, retstate
+ 1207:	  268C			do_cmd_arg_4:	;mov	retstate, #0
+ 1208:	  268C	21 D5				ajmp	ansiout
+ 1209:
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 23
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1210:
+ 1211:				;
+ 1212:				; set arg0-3 to one if zero
+ 1213:				;
+ 1214:	  268E	C0 00		args_gr_zero:	push	ar0
+ 1215:	  2690	C0 01				push	ar1
+ 1216:	  2692	78 26				mov	r0, #arg0
+ 1217:	  2694	79 04				mov	r1, #4
+ 1218:	  2696	B6 00 01	args_gr_zero_2:	cjne	@r0, #0, args_gr_zero_1
+ 1219:	  2699	06				inc	@r0
+ 1220:	  269A	08		args_gr_zero_1:	inc	r0
+ 1221:	  269B	D9 F9				djnz	r1, args_gr_zero_2
+ 1222:	  269D	D0 01				pop	ar1
+ 1223:	  269F	D0 00				pop	ar0
+ 1224:	  26A1	22				ret
+ 1225:
+ 1226:				; r0: x - offset
+ 1227:				; r1: y - offset
+ 1228:				; r2: 0: without scroll, 1: with scroll
+ 1229:				; r3: scroll occured
+ 1230:				; r4: 0 = within bounds, 1 = out of bounds
+ 1231:	  26A2			ansi_move:
+ 1232:						;acall	cursor_off
+ 1233:
+ 1234:	  26A2	7B 00				mov	r3, #0			;no scroll
+ 1235:	  26A4	AC 31				mov	r4, top
+ 1236:	  26A6	AD 32				mov	r5, bottom
+ 1237:
+ 1238:				;
+ 1239:				; check new x-posiion
+ 1240:				;
+ 1241:	  26A8	E8				mov	a, r0
+ 1242:	  26A9	25 37				add	a, cursorx		;< 0?
+ 1243:	  26AB	30 E7 01			jnb	acc.7, ansi_move_x1	;no, check width
+ 1244:	  26AE	E4				clr	a
+ 1245:	  26AF	B4 50 00	ansi_move_x1:	cjne	a, #WIDTH, $+3		;>= WIDTH ?
+ 1246:	  26B2	40 02				jc	ansi_move_x3		;< WIDTH
+ 1247:	  26B4	74 4F				mov	a, #WIDTH-1		;=WIDTH, set to WIDTH-1
+ 1248:	  26B6	F5 37		ansi_move_x3:	mov	cursorx, a
+ 1249:
+ 1250:				;
+ 1251:				; check if within margins
+ 1252:				;
+ 1253:	  26B8	20 11 13			jb	origin, ansi_move_y	;if origin, no out-of-margins
+ 1254:	  26BB	E5 38				mov	a, cursory		;check margins
+ 1255:	  26BD	B5 31 00			cjne	a, top, $+3
+ 1256:	  26C0	40 07				jc	ansi_move_m1		;< top!
+ 1257:	  26C2	B5 32 02			cjne	a, bottom, $+5
+ 1258:	  26C5	80 07				sjmp	ansi_move_y		;= bottom
+ 1259:	  26C7	40 05				jc	ansi_move_y		;< bottom
+ 1260:	  26C9	E4		ansi_move_m1:	clr	a
+ 1261:	  26CA	FA				mov	r2, a			;no scroll
+ 1262:	  26CB	FC				mov	r4, a
+ 1263:	  26CC	7D 17				mov	r5, #HEIGHT-1
+ 1264:
+ 1265:				;
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 24
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1266:				; check y-position
+ 1267:				;
+ 1268:	  26CE	E9		ansi_move_y:	mov	a, r1
+ 1269:	  26CF	25 38				add	a, cursory		;
+ 1270:	  26D1	20 E7 05			jb	acc.7, ansi_move_y2	;< 0
+ 1271:	  26D4	B5 04 00			cjne	a, ar4, $+3		;
+ 1272:	  26D7	50 04				jnc	ansi_move_y1		;>= top
+ 1273:	  26D9	C3		ansi_move_y2:	clr	c
+ 1274:	  26DA	9C				subb	a, r4
+ 1275:	  26DB	FB				mov	r3, a
+ 1276:	  26DC	EC				mov	a, r4			;< top, set to top
+ 1277:
+ 1278:	  26DD	B5 05 02	ansi_move_y1:	cjne	a, ar5, $+5		;= bottom ?
+ 1279:	  26E0	80 05				sjmp	ansi_move_y3		;yes
+ 1280:	  26E2	40 03				jc	ansi_move_y3		;< bottom?
+ 1281:	  26E4	9D				subb	a, r5			;no, >bottom
+ 1282:	  26E5	FB				mov	r3, a
+ 1283:	  26E6	ED				mov	a, r5			;set to bottom
+ 1284:	  26E7	F5 38		ansi_move_y3:	mov	cursory, a
+ 1285:	  26E9	12 28 6B			call	cursor_off
+ 1286:
+ 1287:	  26EC	EA				mov	a, r2			;is scrolling enabled ?
+ 1288:	  26ED	60 05				jz	ansi_move_ex		;no, exit
+ 1289:	  26EF	EB				mov	a, r3			;did scrolling occur?
+ 1290:	  26F0	60 02				jz	ansi_move_ex		;no, exit
+ 1291:
+ 1292:	  26F2	F1 83				acall	scroll
+ 1293:
+ 1294:	  26F4	12 28 4B	ansi_move_ex:	call	draw_cursor
+ 1295:	  26F7	22				ret
+ 1296:
+ 1297:				;ansi_line_left:
+ 1298:						;call	phex
+ 1299:				;		ret
+ 1300:
+ 1301:	  26F8	F1 03		isparm:		acall	isdigit
+ 1302:	  26FA	40 04				jc	isparmex
+ 1303:	  26FC	B4 3B 02			cjne	a, #';', isparm1
+ 1304:	  26FF	D3				setb	c
+ 1305:	  2700	22		isparmex:	ret
+ 1306:	  2701	C3		isparm1:	clr	c
+ 1307:	  2702	22				ret
+ 1308:				;
+ 1309:				; is acc beteen '0' and '9'?
+ 1310:				; if so, return carry clear, set otherwise
+ 1311:				;
+ 1312:	  2703	B4 30 00	isdigit:	cjne	a, #'0', isdigit1
+ 1313:	  2706	50 02		isdigit1:	jnc	isdigit2		;>= '0'
+ 1314:	  2708	B3				cpl	c
+ 1315:	  2709	22				ret				;carry set
+ 1316:	  270A	B4 3A 00	isdigit2:	cjne	a, #'9'+1, isdigit3
+ 1317:	  270D	22		isdigit3:	ret				;= '9' carry clear
+ 1318:
+ 1319:
+ 1320:
+ 1321:				;===============================================
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 25
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1322:				; reset terminal
+ 1323:				;===============================================
+ 1324:	  270E	C2 AF		term_reset:	clr	ea
+ 1325:	  2710	F1 2F				acall	clear_vars
+ 1326:	  2712	75 2D F0			mov	color, #0f0h
+ 1327:	  2715	75 32 17			mov	bottom, #HEIGHT-1
+ 1328:	  2718	75 34 40			mov	serstart, #serbuf
+ 1329:	  271B	75 35 40			mov	serend, #serbuf
+ 1330:	  271E	75 39 0A			mov	t0cnt, #C_TIME
+ 1331:
+ 1332:	  2721	F1 39				acall	resettabu
+ 1333:	  2723	12 28 0A			call	clear_screen
+ 1334:	  2726	D2 AF				setb	ea
+ 1335:
+ 1336:	  2728	12 2B B6			call	prtstatus
+ 1337:	  272B	12 28 4B			call	draw_cursor
+ 1338:	  272E	22				ret
+ 1339:
+ 1340:				;
+ 1341:				; clear 32 vars from "state" on
+ 1342:				;
+ 1343:	  272F	78 20		clear_vars:	mov	r0, #VARS	;clear term-vars
+ 1344:	  2731	79 40				mov	r1, #64
+ 1345:	  2733	76 00		clear_v1:	mov	@r0, #0
+ 1346:	  2735	08				inc	r0
+ 1347:	  2736	D9 FB				djnz	r1, clear_v1
+ 1348:	  2738	22				ret
+ 1349:
+ 1350:
+ 1351:	  2739	78 50		resettabu:	mov	r0, #tabutab
+ 1352:	  273B	79 0A				mov	r1, #10
+ 1353:	  273D	76 80		resettabu1:	mov	@r0, #128
+ 1354:	  273F	08				inc	r0
+ 1355:	  2740	D9 FB				djnz	r1, resettabu1
+ 1356:	  2742	89 50				mov	tabutab, r1	;R1 = 0
+ 1357:	  2744	05 59				inc	tabutab+9	;128 + 1 = 129
+ 1358:	  2746	22				ret
+ 1359:
+ 1360:
+ 1361:	  2747	78 50		cleartabu:	mov	r0, #tabutab
+ 1362:	  2749	79 0A				mov	r1, #10
+ 1363:	  274B	76 00		cleartabu1:	mov	@r0, #0
+ 1364:	  274D	08				inc	r0
+ 1365:	  274E	D9 FB				djnz	r1, cleartabu1
+ 1366:	  2750	05 59				inc	tabutab+9	;tabutab+9 = 1
+ 1367:	  2752	22				ret
+ 1368:
+ 1369:				;
+ 1370:				; compute
+ 1371:				; r0 = cursorx / 8 (byte holding tab-info) + tabutab
+ 1372:				; r1 = cursorx AND 7 (bi tposition within byte)
+ 1373:				;
+ 1374:	  2753	E5 37		tab_set_r0_r1:	mov	a, cursorx
+ 1375:	  2755	03				rr	a
+ 1376:	  2756	03				rr	a
+ 1377:	  2757	03				rr	a
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 26
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1378:	  2758	54 0F				anl	a, #0fh
+ 1379:	  275A	24 50				add	a, #tabutab
+ 1380:	  275C	F8				mov	r0, a				;address byte
+ 1381:	  275D	E5 37				mov	a, cursorx
+ 1382:	  275F	54 07				anl	a, #7
+ 1383:	  2761	F9				mov	r1, a
+ 1384:	  2762	22				ret
+ 1385:
+ 1386:
+ 1387:	  2763	E9		getbit:		mov	a, r1
+ 1388:	  2764	04				inc	a
+ 1389:	  2765	83				movc	a, @a+pc
+ 1390:	  2766	22				ret
+ 1391:	  2767	80 40 20 10	getbittab:	db	128, 64, 32, 16, 8, 4, 2, 1
+	  276B	08 04 02 01
+ 1392:
+ 1393:
+ 1394:	  276F	78 25		clearargs:	mov	r0, #nargs
+ 1395:	  2771	79 05				mov	r1, #5
+ 1396:	  2773	76 00		clearargs1:	mov	@r0, #0
+ 1397:	  2775	08				inc	r0
+ 1398:	  2776	D9 FB				djnz	r1, clearargs1
+ 1399:	  2778	22				ret
+ 1400:
+ 1401:
+ 1402:	  2779	E4		print:		clr	a
+ 1403:	  277A	93				movc	a, @a+dptr
+ 1404:	  277B	70 01				jnz	print1
+ 1405:	  277D	22				ret
+ 1406:	  277E	31 D5		print1:		acall	ansiout
+ 1407:	  2780	A3				inc	dptr
+ 1408:	  2781	80 F6				sjmp	print
+ 1409:
+ 1410:				;msg1:		db	C_ESC, "[J", C_ESC, "[5;5H", 0
+ 1411:				;msg4:		db	C_ESC,"[5;65H", C_ESC,"[31mH", C_ESC,"[32mello ", C_ESC, "[mWorld", C_ESC, "
+				[AJ", C_ESC, "[23;65Ha", C_ESC, "[H"
+ 1412:				;msg2:		db	"Hello world!", C_NEWLINE,0
+ 1413:				;msg3:		db	C_ESC, "[5C", C_ESC, "[7D", 0
+ 1414:
+ 1415:				;===============================================
+ 1416:				; pyhsical routines
+ 1417:				;===============================================
+ 1418:
+ 1419:				;===============================================
+ 1420:				; scrolls one line up or down
+ 1421:				; clear first or last line
+ 1422:				; r3 positive (0-127) scroll-up, scroll-down otherwise
+ 1423:				; r4 numbers of lines to scroll
+ 1424:				; ----------------------------------------------
+ 1425:				; r5 used for x-count
+ 1426:				;===============================================
+ 1427:	  2783	C3		scroll:		clr	c
+ 1428:	  2784	E5 32				mov	a, bottom
+ 1429:	  2786	95 31				subb	a, top
+ 1430:	  2788	FC				mov	r4, a			;number of lines to scroll
+ 1431:	  2789			scroll_r4:
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 27
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1432:	  2789	BB 80 00			cjne	r3, #128, $+3
+ 1433:	  278C	40 47				jc	scroll_up		;<128, positive, scroll up
+ 1434:
+ 1435:	  278E	E5 32				mov	a, bottom
+ 1436:	  2790	14				dec	a
+ 1437:	  2791	75 F0 A0			mov	b, #WIDTH*2
+ 1438:	  2794	A4				mul	ab
+ 1439:	  2795	24 9F				add	a, #(WIDTH*2)-1
+ 1440:	  2797	F5 82				mov	dp0l, a
+ 1441:	  2799	E5 F0				mov	a, b
+ 1442:	  279B	34 80				addc 	a, #80h
+ 1443:	  279D	F5 83				mov	dp0h, a
+ 1444:
+ 1445:	  279F	E5 82				mov	a, dp0l
+ 1446:	  27A1	24 A0				add	a, #WIDTH*2
+ 1447:	  27A3	F5 84				mov	dp1l, a
+ 1448:	  27A5	E5 83				mov	a, dp0h
+ 1449:	  27A7	34 00				addc	a, #0
+ 1450:	  27A9	F5 85				mov	dp1h, a
+ 1451:
+ 1452:				;		call	phex16
+ 1453:				;		mov	a, dp1h
+ 1454:				;		call	phex
+ 1455:				;		mov	a, dp1l
+ 1456:				;		call	phex
+ 1457:				;		jmp	cursor_on
+ 1458:
+ 1459:	  27AB	EC				mov	a, r4
+ 1460:	  27AC	60 1F				jz	scroll_down_6
+ 1461:	  27AE			scroll_down_4:
+ 1462:	  27AE	7D A0				mov	r5, #WIDTH*2
+ 1463:	  27B0			scroll_down_1:
+ 1464:	  27B0	E0				movx	a, @dptr
+ 1465:	  27B1	E5 90				mov	a, P1
+ 1466:	  27B3	05 A2				inc	auxr1
+ 1467:	  27B5	F0				movx	@dptr, a
+ 1468:	  27B6	05 A2				inc	auxr1
+ 1469:
+ 1470:	  27B8	E5 82				mov	a, dp0l
+ 1471:	  27BA	70 02				jnz	scroll_down_2
+ 1472:	  27BC	15 83				dec	dp0h
+ 1473:	  27BE	15 82		scroll_down_2:	dec	dp0l
+ 1474:
+ 1475:	  27C0	E5 84				mov	a, dp1l
+ 1476:	  27C2	70 02				jnz	scroll_down_3
+ 1477:	  27C4	15 85				dec	dp1h
+ 1478:	  27C6	15 84		scroll_down_3:	dec	dp1l
+ 1479:
+ 1480:	  27C8	DD E6				djnz	r5, scroll_down_1
+ 1481:	  27CA	DC E2				djnz	r4, scroll_down_4
+ 1482:
+ 1483:	  27CC	A3				inc	dptr
+ 1484:
+ 1485:						;call	phex16
+ 1486:	  27CD			scroll_down_6:
+ 1487:	  27CD	7D A0				mov	r5, #WIDTH*2
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 28
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1488:	  27CF	E4				clr	a
+ 1489:	  27D0	F0		scroll_down_5:	movx	@dptr, a
+ 1490:	  27D1	A3				inc	dptr
+ 1491:	  27D2	DD FC				djnz	r5, scroll_down_5
+ 1492:
+ 1493:						;ajmp	cursor_on		;reactivate cursor
+ 1494:	  27D4	22				ret
+ 1495:
+ 1496:	  27D5			scroll_up:
+ 1497:	  27D5	E5 31				mov	a, top			;dp0 = topline
+ 1498:	  27D7	75 F0 A0			mov	b, #WIDTH * 2		;dp1 = topline + 1
+ 1499:	  27DA	A4				mul	ab
+ 1500:	  27DB	F5 82				mov	dp0l, a
+ 1501:	  27DD	E5 F0				mov	a, b
+ 1502:	  27DF	34 80				addc	a, #80h
+ 1503:	  27E1	F5 83				mov	dp0h, a
+ 1504:
+ 1505:	  27E3	E5 82				mov	a, dp0l
+ 1506:	  27E5	24 A0				add	a, #WIDTH * 2
+ 1507:	  27E7	F5 84				mov	dp1l, a
+ 1508:	  27E9	E5 83				mov	a, dp0h
+ 1509:	  27EB	34 00				addc	a, #0
+ 1510:	  27ED	F5 85				mov	dp1h, a
+ 1511:
+ 1512:	  27EF	EC				mov	a, r4
+ 1513:	  27F0	60 10				jz	scroll_up_4
+ 1514:
+ 1515:	  27F2			scroll_up_1:
+ 1516:	  27F2	7D A0				mov	r5, #WIDTH * 2
+ 1517:
+ 1518:	  27F4	05 A2		scroll_up_2:	inc	auxr1			;copy from line n+1 to line n
+ 1519:	  27F6	E0				movx	a, @dptr
+ 1520:	  27F7	A3				inc	dptr
+ 1521:	  27F8	E5 90				mov	a, P1
+ 1522:	  27FA	05 A2				inc	auxr1
+ 1523:	  27FC	F0				movx	@dptr, a
+ 1524:	  27FD	A3				inc	dptr
+ 1525:	  27FE	DD F4				djnz	r5, scroll_up_2
+ 1526:	  2800	DC F0				djnz	r4, scroll_up_1
+ 1527:
+ 1528:	  2802			scroll_up_4:
+ 1529:	  2802	7D A0				mov	r5, #WIDTH * 2		;clear last line
+ 1530:	  2804	E4				clr	a
+ 1531:	  2805	F0		scroll_up_3:	movx	@dptr, a
+ 1532:	  2806	A3				inc	dptr
+ 1533:	  2807	DD FC				djnz	r5, scroll_up_3
+ 1534:
+ 1535:	  2809	22				ret
+ 1536:						;ajmp	cursor_on		;restore cursor
+ 1537:
+ 1538:
+ 1539:				;
+ 1540:				; r0: top line
+ 1541:				; r1: bottom line
+ 1542:				; r2: start position first line
+ 1543:				; r3: chars to fill first line
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 29
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1544:				; r4: value filled with
+ 1545:				; r5; chars to fill last line
+ 1546:				;
+ 1547:	  280A	7C 00		clear_screen:	mov	r4, #0
+ 1548:	  280C	E4		fill_screen:	clr	a
+ 1549:	  280D	F8				mov	r0, a
+ 1550:	  280E	79 17				mov	r1, #HEIGHT-1
+ 1551:	  2810	FA				mov	r2, a
+ 1552:	  2811	7B 50				mov	r3, #WIDTH
+ 1553:	  2813	7D 50				mov	r5, #WIDTH
+ 1554:	  2815	80 02				sjmp	fill_lines
+ 1555:
+ 1556:	  2817			clear_lines:
+ 1557:	  2817	7C 00				mov	r4, #0				;fill with zero
+ 1558:	  2819			fill_lines:
+ 1559:	  2819	EA				mov	a, r2				;r2 = r2 * 2
+ 1560:	  281A	23				rl	a
+ 1561:	  281B	FA				mov	r2, a
+ 1562:
+ 1563:	  281C	E9				mov	a, r1				;r1 = r1 - r0 + 1
+ 1564:	  281D	C3				clr	c
+ 1565:	  281E	98				subb	a, r0
+ 1566:	  281F	04				inc	a
+ 1567:	  2820	F9				mov	r1, a				;line count in r1
+ 1568:
+ 1569:	  2821	E8				mov	a, r0				;compute start-position from r0 und r2
+ 1570:	  2822	75 F0 A0			mov	b, #WIDTH * 2
+ 1571:	  2825	A4				mul	ab
+ 1572:	  2826	2A				add	a, r2
+ 1573:	  2827	F5 84				mov	dp1l, a
+ 1574:	  2829	E5 F0				mov	a, b
+ 1575:	  282B	34 80				addc	a, #80h
+ 1576:	  282D	F5 85				mov	dp1h, a
+ 1577:
+ 1578:	  282F	05 A2				inc	auxr1				;switch to dptr1
+ 1579:	  2831	A8 03				mov	r0, ar3				;chars to fill first line
+ 1580:
+ 1581:	  2833	B9 01 02	clear_lines2:	cjne 	r1, #1, clear_lines1		;last line?
+ 1582:	  2836	A8 05				mov	r0, ar5				;chars to fill last line
+ 1583:	  2838	EC		clear_lines1:	mov	a, r4
+ 1584:	  2839	F0				movx	@dptr, a
+ 1585:	  283A	A3				inc	dptr
+ 1586:	  283B	74 70				mov	a, #70h
+ 1587:	  283D	F0				movx	@dptr, a
+ 1588:	  283E	A3				inc	dptr
+ 1589:	  283F	D8 F7				djnz	r0, clear_lines1
+ 1590:	  2841	78 50				mov	r0, #WIDTH
+ 1591:	  2843	D9 EE				djnz	r1, clear_lines2
+ 1592:	  2845	05 A2				inc	auxr1
+ 1593:	  2847	22				ret
+ 1594:
+ 1595:
+ 1596:				;===============================================
+ 1597:				; move cursor
+ 1598:				;===============================================
+ 1599:	  2848	12 28 6B	move_cursor:	call	cursor_off			;restore color under cursor
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 30
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1600:	  284B	12 28 8E	draw_cursor:	call	comp_dptr			;compute new address
+ 1601:	  284E	05 A2				inc	auxr1				;increase by 1 for color
+ 1602:	  2850	A3				inc	dptr
+ 1603:	  2851	05 A2				inc	auxr1
+ 1604:	  2853	85 84 2E			mov	cursorpos, dp1l			;store in cursorpos/+1
+ 1605:	  2856	85 85 2F			mov	cursorpos+1, dp1h
+ 1606:
+ 1607:				;		ajmp	cursor_on			;save color under cursor
+ 1608:				;
+ 1609:				; save color under new cursor position in cursorsave
+ 1610:				; enable interrupt
+ 1611:				;
+ 1612:	  2859			cursor_on:	;mov	a, cursorpos+1
+ 1613:						;call	phex
+ 1614:						;mov	a, cursorpos
+ 1615:						;call	phex
+ 1616:
+ 1617:	  2859	85 2E 84			mov	dp1l, cursorpos
+ 1618:	  285C	85 2F 85			mov	dp1h, cursorpos+1
+ 1619:	  285F	05 A2				inc	auxr1
+ 1620:	  2861	E0				movx	a, @dptr
+ 1621:	  2862	E5 90				mov	a, P1
+ 1622:	  2864	F5 30				mov	cursorsave, a
+ 1623:	  2866	05 A2				inc	auxr1
+ 1624:	  2868	D2 8C				setb	tr0				;enable timer
+ 1625:	  286A	22				ret
+ 1626:
+ 1627:				;
+ 1628:				; clear timer0 interrupt
+ 1629:				; restore color under cursor
+ 1630:				; reset t0cnt
+ 1631:				;
+ 1632:	  286B	C2 8C		cursor_off:	clr	tr0				;stop timer
+ 1633:
+ 1634:				;		mov	a, cursorpos+1
+ 1635:				;		call	phex
+ 1636:				;		mov	a, cursorpos
+ 1637:				;		call	phex
+ 1638:
+ 1639:	  286D	85 2E 84			mov	dp1l, cursorpos
+ 1640:	  2870	85 2F 85			mov	dp1h, cursorpos+1
+ 1641:	  2873	05 A2				inc	auxr1
+ 1642:	  2875	E5 30				mov	a, cursorsave
+ 1643:	  2877	F0				movx	@dptr, a
+ 1644:	  2878	05 A2				inc	auxr1
+ 1645:	  287A	75 8C 80			mov	TH0, #128
+ 1646:	  287D	75 39 01			mov	t0cnt, #1
+ 1647:	  2880	22				ret
+ 1648:
+ 1649:				;
+ 1650:				; converts accu	into two digits in R0, R1 (high, low)
+ 1651:				;
+ 1652:	  2881	75 F0 0A	hex2dez:	mov	b, #10
+ 1653:	  2884	84				div	ab
+ 1654:	  2885	24 30				add	a, #'0'
+ 1655:	  2887	F8				mov	r0, a
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 31
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1656:	  2888	E5 F0				mov	a, b
+ 1657:	  288A	24 30				add	a, #'0'
+ 1658:	  288C	F9				mov	r1, a
+ 1659:	  288D	22				ret
+ 1660:
+ 1661:				;
+ 1662:				; compute dp1 cursor screen address
+ 1663:				; dp1l/h = cursorx * 2 + cursory * WIDTH * 2 + 0x8000
+ 1664:				;
+ 1665:	  288E			comp_dptr:
+ 1666:	  288E	E5 37				mov	a, cursorx
+ 1667:	  2890	23				rl	a
+ 1668:	  2891	FF				mov	r7, a
+ 1669:
+ 1670:	  2892	E5 38				mov	a, cursory
+ 1671:	  2894	75 F0 A0			mov	b, #WIDTH * 2
+ 1672:	  2897	A4				mul	ab
+ 1673:
+ 1674:	  2898	2F				add	a, r7
+ 1675:	  2899	F5 84				mov	dp1l, a
+ 1676:	  289B	E5 F0				mov	a, b
+ 1677:	  289D	34 80				addc	a, #80h
+ 1678:	  289F	F5 85				mov	dp1h, a
+ 1679:	  28A1	22				ret
+ 1680:
+ 1681:						$INCLUDE (io.a51)
+ 1682: 1			;
+ 1683: 1			;
+ 1684: 1			;
+ 1685: 1  28A2			init6845:
+ 1686: 1  28A2	90 00 00			mov	dptr, #0		;enable ADR + DAT
+ 1687: 1  28A5	E0				movx	a, @dptr
+ 1688: 1
+ 1689: 1  28A6	90 80 00			mov	DPTR, #08000h
+ 1690: 1  28A9	05 A2				inc	AUXR1
+ 1691: 1  28AB	90 28 D9			mov	DPTR, #SYDATA
+ 1692: 1  28AE	05 A2				inc	AUXR1
+ 1693: 1  28B0	78 00				mov	R0, #0
+ 1694: 1
+ 1695: 1  28B2			setregs:
+ 1696: 1			;		call	PHEX
+ 1697: 1			;		call	SPACE
+ 1698: 1
+ 1699: 1  28B2	E8				mov	A, R0			; send address
+ 1700: 1  28B3	12 29 7B			call	PHEX
+ 1701: 1  28B6	F0				movx	@DPTR,A			; address register
+ 1702: 1  28B7	D2 B5				setb	T1			; clock high
+ 1703: 1  28B9	C2 B5				clr	T1			; clock low
+ 1704: 1  28BB	A3				inc	DPTR			; data reg
+ 1705: 1
+ 1706: 1  28BC	05 A2				inc	AUXR1			;data pointer
+ 1707: 1  28BE	93				movc	A, @A+DPTR
+ 1708: 1  28BF	12 29 7B			call	PHEX
+ 1709: 1  28C2	05 A2				inc	AUXR1			; address pointer
+ 1710: 1  28C4	F0				movx	@DPTR, A		; send data
+ 1711: 1  28C5	D2 B5				setb	T1			; clock high
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 32
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1712: 1  28C7	C2 B5				clr	T1			; clock low
+ 1713: 1
+ 1714: 1  28C9	12 29 2C			call	SPACE
+ 1715: 1  28CC	A3				inc	DPTR
+ 1716: 1  28CD	08				inc	R0
+ 1717: 1  28CE	B8 0F E1			cjne	R0, #15, setregs
+ 1718: 1
+ 1719: 1  28D1	90 00 00			mov	dptr, #0		;enable ADR + DAT
+ 1720: 1  28D4	E0				movx	a, @dptr
+ 1721: 1
+ 1722: 1  28D5	12 29 36			call	newline
+ 1723: 1			;		call	CIN
+ 1724: 1			;
+ 1725: 1			;		setb	INT0
+ 1726: 1			;		call	CIN
+ 1727: 1  28D8	22				ret
+ 1728: 1
+ 1729: 1			;
+ 1730: 1			; 25,333 Mhz / 8 = 3,166 Mhz
+ 1731: 1			;
+ 1732: 1			; 31468 HZ = 31,77 uS
+ 1733: 1			;
+ 1734: 1			; 25,333 Mhz / 8 / 31468 ~ 	100 chars Horizontal Total
+ 1735: 1			;				  2 chars Fornt Porch
+ 1736: 1			;				  6 chars Back Porch
+ 1737: 1			;				 80 chars Horizontal Visible
+ 1738: 1			;				 12 chars Sync Pulse
+ 1739: 1			;Scanline part	Pixels	Time [µs]
+ 1740: 1			;Visible area	640	25.422045680238
+ 1741: 1			;Front porch	16	0.63555114200596
+ 1742: 1			;Sync pulse	96	3.8133068520357
+ 1743: 1			;Back porch	48	1.9066534260179
+ 1744: 1			;Whole line	800	31.777557100298
+ 1745: 1
+ 1746: 1			;Frame part	Lines	Time [ms]
+ 1747: 1			;Visible area	400	12.711022840119
+ 1748: 1			;Front porch	12	0.38133068520357
+ 1749: 1			;Sync pulse	2	0.063555114200596
+ 1750: 1			;Back porch	35	1.1122144985104
+ 1751: 1			;Whole frame	449	14.268123138034
+ 1752: 1			;
+ 1753: 1  28D9	64		SYDATA:		DB	100		;R0 Horizontal Total - 1
+ 1754: 1  28DA	50				DB	80		;R1 Horizontal Displayed
+ 1755: 1  28DB	54				DB	84		;R2 Horizontal Sync Position
+ 1756: 1  28DC	0C				DB	0ch		;R3 VSYNC & HSYNC width
+ 1757: 1  28DD	1C				DB	28		;R4 Vertical total - 1			;27	32
+ 1758: 1  28DE	05				DB	5		;R5 Vertical Adjust
+ 1759: 1  28DF	19				DB	25		;R6 Vertical Displayed			;25	30
+ 1760: 1  28E0	1B				DB	27		;R7 Vertical Sync Position		;25	32
+ 1761: 1  28E1	00				DB	00h		;R8 Mode Control
+ 1762: 1  28E2	0F				DB	15		;R9 Scan Lines - 1 (character lines)
+ 1763: 1  28E3	00				DB	0		;R10 Cursor Start
+ 1764: 1  28E4	00				DB	0		;R11 Cursor End
+ 1765: 1  28E5	00				DB	000h		;R12 Display Start High
+ 1766: 1  28E6	00				DB	000h		;R13 Display Start Low
+ 1767: 1  28E7	00				DB	0		;R14 Cursor Pos High
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 33
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1768: 1  28E8	00				DB	0		;R15 Cursor Pos Low
+ 1769: 1  28E9	00				DB	0		;R16 Light Pen High
+ 1770: 1  28EA	00				DB	0		;R17 Light Pen Low
+ 1771: 1  28EB	00				DB	0		;R18 Update Address Reg High
+ 1772: 1  28EC	00				DB	0		;R19 Update Address Reg Low
+ 1773: 1								;R31 Dummy Register
+ 1774: 1			;
+ 1775: 1			;
+ 1776: 1			;
+ 1777: 1  28ED			copyFont:
+ 1778: 1  28ED	90 70 00			mov	DPTR, #7000h
+ 1779: 1  28F0	05 A2				inc	AUXR1
+ 1780: 1  28F2	90 A0 00			mov	DPTR, #(8000h+2000h) ;+4000h+1000h
+ 1781: 1  28F5	05 A2				inc	AUXR1
+ 1782: 1
+ 1783: 1  28F7	E4		copyFont1:	clr	A
+ 1784: 1  28F8	93				movc	A, @A+DPTR
+ 1785: 1  28F9	A3				inc	DPTR
+ 1786: 1  28FA	05 A2				inc	AUXR1
+ 1787: 1  28FC	F0				movx	@DPTR, A
+ 1788: 1  28FD	A3				inc	DPTR
+ 1789: 1  28FE	05 A2				inc	AUXR1
+ 1790: 1
+ 1791: 1  2900	E5 83				mov	A, DP0H
+ 1792: 1					;call	PHEX
+ 1793: 1  2902	B4 80 F2			cjne	A, #80h, copyFont1
+ 1794: 1
+ 1795: 1			;		mov	A, AUXR1
+ 1796: 1			;		call	PHEX
+ 1797: 1			;		call	newline
+ 1798: 1  2905	22				ret
+ 1799: 1
+ 1800: 1			;
+ 1801: 1			;
+ 1802: 1			;
+ 1803: 1  2906	90 80 00	testScreen:	mov	DPTR, #8000h
+ 1804: 1  2909	78 15				mov	R0, #21
+ 1805: 1
+ 1806: 1  290B	79 50		testScreen3:	mov	R1, #80
+ 1807: 1  290D	7A 01				mov	R2, #1
+ 1808: 1  290F	EA		testScreen1:	mov	A, R2
+ 1809: 1  2910	F0				movx	@DPTR, A
+ 1810: 1  2911	A3				inc	DPTR
+ 1811: 1  2912	74 70				mov	A, #70h
+ 1812: 1					;anl	A, #3
+ 1813: 1					;orl	A, #0f0h
+ 1814: 1					;inc	A
+ 1815: 1  2914	F0				movx	@DPTR, A
+ 1816: 1  2915	A3				inc	DPTR
+ 1817: 1  2916	0A				inc	R2
+ 1818: 1  2917	BA 3A 02			cjne	R2, #'9'+1, testScreen2
+ 1819: 1  291A	7A 30				mov	R2, #'0'
+ 1820: 1  291C	D9 F1		testScreen2:	djnz	R1, testScreen1
+ 1821: 1  291E	D8 EB				djnz	R0, testScreen3
+ 1822: 1
+ 1823: 1  2920	E8		testScreen4:	mov	a, r0
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 34
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1824: 1  2921	F0				movx	@dptr, a
+ 1825: 1  2922	A3				inc	dptr
+ 1826: 1  2923	74 60				mov	a, #60h
+ 1827: 1  2925	F0				movx	@dptr, a
+ 1828: 1  2926	A3				inc	dptr
+ 1829: 1  2927	08				inc	r0
+ 1830: 1  2928	B8 00 F5			cjne	r0, #0, testScreen4
+ 1831: 1  292B	22				ret
+ 1832: 1			;
+ 1833: 1			;
+ 1834: 1			;
+ 1835: 1  292C	C0 E0		space:		push	acc
+ 1836: 1  292E	74 20				mov	a, #' '
+ 1837: 1  2930	12 29 40			call	cout
+ 1838: 1  2933	D0 E0				pop	acc
+ 1839: 1  2935	22				ret
+ 1840: 1
+ 1841: 1  2936	C0 E0		newline:	push	acc
+ 1842: 1  2938	74 0A				mov	a, #0ah
+ 1843: 1  293A	12 29 40			call	cout
+ 1844: 1  293D	D0 E0				pop	acc
+ 1845: 1  293F	22				ret
+ 1846: 1
+ 1847: 1
+ 1848: 1  2940	20 05 FD	cout:		jb	serbusy, cout
+ 1849: 1  2943	D2 05				setb	serbusy
+ 1850: 1  2945	F5 99				mov	sbuf, a
+ 1851: 1  2947	22				ret
+ 1852: 1
+ 1853: 1
+ 1854: 1  2948	30 99 FD	cout_x:		jnb	ti, cout_x
+ 1855: 1  294B	C2 99				clr	ti			;clr ti before the mov to sbuf!
+ 1856: 1  294D	F5 99				mov	sbuf, a
+ 1857: 1  294F	22				ret
+ 1858: 1
+ 1859: 1  2950	C0 00		cin:		push	ar0
+ 1860: 1  2952	E5 34		cin_2:		mov	a, serstart
+ 1861: 1  2954	B5 35 02			cjne	a, serend, cin_1
+ 1862: 1  2957	80 F9				sjmp	cin_2
+ 1863: 1  2959	C2 AC		cin_1:		clr	ES			;no serial interrupt
+ 1864: 1  295B	04				inc	a
+ 1865: 1  295C	F8				mov	r0, a
+ 1866: 1  295D	B8 50 00			cjne	r0, #serbuf+16, $+3
+ 1867: 1  2960	40 02				jc	cin_3
+ 1868: 1  2962	78 40				mov	r0, #serbuf
+ 1869: 1  2964	E6		cin_3:		mov	a, @r0
+ 1870: 1  2965	88 34				mov	serstart, r0
+ 1871: 1  2967	15 36				dec	sercount
+ 1872: 1			;		push	acc
+ 1873: 1			;		mov	a, sercount
+ 1874: 1			;		call	phex
+ 1875: 1			;		pop	acc
+ 1876: 1
+ 1877: 1  2969	A8 36		cin_5:		mov	r0, sercount
+ 1878: 1  296B	B8 00 08			cjne	r0, #0, cin_4
+ 1879: 1
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 35
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1880: 1  296E	30 04 05			jnb	xonoff, cin_4
+ 1881: 1
+ 1882: 1  2971	75 99 11	cin_7:		mov	SBUF, #C_XON
+ 1883: 1  2974	C2 04				clr	xonoff
+ 1884: 1			;		mov	r0, #80
+ 1885: 1			;		djnz	r0, $
+ 1886: 1
+ 1887: 1  2976	D0 00		cin_4:		pop	ar0
+ 1888: 1  2978	D2 AC				setb	ES
+ 1889: 1  297A	22				ret
+ 1890: 1
+ 1891: 1
+ 1892: 1			;cin_x:		jnb	ri, cin
+ 1893: 1			;		clr	ri
+ 1894: 1			;		mov	a, sbuf
+ 1895: 1			;		ret
+ 1896: 1
+ 1897: 1			; Highly code efficient resursive call phex contributed
+ 1898: 1			; by Alexander B. Alexandrov <abalex@cbr.spb.ru>
+ 1899: 1
+ 1900: 1  297B			phex:
+ 1901: 1  297B			phex8:
+ 1902: 1  297B	31 7D				acall	phex_b
+ 1903: 1  297D	C4		phex_b:		swap	a		;SWAP A will be twice => A unchanged
+ 1904: 1  297E	C0 E0		phex1:		push	acc
+ 1905: 1  2980	54 0F				anl	a, #15
+ 1906: 1  2982	24 90				add	a, #90h	; acc is 0x9X, where X is hex digit
+ 1907: 1  2984	D4				da	a		; if A to F, C=1 and lower four bits are 0..5
+ 1908: 1  2985	34 40				addc	a, #40h
+ 1909: 1  2987	D4				da	a
+ 1910: 1  2988	31 40				call	cout
+ 1911: 1  298A	D0 E0				pop	acc
+ 1912: 1  298C	22				ret
+ 1913: 1
+ 1914: 1  298D			phex16:
+ 1915: 1  298D	C0 E0				push	acc
+ 1916: 1  298F	E5 83				mov	a, dph
+ 1917: 1  2991	31 7B				call	phex
+ 1918: 1  2993	E5 82				mov	a, dpl
+ 1919: 1  2995	31 7B				call	phex
+ 1920: 1  2997	D0 E0				pop	acc
+ 1921: 1  2999	22				ret
+ 1922: 1
+ 1923: 1			;a not so well documented feature of pstr is that you can print
+ 1924: 1			;multiple consecutive strings without needing to reload dptr
+ 1925: 1			;(which takes 3 bytes of code!)... this is useful for inserting
+ 1926: 1			;numbers or spaces between strings.
+ 1927: 1
+ 1928: 1  299A	C0 E0		pstr:		push	acc
+ 1929: 1  299C	E4		pstr1:		clr	a
+ 1930: 1  299D	93				movc	a, @a+dptr
+ 1931: 1  299E	A3				inc	dptr
+ 1932: 1  299F	60 0A				jz	pstr2
+ 1933: 1  29A1	A2 E7				mov	c, acc.7
+ 1934: 1  29A3	55 7F				anl	a, 7Fh
+ 1935: 1  29A5	31 40				call	cout
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 36
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1936: 1  29A7	40 02				jc	pstr2
+ 1937: 1  29A9	80 F1				sjmp	pstr1
+ 1938: 1  29AB	D0 E0		pstr2:		pop	acc
+ 1939: 1  29AD	22				ret
+ 1940: 1
+ 1941: 1			;converts the ascii code in Acc to uppercase, if it is lowercase
+ 1942: 1
+ 1943: 1			; Code efficient (saves 6 byes) upper contributed
+ 1944: 1			; by Alexander B. Alexandrov <abalex@cbr.spb.ru>
+ 1945: 1
+ 1946: 1			;upper:
+ 1947: 1			;		cjne	a, #97, upper2
+ 1948: 1			;upper2:		jc	upper4		;end if acc < 97
+ 1949: 1			;		cjne	a, #123, upper3
+ 1950: 1			;upper3:		jnc	upper4		;end if acc >= 123
+ 1951: 1			;		add	a, #224		;convert to uppercase
+ 1952: 1			;upper4:		ret
+ 1953:
+ 1954:				;===============================================
+ 1955:				; decode scancode
+ 1956:				;===============================================
+ 1957:	  29AE			keydecode:	;mov	a, keyrxval
+ 1958:						;call	phex
+ 1959:
+ 1960:	  29AE	74 E0				mov	a, #EXTENDED			;extended?
+ 1961:	  29B0	B5 3B 03			cjne	a, keyrxval, keybreak
+ 1962:	  29B3	D2 09				setb	keyrxextended			;set extended flag
+ 1963:	  29B5	22				ret
+ 1964:
+ 1965:	  29B6	74 F0		keybreak:	mov	a, #BREAK			;break?
+ 1966:	  29B8	B5 3B 03			cjne	a, keyrxval, keyshift
+ 1967:	  29BB	D2 0A				setb	keyrxbreak
+ 1968:	  29BD	22				ret
+ 1969:
+ 1970:	  29BE	74 12		keyshift:	mov	a, #CLSHIFT			;left-shift?
+ 1971:	  29C0	B5 3B 02			cjne	a, keyrxval, keyshift1
+ 1972:	  29C3	80 05				sjmp	keyshift2
+ 1973:	  29C5	74 59		keyshift1:	mov	a, #CRSHIFT			;right shift?
+ 1974:	  29C7	B5 3B 07			cjne	a, keyrxval, keyStrg
+ 1975:	  29CA	A2 0A		keyshift2:	mov	c, keyrxbreak
+ 1976:	  29CC	B3				cpl	c
+ 1977:	  29CD	92 0B				mov	keyrxshift, c
+ 1978:	  29CF	80 16				sjmp	keyCheckBrk1
+ 1979:
+ 1980:	  29D1	74 14		keyStrg:	mov	a, #CLSTRG
+ 1981:	  29D3	B5 3B 07			cjne	a, keyrxval, keyCheckBrk
+ 1982:	  29D6	A2 0A				mov	c, keyrxbreak
+ 1983:	  29D8	B3				cpl	c
+ 1984:	  29D9	92 0D				mov	keyrxstrg, c
+ 1985:	  29DB	80 0A				sjmp	keyCheckBrk1
+ 1986:
+ 1987:	  29DD	30 0A 0C	keyCheckBrk:	jnb	keyrxbreak, keynormal		;break active?
+ 1988:	  29E0	74 11				mov	a, #ALTGR			;ALT-GR?
+ 1989:	  29E2	B5 3B 02			cjne	a, keyrxval, keyCheckBrk1
+ 1990:	  29E5	C2 0C				clr	keyrxaltgr			;clear ALT-GR
+ 1991:	  29E7	C2 0A		keyCheckBrk1:	clr	keyrxbreak
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 37
+
+
+
+ Line  I  Addr  Code            Source
+
+ 1992:	  29E9	C2 09				clr	keyrxextended
+ 1993:	  29EB	22				ret
+ 1994:
+ 1995:	  29EC	C0 00		keynormal:	push	ar0
+ 1996:	  29EE	30 0B 05			jnb	keyrxshift, keyMakeExt
+ 1997:	  29F1	12 2A CC			call	keygetshift
+ 1998:	  29F4	80 3A				sjmp	keyExitOK
+ 1999:
+ 2000:	  29F6	30 09 1A	keyMakeExt:	jnb	keyrxextended, keyAltGr
+ 2001:	  29F9	C2 09				clr	keyrxextended			;clear extended
+ 2002:	  29FB	78 0D				mov	r0, #13
+ 2003:	  29FD	12 2B 77	keyMakeExt2:	call	keygetextind
+ 2004:	  2A00	B5 3B 0C			cjne	a, keyrxval, keyMakeExt1	;found?
+ 2005:	  2A03	12 2B 87			call	keygetext
+ 2006:	  2A06	B4 11 04			cjne	a, #ALTGR, keyMakeExt3		;ALTGR-pressed?
+ 2007:	  2A09	D2 0C				setb	keyrxaltgr			;set ALTGR-flag
+ 2008:	  2A0B	80 27				sjmp	keyExit
+ 2009:	  2A0D	80 21		keyMakeExt3:	sjmp	keyExitOK
+ 2010:	  2A0F	D8 EC		keyMakeExt1:	djnz	r0, keyMakeExt2
+ 2011:	  2A11	80 21				sjmp	keyExit
+ 2012:
+ 2013:	  2A13	30 0C 11	keyAltGr:	jnb	keyrxaltgr, keyMake		;AltGR pressed?
+ 2014:	  2A16	78 08				mov	r0, #8
+ 2015:	  2A18	12 2B 61	keyAltGr2:	call	keygetaltgrind
+ 2016:	  2A1B	B5 3B 05			cjne	a, keyrxval, keyAltGr1		;found?
+ 2017:	  2A1E	12 2B 6C			call	keygetaltgr
+ 2018:	  2A21	80 0D				sjmp	keyExitOK
+ 2019:	  2A23	D8 F3		keyAltGr1:	djnz	r0, keyAltGr2
+ 2020:	  2A25	80 0D				sjmp	keyExit
+ 2021:
+ 2022:	  2A27	12 2A 37	keyMake:	call	keygetnoshift
+ 2023:	  2A2A	30 0D 03			jnb	keyrxstrg, keyExitOK
+ 2024:	  2A2D	C3				clr	c
+ 2025:	  2A2E	94 60				subb	a, #96
+ 2026:
+ 2027:	  2A30	F5 3B		keyExitOK:	mov	keyrxval, a
+ 2028:	  2A32	D2 08				setb	keyavail
+ 2029:
+ 2030:				;		mov	p2, #High(08000h + 24*160 + 77*2)
+ 2031:				;		mov	r0, #Low(08000h + 24*160 + 77*2);
+ 2032:				;		movx	@r0, a
+ 2033:
+ 2034:	  2A34	D0 00		keyExit:	pop	ar0
+ 2035:	  2A36	22				ret
+ 2036:
+ 2037:
+ 2038:	  2A37	E5 3B		keygetnoshift:	mov	a, keyrxval
+ 2039:	  2A39	04				inc	a
+ 2040:	  2A3A	83				movc	a, @a+pc
+ 2041:	  2A3B	22				ret
+ 2042:	  2A3C			CHARTABLE_NOSHIFT:
+ 2043:				;		 	 00   01   02   03   04   05   06   07   08   09   0A   0B   0C   0D   0E
+				0F
+ 2044:	  2A3C	00 88 00 84			db	  0,  F9,   0,  F5,  F3,  F1,  F2, F12,   0, F10,  F8,  F6,  F4,TABU, '^',
+	  2A40	82 80 81 8B	 0	; 00
+	  2A44	00 89 87 85
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 38
+
+
+
+ Line  I  Addr  Code            Source
+
+	  2A48	83 09 5E 00
+ 2045:	  2A4C	00 00 00 00			db     	  0,   0,   0,   0,   0, 'q', '1',   0,   0,   0, 'y', 's', 'a', 'w', '2',
+	  2A50	00 71 31 00	 0	; 10
+	  2A54	00 00 79 73
+	  2A58	61 77 32 00
+ 2046:	  2A5C	00 63 78 64			db	  0, 'c', 'x', 'd', 'e', '4', '3',   0,   0, ' ', 'v', 'f', 't', 'r', '5',
+	  2A60	65 34 33 00	 0	; 20
+	  2A64	00 20 76 66
+	  2A68	74 72 35 00
+ 2047:	  2A6C	00 6E 62 68			db	  0, 'n', 'b', 'h', 'g', 'z', '6',   0,   0,   0, 'm', 'j', 'u', '7', '8',
+	  2A70	67 7A 36 00	 0	; 30
+	  2A74	00 00 6D 6A
+	  2A78	75 37 38 00
+ 2048:	  2A7C	00 2C 6B 69			db	  0, ',', 'k', 'i', 'o', '0', '9',   0,   0, '.', '-', 'l', 246, 'p', 223,
+	  2A80	6F 30 39 00	 0	; 40 	5c = \, 223 = ß
+	  2A84	00 2E 2D 6C
+	  2A88	F6 70 DF 00
+ 2049:	  2A8C	00 00 E4 58			db	  0,   0, 228,  'X',252, 180,   0,   0,   0,   0,C_CR, '+',   0, '#',   0,
+	  2A90	FC B4 00 00	 0	; 50
+	  2A94	00 00 0D 2B
+	  2A98	00 23 00 00
+ 2050:	  2A9C	00 3C 00 00			db	  0, '<',   0,   0,   0,   0,C_DEL,  0,   0, '1',   0, '4', '7',   0,   0,
+	  2AA0	00 00 7F 00	 0	; 60
+	  2AA4	00 31 00 34
+	  2AA8	37 00 00 00
+ 2051:	  2AAC	30 2E 32 35			db	 '0', '.', '2', '5', '6', '8',ESC,   0, F11, '+', '3', '-', '*', '9', CLS,
+	  2AB0	36 38 1B 00	 0	; 70
+	  2AB4	8A 2B 33 2D
+	  2AB8	2A 39 01 00
+ 2052:	  2ABC	00 00 00 86			db	  0,   0,   0,  F7,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
+	  2AC0	00 00 00 00	 0	; 80
+	  2AC4	00 00 00 00
+	  2AC8	00 00 00 00
+ 2053:
+ 2054:	  2ACC	E5 3B		keygetshift:	mov	a, keyrxval
+ 2055:	  2ACE	04				inc	a
+ 2056:	  2ACF	83				movc	a, @a+pc
+ 2057:	  2AD0	22				ret
+ 2058:	  2AD1			CHARTABLE_SHIFT:
+ 2059:				;		 	 00   01   02   03   04   05   06   07   08   09   0A   0B   0C   0D   0E
+				0F
+ 2060:	  2AD1	00 09 00 05			db	  0,   9,   0,   5,   3,   1,   2,  12,   0,  10,   8,   6,   4,TABU,0B0h,
+	  2AD5	03 01 02 0C	 0	; 00
+	  2AD9	00 0A 08 06
+	  2ADD	04 09 B0 00
+ 2061:	  2AE1	00 00 00 00			db        0,   0,   0,   0,   0, 'Q', '!',   0,   0,   0, 'Y', 'S', 'A', 'W', '"',
+	  2AE5	00 51 21 00	 0	; 10
+	  2AE9	00 00 59 53
+	  2AED	41 57 22 00
+ 2062:	  2AF1	00 43 58 44			db	  0, 'C', 'X', 'D', 'E', '$', 167,   0,   0, ' ', 'V', 'F', 'T', 'R', '%',
+	  2AF5	45 24 A7 00	 0	; 20 	167=§
+	  2AF9	00 20 56 46
+	  2AFD	54 52 25 00
+ 2063:	  2B01	00 4E 42 48			db	  0, 'N', 'B', 'H', 'G', 'Z', '&',   0,   0,   0, 'M', 'J', 'U', '/', '(',
+	  2B05	47 5A 26 00	 0	; 30
+	  2B09	00 00 4D 4A
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 39
+
+
+
+ Line  I  Addr  Code            Source
+
+	  2B0D	55 2F 28 00
+ 2064:	  2B11	00 3B 4B 49			db	  0, ';', 'K', 'I', 'O', '=', ')',   0,   0, ':', '_', 'L', 214, 'P', '?',
+	  2B15	4F 3D 29 00	 0	; 40
+	  2B19	00 3A 5F 4C
+	  2B1D	D6 50 3F 00
+ 2065:	  2B21	00 00 C4 00			db	  0,   0, 196,   0, 220, '`',   0,   0,   0,   0,  LF, '*',   0,027h,   0,
+	  2B25	DC 60 00 00	 0	; 50
+	  2B29	00 00 0A 2A
+	  2B2D	00 27 00 00
+ 2066:	  2B31	00 3E 00 00			db	  0, '>',   0,   0,   0,   0,CDCH,   0,   0, '1',   0, CCLF, '7',   0,  0,
+	  2B35	00 00 FE 00	 0	; 60
+	  2B39	00 31 00 1E
+	  2B3D	37 00 00 00
+ 2067:	  2B41	30 2E 1D 35			db	'0', '.', CCDN, '5', CCRT, CCUP,  0,   0,  11, '+', '3', '-', '*', '9', 0,
+	  2B45	1F 1C 00 00	 0  ; 70
+	  2B49	0B 2B 33 2D
+	  2B4D	2A 39 00 00
+ 2068:	  2B51	00 00 00 07			db	  0,   0,   0,   7,   0,   0,   0,   0,   0,   0,   0,   0,   0,  0,    0,
+	  2B55	00 00 00 00	 0	; 80
+	  2B59	00 00 00 00
+	  2B5D	00 00 00 00
+ 2069:
+ 2070:
+ 2071:	  2B61	E8		keygetaltgrind:	mov	a, r0
+ 2072:	  2B62	83				movc	a, @a+pc
+ 2073:	  2B63	22				ret
+ 2074:	  2B64			ALTGR_TABLE_IND:
+ 2075:	  2B64	15				db	015h	; q = @
+ 2076:	  2B65	61				db	061h	; <> = |
+ 2077:	  2B66	5B				db	05Bh	; *+ = ~
+ 2078:	  2B67	4E				db	04Eh	; ?ß = \
+ 2079:	  2B68	3E				db	03Eh	; 8( = [
+ 2080:	  2B69	46				db	046h	; 9) = ]
+ 2081:	  2B6A	3D				db	03Dh	; 7/ = {
+ 2082:	  2B6B	45				db	045h	; 0= = }
+ 2083:
+ 2084:
+ 2085:	  2B6C	E8		keygetaltgr:	mov	a, r0
+ 2086:	  2B6D	83				movc	a, @a+pc
+ 2087:	  2B6E	22				ret
+ 2088:	  2B6F	40		ALTGR_TABLE:	db	'@'
+ 2089:	  2B70	7C				db	'|'
+ 2090:	  2B71	7E				db	'~'
+ 2091:	  2B72	5C				db	05Ch
+ 2092:	  2B73	5B				db	'['
+ 2093:	  2B74	5D				db	']'
+ 2094:	  2B75	7B				db	'{'
+ 2095:	  2B76	7D				db	'}'
+ 2096:
+ 2097:
+ 2098:	  2B77	E8		keygetextind:	mov	a, r0
+ 2099:	  2B78	83				movc	a, @a+pc
+ 2100:	  2B79	22				ret
+ 2101:	  2B7A	11		EXT_TABLE_IND:	db	ALTGR
+ 2102:	  2B7B	4A				db	04Ah	; /
+ 2103:	  2B7C	5A				db	05Ah	; ENTER
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 40
+
+
+
+ Line  I  Addr  Code            Source
+
+ 2104:	  2B7D	69				db	069h	; END
+ 2105:	  2B7E	6B				db	06Bh	; LEFT
+ 2106:	  2B7F	6C				db	06Ch	; HOME
+ 2107:	  2B80	70				db	070h	; INS
+ 2108:	  2B81	71				db	071h	; DEL
+ 2109:	  2B82	72				db	072h	; DOWN
+ 2110:	  2B83	74				db	074h	; RIGHT
+ 2111:	  2B84	75				db	075h	; Up
+ 2112:	  2B85	7A				db	07Ah	; PAGE DOWN
+ 2113:	  2B86	7D				db	07Dh	; PAGE UP
+ 2114:
+ 2115:	  2B87	E8		keygetext:	mov	a, r0
+ 2116:	  2B88	83				movc	a, @a+pc
+ 2117:	  2B89	22				ret
+ 2118:	  2B8A	11		EXT_TABLE:	db	ALTGR
+ 2119:	  2B8B	2F				db	'/'	; NumPad division symbol
+ 2120:	  2B8C	0D				db	C_CR	; ENTER
+ 2121:	  2B8D	1D				db	CCBT	; cursor bottom with SuperFlag
+ 2122:	  2B8E	13				db	19	; cursor left	CTRL-S
+ 2123:	  2B8F	1C				db	CCHM	; cursor home with SuperFLag
+ 2124:	  2B90	16				db	22	; insert	CTRL-V
+ 2125:	  2B91	07				db	7	; delete	CTRL-G
+ 2126:	  2B92	18				db	24	; cursor down	CTRL-X
+ 2127:	  2B93	04				db	4	; cursor right	CTRL-D
+ 2128:	  2B94	05				db	5	; cursor up	CTRL-E
+ 2129:	  2B95	03				db	3	; pagedown CTRL-C
+ 2130:	  2B96	12				db	18	; pageup CTRL-R
+ 2131:				;
+ 2132:				;
+ 2133:				;
+ 2134:	  2B97	E8		getbaud:	mov	a, r0
+ 2135:	  2B98	04				inc	a
+ 2136:	  2B99	83				movc	a, @a+pc
+ 2137:	  2B9A	22				ret
+ 2138:	  2B9B	FF				db	0ffh	;115200
+ 2139:	  2B9C	F4				db	0f4h	;9600
+ 2140:	  2B9D	FA				db	0fah	;19200
+ 2141:	  2B9E	FD				db	0fdh	;38400
+ 2142:	  2B9F	FE				db	0feh	;57600
+ 2143:
+ 2144:	  2BA0	83		getbdtxt:	movc	a, @a+pc
+ 2145:	  2BA1	22				ret
+ 2146:	  2BA2	31 31 35 32			db	"1152"
+ 2147:	  2BA6	20 20 39 36			db	"  96"
+ 2148:	  2BAA	20 31 39 32			db	" 192"
+ 2149:	  2BAE	20 33 38 34			db	" 384"
+ 2150:	  2BB2	20 35 37 36			db	" 576"
+ 2151:
+ 2152:				;
+ 2153:				;
+ 2154:	  2BB6			prtstatus:
+ 2155:				;		mov	dptr, #08000h + 20 * WIDTH * 2
+ 2156:				;		mov	r0, #0
+ 2157:				;prtstatus6:	mov	a, r0
+ 2158:				;		movx	@dptr, a
+ 2159:				;		inc	dptr
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 41
+
+
+
+ Line  I  Addr  Code            Source
+
+ 2160:				;		mov	a, #070h
+ 2161:				;		movx	@dptr, a
+ 2162:				;		inc	dptr
+ 2163:				;		inc	r0
+ 2164:				;		cjne	r0, #0, prtstatus6
+ 2165:
+ 2166:	  2BB6	90 8F 00			mov	dptr, #08000h + 24 * WIDTH * 2
+ 2167:	  2BB9	78 01				mov	r0, #1
+ 2168:	  2BBB	71 FC		prtstatus1:	acall	getstatus			;get status line
+ 2169:	  2BBD	F0				movx	@dptr, a
+ 2170:	  2BBE	A3				inc	dptr
+ 2171:	  2BBF	74 06				mov	a, #06h				;color turquoise
+ 2172:	  2BC1	F0				movx	@dptr, a
+ 2173:	  2BC2	A3				inc	dptr
+ 2174:	  2BC3	08				inc	r0
+ 2175:	  2BC4	B8 51 F4			cjne	r0, #81, prtstatus1
+ 2176:
+ 2177:	  2BC7	90 8F 10			mov	dptr, #08000h + 24 * WIDTH * 2 + 8 * 2
+ 2178:	  2BCA	E5 3D				mov	a, baudidx
+ 2179:	  2BCC	23				rl	a				;mul2
+ 2180:	  2BCD	23				rl	a				;mul4
+ 2181:	  2BCE	04				inc	a
+ 2182:	  2BCF	F8				mov	r0, a
+ 2183:	  2BD0	79 00				mov	r1, #0
+ 2184:	  2BD2	71 A0		prtbaud:	call	getbdtxt
+ 2185:	  2BD4	F0				movx	@dptr, a
+ 2186:	  2BD5	A3				inc	dptr
+ 2187:	  2BD6	A3				inc	dptr
+ 2188:	  2BD7	08				inc	r0
+ 2189:	  2BD8	E8				mov	a, r0
+ 2190:	  2BD9	09				inc	r1
+ 2191:	  2BDA	B9 04 F5			cjne	r1, #4, prtbaud
+ 2192:
+ 2193:	  2BDD	74 FB				mov	a, #251				;Haken
+ 2194:	  2BDF	30 12 04			jnb	newlinemode, prtstatus2
+ 2195:	  2BE2	90 8F 34			mov	dptr, #08000h + 24 * WIDTH * 2 + 26 * 2
+ 2196:	  2BE5	F0				movx	@dptr, a
+ 2197:	  2BE6	30 13 04	prtstatus2:	jnb	insert	, prtstatus3
+ 2198:	  2BE9	90 8F 4C			mov	dptr, #08000h + 24 * WIDTH * 2 + 38 * 2
+ 2199:	  2BEC	F0				movx	@dptr, a
+ 2200:	  2BED	30 11 04	prtstatus3:	jnb	origin, prtstatus4
+ 2201:	  2BF0	90 8F 64			mov	dptr, #08000h + 24 * WIDTH * 2 + 50 * 2
+ 2202:	  2BF3	F0				movx	@dptr, a
+ 2203:	  2BF4	20 10 04	prtstatus4:	jb	nowrap, prtstatus5
+ 2204:	  2BF7	90 8F 78			mov	dptr, #08000h + 24 * WIDTH * 2 + 60 * 2
+ 2205:	  2BFA	F0				movx	@dptr, a
+ 2206:	  2BFB	22		prtstatus5:	ret
+ 2207:
+ 2208:	  2BFC	E8		getstatus:	mov	a, r0
+ 2209:	  2BFD	83				movc	a, @a + pc
+ 2210:	  2BFE	22				ret
+ 2211:				;			"0         1         2         3         4         5         6         7
+				     "
+ 2212:				;			"012345678901234567890123456789012345678901234567890123456789012345678901234
+				56789
+ 2213:	  2BFF	7C 20 42 61	status:		db	"| Baud:     00 | Newline: - | Insert: - | Origin: - | Wrap: - |     VT102
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 42
+
+
+
+ Line  I  Addr  Code            Source
+
+	  2C03	75 64 3A 20	    |"
+	  2C07	20 20 20 20
+	  2C0B	30 30 20 7C
+	  2C0F	20 4E 65 77
+	  2C13	6C 69 6E 65
+	  2C17	3A 20 2D 20
+	  2C1B	7C 20 49 6E
+	  2C1F	73 65 72 74
+	  2C23	3A 20 2D 20
+	  2C27	7C 20 4F 72
+	  2C2B	69 67 69 6E
+	  2C2F	3A 20 2D 20
+	  2C33	7C 20 57 72
+	  2C37	61 70 3A 20
+	  2C3B	2D 20 7C 20
+	  2C3F	20 20 20 20
+	  2C43	56 54 31 30
+	  2C47	32 20 20 20
+	  2C4B	20 20 20 7C
+ 2214:						END
+
+
+
+
+
+                     register banks used:  0
+
+                     no errors
+
+
+
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 43
+
+
+
+
+
+	       L I S T   O F   S Y M B O L S
+	       =============================
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+??ASEM_51			  NUMBER    8051
+??VERSION			  NUMBER    0130
+AC				  BIT	      D6	  94
+ACC				  DATA	      E0	  36
+ALR				  NUMBER    0011	 176
+ALTGR				  NUMBER    0011	 175
+ALTGR_TABLE			  CODE	    2B6F	2088
+ALTGR_TABLE_IND			  CODE	    2B64	2074
+ANSIOUT				  CODE	    21D5	 478
+ANSIOUT1			  CODE	    21DD	 484
+ANSIOUT2			  CODE	    21E4	 488
+ANSI_MOVE			  CODE	    26A2	1231
+ANSI_MOVE_EX			  CODE	    26F4	1294
+ANSI_MOVE_M1			  CODE	    26C9	1260
+ANSI_MOVE_X1			  CODE	    26AF	1245
+ANSI_MOVE_X3			  CODE	    26B6	1248
+ANSI_MOVE_Y			  CODE	    26CE	1268
+ANSI_MOVE_Y1			  CODE	    26DD	1278
+ANSI_MOVE_Y2			  CODE	    26D9	1273
+ANSI_MOVE_Y3			  CODE	    26E7	1284
+ANSI_TAB			  CODE	    21E8	 492
+ARG0				  NUMBER    0026	 226
+ARG1				  NUMBER    0027	 227
+ARG2				  NUMBER    0028	 228
+ARG3				  NUMBER    0029	 229
+ARGS_GR_ZERO			  CODE	    268E	1214
+ARGS_GR_ZERO_1			  CODE	    269A	1220
+ARGS_GR_ZERO_2			  CODE	    2696	1218
+AUXR				  DATA	      8E	  19
+AUXR1				  DATA	      A2	  24
+B				  DATA	      F0	  37
+BACK				  NUMBER    0008	 148
+BAUDFLAG			  NUMBER    0014	 222
+BAUDIDX				  NUMBER    003D	 249
+BOTTOM				  NUMBER    0032	 238
+BREAK				  NUMBER    00F0	 183
+CCAPS				  NUMBER    0058	 180
+CCBT				  NUMBER    001D	 141
+CCDN				  NUMBER    001D	 153
+CCHM				  NUMBER    001C	 140
+CCLF				  NUMBER    001E	 154
+CCLM				  NUMBER    001E	 142
+CCRM				  NUMBER    001F	 143
+CCRT				  NUMBER    001F	 155
+CCUP				  NUMBER    001C	 152
+CDCH				  NUMBER    00FE	 158
+CHARTABLE_NOSHIFT		  CODE	    2A3C	2042
+CHARTABLE_SHIFT			  CODE	    2AD1	2058
+CHAR_OUT			  CODE	    227F	 591
+CHAR_OUT_1			  CODE	    22E0	 652
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 44
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+CHAR_OUT_2			  CODE	    22B8	 629
+CHAR_OUT_2A			  CODE	    22C6	 637
+CHAR_OUT_2B			  CODE	    22CE	 641
+CHAR_OUT_3			  CODE	    2295	 603
+CHAR_OUT_4			  CODE	    22D5	 645
+CICH				  NUMBER    00FF	 159
+CILN				  NUMBER    009D	 157
+CIN				  CODE	    2950	1859
+CIN_1				  CODE	    2959	1863
+CIN_2				  CODE	    2952	1860
+CIN_3				  CODE	    2964	1869
+CIN_4				  CODE	    2976	1887
+CIN_5				  CODE	    2969	1877
+CIN_7				  CODE	    2971	1882
+CLEARARGS			  CODE	    276F	1394
+CLEARARGS1			  CODE	    2773	1396
+CLEARTABU			  CODE	    2747	1361
+CLEARTABU1			  CODE	    274B	1363
+CLEAR_LINES			  CODE	    2817	1556
+CLEAR_LINES1			  CODE	    2838	1583
+CLEAR_LINES2			  CODE	    2833	1581
+CLEAR_SCREEN			  CODE	    280A	1547
+CLEAR_V1			  CODE	    2733	1345
+CLEAR_VARS			  CODE	    272F	1343
+CLS				  NUMBER    0001	 147
+CLSHIFT				  NUMBER    0012	 177
+CLSTRG				  NUMBER    0014	 178
+COLOR				  NUMBER    002D	 233
+COMP_DPTR			  CODE	    288E	1665
+COPYFONT			  CODE	    28ED	1777
+COPYFONT1			  CODE	    28F7	1783
+COUT				  CODE	    2940	1848
+COUT_X				  CODE	    2948	1854
+CPRL2				  BIT	      C8	  81
+CRSHIFT				  NUMBER    0059	 179
+CSPACE				  NUMBER    0020	 156
+CT2				  BIT	      C9	  82
+CURSORPOS			  NUMBER    002E	 234
+CURSORPOS1			  NUMBER    002F	 235
+CURSORSAVE			  NUMBER    0030	 236
+CURSORX				  NUMBER    0037	 243
+CURSORY				  NUMBER    0038	 244
+CURSOR_OFF			  CODE	    286B	1632
+CURSOR_ON			  CODE	    2859	1612
+CY				  BIT	      D7	  95
+C_BACKSP			  NUMBER    0008	 127
+C_BELL				  NUMBER    0007	 126
+C_CR				  NUMBER    000D	 132
+C_DEL				  NUMBER    007F	 138
+C_ESC				  NUMBER    001B	 137
+C_FF				  NUMBER    000C	 131
+C_NEWLINE			  NUMBER    000A	 129
+C_SI				  NUMBER    000F	 134
+C_SO				  NUMBER    000E	 133
+C_TAB				  NUMBER    0009	 128
+C_TIME				  NUMBER    000A	 124
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 45
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+C_VT				  NUMBER    000B	 130
+C_XOFF				  NUMBER    0013	 136
+C_XON				  NUMBER    0011	 135
+DECANM				  NUMBER    0002	 187
+DECARM				  NUMBER    0008	 193
+DECAWM				  NUMBER    0007	 192
+DECCKM				  NUMBER    0001	 186
+DECCOLM				  NUMBER    0003	 188
+DECINLM				  NUMBER    0009	 194
+DECOM				  NUMBER    0006	 191
+DECSCLM				  NUMBER    0004	 189
+DECSCNM				  NUMBER    0005	 190
+DO_CMD_ARG			  CODE	    2665	1179
+DO_CMD_ARG_1			  CODE	    267A	1195
+DO_CMD_ARG_2			  CODE	    2680	1202
+DO_CMD_ARG_3			  CODE	    2687	1205
+DO_CMD_ARG_4			  CODE	    268C	1207
+DO_CR				  CODE	    224A	 553
+DO_CSI				  CODE	    2353	 725
+DO_CSI_B			  CODE	    2373	 745
+DO_CSI_C			  CODE	    237C	 751
+DO_CSI_CC			  CODE	    246F	 875
+DO_CSI_CC1			  CODE	    2474	 877
+DO_CSI_CC2			  CODE	    2472	 876
+DO_CSI_D			  CODE	    2385	 757
+DO_CSI_END			  CODE	    25FF	1083
+DO_CSI_END1			  CODE	    252E	 972
+DO_CSI_G			  CODE	    2530	 974
+DO_CSI_G1			  CODE	    253A	 978
+DO_CSI_H			  CODE	    2391	 766
+DO_CSI_H1			  CODE	    2396	 768
+DO_CSI_H2			  CODE	    2399	 769
+DO_CSI_HH			  CODE	    2598	1026
+DO_CSI_HH1			  CODE	    25A9	1034
+DO_CSI_HH2			  CODE	    25AE	1036
+DO_CSI_HHX			  CODE	    25B3	1038
+DO_CSI_J			  CODE	    24C5	 920
+DO_CSI_JA			  CODE	    24CA	 922
+DO_CSI_JB			  CODE	    24DC	 932
+DO_CSI_JC			  CODE	    24CD	 923
+DO_CSI_JD			  CODE	    24ED	 941
+DO_CSI_K			  CODE	    2504	 953
+DO_CSI_KA			  CODE	    2519	 963
+DO_CSI_KB			  CODE	    2524	 968
+DO_CSI_KEYS			  CODE	    2360	 732
+DO_CSI_L			  CODE	    2543	 985
+DO_CSI_L1			  CODE	    2556	 993
+DO_CSI_L2			  CODE	    255B	 995
+DO_CSI_LL			  CODE	    25B7	1042
+DO_CSI_LL1			  CODE	    25C2	1047
+DO_CSI_LL2			  CODE	    25C7	1049
+DO_CSI_LLX			  CODE	    25CC	1051
+DO_CSI_M			  CODE	    23BC	 791
+DO_CSI_MA			  CODE	    23CA	 797
+DO_CSI_MB			  CODE	    23DA	 804
+DO_CSI_MC			  CODE	    23CC	 798
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 46
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+DO_CSI_MD			  CODE	    23D7	 803
+DO_CSI_ME			  CODE	    23DE	 806
+DO_CSI_MF			  CODE	    23E1	 807
+DO_CSI_MG			  CODE	    23F0	 816
+DO_CSI_MH			  CODE	    23F7	 819
+DO_CSI_MM			  CODE	    256A	1004
+DO_CSI_MM1			  CODE	    257D	1012
+DO_CSI_MM2			  CODE	    2584	1015
+DO_CSI_MX			  CODE	    2408	 828
+DO_CSI_MX1			  CODE	    240D	 830
+DO_CSI_MX2			  CODE	    2413	 832
+DO_CSI_MX3			  CODE	    2419	 834
+DO_CSI_N			  CODE	    241D	 838
+DO_CSI_N1			  CODE	    2427	 842
+DO_CSI_N6			  CODE	    2433	 848
+DO_CSI_P			  CODE	    25D0	1055
+DO_CSI_P1			  CODE	    25EB	1070
+DO_CSI_P2			  CODE	    25D7	1058
+DO_CSI_Q			  CODE	    2600	1102
+DO_CSI_QUES			  CODE	    24FD	 949
+DO_CSI_Q_END			  CODE	    2648	1137
+DO_CSI_Q_H			  CODE	    260C	1108
+DO_CSI_Q_H1			  CODE	    261D	1116
+DO_CSI_Q_H2			  CODE	    2622	1118
+DO_CSI_Q_HX			  CODE	    2629	1121
+DO_CSI_Q_L			  CODE	    262D	1125
+DO_CSI_Q_L1			  CODE	    2639	1130
+DO_CSI_Q_L2			  CODE	    263E	1132
+DO_CSI_Q_LX			  CODE	    2645	1135
+DO_CSI_R			  CODE	    247F	 884
+DO_CSI_RA			  CODE	    248E	 890
+DO_CSI_RB			  CODE	    249F	 897
+DO_CSI_RC			  CODE	    24B6	 910
+DO_CSI_RD			  CODE	    24C3	 917
+DO_CSI_RE			  CODE	    24B3	 907
+DO_CSI_S			  CODE	    23A7	 779
+DO_CSI_U			  CODE	    23B1	 785
+DO_ESC				  CODE	    22F3	 667
+DO_ESC_7			  CODE	    2303	 675
+DO_ESC_8			  CODE	    230D	 680
+DO_ESC_C			  CODE	    233E	 707
+DO_ESC_CSI			  CODE	    22FC	 671
+DO_ESC_D			  CODE	    2319	 685
+DO_ESC_EX			  CODE	    2352	 720
+DO_ESC_H			  CODE	    2343	 710
+DO_ESC_HA			  CODE	    2329	 695
+DO_ESC_HASH			  CODE	    264D	1150
+DO_ESC_HASH_END			  CODE	    2658	1156
+DO_ESC_LBR			  CODE	    2330	 699
+DO_ESC_LBRACK			  CODE	    2659	1167
+DO_ESC_LB_1			  CODE	    2662	1172
+DO_ESC_M			  CODE	    2321	 690
+DO_ESC_Q			  CODE	    2649	1143
+DO_ESC_RBR			  CODE	    2337	 703
+DO_ESC_RBRACK			  CODE	    2659	1163
+DO_ESC_Z			  CODE	    234D	 717
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 47
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+DO_IDLE				  CODE	    21FA	 499
+DO_IDLE_BS			  CODE	    2213	 518
+DO_IDLE_CR			  CODE	    2247	 552
+DO_IDLE_DEL			  CODE	    2204	 508
+DO_IDLE_END			  CODE	    2271	 576
+DO_IDLE_ESC			  CODE	    2253	 558
+DO_IDLE_FF			  CODE	    226C	 573
+DO_IDLE_NL			  CODE	    223D	 546
+DO_IDLE_PRE			  CODE	    220A	 512
+DO_IDLE_SI			  CODE	    2261	 566
+DO_IDLE_SO			  CODE	    225B	 562
+DO_IDLE_TAB			  CODE	    2219	 522
+DO_IDLE_TAB1			  CODE	    2233	 537
+DO_IDLE_TAB2			  CODE	    2238	 540
+DO_IDLE_TAB3			  CODE	    221E	 524
+DO_IDLE_VT			  CODE	    2267	 570
+DO_NEWLINE			  CODE	    2240	 547
+DP0H				  DATA	      83	   9
+DP0L				  DATA	      82	   8
+DP1H				  DATA	      85	  11
+DP1L				  DATA	      84	  10
+DPH				  NUMBER    0083	 108
+DPL				  NUMBER    0082	 109
+DRAW_CHAR			  CODE	    2271	 580
+DRAW_CHAR_1			  CODE	    22EA	 659
+DRAW_CURSOR			  CODE	    284B	1600
+DUMMY				  NUMBER    002A	 230
+EA				  BIT	      AF	  66
+ES				  BIT	      AC	  64
+ESC				  NUMBER    001B	 151
+ET0				  BIT	      A9	  61
+ET1				  BIT	      AB	  63
+ET2				  BIT	      AD	  65
+EX0				  BIT	      A8	  60
+EX1				  BIT	      AA	  62
+EXEN2				  BIT	      CB	  84
+EXF2				  BIT	      CE	  87
+EXINT0				  CODE	    2079	 338
+EXINT0A				  CODE	    209A	 355
+EXINT0B				  CODE	    2084	 345
+EXINT0EX			  CODE	    20A1	 360
+EXTENDED			  NUMBER    00E0	 182
+EXTI0				  CODE	    0003	  98
+EXTI1				  CODE	    0013	 100
+EXT_TABLE			  CODE	    2B8A	2118
+EXT_TABLE_IND			  CODE	    2B7A	2101
+F0				  BIT	      D5	  93
+F1				  NUMBER    0080	 161
+F10				  NUMBER    0089	 170
+F11				  NUMBER    008A	 171
+F12				  NUMBER    008B	 172
+F2				  NUMBER    0081	 162
+F3				  NUMBER    0082	 163
+F4				  NUMBER    0083	 164
+F5				  NUMBER    0084	 165
+F6				  NUMBER    0085	 166
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 48
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+F7				  NUMBER    0086	 167
+F8				  NUMBER    0087	 168
+F9				  NUMBER    0088	 169
+FILL_LINES			  CODE	    2819	1558
+FILL_SCREEN			  CODE	    280C	1548
+FLAGS				  NUMBER    0020	 201
+FLAGS1				  NUMBER    0021	 209
+FLAGS2				  NUMBER    0022	 217
+FREE0				  NUMBER    005A	 255
+FREE1				  NUMBER    005B	 256
+FREE2				  NUMBER    005C	 257
+FREE3				  NUMBER    005D	 258
+FREE4				  NUMBER    005E	 259
+FREE5				  NUMBER    005F	 260
+GETBAUD				  CODE	    2B97	2134
+GETBDTXT			  CODE	    2BA0	2144
+GETBIT				  CODE	    2763	1387
+GETBITTAB			  CODE	    2767	1391
+GETREPORT			  CODE	    2462	 870
+GETSTATUS			  CODE	    2BFC	2208
+HARDWARE			  NUMBER    0001	 105
+HEIGHT				  NUMBER    0018	 112
+HEX2DEZ				  CODE	    2881	1652
+IE				  DATA	      A8	  26
+IE0				  BIT	      89	  40
+IE1				  BIT	      8B	  42
+INIT				  CODE	    2157	 406
+INIT6845			  CODE	    28A2	1685
+INIT_1				  CODE	    2177	 423
+INIT_2				  CODE	    2182	 430
+INIT_LOOP			  CODE	    216F	 419
+INSERT				  NUMBER    0013	 221
+INT0				  BIT	      B2	  69
+INT1				  BIT	      B3	  70
+INVERSE				  NUMBER    0003	 205
+IP				  DATA	      B8	  28
+IRM				  NUMBER    0004	 195
+ISDIGIT				  CODE	    2703	1312
+ISDIGIT1			  CODE	    2706	1313
+ISDIGIT2			  CODE	    270A	1316
+ISDIGIT3			  CODE	    270D	1317
+ISPARM				  CODE	    26F8	1301
+ISPARM1				  CODE	    2701	1306
+ISPARMEX			  CODE	    2700	1305
+IT0				  BIT	      88	  39
+IT1				  BIT	      8A	  41
+KEYALTGR			  CODE	    2A13	2013
+KEYALTGR1			  CODE	    2A23	2019
+KEYALTGR2			  CODE	    2A18	2015
+KEYAVAIL			  NUMBER    0008	 210
+KEYBREAK			  CODE	    29B6	1965
+KEYCHECKBRK			  CODE	    29DD	1987
+KEYCHECKBRK1			  CODE	    29E7	1991
+KEYDECODE			  CODE	    29AE	1957
+KEYEXIT				  CODE	    2A34	2034
+KEYEXITOK			  CODE	    2A30	2027
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 49
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+KEYGETALTGR			  CODE	    2B6C	2085
+KEYGETALTGRIND			  CODE	    2B61	2071
+KEYGETEXT			  CODE	    2B87	2115
+KEYGETEXTIND			  CODE	    2B77	2098
+KEYGETNOSHIFT			  CODE	    2A37	2038
+KEYGETSHIFT			  CODE	    2ACC	2054
+KEYMAKE				  CODE	    2A27	2022
+KEYMAKEEXT			  CODE	    29F6	2000
+KEYMAKEEXT1			  CODE	    2A0F	2010
+KEYMAKEEXT2			  CODE	    29FD	2003
+KEYMAKEEXT3			  CODE	    2A0D	2009
+KEYNORMAL			  CODE	    29EC	1995
+KEYRXALTGR			  NUMBER    000C	 214
+KEYRXBREAK			  NUMBER    000A	 212
+KEYRXCNT			  NUMBER    003A	 246
+KEYRXEXTENDED			  NUMBER    0009	 211
+KEYRXSHIFT			  NUMBER    000B	 213
+KEYRXSTRG			  NUMBER    000D	 215
+KEYRXVAL			  NUMBER    003B	 247
+KEYSHIFT			  CODE	    29BE	1970
+KEYSHIFT1			  CODE	    29C5	1973
+KEYSHIFT2			  CODE	    29CA	1975
+KEYSTRG				  CODE	    29D1	1980
+LASTCHAR			  NUMBER    0001	 203
+LCHARTMP			  NUMBER    0002	 204
+LF				  NUMBER    000A	 150
+LNM				  NUMBER    0014	 196
+LOCAT				  NUMBER    2100	 366
+LOOP_CIN			  CODE	    21C1	 464
+LOOP_TEST			  CODE	    217A	 425
+MAIN_COUT			  CODE	    21AC	 454
+MAIN_F6				  CODE	    2192	 441
+MAIN_F6A			  CODE	    219D	 446
+MAIN_LOOP			  CODE	    2186	 436
+MAIN_SERIN			  CODE	    21BA	 460
+MAIN_STATUS			  CODE	    21D0	 471
+MISO				  BIT	      96	  50
+MOSI				  BIT	      95	  49
+MOVE_CURSOR			  CODE	    2848	1599
+NARGS				  NUMBER    0025	 225
+NEWLINE				  CODE	    2936	1841
+NEWLINEMODE			  NUMBER    0012	 220
+NOWRAP				  NUMBER    0010	 218
+OLDSTATUS			  NUMBER    003C	 248
+ORIGIN				  NUMBER    0011	 219
+OV				  BIT	      D2	  90
+P				  BIT	      D0	  89
+P0				  DATA	      80	   6
+P1				  DATA	      90	  20
+P2				  DATA	      A0	  23
+P3				  DATA	      B0	  27
+PCON				  DATA	      87	  12
+PHEX				  CODE	    297B	1900
+PHEX1				  CODE	    297E	1904
+PHEX16				  CODE	    298D	1914
+PHEX8				  CODE	    297B	1901
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 50
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+PHEX_B				  CODE	    297D	1903
+PRINT				  CODE	    2779	1402
+PRINT1				  CODE	    277E	1406
+PRTBAUD				  CODE	    2BD2	2184
+PRTSTATUS			  CODE	    2BB6	2154
+PRTSTATUS1			  CODE	    2BBB	2168
+PRTSTATUS2			  CODE	    2BE6	2197
+PRTSTATUS3			  CODE	    2BED	2200
+PRTSTATUS4			  CODE	    2BF4	2203
+PRTSTATUS5			  CODE	    2BFB	2206
+PS				  BIT	      BC	  79
+PSTR				  CODE	    299A	1928
+PSTR1				  CODE	    299C	1929
+PSTR2				  CODE	    29AB	1938
+PSW				  DATA	      D0	  35
+PT0				  BIT	      B9	  76
+PT1				  BIT	      BB	  78
+PT2				  BIT	      BD	  80
+PX0				  BIT	      B8	  75
+PX1				  BIT	      BA	  77
+RB8				  BIT	      9A	  54
+RCAP2H				  DATA	      CB	  32
+RCAP2L				  DATA	      CA	  31
+RCLK				  BIT	      CD	  86
+RD				  BIT	      B7	  74
+REN				  BIT	      9C	  56
+REPORTDA			  CODE	    2468	 873
+REPORTOK			  CODE	    2464	 872
+RESET				  CODE	    0000	  97
+RESETTABU			  CODE	    2739	1351
+RESETTABU1			  CODE	    273D	1353
+RETSTATE			  NUMBER    0023	 224
+RI				  BIT	      98	  52
+RS0				  BIT	      D3	  91
+RS1				  BIT	      D4	  92
+RXD				  BIT	      B0	  67
+SBUF				  DATA	      99	  22
+SCK				  BIT	      97	  51
+SCON				  DATA	      98	  21
+SCROLL				  CODE	    2783	1427
+SCROLL_DOWN_1			  CODE	    27B0	1463
+SCROLL_DOWN_2			  CODE	    27BE	1473
+SCROLL_DOWN_3			  CODE	    27C6	1478
+SCROLL_DOWN_4			  CODE	    27AE	1461
+SCROLL_DOWN_5			  CODE	    27D0	1489
+SCROLL_DOWN_6			  CODE	    27CD	1486
+SCROLL_R4			  CODE	    2789	1431
+SCROLL_UP			  CODE	    27D5	1496
+SCROLL_UP_1			  CODE	    27F2	1515
+SCROLL_UP_2			  CODE	    27F4	1518
+SCROLL_UP_3			  CODE	    2805	1531
+SCROLL_UP_4			  CODE	    2802	1528
+SCURSORX			  NUMBER    002B	 231
+SCURSORY			  NUMBER    002C	 232
+SENDPOS				  CODE	    2456	 863
+SERBUF				  NUMBER    0040	 251
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 51
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+SERBUSY				  NUMBER    0005	 207
+SERCOUNT			  NUMBER    0036	 242
+SEREND				  NUMBER    0035	 241
+SERINT				  CODE	    2023	 275
+SERINT1				  CODE	    2038	 287
+SERINTEX			  CODE	    2055	 302
+SERINTTI			  CODE	    204E	 298
+SERSTART			  NUMBER    0034	 240
+SETREGS				  CODE	    28B2	1695
+SINT				  CODE	    0023	 102
+SM0				  BIT	      9F	  59
+SM1				  BIT	      9E	  58
+SM2				  BIT	      9D	  57
+SP				  DATA	      81	   7
+SPACE				  CODE	    292C	1835
+SPECIAL				  NUMBER    0000	 202
+STACK				  NUMBER    0080	 107
+START				  CODE	    2140	 383
+STATE				  NUMBER    0033	 239
+STATUS				  CODE	    2BFF	2213
+ST_CMD_ARG			  NUMBER    000A	 119
+ST_CSI				  NUMBER    0004	 116
+ST_CSI_Q			  NUMBER    000E	 121
+ST_ESC				  NUMBER    0002	 115
+ST_ESC_HASH			  NUMBER    0008	 118
+ST_ESC_LBRACK			  NUMBER    000C	 120
+ST_ESC_Q			  NUMBER    0006	 117
+ST_ESC_RBRACK			  NUMBER    0010	 122
+ST_IDLE				  NUMBER    0000	 114
+SYDATA				  CODE	    28D9	1753
+T0				  BIT	      B4	  71
+T0CNT				  NUMBER    0039	 245
+T1				  BIT	      B5	  72
+T2				  BIT	      90	  47
+T2CON				  DATA	      C8	  29
+T2EX				  BIT	      91	  48
+T2MOD				  DATA	      C9	  30
+TABU				  NUMBER    0009	 149
+TABUTAB				  NUMBER    0050	 253
+TAB_SET_R0_R1			  CODE	    2753	1374
+TB8				  BIT	      9B	  55
+TCLK				  BIT	      CC	  85
+TCON				  DATA	      88	  13
+TERM_RESET			  CODE	    270E	1324
+TESTSCREEN			  CODE	    2906	1803
+TESTSCREEN1			  CODE	    290F	1808
+TESTSCREEN2			  CODE	    291C	1820
+TESTSCREEN3			  CODE	    290B	1806
+TESTSCREEN4			  CODE	    2920	1823
+TF0				  BIT	      8D	  44
+TF1				  BIT	      8F	  46
+TF2				  BIT	      CF	  88
+TH0				  DATA	      8C	  17
+TH1				  DATA	      8D	  18
+TH2				  DATA	      CD	  34
+TI				  BIT	      99	  53
+
+ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 52
+
+
+
+SYMBOL				  TYPE     VALUE	LINE
+------------------------------------------------------------
+TIMER0				  CODE	    000B	  99
+TIMER0INT			  CODE	    205C	 312
+TIMER0INT_EX			  CODE	    2078	 328
+TIMER1				  CODE	    001B	 101
+TIMER2				  CODE	    002B	 103
+TL0				  DATA	      8A	  15
+TL1				  DATA	      8B	  16
+TL2				  DATA	      CC	  33
+TMOD				  DATA	      89	  14
+TOP				  NUMBER    0031	 237
+TR0				  BIT	      8C	  43
+TR1				  BIT	      8E	  45
+TR2				  BIT	      CA	  83
+TXD				  BIT	      B1	  68
+VARS				  NUMBER    0020	 199
+WDTRST				  DATA	      A6	  25
+WIDTH				  NUMBER    0050	 111
+WR				  BIT	      B6	  73
+XONOFF				  NUMBER    0004	 206

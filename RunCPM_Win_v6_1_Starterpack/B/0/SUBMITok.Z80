@@ -1,0 +1,621 @@
+;
+;		RunCPM - Execute 8bit CP/M applications on modern computers
+;		Copyright (c) 2016 - Marcelo Dantas
+;
+;		Extensive debugging/testing by Tom L. Burnett
+;		Debugging/testing and new features by Krzysztof Klis
+;
+; SUBMIT - Version patched for RunCPM
+
+; enum values
+wboot            equ 0
+bdos             equ 5
+lf               equ 0Ah
+cr               equ 0Dh
+endfile          equ 1Ah
+dfcba            equ 5Ch
+extPos           equ 65h
+dbuff            equ 80h
+dbuff1           equ 81h
+sbp              equ 674h
+rbuff            equ 676h
+rbp              equ 0E76h
+rlen             equ 0E78h
+varS             equ 0E79h
+ssbp             equ 0E7Ah
+varA             equ 0E7Bh
+reading          equ 0E7Ch
+varB             equ 0E7Dh
+varI             equ 0E7Eh
+stackptr         equ 0E93h
+
+                org 100h
+                jp      start
+                db ' copyright(c) 1977, digital research '
+crlf            db 0Dh,0Ah,'$'
+errLine         db 'Error On Line $'
+eSub            db 'SUB'
+noSUB           db 'No ',27h,'SUB',27h,' File Present$'
+errWrite        db 'Disk Write Error$'
+errBuf          db 'Command Buffer Overflow$'
+errLong         db 'Command Too Long$'
+errParm         db 'Parameter Error$'
+errCtrl         db 'Invalid Control Character$'
+errDir          db 'Directory Full$'
+errClose        db 'Cannot Close, Read/Only?$'
+start:
+                ld      hl, 0
+                add     hl, sp
+                ld      (oldsp), hl
+                ld      hl, stackptr
+                ld      sp, hl
+                call    setup
+                call    fillrbuf
+                call    makefile
+                call    boot
+                ret
+; =============== S U B R O U T I N E =======================================
+print:
+                ld      hl,  ptrPrint+1
+                ld      (hl), b
+                dec     hl
+                ld      (hl), c
+                ld      hl, (ptrPrint)
+                ex      de, hl
+                ld      c, 9
+                call    mon1
+                ret
+; End of function print
+; =============== S U B R O U T I N E =======================================
+; Open file - BC holds FCB addr
+open:
+                ld      hl,  ptrOpen+1
+                ld      (hl), b
+                dec     hl
+                ld      (hl), c
+                ld      hl, (ptrOpen)
+                ex      de, hl
+                ld      c, 15
+                call    mon2
+                ld      (dcnt), a
+                ret
+; End of function open
+; =============== S U B R O U T I N E =======================================
+close:
+                ld      hl,  ptrClose+1
+                ld      (hl), b
+                dec     hl
+                ld      (hl), c
+                ld      hl, (ptrClose)
+                ex      de, hl
+                ld      c, 16
+                call    mon2
+                ld      (dcnt), a
+                ret
+; End of function close
+; =============== S U B R O U T I N E =======================================
+delete:
+                ld      hl,  ptrDelete+1
+                ld      (hl), b
+                dec     hl
+                ld      (hl), c
+                ld      hl, (ptrDelete)
+                ex      de, hl
+                ld      c, 19
+                call    mon1
+                ret
+; End of function delete
+; =============== S U B R O U T I N E =======================================
+diskread:
+                ld      hl,  ptrDiskread+1
+                ld      (hl), b
+                dec     hl
+                ld      (hl), c
+                ld      hl, (ptrDiskread)
+                ex      de, hl
+                ld      c, 20
+                call    mon2
+                ret
+; End of function diskread
+; =============== S U B R O U T I N E =======================================
+diskwrite:
+                ld      hl,  ptrDiskwrite+1
+                ld      (hl), b
+                dec     hl
+                ld      (hl), c
+                ld      hl, (ptrDiskwrite)
+                ex      de, hl
+                ld      c, 21
+                call    mon2
+                ret
+; End of function diskwrite
+; =============== S U B R O U T I N E =======================================
+make:
+                ld      hl,  ptrMake+1
+                ld      (hl), b
+                dec     hl
+                ld      (hl), c
+                ld      hl, (ptrMake)
+                ex      de, hl
+                ld      c, 22
+                call    mon2
+                ld      (dcnt), a
+                ret
+; End of function make
+; =============== S U B R O U T I N E =======================================
+; PUSH=Source E=Amount BC=Dest
+move:
+                ld      hl, varN
+                ld      (hl), e
+                dec     hl
+                ld      (hl), b
+                dec     hl
+                ld      (hl), c
+                dec     hl
+                pop     de
+                pop     bc
+                ld      (hl), b
+                dec     hl
+                ld      (hl), c
+                push    de
+move1:
+                ld      a, (varN)
+                dec     a
+                ld      (varN), a
+                cp      255
+                jp      z, move2
+                ld      hl, (vMoveA)
+                push    hl
+                ld      hl, (vMoveB)
+                pop     bc
+                ld      a, (bc)
+                ld      (hl), a
+                ld      hl, (vMoveA)
+                inc     hl
+                ld      (vMoveA), hl
+                ld      hl, (vMoveB)
+                inc     hl
+                ld      (vMoveB), hl
+                jp      move1
+move2:
+                ret
+; End of function move
+; =============== S U B R O U T I N E =======================================
+error:
+                ld      hl,  vErrorA+1
+                ld      (hl), b
+                dec     hl
+                ld      (hl), c
+                ld      bc, crlf
+                call    print
+                ld      bc, errLine
+                call    print
+                ld      bc, ln1
+                call    print
+                ld      hl, (vErrorA)
+                ld      b, h
+                ld      c, l
+                call    print
+                ld      hl, (oldsp)
+                ld      sp, hl
+                ret
+; End of function error
+; =============== S U B R O U T I N E =======================================
+setup:
+                ld      bc, dbuff1
+                push    bc
+                ld      e, 127
+                ld      bc, bufSave
+                call    move            ; PUSH=Source E=Amount BC=Dest
+                ld      hl, (dbuff)
+                ld      h, 0
+                ld      bc, bufSave
+                add     hl, bc
+                ld      (hl), 0
+                ld      bc, eSub
+                push    bc
+                ld      e, 3
+                ld      bc, extPos
+                call    move            ; PUSH=Source E=Amount BC=Dest
+                ld      bc, dfcba
+                call    open            ; Open file - BC holds FCB addr
+                ld      a, (dcnt)
+                cp      255
+                jp      nz, setup1
+                ld      bc, noSUB
+                call    error
+setup1:
+                ld      hl, sbp
+                ld      (hl), 128
+                ret
+; End of function setup
+; =============== S U B R O U T I N E =======================================
+getsource:
+                ld      a, 127
+                ld      hl, sbp
+                cp      (hl)
+                jp      nc, getsource2
+                ld      bc, dfcba
+                call    diskread
+                cp      0
+                jp      z, getsource1
+                ld      a, endfile
+                ret
+getsource1:
+                ld      hl, sbp
+                ld      (hl), 0
+getsource2:
+                ld      a, (sbp)
+                inc     a
+                ld      (sbp), a
+                dec     a
+                ld      c, a
+                ld      b, 0
+                ld      hl, dbuff
+                add     hl, bc
+                ld      a, (hl)
+                ld      (sbp+1), a
+                cp      cr
+                jp      nz, getsource3
+                ld      a, (ln3)
+                inc     a
+                ld      (ln3), a
+                ld      c, a
+                ld      a, '9'
+                cp      c
+                jp      nc, getsource3
+                ld      hl, ln3
+                ld      (hl), '0'
+                dec     hl
+                ld      a, (hl)
+                inc     a
+                ld      (hl), a
+                ld      c, a
+                ld      a, '9'
+                cp      c
+                jp      nc, getsource3
+                ld      hl, ln2
+                ld      (hl), '0'
+                dec     hl
+                inc     (hl)
+getsource3:
+                ld      a, (sbp+1)
+                sub     'a'
+                cp      26
+                jp      nc, getsource4
+                ld      a, (sbp+1)
+                and     5Fh
+                ld      (sbp+1), a
+getsource4:
+                ld      a, (sbp+1)
+                ret
+; End of function getsource
+; =============== S U B R O U T I N E =======================================
+writebuff:
+                ld      bc, dfcb
+                call    diskwrite
+                cp      0
+                jp      z, writebuff1
+                ld      bc, errWrite
+                call    error
+writebuff1:
+                ret
+; End of function writebuff
+; =============== S U B R O U T I N E =======================================
+fillrbuf:
+                ld      hl, rbuff
+                ld      (hl), 0
+                ld      hl, 0
+                ld      (rbp), hl
+                ld      hl, reading
+                ld      (hl), 1
+fillrbuf1:
+                ld      a, (reading)
+                rra
+                jp      nc, fillrbuf16
+                ld      hl, rlen
+                ld      (hl), 0
+fillrbuf2:
+                call    getsource
+                ld      (varB), a
+                sub     endfile
+                add     a, 255
+                sbc     a, a
+                push    af
+                ld      a, (varB)
+                sub     cr
+                add     a, 255
+                sbc     a, a
+                pop     bc
+                ld      c, b
+                and     c
+                rra
+                jp      nc, fillrbuf15
+                ld      a, (varB)
+                cp      lf
+                jp      z, fillrbuf14
+                ld      a, (varB)
+                cp      '$'
+                jp      nz, fillrbuf10
+                call    getsource
+                ld      (varB), a
+                cp      '$'
+                jp      nz, fillrbuf3
+                ld      hl, (varB)
+                ld      c, l
+                call    putrbuff
+                jp      fillrbuf9
+fillrbuf3:
+                ld      a, (varB)
+                sub     '0'
+                ld      (varB), a
+                ld      c, a
+                ld      a, 9
+                cp      c
+                jp      nc, fillrbuf4
+                ld      bc, errParm
+                call    error
+                jp      fillrbuf9
+fillrbuf4:
+                ld      hl, ssbp
+                ld      (hl), 0
+                call    deblankparm
+fillrbuf5:
+                ld      a, (varB)
+                cp      0
+                jp      z, fillrbuf8
+                ld      hl, varB
+                dec     (hl)
+fillrbuf6:
+                call    notend
+                rra
+                jp      nc, fillrbuf7
+                jp      fillrbuf6
+fillrbuf7:
+                call    deblankparm
+                jp      fillrbuf5
+fillrbuf8:
+                call    notend
+                rra
+                jp      nc, fillrbuf9
+                ld      hl, (varS)
+                ld      c, l
+                call    putrbuff
+                jp      fillrbuf8
+fillrbuf9:
+                jp      fillrbuf14
+fillrbuf10:
+                ld      a, (varB)
+                cp      '^'
+                jp      nz, fillrbuf13
+                call    getsource
+                sub     'a'
+                ld      (varB), a
+                ld      c, a
+                ld      a, 25
+                cp      c
+                jp      nc, fillrbuf11
+                ld      bc, errCtrl
+                call    error
+                jp      fillrbuf12
+fillrbuf11:
+                ld      a, (varB)
+                inc     a
+                ld      c, a
+                call    putrbuff
+fillrbuf12:
+                jp      fillrbuf14
+fillrbuf13:
+                ld      hl, (varB)
+                ld      c, l
+                call    putrbuff
+fillrbuf14:
+                jp      fillrbuf2
+fillrbuf15:
+                ld      a, (varB)
+                sub     cr
+                sub     1
+                sbc     a, a
+                ld      (reading), a
+                ld      hl, (rlen)
+                ld      c, l
+                call    putrbuff
+                jp      fillrbuf1
+fillrbuf16:
+                ret
+; End of function fillrbuf
+; =============== S U B R O U T I N E =======================================
+notend:
+                ld      hl, (ssbp)
+                ld      h, 0
+                ld      bc, bufSave
+                add     hl, bc
+                ld      a, (hl)
+                ld      (varS), a
+                sub     ' '
+                sub     1
+                sbc     a, a
+                push    af
+                ld      a, (varS)
+                sub     0
+                sub     1
+                sbc     a, a
+                pop     bc
+                ld      c, b
+                or      c
+                rra
+                jp      c, notend1
+                ld      hl, ssbp
+                inc     (hl)
+                ld      a, 1
+                ret
+notend1:
+                ld      a, 0
+                ret
+; End of function notend
+; =============== S U B R O U T I N E =======================================
+deblankparm:
+                ld      hl, (ssbp)
+                ld      h, 0
+                ld      bc, bufSave
+                add     hl, bc
+                ld      a, (hl)
+                cp      ' '
+                jp      nz, deblankparm1
+                ld      hl, ssbp
+                inc     (hl)
+                jp      deblankparm
+deblankparm1:
+                ret
+; End of function deblankparm
+; =============== S U B R O U T I N E =======================================
+putrbuff:
+                ld      hl, varA
+                ld      (hl), c
+                ld      hl, (rbp)
+                inc     hl
+                ld      (rbp), hl
+                ld      de, 7FFh
+                call    last
+                jp      nc, putrbuff1
+                ld      bc, errBuf
+                call    error
+putrbuff1:
+                ld      hl, (rbp)
+                ld      bc, rbuff
+                add     hl, bc
+                ld      a, (varA)
+                ld      (hl), a
+                ld      a, (rlen)
+                inc     a
+                ld      (rlen), a
+                ld      c, a
+                ld      a, 125
+                cp      c
+                jp      nc, putrbuff2
+                ld      bc, errLong
+                call    error
+putrbuff2:
+                ret
+; End of function putrbuff
+; =============== S U B R O U T I N E =======================================
+makefile:
+                ld      bc, dfcb
+                call    delete
+                ld      hl, rec
+                ld      (hl), 0
+                ld      bc, dfcb
+                call    make
+                ld      a, (dcnt)
+                cp      255
+                jp      nz, makefile1
+                ld      bc, errDir
+                call    error
+makefile1:
+                call    getrbuff
+                ld      (varI), a
+                cp      0
+                jp      z, makefile4
+                ld      a, (varI)
+                ld      (dbuff), a
+                ld      c, a
+                ld      b, 0
+                ld      hl, 129
+                add     hl, bc
+                ld      (hl), 0
+                ld      hl, (varI)
+                ld      h, 0
+                ld      bc, 130
+                add     hl, bc
+                ld      (hl), '$'
+makefile2:
+                ld      a, 0
+                ld      hl, varI
+                cp      (hl)
+                jp      nc, makefile3
+                call    getrbuff
+                ld      hl, (varI)
+                ld      h, 0
+                ld      bc, 128
+                add     hl, bc
+                ld      (hl), a
+                ld      hl, varI
+                dec     (hl)
+                jp      makefile2
+makefile3:
+                call    writebuff
+                jp      makefile1
+makefile4:
+                ld      bc, dfcb
+                call    close
+                ld      a, (dcnt)
+                cp      255
+                jp      nz, makefile5
+                ld      bc, errClose
+                call    error
+makefile5:
+                ret
+; End of function makefile
+; =============== S U B R O U T I N E =======================================
+getrbuff:
+                ld      hl, (rbp)
+                dec     hl
+                ld      (rbp), hl
+                ld      bc, rbuff
+                add     hl, bc
+                ld      a, (hl)
+                ret
+; End of function getrbuff
+; =============== S U B R O U T I N E =======================================
+boot:
+                jp      wboot
+; End of function boot
+; =============== S U B R O U T I N E =======================================
+mon1:
+                jp      bdos
+; End of function mon1
+; =============== S U B R O U T I N E =======================================
+mon2:
+                jp      bdos
+; End of function mon2
+                db 0CDh, 5, 0, 0C9h, 0C9h, 0C9h, 5Fh, 16h, 0
+; =============== S U B R O U T I N E =======================================
+last:
+                ld      a, e
+                sub     l
+                ld      l, a
+                ld      a, d
+                sbc     a, h
+                ld      h, a
+                ret
+; End of function last
+                db 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+                db 0, 0, 0, 0, 0, 0
+ln1             db  30h ; 0
+ln2             db  30h ; 0
+ln3             db  31h ; 1
+                db  20h
+                db  24h ; $
+dfcb            db    1
+                db '$$$     SUB'
+                db 0, 0, 0, 1Ah
+                db 1Ah, 1Ah, 1Ah, 1Ah, 1Ah, 1Ah, 1Ah, 1Ah
+                db 1Ah, 1Ah, 1Ah, 1Ah, 1Ah, 1Ah, 1Ah, 1Ah
+rec             db  1Ah
+ptrPrint        dw 1A1Ah
+dcnt            db 1Ah
+ptrOpen         dw 1A1Ah
+ptrClose        dw 1A1Ah
+ptrDelete       dw 1A1Ah
+ptrDiskread     dw 1A1Ah
+ptrDiskwrite    dw 1A1Ah
+ptrMake         dw 1A1Ah
+vMoveA          dw 1A1Ah
+vMoveB          dw 1A1Ah
+varN            db 1Ah
+oldsp           dw 1A1Ah
+vErrorA         dw 1A1Ah
+bufSave         db 1Ah, 1Ah, 1Ah, 1Ah, 1Ah, 1Ah, 1Ah, 1Ah
+                db 1Ah, 1Ah, 1Ah, 1Ah
+; end of 'RAM'
+                end

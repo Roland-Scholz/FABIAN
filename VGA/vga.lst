@@ -10,9 +10,9 @@ ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. 
 
 
 
-	Source File:	C:\github\fabian\VGA\vga.a51
-	Object File:	C:\github\fabian\VGA\vga.hex
-	List File:	C:\github\fabian\VGA\vga.lst
+	Source File:	C:\github\FABIAN\VGA\vga.a51
+	Object File:	C:\github\FABIAN\VGA\vga.hex
+	List File:	C:\github\FABIAN\VGA\vga.lst
 
 
 
@@ -288,31 +288,31 @@ ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. 
   239:	  604F	C2 B3				clr	INT1			;screen 0
   240:	  6051	75 A2 00			mov	AUXR1, #0
   241:
-  242:	  6054	12 61 11			call	init6845
+  242:	  6054	12 61 0E			call	init6845
   243:						;call	CIN
-  244:	  6057	12 60 F0			call	copyFont
-  245:	  605A	02 20 00			ljmp	02000h
+  244:	  6057	12 60 ED			call	copyFont
+  245:						;ljmp	02000h
   246:
   247:						;call	CIN
-  248:	  605D	12 60 D5			call	testScreen
-  249:	  6060	12 60 B8			call	dumpRam
+  248:	  605A	12 60 D2			call	testScreen
+  249:	  605D	12 61 5B			call	testRam
   250:						;call	CIN
   251:						;setb	INT0
   252:						;call	CIN
   253:
   254:
-  255:	  6063	12 00 32	regs:		call	CIN
-  256:	  6066	B4 0D 04			cjne	A, #13, regs4
-  257:	  6069	12 61 58			call	testram
-  258:	  606C	22				ret
+  255:	  6060	12 00 32	regs:		call	CIN
+  256:	  6063	B4 0D 04			cjne	A, #13, regs4
+  257:	  6066	12 61 5B			call	testram
+  258:	  6069	22				ret
   259:
-  260:	  606D	C3		regs4:		clr	C
-  261:	  606E	94 30				subb	A, #'0'
-  262:	  6070	F8				mov	R0, A
-  263:	  6071	12 00 34			call	PHEX
-  264:	  6074	90 61 44			mov	DPTR, #SYDATA
-  265:	  6077	93				movc	A, @A+DPTR
-  266:	  6078	F9				mov	R1, A
+  260:	  606A	C3		regs4:		clr	C
+  261:	  606B	94 30				subb	A, #'0'
+  262:	  606D	F8				mov	R0, A
+  263:	  606E	12 00 34			call	PHEX
+  264:	  6071	90 61 47			mov	DPTR, #SYDATA
+  265:	  6074	93				movc	A, @A+DPTR
+  266:	  6075	F9				mov	R1, A
 
 ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 6
 
@@ -320,61 +320,61 @@ ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. 
 
  Line  I  Addr  Code            Source
 
-  267:	  6079	12 00 34			call	PHEX
+  267:	  6076	12 00 34			call	PHEX
   268:
-  269:	  607C	12 00 32	regs3:		call	CIN
-  270:	  607F	B4 2D 03			cjne	A, #'-',regs1
-  271:	  6082	19				dec	R1
-  272:	  6083	01 91				ajmp	regsset
-  273:	  6085	B4 2B 03	regs1:		cjne	A, #'+', regs2
-  274:	  6088	09				inc	R1
-  275:	  6089	01 91				ajmp	regsset
-  276:	  608B	B4 78 EE	regs2:		cjne	A, #'x', regs3
-  277:	  608E	02 60 63			ljmp	regs
+  269:	  6079	12 00 32	regs3:		call	CIN
+  270:	  607C	B4 2D 03			cjne	A, #'-',regs1
+  271:	  607F	19				dec	R1
+  272:	  6080	01 8E				ajmp	regsset
+  273:	  6082	B4 2B 03	regs1:		cjne	A, #'+', regs2
+  274:	  6085	09				inc	R1
+  275:	  6086	01 8E				ajmp	regsset
+  276:	  6088	B4 78 EE	regs2:		cjne	A, #'x', regs3
+  277:	  608B	02 60 60			ljmp	regs
   278:
-  279:	  6091	74 44		regsset:	mov	A, #LOW SYDATA
-  280:	  6093	28				add	A, R0
-  281:	  6094	F5 82				mov	DP0L, A
-  282:	  6096	74 61				mov	A, #HIGH SYDATA
-  283:	  6098	34 00				addc	A, #0
-  284:	  609A	F5 83				mov	DP0H, A
-  285:	  609C	E9				mov	A, R1
-  286:	  609D	12 00 34			call	PHEX
-  287:	  60A0	F0				movx	@DPTR, A
+  279:	  608E	74 47		regsset:	mov	A, #LOW SYDATA
+  280:	  6090	28				add	A, R0
+  281:	  6091	F5 82				mov	DP0L, A
+  282:	  6093	74 61				mov	A, #HIGH SYDATA
+  283:	  6095	34 00				addc	A, #0
+  284:	  6097	F5 83				mov	DP0H, A
+  285:	  6099	E9				mov	A, R1
+  286:	  609A	12 00 34			call	PHEX
+  287:	  609D	F0				movx	@DPTR, A
   288:
-  289:	  60A1	D2 B4				setb	T0
-  290:	  60A3	90 80 00			mov	DPTR, #8000h
-  291:	  60A6	E8				mov	A, R0
-  292:	  60A7	F0				movx	@DPTR, A
-  293:	  60A8	D2 B5				setb	T1
-  294:	  60AA	C2 B5				clr	T1
-  295:	  60AC	A3				inc	DPTR
-  296:	  60AD	E9				mov	A, R1
-  297:	  60AE	F0				movx	@DPTR, A
-  298:	  60AF	D2 B5				setb	T1
-  299:	  60B1	C2 B5				clr	T1
-  300:	  60B3	C2 B4				clr	T0
-  301:	  60B5	01 7C				ajmp	regs3
+  289:	  609E	D2 B4				setb	T0
+  290:	  60A0	90 80 00			mov	DPTR, #8000h
+  291:	  60A3	E8				mov	A, R0
+  292:	  60A4	F0				movx	@DPTR, A
+  293:	  60A5	D2 B5				setb	T1
+  294:	  60A7	C2 B5				clr	T1
+  295:	  60A9	A3				inc	DPTR
+  296:	  60AA	E9				mov	A, R1
+  297:	  60AB	F0				movx	@DPTR, A
+  298:	  60AC	D2 B5				setb	T1
+  299:	  60AE	C2 B5				clr	T1
+  300:	  60B0	C2 B4				clr	T0
+  301:	  60B2	01 79				ajmp	regs3
   302:
-  303:	  60B7	22				ret
+  303:	  60B4	22				ret
   304:
   305:
-  306:	  60B8	90 80 00	dumpRam:	mov	DPTR, #8000h
-  307:	  60BB	E0		dumpRam2:	movx	A, @DPTR
-  308:	  60BC	E5 90				mov	A, P1
-  309:	  60BE	12 00 34			call	PHEX
-  310:	  60C1	12 63 95			call	SPACE
-  311:	  60C4	A3				inc	DPTR
-  312:	  60C5	E5 82				mov	A, DP0L
-  313:	  60C7	54 0F				anl	A, #0fh
-  314:	  60C9	B4 00 03			cjne	A, #0, dumpRam1
-  315:	  60CC	12 00 48			call	newline
-  316:	  60CF	E5 83		dumpram1:	mov	A, DP0H
-  317:	  60D1	B4 81 E7			cjne	A, #81h, dumpram2
-  318:	  60D4	22				ret
+  306:	  60B5	90 80 00	dumpRam:	mov	DPTR, #8000h
+  307:	  60B8	E0		dumpRam2:	movx	A, @DPTR
+  308:	  60B9	E5 90				mov	A, P1
+  309:	  60BB	12 00 34			call	PHEX
+  310:	  60BE	12 63 98			call	SPACE
+  311:	  60C1	A3				inc	DPTR
+  312:	  60C2	E5 82				mov	A, DP0L
+  313:	  60C4	54 0F				anl	A, #0fh
+  314:	  60C6	B4 00 03			cjne	A, #0, dumpRam1
+  315:	  60C9	12 00 48			call	newline
+  316:	  60CC	E5 83		dumpram1:	mov	A, DP0H
+  317:	  60CE	B4 81 E7			cjne	A, #81h, dumpram2
+  318:	  60D1	22				ret
   319:
-  320:	  60D5	90 80 00	testScreen:	mov	DPTR, #8000h
-  321:	  60D8	78 0A				mov	R0, #10
+  320:	  60D2	90 80 00	testScreen:	mov	DPTR, #8000h
+  321:	  60D5	78 0A				mov	R0, #10
   322:
 
 ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 7
@@ -383,62 +383,62 @@ ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. 
 
  Line  I  Addr  Code            Source
 
-  323:	  60DA	79 50		testScreen3:	mov	R1, #80
-  324:	  60DC	7A 30				mov	R2, #'0'
-  325:	  60DE	EA		testScreen1:	mov	A, R2
-  326:	  60DF	F0				movx	@DPTR, A
-  327:	  60E0	A3				inc	DPTR
-  328:	  60E1	74 70				mov	A, #70h
+  323:	  60D7	79 50		testScreen3:	mov	R1, #80
+  324:	  60D9	7A 30				mov	R2, #'0'
+  325:	  60DB	EA		testScreen1:	mov	A, R2
+  326:	  60DC	F0				movx	@DPTR, A
+  327:	  60DD	A3				inc	DPTR
+  328:	  60DE	74 70				mov	A, #70h
   329:						;anl	A, #3
   330:						;orl	A, #0f0h
   331:						;inc	A
-  332:	  60E3	F0				movx	@DPTR, A
-  333:	  60E4	A3				inc	DPTR
-  334:	  60E5	0A				inc	R2
-  335:	  60E6	BA 3A 02			cjne	R2, #'9'+1, testScreen2
-  336:	  60E9	7A 30				mov	R2, #'0'
-  337:	  60EB	D9 F1		testScreen2:	djnz	R1, testScreen1
-  338:	  60ED	D8 EB				djnz	R0, testScreen3
-  339:	  60EF	22				ret
+  332:	  60E0	F0				movx	@DPTR, A
+  333:	  60E1	A3				inc	DPTR
+  334:	  60E2	0A				inc	R2
+  335:	  60E3	BA 3A 02			cjne	R2, #'9'+1, testScreen2
+  336:	  60E6	7A 30				mov	R2, #'0'
+  337:	  60E8	D9 F1		testScreen2:	djnz	R1, testScreen1
+  338:	  60EA	D8 EB				djnz	R0, testScreen3
+  339:	  60EC	22				ret
   340:				;
   341:				;
   342:				;
-  343:	  60F0			copyFont:
-  344:	  60F0	90 70 00			mov	DPTR, #7000h
-  345:	  60F3	05 A2				inc	AUXR1
-  346:	  60F5	90 A0 00			mov	DPTR, #(8000h+2000h) ;+4000h+1000h
-  347:	  60F8	05 A2				inc	AUXR1
+  343:	  60ED			copyFont:
+  344:	  60ED	90 70 00			mov	DPTR, #7000h
+  345:	  60F0	05 A2				inc	AUXR1
+  346:	  60F2	90 A0 00			mov	DPTR, #(8000h+2000h) ;+4000h+1000h
+  347:	  60F5	05 A2				inc	AUXR1
   348:
-  349:	  60FA	E4		copyFont1:	clr	A
-  350:	  60FB	93				movc	A, @A+DPTR
-  351:	  60FC	A3				inc	DPTR
-  352:	  60FD	05 A2				inc	AUXR1
-  353:	  60FF	F0				movx	@DPTR, A
-  354:	  6100	A3				inc	DPTR
-  355:	  6101	05 A2				inc	AUXR1
+  349:	  60F7	E4		copyFont1:	clr	A
+  350:	  60F8	93				movc	A, @A+DPTR
+  351:	  60F9	A3				inc	DPTR
+  352:	  60FA	05 A2				inc	AUXR1
+  353:	  60FC	F0				movx	@DPTR, A
+  354:	  60FD	A3				inc	DPTR
+  355:	  60FE	05 A2				inc	AUXR1
   356:
-  357:	  6103	E5 83				mov	A, DP0H
+  357:	  6100	E5 83				mov	A, DP0H
   358:						;call	PHEX
-  359:	  6105	B4 80 F2			cjne	A, #80h, copyFont1
+  359:	  6102	B4 80 F2			cjne	A, #80h, copyFont1
   360:
-  361:	  6108	E5 A2				mov	A, AUXR1
-  362:	  610A	12 00 34			call	PHEX
-  363:	  610D	12 00 48			call	newline
-  364:	  6110	22				ret
+  361:	  6105	E5 A2				mov	A, AUXR1
+  362:	  6107	12 00 34			call	PHEX
+  363:	  610A	12 00 48			call	newline
+  364:	  610D	22				ret
   365:
   366:
   367:
   368:				;
   369:				;
   370:				;
-  371:	  6111	D2 B4		init6845:	setb	T0			;enable ADR + DAT
-  372:	  6113	90 80 00			mov	DPTR, #8000h
-  373:	  6116	05 A2				inc	AUXR1
-  374:	  6118	90 61 44			mov	DPTR, #SYDATA
-  375:	  611B	05 A2				inc	AUXR1
-  376:	  611D	78 00				mov	R0, #0
-  377:
-  378:	  611F			setregs:
+  371:	  610E	90 00 00	init6845:	mov	dptr, #0		;enable ADR + DAT
+  372:	  6111	E0				movx	a, @dptr
+  373:	  6112	E0				movx	a, @dptr
+  374:
+  375:	  6113	90 80 00			mov	DPTR, #8000h
+  376:	  6116	05 A2				inc	AUXR1
+  377:	  6118	90 61 47			mov	DPTR, #SYDATA
+  378:	  611B	05 A2				inc	AUXR1
 
 ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 8
 
@@ -446,62 +446,62 @@ ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. 
 
  Line  I  Addr  Code            Source
 
-  379:				;		call	PHEX
-  380:				;		call	SPACE
-  381:
-  382:	  611F	E8				mov	A, R0			; send address
-  383:	  6120	12 00 34			call	PHEX
-  384:	  6123	F0				movx	@DPTR,A			; address register
-  385:	  6124	D2 B5				setb	T1			; clock high
-  386:	  6126	C2 B5				clr	T1			; clock low
-  387:	  6128	A3				inc	DPTR			; data reg
-  388:
-  389:	  6129	05 A2				inc	AUXR1			;data pointer
-  390:	  612B	93				movc	A, @A+DPTR
-  391:	  612C	12 00 34			call	PHEX
-  392:	  612F	05 A2				inc	AUXR1			; address pointer
-  393:	  6131	F0				movx	@DPTR, A		; send data
-  394:	  6132	D2 B5				setb	T1			; clock high
-  395:	  6134	C2 B5				clr	T1			; clock low
-  396:
-  397:
-  398:	  6136	12 63 95			call	SPACE
-  399:	  6139	A3				inc	DPTR
-  400:	  613A	08				inc	R0
-  401:	  613B	B8 0F E1			cjne	R0, #15, setregs
-  402:
-  403:	  613E	C2 B4				clr	T0
-  404:	  6140	12 00 48			call	newline
-  405:				;		call	CIN
-  406:				;
-  407:				;		setb	INT0
-  408:				;		call	CIN
-  409:	  6143	22				ret
-  410:
+  379:	  611D	78 00				mov	R0, #0
+  380:
+  381:	  611F			setregs:
+  382:				;		call	PHEX
+  383:				;		call	SPACE
+  384:
+  385:	  611F	E8				mov	A, R0			; send address
+  386:	  6120	12 00 34			call	PHEX
+  387:	  6123	F0				movx	@DPTR,A			; address register
+  388:	  6124	D2 B5				setb	T1			; clock high
+  389:	  6126	C2 B5				clr	T1			; clock low
+  390:	  6128	A3				inc	DPTR			; data reg
+  391:
+  392:	  6129	05 A2				inc	AUXR1			;data pointer
+  393:	  612B	93				movc	A, @A+DPTR
+  394:	  612C	12 00 34			call	PHEX
+  395:	  612F	05 A2				inc	AUXR1			; address pointer
+  396:	  6131	F0				movx	@DPTR, A		; send data
+  397:	  6132	D2 B5				setb	T1			; clock high
+  398:	  6134	C2 B5				clr	T1			; clock low
+  399:
+  400:
+  401:	  6136	12 63 98			call	SPACE
+  402:	  6139	A3				inc	DPTR
+  403:	  613A	08				inc	R0
+  404:	  613B	B8 0F E1			cjne	R0, #15, setregs
+  405:
+  406:	  613E	90 00 00			mov	dptr, #0		;enable ADR + DAT
+  407:	  6141	E0				movx	a, @dptr
+  408:	  6142	E0				movx	a, @dptr
+  409:	  6143	12 00 48			call	newline
+  410:				;		call	CIN
   411:				;
-  412:				; 25,333 Mhz / 8 = 3,166 Mhz
-  413:				;
-  414:				; 31468 HZ = 31,77 uS
-  415:				;
-  416:				; 25,333 Mhz / 8 / 31468 ~ 	100 chars Horizontal Total
-  417:				;				  2 chars Fornt Porch
-  418:				;				  6 chars Back Porch
-  419:				;				 80 chars Horizontal Visible
-  420:				;				 12 chars Sync Pulse
-  421:				;Scanline part	Pixels	Time [µs]
-  422:				;Visible area	640	25.422045680238
-  423:				;Front porch	16	0.63555114200596
-  424:				;Sync pulse	96	3.8133068520357
-  425:				;Back porch	48	1.9066534260179
-  426:				;Whole line	800	31.777557100298
-  427:
-  428:				;Frame part	Lines	Time [ms]
-  429:				;Visible area	400	12.711022840119
-  430:				;Front porch	12	0.38133068520357
-  431:				;Sync pulse	2	0.063555114200596
-  432:				;Back porch	35	1.1122144985104
-  433:				;Whole frame	449	14.268123138034
-  434:				;
+  412:				;		setb	INT0
+  413:				;		call	CIN
+  414:	  6146	22				ret
+  415:
+  416:				;
+  417:				; 25,333 Mhz / 8 = 3,166 Mhz
+  418:				;
+  419:				; 31468 HZ = 31,77 uS
+  420:				;
+  421:				; 25,333 Mhz / 8 / 31468 ~ 	100 chars Horizontal Total
+  422:				;				  2 chars Fornt Porch
+  423:				;				  6 chars Back Porch
+  424:				;				 80 chars Horizontal Visible
+  425:				;				 12 chars Sync Pulse
+  426:				;Scanline part	Pixels	Time [µs]
+  427:				;Visible area	640	25.422045680238
+  428:				;Front porch	16	0.63555114200596
+  429:				;Sync pulse	96	3.8133068520357
+  430:				;Back porch	48	1.9066534260179
+  431:				;Whole line	800	31.777557100298
+  432:
+  433:				;Frame part	Lines	Time [ms]
+  434:				;Visible area	400	12.711022840119
 
 ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. Heinz                                         PAGE 9
 
@@ -509,62 +509,62 @@ ASEM-51 V1.3                                         Copyright (c) 2002 by W.W. 
 
  Line  I  Addr  Code            Source
 
-  435:	  6144	64		SYDATA:		DB	100		;R0 Horizontal Total - 1
-  436:	  6145	50				DB	80		;R1 Horizontal Displayed
-  437:	  6146	54				DB	84		;R2 Horizontal Sync Position
-  438:	  6147	0C				DB	0ch		;R3 VSYNC & HSYNC width
-  439:	  6148	1C				DB	28		;R4 Vertical total - 1			;27	32
-  440:	  6149	05				DB	5		;R5 Vertical Adjust
-  441:	  614A	19				DB	25		;R6 Vertical Displayed			;25	30
-  442:	  614B	1B				DB	27		;R7 Vertical Sync Position		;25	32
-  443:	  614C	00				DB	00h		;R8 Mode Control
-  444:	  614D	0F				DB	15		;R9 Scan Lines - 1 (character lines)
-  445:	  614E	00				DB	0		;R10 Cursor Start
-  446:	  614F	00				DB	0		;R11 Cursor End
-  447:	  6150	00				DB	000h		;R12 Display Start High
-  448:	  6151	00				DB	000h		;R13 Display Start Low
-  449:	  6152	00				DB	0		;R14 Cursor Pos High
-  450:	  6153	00				DB	0		;R15 Cursor Pos Low
-  451:	  6154	00				DB	0		;R16 Light Pen High
-  452:	  6155	00				DB	0		;R17 Light Pen Low
-  453:	  6156	00				DB	0		;R18 Update Address Reg High
-  454:	  6157	00				DB	0		;R19 Update Address Reg Low
-  455:									;R31 Dummy Register
-  456:
-  457:
-  458:	  6158			testram:
-  459:	  6158	78 00				mov	R0, #00h
-  460:	  615A	79 00				mov	R1, #00h
-  461:	  615C	7A 80				mov	R2, #80h
+  435:				;Front porch	12	0.38133068520357
+  436:				;Sync pulse	2	0.063555114200596
+  437:				;Back porch	35	1.1122144985104
+  438:				;Whole frame	449	14.268123138034
+  439:				;
+  440:	  6147	64		SYDATA:		DB	100		;R0 Horizontal Total - 1
+  441:	  6148	50				DB	80		;R1 Horizontal Displayed
+  442:	  6149	54				DB	84		;R2 Horizontal Sync Position
+  443:	  614A	0C				DB	0ch		;R3 VSYNC & HSYNC width
+  444:	  614B	1C				DB	28		;R4 Vertical total - 1			;27	32
+  445:	  614C	05				DB	5		;R5 Vertical Adjust
+  446:	  614D	19				DB	25		;R6 Vertical Displayed			;25	30
+  447:	  614E	1B				DB	27		;R7 Vertical Sync Position		;25	32
+  448:	  614F	00				DB	00h		;R8 Mode Control
+  449:	  6150	0F				DB	15		;R9 Scan Lines - 1 (character lines)
+  450:	  6151	00				DB	0		;R10 Cursor Start
+  451:	  6152	00				DB	0		;R11 Cursor End
+  452:	  6153	00				DB	000h		;R12 Display Start High
+  453:	  6154	00				DB	000h		;R13 Display Start Low
+  454:	  6155	00				DB	0		;R14 Cursor Pos High
+  455:	  6156	00				DB	0		;R15 Cursor Pos Low
+  456:	  6157	00				DB	0		;R16 Light Pen High
+  457:	  6158	00				DB	0		;R17 Light Pen Low
+  458:	  6159	00				DB	0		;R18 Update Address Reg High
+  459:	  615A	00				DB	0		;R19 Update Address Reg Low
+  460:									;R31 Dummy Register
+  461:
   462:
-  463:	  615E	12 61 72	testloop:	call	writepage
-  464:	  6161	FC				mov	R4, A
-  465:	  6162	12 61 98	testloop1:	call	readpage
-  466:	  6165	B5 04 FA			cjne	A, 4, testloop1
-  467:	  6168	12 00 48			call	newline
-  468:
-  469:	  616B	09				inc	R1
-  470:				;		inc	R2
-  471:	  616C	B9 20 EF			cjne	R1, #20h, testloop
-  472:	  616F	21 58				ajmp	testram
+  463:	  615B			testram:
+  464:	  615B	78 00				mov	R0, #00h
+  465:	  615D	79 00				mov	R1, #00h
+  466:	  615F	7A 80				mov	R2, #80h
+  467:
+  468:	  6161	12 61 75	testloop:	call	writepage
+  469:	  6164	FC				mov	R4, A
+  470:	  6165	12 61 9B	testloop1:	call	readpage
+  471:	  6168	B5 04 FA			cjne	A, 4, testloop1
+  472:	  616B	12 00 48			call	newline
   473:
-  474:	  6171	22		error:		ret
-  475:
-  476:
-  477:
-  478:	  6172	E9		writepage:	mov	A, R1
-  479:	  6173	12 00 34			call	PHEX
-  480:	  6176	E8				mov	A, R0
-  481:	  6177	12 00 34			call	PHEX
-  482:	  617A	12 63 95			call	space
-  483:	  617D	EA				mov	A, R2
-  484:	  617E	12 00 34			call	PHEX
-  485:	  6181	12 63 95			call	space
-  486:
-  487:	  6184	7B 00				mov	R3, #00h
-  488:	  6186	E4		tp0:		clr	A
-  489:	  6187	88 82				mov	DP0L, R0
-  490:	  6189	89 83				mov	DP0H, R1
+  474:	  616E	09				inc	R1
+  475:				;		inc	R2
+  476:	  616F	B9 20 EF			cjne	R1, #20h, testloop
+  477:	  6172	21 5B				ajmp	testram
+  478:
+  479:	  6174	22		error:		ret
+  480:
+  481:
+  482:
+  483:	  6175	E9		writepage:	mov	A, R1
+  484:	  6176	12 00 34			call	PHEX
+  485:	  6179	E8				mov	A, R0
+  486:	  617A	12 00 34			call	PHEX
+  487:	  617D	12 63 98			call	space
+  488:	  6180	EA				mov	A, R2
+  489:	  6181	12 00 34			call	PHEX
+  490:	  6184	12 63 98			call	space
 
 ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 10
 
@@ -572,62 +572,62 @@ ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. H
 
  Line  I  Addr  Code            Source
 
-  491:	  618B	93				movc	A, @A+DPTR
-  492:				;		push	ACC
-  493:				;		call	PHEX
-  494:				;		call	SPACE
-  495:				;		pop	ACC
-  496:	  618C	8A 83				mov	DP0H, R2
-  497:	  618E	F0				movx	@dptr, A
-  498:	  618F	2B				add	A, R3
-  499:	  6190	FB				mov	R3, A
-  500:	  6191	D8 F3				djnz	R0, tp0
-  501:
-  502:				;		call	newline
-  503:	  6193	EB				mov	A, R3
-  504:	  6194	12 00 34			call	PHEX
-  505:	  6197	22				ret
+  491:
+  492:	  6187	7B 00				mov	R3, #00h
+  493:	  6189	E4		tp0:		clr	A
+  494:	  618A	88 82				mov	DP0L, R0
+  495:	  618C	89 83				mov	DP0H, R1
+  496:	  618E	93				movc	A, @A+DPTR
+  497:				;		push	ACC
+  498:				;		call	PHEX
+  499:				;		call	SPACE
+  500:				;		pop	ACC
+  501:	  618F	8A 83				mov	DP0H, R2
+  502:	  6191	F0				movx	@dptr, A
+  503:	  6192	2B				add	A, R3
+  504:	  6193	FB				mov	R3, A
+  505:	  6194	D8 F3				djnz	R0, tp0
   506:
-  507:
-  508:	  6198	7B 00		readpage:	mov	R3, #00h
-  509:	  619A	8A 83		 		mov	DP0H, R2
-  510:	  619C	88 82		tp1: 		mov	DP0L, R0
+  507:				;		call	newline
+  508:	  6196	EB				mov	A, R3
+  509:	  6197	12 00 34			call	PHEX
+  510:	  619A	22				ret
   511:
-  512:	  619E	E0				movx	A, @dptr
-  513:				;		nop
-  514:				;		nop
-  515:	  619F	E5 90				mov	A, P1
-  516:				;		push	ACC
-  517:				;		call	PHEX
-  518:				;		call	SPACE
-  519:				;		pop	ACC
-  520:	  61A1	2B				add	A, R3
-  521:	  61A2	FB				mov	R3, A
-  522:	  61A3	D8 F7				djnz	R0, tp1
-  523:
-  524:	  61A5	12 63 95			call	space
-  525:	  61A8	EB				mov	A, R3
-  526:	  61A9	12 00 34			call	PHEX
-  527:
-  528:	  61AC	22				ret
-  529:				;
-  530:				;
-  531:				;		;setb	SYCS			;deselect
-  532:	  61AD	C2 B3				clr	SYRS			;address
-  533:	  61AF	C2 B4				clr	SYPHI2			;enable
-  534:						;clr	SYRW			;write
-  535:
-  536:	  61B1	04		loop:		inc	A
-  537:	  61B2	F5 90				mov	DATABUS, A		; send data
-  538:	  61B4	D2 B3				setb	SYRS			; register data
-  539:	  61B6	D2 B4				setb	SYPHI2			; clock high
-  540:	  61B8	C2 B4				clr	SYPHI2			; clock low
-  541:	  61BA	31 BE				acall	time
-  542:	  61BC	21 B1				ajmp	loop
-  543:
-  544:	  61BE	78 00		time:		mov	R0, #0
-  545:	  61C0	79 00				mov	R1, #0
-  546:	  61C2	D8 FE		time1:		djnz	r0, time1
+  512:
+  513:	  619B	7B 00		readpage:	mov	R3, #00h
+  514:	  619D	8A 83		 		mov	DP0H, R2
+  515:	  619F	88 82		tp1: 		mov	DP0L, R0
+  516:
+  517:	  61A1	E0				movx	A, @dptr
+  518:				;		nop
+  519:				;		nop
+  520:	  61A2	E5 90				mov	A, P1
+  521:				;		push	ACC
+  522:				;		call	PHEX
+  523:				;		call	SPACE
+  524:				;		pop	ACC
+  525:	  61A4	2B				add	A, R3
+  526:	  61A5	FB				mov	R3, A
+  527:	  61A6	D8 F7				djnz	R0, tp1
+  528:
+  529:	  61A8	12 63 98			call	space
+  530:	  61AB	EB				mov	A, R3
+  531:	  61AC	12 00 34			call	PHEX
+  532:
+  533:	  61AF	22				ret
+  534:				;
+  535:				;
+  536:				;		;setb	SYCS			;deselect
+  537:	  61B0	C2 B3				clr	SYRS			;address
+  538:	  61B2	C2 B4				clr	SYPHI2			;enable
+  539:						;clr	SYRW			;write
+  540:
+  541:	  61B4	04		loop:		inc	A
+  542:	  61B5	F5 90				mov	DATABUS, A		; send data
+  543:	  61B7	D2 B3				setb	SYRS			; register data
+  544:	  61B9	D2 B4				setb	SYPHI2			; clock high
+  545:	  61BB	C2 B4				clr	SYPHI2			; clock low
+  546:	  61BD	31 C1				acall	time
 
 ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 11
 
@@ -635,62 +635,62 @@ ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. H
 
  Line  I  Addr  Code            Source
 
-  547:	  61C4	D9 FC				djnz	r1, time1
-  548:	  61C6	22				ret
-  549:
-  550:
-  551:				;LOOP:		call	CIN
-  552:				;		call	COUT
-  553:				;
-  554:	  61C7	21 B1				ajmp	LOOP
+  547:	  61BF	21 B4				ajmp	loop
+  548:
+  549:	  61C1	78 00		time:		mov	R0, #0
+  550:	  61C3	79 00				mov	R1, #0
+  551:	  61C5	D8 FE		time1:		djnz	r0, time1
+  552:	  61C7	D9 FC				djnz	r1, time1
+  553:	  61C9	22				ret
+  554:
   555:
-  556:
-  557:				;		CLR	SCK_52
-  558:				;		CLR	RES_52
-  559:				;		CALL	TIME35MS
-  560:				;		SETB	RES_52
-  561:				;		MOV	R5,#7
-  562:				;START2:		CALL	TIME35MS
-  563:				;		DJNZ	R5,START2
-  564:				;		MOV	AUXR1,#0
-  565:
-  566:				;		ACALL	ENABLE
-  567:				;		ACALL	SIGNATURE
-  568:				;		JNC	MENU
-  569:				;		JC	MENU
-  570:				;		MOV	DPTR,#MSGSIGFAIL
-  571:				;		CALL	PSTR
-  572:				;		CALL	CIN
-  573:				;		AJMP	START
-  574:
-  575:	  61C9	90 64 78	MENU:		MOV	DPTR,#MSGMENU
-  576:	  61CC	12 00 38			CALL	PSTR
-  577:	  61CF	12 00 32	MENULOOP:	CALL	CIN
-  578:	  61D2	B4 63 04	MENUC:		CJNE	A,#"c",MENUD
-  579:	  61D5	31 F9				ACALL	CLEAR
-  580:	  61D7	21 C9				AJMP	MENU
-  581:	  61D9	B4 64 04	MENUD:		CJNE	A,#"d",MENUP
-  582:	  61DC	51 06				ACALL	DNLD
-  583:	  61DE	21 C9				AJMP	MENU
-  584:	  61E0	B4 70 04	MENUP:		CJNE	A,#"p",MENUR
-  585:	  61E3	71 9F				ACALL	PROGRAM
-  586:	  61E5	21 C9				AJMP	MENU
-  587:	  61E7	B4 72 04	MENUR:		CJNE	A,#"r",MENUV
-  588:	  61EA	71 D0				ACALL	READFLASH
-  589:	  61EC	21 C9				AJMP	MENU
-  590:	  61EE	B4 76 04	MENUV:		CJNE	A,#"v",MENUX
-  591:	  61F1	71 CC				ACALL	VERIFY
-  592:	  61F3	21 C9				AJMP	MENU
-  593:	  61F5	B4 78 D7	MENUX:		CJNE	A,#"x",MENULOOP
-  594:	  61F8	22				RET
-  595:
-  596:	  61F9	78 FC		CLEAR:		MOV	R0,#SPICMD
-  597:	  61FB	76 AC				MOV	@R0,#0ACh
-  598:	  61FD	08				INC	R0
-  599:	  61FE	76 80				MOV	@R0,#080h
-  600:	  6200	91 63				ACALL	COMMAND
-  601:	  6202	91 74				ACALL	TIME5MS
-  602:	  6204	81 74				AJMP	TIME5MS
+  556:				;LOOP:		call	CIN
+  557:				;		call	COUT
+  558:				;
+  559:	  61CA	21 B4				ajmp	LOOP
+  560:
+  561:
+  562:				;		CLR	SCK_52
+  563:				;		CLR	RES_52
+  564:				;		CALL	TIME35MS
+  565:				;		SETB	RES_52
+  566:				;		MOV	R5,#7
+  567:				;START2:		CALL	TIME35MS
+  568:				;		DJNZ	R5,START2
+  569:				;		MOV	AUXR1,#0
+  570:
+  571:				;		ACALL	ENABLE
+  572:				;		ACALL	SIGNATURE
+  573:				;		JNC	MENU
+  574:				;		JC	MENU
+  575:				;		MOV	DPTR,#MSGSIGFAIL
+  576:				;		CALL	PSTR
+  577:				;		CALL	CIN
+  578:				;		AJMP	START
+  579:
+  580:	  61CC	90 64 7B	MENU:		MOV	DPTR,#MSGMENU
+  581:	  61CF	12 00 38			CALL	PSTR
+  582:	  61D2	12 00 32	MENULOOP:	CALL	CIN
+  583:	  61D5	B4 63 04	MENUC:		CJNE	A,#"c",MENUD
+  584:	  61D8	31 FC				ACALL	CLEAR
+  585:	  61DA	21 CC				AJMP	MENU
+  586:	  61DC	B4 64 04	MENUD:		CJNE	A,#"d",MENUP
+  587:	  61DF	51 09				ACALL	DNLD
+  588:	  61E1	21 CC				AJMP	MENU
+  589:	  61E3	B4 70 04	MENUP:		CJNE	A,#"p",MENUR
+  590:	  61E6	71 A2				ACALL	PROGRAM
+  591:	  61E8	21 CC				AJMP	MENU
+  592:	  61EA	B4 72 04	MENUR:		CJNE	A,#"r",MENUV
+  593:	  61ED	71 D3				ACALL	READFLASH
+  594:	  61EF	21 CC				AJMP	MENU
+  595:	  61F1	B4 76 04	MENUV:		CJNE	A,#"v",MENUX
+  596:	  61F4	71 CF				ACALL	VERIFY
+  597:	  61F6	21 CC				AJMP	MENU
+  598:	  61F8	B4 78 D7	MENUX:		CJNE	A,#"x",MENULOOP
+  599:	  61FB	22				RET
+  600:
+  601:	  61FC	78 FC		CLEAR:		MOV	R0,#SPICMD
+  602:	  61FE	76 AC				MOV	@R0,#0ACh
 
 ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 12
 
@@ -698,62 +698,62 @@ ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. H
 
  Line  I  Addr  Code            Source
 
-  603:	  6206			dnld:
-  604:	  6206	90 65 43			mov	dptr, #dnlds1
-  605:	  6209	12 00 45			call	pcstr_h		   ;"begin sending file <ESC> to abort"
-  606:	  620C	71 8C				acall	dnld_init
-  607:
-  608:					  ;look for begining of line marker ':'
-  609:	  620E	12 00 32	dnld1:		call	cin
-  610:	  6211	B4 1B 02			cjne	a, #27, dnld2	;Test for escape
-  611:	  6214	41 9C				ajmp	dnld_esc
+  603:	  6200	08				INC	R0
+  604:	  6201	76 80				MOV	@R0,#080h
+  605:	  6203	91 66				ACALL	COMMAND
+  606:	  6205	91 77				ACALL	TIME5MS
+  607:	  6207	81 77				AJMP	TIME5MS
+  608:	  6209			dnld:
+  609:	  6209	90 65 46			mov	dptr, #dnlds1
+  610:	  620C	12 00 45			call	pcstr_h		   ;"begin sending file <ESC> to abort"
+  611:	  620F	71 8F				acall	dnld_init
   612:
-  613:	  6216	B4 3A 02	dnld2:		cjne	a, #':', dnld2b
-  614:	  6219	80 12				sjmp	dnld2d
-  615:	  621B			dnld2b:	  ;check to see if it's a hex digit, error if it is
-  616:	  621B	12 00 65			call	asc2hex
-  617:	  621E	40 EE				jc	dnld1
-  618:	  6220	79 06				mov	r1, #6
-  619:	  6222	51 AF				acall	dnld_inc
-  620:	  6224	80 E8				sjmp	dnld1
-  621:
-  622:	  6226			dnld_now: ;entry point for main menu detecting ":" character
-  623:	  6226	74 5E				mov	a, #'^'
-  624:	  6228	12 00 30			call	cout
-  625:	  622B	71 8C				acall	dnld_init
+  613:					  ;look for begining of line marker ':'
+  614:	  6211	12 00 32	dnld1:		call	cin
+  615:	  6214	B4 1B 02			cjne	a, #27, dnld2	;Test for escape
+  616:	  6217	41 9F				ajmp	dnld_esc
+  617:
+  618:	  6219	B4 3A 02	dnld2:		cjne	a, #':', dnld2b
+  619:	  621C	80 12				sjmp	dnld2d
+  620:	  621E			dnld2b:	  ;check to see if it's a hex digit, error if it is
+  621:	  621E	12 00 65			call	asc2hex
+  622:	  6221	40 EE				jc	dnld1
+  623:	  6223	79 06				mov	r1, #6
+  624:	  6225	51 B2				acall	dnld_inc
+  625:	  6227	80 E8				sjmp	dnld1
   626:
-  627:	  622D	79 00		dnld2d:		mov	r1, #0
-  628:	  622F	51 AF				acall	dnld_inc
-  629:
-  630:					  ;begin taking in the line of data
-  631:	  6231	74 2E		dnld3:		mov	a, #'.'
-  632:	  6233	12 00 30			call	cout
-  633:	  6236	7C 00				mov	r4, #0		;r4 will count up checksum
-  634:	  6238	51 CE				acall	dnld_ghex
-  635:	  623A	F8				mov	r0, a		;R0 = # of data bytes
-  636:				;	mov	a, #'.'
-  637:				;	acall	cout
-  638:	  623B	51 CE				acall	dnld_ghex
-  639:	  623D	B4 30 00			CJNE	A,#030h,dnld3_a
-  640:	  6240	50 02		dnld3_a:	JNC	dnld3_b
-  641:	  6242	24 D0				ADD	A,#0D0h
-  642:	  6244	F5 83		dnld3_b:	mov	dp0h, a		;High byte of load address
-  643:	  6246	51 CE				acall	dnld_ghex
-  644:	  6248	F5 82				mov	dp0l, a		;Low byte of load address
-  645:	  624A	51 CE				acall	dnld_ghex	;Record type
-  646:	  624C	B4 01 02			cjne	a, #1, dnld4	;End record?
-  647:	  624F	80 2D				sjmp	dnld_end
-  648:	  6251	70 22		dnld4:		jnz	dnld_unknown	;is it a unknown record type???
-  649:	  6253	E8		dnld5:		mov	a, r0
-  650:	  6254	60 14				jz	dnld_get_cksum
-  651:	  6256	51 CE				acall	dnld_ghex	;Get data byte
-  652:	  6258	FA				mov	r2, a
-  653:	  6259	79 01				mov	r1, #1
-  654:	  625B	51 AF				acall	dnld_inc	;count total data bytes received
-  655:	  625D	EA				mov	a, r2
-  656:	  625E	12 00 56			lcall	smart_wr	;c=1 if an error writing
-  657:	  6261	E4				clr	a
-  658:	  6262	34 02				addc	a, #2
+  627:	  6229			dnld_now: ;entry point for main menu detecting ":" character
+  628:	  6229	74 5E				mov	a, #'^'
+  629:	  622B	12 00 30			call	cout
+  630:	  622E	71 8F				acall	dnld_init
+  631:
+  632:	  6230	79 00		dnld2d:		mov	r1, #0
+  633:	  6232	51 B2				acall	dnld_inc
+  634:
+  635:					  ;begin taking in the line of data
+  636:	  6234	74 2E		dnld3:		mov	a, #'.'
+  637:	  6236	12 00 30			call	cout
+  638:	  6239	7C 00				mov	r4, #0		;r4 will count up checksum
+  639:	  623B	51 D1				acall	dnld_ghex
+  640:	  623D	F8				mov	r0, a		;R0 = # of data bytes
+  641:				;	mov	a, #'.'
+  642:				;	acall	cout
+  643:	  623E	51 D1				acall	dnld_ghex
+  644:	  6240	B4 30 00			CJNE	A,#030h,dnld3_a
+  645:	  6243	50 02		dnld3_a:	JNC	dnld3_b
+  646:	  6245	24 D0				ADD	A,#0D0h
+  647:	  6247	F5 83		dnld3_b:	mov	dp0h, a		;High byte of load address
+  648:	  6249	51 D1				acall	dnld_ghex
+  649:	  624B	F5 82				mov	dp0l, a		;Low byte of load address
+  650:	  624D	51 D1				acall	dnld_ghex	;Record type
+  651:	  624F	B4 01 02			cjne	a, #1, dnld4	;End record?
+  652:	  6252	80 2D				sjmp	dnld_end
+  653:	  6254	70 22		dnld4:		jnz	dnld_unknown	;is it a unknown record type???
+  654:	  6256	E8		dnld5:		mov	a, r0
+  655:	  6257	60 14				jz	dnld_get_cksum
+  656:	  6259	51 D1				acall	dnld_ghex	;Get data byte
+  657:	  625B	FA				mov	r2, a
+  658:	  625C	79 01				mov	r1, #1
 
 ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 13
 
@@ -761,62 +761,62 @@ ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. H
 
  Line  I  Addr  Code            Source
 
-  659:	  6264	F9				mov	r1, a
-  660:				;     2 = bytes written
-  661:				;     3 = bytes unable to write
-  662:	  6265	51 AF				acall	dnld_inc
-  663:	  6267	A3				inc	dptr
-  664:	  6268	D8 E9				djnz	r0, dnld5
-  665:	  626A			dnld_get_cksum:
-  666:	  626A	51 CE				acall	dnld_ghex	;get checksum
-  667:	  626C	EC				mov	a, r4
-  668:	  626D	60 9F				jz	dnld1		;should always add to zero
-  669:	  626F			dnld_sumerr:
-  670:	  626F	79 04				mov	r1, #4
-  671:	  6271	51 AF				acall	dnld_inc	;all we can do it count # of cksum errors
-  672:	  6273	80 99				sjmp	dnld1
-  673:
-  674:	  6275			dnld_unknown:	;handle unknown line type
-  675:	  6275	E8				mov	a, r0
-  676:	  6276	60 F2				jz	dnld_get_cksum	;skip data if size is zero
-  677:	  6278			dnld_ukn2:
-  678:	  6278	51 CE				acall	dnld_ghex	;consume all of unknown data
-  679:	  627A	D8 FC				djnz	r0, dnld_ukn2
-  680:	  627C	80 EC				sjmp	dnld_get_cksum
-  681:
-  682:	  627E			dnld_end:   ;handles the proper end-of-download marker
-  683:	  627E	E8				mov	a, r0
-  684:	  627F	60 04				jz	dnld_end_3	;should usually be zero
-  685:	  6281			dnld_end_2:
-  686:	  6281	51 CE				acall	dnld_ghex	;consume all of useless data
-  687:	  6283	D8 F3				djnz	r0, dnld_ukn2
-  688:	  6285			dnld_end_3:
-  689:	  6285	51 CE				acall	dnld_ghex	;get the last checksum
-  690:	  6287	EC				mov	a, r4
-  691:	  6288	70 E5				jnz	dnld_sumerr
-  692:	  628A	51 A6				acall	dnld_dly
-  693:	  628C	90 65 62			mov	dptr, #dnlds3
-  694:	  628F	12 00 45			call	pcstr_h		   ;"download went ok..."
-  695:					;consume any cr or lf character that may have been
-  696:					;on the end of the last line
-  697:	  6292	20 98 02			jb	ri, dnld_end_4
-  698:	  6295	61 19				ajmp	dnld_sum
-  699:	  6297			dnld_end_4:
-  700:	  6297	12 00 32			call	cin
-  701:	  629A	80 7D				sjmp	dnld_sum
-  702:
-  703:
-  704:
-  705:	  629C			dnld_esc:   ;handle esc received in the download stream
-  706:	  629C	51 A6				acall	dnld_dly
-  707:	  629E	90 65 5A			mov	dptr, #dnlds2
-  708:	  62A1	12 00 45			call	pcstr_h		   ;"download aborted."
-  709:	  62A4	80 73				sjmp	dnld_sum
-  710:
-  711:	  62A6			dnld_dly:   ;a short delay since most terminal emulation programs
-  712:					    ;won't be ready to receive anything immediately after
-  713:					    ;they've transmitted a file... even on a fast Pentium(tm)
-  714:					    ;machine with 16550 uarts!
+  659:	  625E	51 B2				acall	dnld_inc	;count total data bytes received
+  660:	  6260	EA				mov	a, r2
+  661:	  6261	12 00 56			lcall	smart_wr	;c=1 if an error writing
+  662:	  6264	E4				clr	a
+  663:	  6265	34 02				addc	a, #2
+  664:	  6267	F9				mov	r1, a
+  665:				;     2 = bytes written
+  666:				;     3 = bytes unable to write
+  667:	  6268	51 B2				acall	dnld_inc
+  668:	  626A	A3				inc	dptr
+  669:	  626B	D8 E9				djnz	r0, dnld5
+  670:	  626D			dnld_get_cksum:
+  671:	  626D	51 D1				acall	dnld_ghex	;get checksum
+  672:	  626F	EC				mov	a, r4
+  673:	  6270	60 9F				jz	dnld1		;should always add to zero
+  674:	  6272			dnld_sumerr:
+  675:	  6272	79 04				mov	r1, #4
+  676:	  6274	51 B2				acall	dnld_inc	;all we can do it count # of cksum errors
+  677:	  6276	80 99				sjmp	dnld1
+  678:
+  679:	  6278			dnld_unknown:	;handle unknown line type
+  680:	  6278	E8				mov	a, r0
+  681:	  6279	60 F2				jz	dnld_get_cksum	;skip data if size is zero
+  682:	  627B			dnld_ukn2:
+  683:	  627B	51 D1				acall	dnld_ghex	;consume all of unknown data
+  684:	  627D	D8 FC				djnz	r0, dnld_ukn2
+  685:	  627F	80 EC				sjmp	dnld_get_cksum
+  686:
+  687:	  6281			dnld_end:   ;handles the proper end-of-download marker
+  688:	  6281	E8				mov	a, r0
+  689:	  6282	60 04				jz	dnld_end_3	;should usually be zero
+  690:	  6284			dnld_end_2:
+  691:	  6284	51 D1				acall	dnld_ghex	;consume all of useless data
+  692:	  6286	D8 F3				djnz	r0, dnld_ukn2
+  693:	  6288			dnld_end_3:
+  694:	  6288	51 D1				acall	dnld_ghex	;get the last checksum
+  695:	  628A	EC				mov	a, r4
+  696:	  628B	70 E5				jnz	dnld_sumerr
+  697:	  628D	51 A9				acall	dnld_dly
+  698:	  628F	90 65 65			mov	dptr, #dnlds3
+  699:	  6292	12 00 45			call	pcstr_h		   ;"download went ok..."
+  700:					;consume any cr or lf character that may have been
+  701:					;on the end of the last line
+  702:	  6295	20 98 02			jb	ri, dnld_end_4
+  703:	  6298	61 1C				ajmp	dnld_sum
+  704:	  629A			dnld_end_4:
+  705:	  629A	12 00 32			call	cin
+  706:	  629D	80 7D				sjmp	dnld_sum
+  707:
+  708:
+  709:
+  710:	  629F			dnld_esc:   ;handle esc received in the download stream
+  711:	  629F	51 A9				acall	dnld_dly
+  712:	  62A1	90 65 5D			mov	dptr, #dnlds2
+  713:	  62A4	12 00 45			call	pcstr_h		   ;"download aborted."
+  714:	  62A7	80 73				sjmp	dnld_sum
 
 ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 14
 
@@ -824,62 +824,62 @@ ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. H
 
  Line  I  Addr  Code            Source
 
-  715:	  62A6	78 00				mov	R0,#0
-  716:	  62A8	79 00		dnlddly2:	mov	R1,#0
-  717:	  62AA	D9 FE				djnz	r1, $		;roughly 128k cycles, appox 0.1 sec
-  718:	  62AC	D8 FA				djnz	r0, dnlddly2
-  719:	  62AE	22				ret
-  720:
-  721:	  62AF			dnld_inc:     ;increment parameter specified by R1
-  722:					      ;note, values in Acc and R1 are destroyed
-  723:	  62AF	E9				mov	a, r1
-  724:	  62B0	54 07				anl	a, #00000111b	;just in case
-  725:	  62B2	23				rl	a
-  726:	  62B3	24 EC				add	a, #dnld_parm
-  727:	  62B5	F9				mov	r1, a		;now r1 points to lsb
-  728:	  62B6	07				inc	@r1
-  729:	  62B7	E7				mov	a, @r1
-  730:	  62B8	70 02				jnz	dnldin2
-  731:	  62BA	09				inc	r1
-  732:	  62BB	07				inc	@r1
-  733:	  62BC	22		dnldin2:	ret
-  734:
-  735:	  62BD			dnld_gp:     ;get parameter, and inc to next one (@r1)
-  736:					     ;carry clear if parameter is zero.
-  737:					     ;16 bit value returned in dptr
-  738:	  62BD	D3				setb	c
-  739:	  62BE	87 82				mov	dp0l, @r1
-  740:	  62C0	09				inc	r1
-  741:	  62C1	87 83				mov	dp0h, @r1
-  742:	  62C3	09				inc	r1
-  743:	  62C4	E5 82				mov	a, dp0l
-  744:	  62C6	70 05				jnz	dnldgp2
-  745:	  62C8	E5 83				mov	a, dph
-  746:	  62CA	70 01				jnz	dnldgp2
-  747:	  62CC	C3				clr	c
-  748:	  62CD	22		dnldgp2:	ret
-  749:
-  750:				;a spacial version of ghex just for the download.  Does not
-  751:				;look for carriage return or backspace.	 Handles ESC key by
-  752:				;poping the return address (I know, nasty, but it saves many
-  753:				;bytes of code in this 4k ROM) and then jumps to the esc
-  754:				;key handling.	This ghex doesn't echo characters, and if it
-  755:				;sees ':', it pops the return and jumps to an error handler
-  756:				;for ':' in the middle of a line.  Non-hex digits also jump
-  757:				;to error handlers, depending on which digit.
-  758:
-  759:	  62CE			dnld_ghex:
-  760:	  62CE	12 00 32	dnldgh1:	call	cin
-  761:	  62D1	12 00 40			call	upper
-  762:	  62D4	B4 1B 06			cjne	a, #27, dnldgh3
-  763:	  62D7	D0 E0		dnldgh2:	pop	acc
-  764:	  62D9	D0 E0				pop	acc
-  765:	  62DB	80 BF				sjmp	dnld_esc
-  766:	  62DD	B4 3A 0A	dnldgh3:	cjne	a, #':', dnldgh5
-  767:	  62E0	79 05		dnldgh4:	mov	r1, #5		;handle unexpected beginning of line
-  768:	  62E2	51 AF				acall	dnld_inc
-  769:	  62E4	D0 E0				pop	acc
-  770:	  62E6	D0 E0				pop	acc
+  715:
+  716:	  62A9			dnld_dly:   ;a short delay since most terminal emulation programs
+  717:					    ;won't be ready to receive anything immediately after
+  718:					    ;they've transmitted a file... even on a fast Pentium(tm)
+  719:					    ;machine with 16550 uarts!
+  720:	  62A9	78 00				mov	R0,#0
+  721:	  62AB	79 00		dnlddly2:	mov	R1,#0
+  722:	  62AD	D9 FE				djnz	r1, $		;roughly 128k cycles, appox 0.1 sec
+  723:	  62AF	D8 FA				djnz	r0, dnlddly2
+  724:	  62B1	22				ret
+  725:
+  726:	  62B2			dnld_inc:     ;increment parameter specified by R1
+  727:					      ;note, values in Acc and R1 are destroyed
+  728:	  62B2	E9				mov	a, r1
+  729:	  62B3	54 07				anl	a, #00000111b	;just in case
+  730:	  62B5	23				rl	a
+  731:	  62B6	24 EC				add	a, #dnld_parm
+  732:	  62B8	F9				mov	r1, a		;now r1 points to lsb
+  733:	  62B9	07				inc	@r1
+  734:	  62BA	E7				mov	a, @r1
+  735:	  62BB	70 02				jnz	dnldin2
+  736:	  62BD	09				inc	r1
+  737:	  62BE	07				inc	@r1
+  738:	  62BF	22		dnldin2:	ret
+  739:
+  740:	  62C0			dnld_gp:     ;get parameter, and inc to next one (@r1)
+  741:					     ;carry clear if parameter is zero.
+  742:					     ;16 bit value returned in dptr
+  743:	  62C0	D3				setb	c
+  744:	  62C1	87 82				mov	dp0l, @r1
+  745:	  62C3	09				inc	r1
+  746:	  62C4	87 83				mov	dp0h, @r1
+  747:	  62C6	09				inc	r1
+  748:	  62C7	E5 82				mov	a, dp0l
+  749:	  62C9	70 05				jnz	dnldgp2
+  750:	  62CB	E5 83				mov	a, dph
+  751:	  62CD	70 01				jnz	dnldgp2
+  752:	  62CF	C3				clr	c
+  753:	  62D0	22		dnldgp2:	ret
+  754:
+  755:				;a spacial version of ghex just for the download.  Does not
+  756:				;look for carriage return or backspace.	 Handles ESC key by
+  757:				;poping the return address (I know, nasty, but it saves many
+  758:				;bytes of code in this 4k ROM) and then jumps to the esc
+  759:				;key handling.	This ghex doesn't echo characters, and if it
+  760:				;sees ':', it pops the return and jumps to an error handler
+  761:				;for ':' in the middle of a line.  Non-hex digits also jump
+  762:				;to error handlers, depending on which digit.
+  763:
+  764:	  62D1			dnld_ghex:
+  765:	  62D1	12 00 32	dnldgh1:	call	cin
+  766:	  62D4	12 00 40			call	upper
+  767:	  62D7	B4 1B 06			cjne	a, #27, dnldgh3
+  768:	  62DA	D0 E0		dnldgh2:	pop	acc
+  769:	  62DC	D0 E0				pop	acc
+  770:	  62DE	80 BF				sjmp	dnld_esc
 
 ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 15
 
@@ -887,62 +887,62 @@ ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. H
 
  Line  I  Addr  Code            Source
 
-  771:	  62E8	41 31				ajmp	dnld3		;and now we're on a new line!
-  772:	  62EA	12 00 65	dnldgh5:	call	asc2hex
-  773:	  62ED	50 06				jnc	dnldgh6
-  774:	  62EF	79 07				mov	r1, #7
-  775:	  62F1	51 AF				acall	dnld_inc
-  776:	  62F3	80 D9				sjmp	dnldgh1
-  777:	  62F5	FA		dnldgh6:	mov	r2, a		;keep first digit in r2
-  778:	  62F6	12 00 32	dnldgh7:	call	cin
-  779:	  62F9	12 00 40			call	upper
-  780:	  62FC	B4 1B 02			cjne	a, #27, dnldgh8
-  781:	  62FF	80 D6				sjmp	dnldgh2
-  782:	  6301	B4 3A 02	dnldgh8:	cjne	a, #':', dnldgh9
-  783:	  6304	80 DA				sjmp	dnldgh4
-  784:	  6306	12 00 65	dnldgh9:	call	asc2hex
-  785:	  6309	50 06				jnc	dnldghA
-  786:	  630B	79 07				mov	r1, #7
-  787:	  630D	51 AF				acall	dnld_inc
-  788:	  630F	80 E5				sjmp	dnldgh7
-  789:	  6311	CA		dnldghA:	xch	a, r2
-  790:	  6312	C4				swap	a
-  791:	  6313	4A				orl	a, r2
-  792:	  6314	FA				mov	r2, a
-  793:	  6315	2C				add	a, r4		;add into checksum
-  794:	  6316	FC				mov	r4, a
-  795:	  6317	EA				mov	a, r2		;return value in acc
-  796:	  6318	22				ret
-  797:
-  798:				;dnlds4 =  "Summary:"
-  799:				;dnlds5 =  " lines received"
-  800:				;dnlds6a = " bytes received"
-  801:				;dnlds6b = " bytes written"
+  771:	  62E0	B4 3A 0A	dnldgh3:	cjne	a, #':', dnldgh5
+  772:	  62E3	79 05		dnldgh4:	mov	r1, #5		;handle unexpected beginning of line
+  773:	  62E5	51 B2				acall	dnld_inc
+  774:	  62E7	D0 E0				pop	acc
+  775:	  62E9	D0 E0				pop	acc
+  776:	  62EB	41 34				ajmp	dnld3		;and now we're on a new line!
+  777:	  62ED	12 00 65	dnldgh5:	call	asc2hex
+  778:	  62F0	50 06				jnc	dnldgh6
+  779:	  62F2	79 07				mov	r1, #7
+  780:	  62F4	51 B2				acall	dnld_inc
+  781:	  62F6	80 D9				sjmp	dnldgh1
+  782:	  62F8	FA		dnldgh6:	mov	r2, a		;keep first digit in r2
+  783:	  62F9	12 00 32	dnldgh7:	call	cin
+  784:	  62FC	12 00 40			call	upper
+  785:	  62FF	B4 1B 02			cjne	a, #27, dnldgh8
+  786:	  6302	80 D6				sjmp	dnldgh2
+  787:	  6304	B4 3A 02	dnldgh8:	cjne	a, #':', dnldgh9
+  788:	  6307	80 DA				sjmp	dnldgh4
+  789:	  6309	12 00 65	dnldgh9:	call	asc2hex
+  790:	  630C	50 06				jnc	dnldghA
+  791:	  630E	79 07				mov	r1, #7
+  792:	  6310	51 B2				acall	dnld_inc
+  793:	  6312	80 E5				sjmp	dnldgh7
+  794:	  6314	CA		dnldghA:	xch	a, r2
+  795:	  6315	C4				swap	a
+  796:	  6316	4A				orl	a, r2
+  797:	  6317	FA				mov	r2, a
+  798:	  6318	2C				add	a, r4		;add into checksum
+  799:	  6319	FC				mov	r4, a
+  800:	  631A	EA				mov	a, r2		;return value in acc
+  801:	  631B	22				ret
   802:
-  803:	  6319			dnld_sum:    ;print out download summary
-  804:	  6319	EE				mov	a, r6
-  805:	  631A	C0 E0				push	acc
-  806:	  631C	EF				mov	a, r7
-  807:	  631D	C0 E0				push	acc
-  808:	  631F	90 65 69			mov	dptr, #dnlds4
-  809:	  6322	12 00 45			call	pcstr_h
-  810:	  6325	79 EC				mov	r1, #dnld_parm
-  811:	  6327	7E 72				mov	r6, #LOW dnlds5
-  812:	  6329	7F 65				mov	r7, #HIGH dnlds5
-  813:	  632B	71 88				acall	dnld_i0
-  814:	  632D	7E 78				mov	r6, #LOW dnlds6a
-  815:	  632F	7F 65				mov	r7, #HIGH dnlds6a
-  816:	  6331	71 88				acall	dnld_i0
-  817:	  6333	7E 7D				mov	r6, #LOW dnlds6b
-  818:	  6335	7F 65				mov	r7, #HIGH dnlds6b
-  819:	  6337	71 88				acall	dnld_i0
-  820:
-  821:	  6339			dnld_err:    ;now print out error summary
-  822:	  6339	7A 05				mov	r2, #5
-  823:	  633B	51 BD		dnlder2:	acall	dnld_gp
-  824:	  633D	40 0A				jc	dnlder3		;any errors?
-  825:	  633F	DA FA				djnz	r2, dnlder2
-  826:					 ;no errors, so we print the nice message
+  803:				;dnlds4 =  "Summary:"
+  804:				;dnlds5 =  " lines received"
+  805:				;dnlds6a = " bytes received"
+  806:				;dnlds6b = " bytes written"
+  807:
+  808:	  631C			dnld_sum:    ;print out download summary
+  809:	  631C	EE				mov	a, r6
+  810:	  631D	C0 E0				push	acc
+  811:	  631F	EF				mov	a, r7
+  812:	  6320	C0 E0				push	acc
+  813:	  6322	90 65 6C			mov	dptr, #dnlds4
+  814:	  6325	12 00 45			call	pcstr_h
+  815:	  6328	79 EC				mov	r1, #dnld_parm
+  816:	  632A	7E 75				mov	r6, #LOW dnlds5
+  817:	  632C	7F 65				mov	r7, #HIGH dnlds5
+  818:	  632E	71 8B				acall	dnld_i0
+  819:	  6330	7E 7B				mov	r6, #LOW dnlds6a
+  820:	  6332	7F 65				mov	r7, #HIGH dnlds6a
+  821:	  6334	71 8B				acall	dnld_i0
+  822:	  6336	7E 80				mov	r6, #LOW dnlds6b
+  823:	  6338	7F 65				mov	r7, #HIGH dnlds6b
+  824:	  633A	71 8B				acall	dnld_i0
+  825:
+  826:	  633C			dnld_err:    ;now print out error summary
 
 ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 16
 
@@ -950,62 +950,62 @@ ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. H
 
  Line  I  Addr  Code            Source
 
-  827:	  6341	90 65 B9			mov	dptr, #dnlds13
-  828:	  6344	12 00 45			call	pcstr_h
-  829:	  6347	80 26				sjmp	dlnd_sum_done
-  830:
-  831:	  6349			dnlder3:  ;there were errors, so now we print 'em
-  832:	  6349	90 65 88			mov	dptr, #dnlds7
-  833:	  634C	12 00 45			call	pcstr_h
-  834:					  ;but let's not be nasty... only print if necessary
-  835:	  634F	79 F2				mov	r1, #(dnld_parm+6)
-  836:	  6351	7E 8C				mov	r6, #LOW dnlds8
-  837:	  6353	7F 65				mov	r7, #HIGH dnlds8
-  838:	  6355	71 78				acall	dnld_item
-  839:	  6357	7E 9D				mov	r6, #LOW dnlds9
-  840:	  6359	7F 65				mov	r7, #HIGH dnlds9
-  841:	  635B	71 78				acall	dnld_item
-  842:	  635D	7E A5				mov	r6, #LOW dnlds10
-  843:	  635F	7F 65				mov	r7, #HIGH dnlds10
-  844:	  6361	71 78				acall	dnld_item
-  845:	  6363	7E AB				mov	r6, #LOW dnlds11
-  846:	  6365	7F 65				mov	r7, #HIGH dnlds11
-  847:	  6367	71 78				acall	dnld_item
-  848:	  6369	7E B0				mov	r6, #LOW dnlds12
-  849:	  636B	7F 65				mov	r7, #HIGH dnlds12
-  850:	  636D	71 78				acall	dnld_item
-  851:	  636F			dlnd_sum_done:
-  852:	  636F	D0 E0				pop	acc
-  853:	  6371	FF				mov	r7, a
-  854:	  6372	D0 E0				pop	acc
-  855:	  6374	FE				mov	r6, a
-  856:	  6375	02 00 48			jmp	newline
-  857:
-  858:	  6378			dnld_item:
-  859:	  6378	51 BD				acall	dnld_gp		;error conditions
-  860:	  637A	50 0B				jnc	dnld_i3
-  861:	  637C	12 63 95	dnld_i2:call	space
-  862:	  637F	12 00 53			lcall	pint16u
-  863:	  6382	71 9A				acall	r6r7todptr
-  864:	  6384	12 00 45			call	pcstr_h
-  865:	  6387	22		dnld_i3:	ret
-  866:
-  867:	  6388	51 BD		dnld_i0:	acall	dnld_gp		;non-error conditions
-  868:	  638A	80 F0				sjmp	dnld_i2
-  869:
-  870:
-  871:	  638C			dnld_init:
-  872:					;init all dnld parms to zero.
-  873:	  638C	78 EC				mov	r0, #dnld_parm
-  874:	  638E	76 00		dnld0:		mov	@r0, #0
-  875:	  6390	08				inc	r0
-  876:	  6391	B8 FC FA			cjne	r0, #dnld_parm + 16, dnld0
-  877:	  6394	22				ret
-  878:
-  879:	  6395	74 20		space:		mov	a, #' '
-  880:	  6397	02 00 30			JMP	COUT
-  881:
-  882:	  639A			r6r7todptr:
+  827:	  633C	7A 05				mov	r2, #5
+  828:	  633E	51 C0		dnlder2:	acall	dnld_gp
+  829:	  6340	40 0A				jc	dnlder3		;any errors?
+  830:	  6342	DA FA				djnz	r2, dnlder2
+  831:					 ;no errors, so we print the nice message
+  832:	  6344	90 65 BC			mov	dptr, #dnlds13
+  833:	  6347	12 00 45			call	pcstr_h
+  834:	  634A	80 26				sjmp	dlnd_sum_done
+  835:
+  836:	  634C			dnlder3:  ;there were errors, so now we print 'em
+  837:	  634C	90 65 8B			mov	dptr, #dnlds7
+  838:	  634F	12 00 45			call	pcstr_h
+  839:					  ;but let's not be nasty... only print if necessary
+  840:	  6352	79 F2				mov	r1, #(dnld_parm+6)
+  841:	  6354	7E 8F				mov	r6, #LOW dnlds8
+  842:	  6356	7F 65				mov	r7, #HIGH dnlds8
+  843:	  6358	71 7B				acall	dnld_item
+  844:	  635A	7E A0				mov	r6, #LOW dnlds9
+  845:	  635C	7F 65				mov	r7, #HIGH dnlds9
+  846:	  635E	71 7B				acall	dnld_item
+  847:	  6360	7E A8				mov	r6, #LOW dnlds10
+  848:	  6362	7F 65				mov	r7, #HIGH dnlds10
+  849:	  6364	71 7B				acall	dnld_item
+  850:	  6366	7E AE				mov	r6, #LOW dnlds11
+  851:	  6368	7F 65				mov	r7, #HIGH dnlds11
+  852:	  636A	71 7B				acall	dnld_item
+  853:	  636C	7E B3				mov	r6, #LOW dnlds12
+  854:	  636E	7F 65				mov	r7, #HIGH dnlds12
+  855:	  6370	71 7B				acall	dnld_item
+  856:	  6372			dlnd_sum_done:
+  857:	  6372	D0 E0				pop	acc
+  858:	  6374	FF				mov	r7, a
+  859:	  6375	D0 E0				pop	acc
+  860:	  6377	FE				mov	r6, a
+  861:	  6378	02 00 48			jmp	newline
+  862:
+  863:	  637B			dnld_item:
+  864:	  637B	51 C0				acall	dnld_gp		;error conditions
+  865:	  637D	50 0B				jnc	dnld_i3
+  866:	  637F	12 63 98	dnld_i2:call	space
+  867:	  6382	12 00 53			lcall	pint16u
+  868:	  6385	71 9D				acall	r6r7todptr
+  869:	  6387	12 00 45			call	pcstr_h
+  870:	  638A	22		dnld_i3:	ret
+  871:
+  872:	  638B	51 C0		dnld_i0:	acall	dnld_gp		;non-error conditions
+  873:	  638D	80 F0				sjmp	dnld_i2
+  874:
+  875:
+  876:	  638F			dnld_init:
+  877:					;init all dnld parms to zero.
+  878:	  638F	78 EC				mov	r0, #dnld_parm
+  879:	  6391	76 00		dnld0:		mov	@r0, #0
+  880:	  6393	08				inc	r0
+  881:	  6394	B8 FC FA			cjne	r0, #dnld_parm + 16, dnld0
+  882:	  6397	22				ret
 
 ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 17
 
@@ -1013,62 +1013,62 @@ ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. H
 
  Line  I  Addr  Code            Source
 
-  883:	  639A	8E 82				mov	dpl, r6
-  884:	  639C	8F 83				mov	dph, r7
-  885:	  639E	22				ret
+  883:
+  884:	  6398	74 20		space:		mov	a, #' '
+  885:	  639A	02 00 30			JMP	COUT
   886:
-  887:
-  888:	  639F	90 D0 00	PROGRAM:	MOV	DPTR,#0D000h
-  889:
-  890:	  63A2	78 FC		PROGRAM64:	MOV	R0,#SPICMD
-  891:	  63A4	76 50				MOV	@R0,#050h		; Byte Write Page
-  892:	  63A6	08				INC	R0
-  893:	  63A7	76 00				MOV	@R0,#0
-  894:	  63A9	08				INC 	R0
-  895:	  63AA	76 00				MOV	@R0,#0
-  896:
-  897:	  63AC	E4		PROGRAM64B:	CLR	A
-  898:	  63AD	93				MOVC	A,@A+DPTR
-  899:	  63AE	78 FF				MOV	R0,#SPIDATA
-  900:	  63B0	F6				MOV	@R0,A
-  901:	  63B1	91 63				ACALL	COMMAND
-  902:	  63B3	A3				INC	DPTR
-  903:
-  904:	  63B4	7E 3F				MOV	R6,#63
-  905:	  63B6	E4		PROGRAM64A:	CLR	A
-  906:	  63B7	93				MOVC	A,@A+DPTR
-  907:				;		ACALL	SPIBYTE
-  908:	  63B8	A3				INC	DPTR
-  909:	  63B9	DE FB				DJNZ	R6,PROGRAM64A
-  910:
-  911:	  63BB	76 FE				MOV	@R0,#SPIADRLO
-  912:	  63BD	E6				MOV	A,@R0
-  913:	  63BE	24 40				ADD	A,#64
-  914:	  63C0	F6				MOV	@R0,A
-  915:	  63C1	18				DEC	R0
-  916:	  63C2	E6				MOV	A,@R0
-  917:	  63C3	34 00				ADDC	A,#0
-  918:	  63C5	F6				MOV	@R0,A
-  919:	  63C6	91 74				ACALL	TIME5MS
-  920:	  63C8	B4 30 E1			CJNE	A,#030h,PROGRAM64B
-  921:	  63CB	22		PROGRAM64EX:	RET
-  922:
-  923:	  63CC	7A 01		VERIFY:		MOV	R2,#1
-  924:	  63CE	61 D2				AJMP	READFLASH1
-  925:
-  926:	  63D0	7A 00		READFLASH:	MOV	R2,#0
-  927:	  63D2	90 D0 00	READFLASH1:	MOV	DPTR,#0D000h
-  928:
-  929:	  63D5	78 FC		READ64:		MOV	R0,#SPICMD
-  930:	  63D7	76 30				MOV	@R0,#030h		; Byte Read Page
-  931:	  63D9	08				INC	R0
-  932:	  63DA	76 00				MOV	@R0,#0
-  933:	  63DC	08				INC 	R0
-  934:	  63DD	76 00				MOV	@R0,#0
-  935:	  63DF	91 63		READ64B:	ACALL	COMMAND
-  936:	  63E1	91 31				ACALL	READVERI
-  937:	  63E3	40 19				JC	READ64ERR
-  938:	  63E5	A3				INC	DPTR
+  887:	  639D			r6r7todptr:
+  888:	  639D	8E 82				mov	dpl, r6
+  889:	  639F	8F 83				mov	dph, r7
+  890:	  63A1	22				ret
+  891:
+  892:
+  893:	  63A2	90 D0 00	PROGRAM:	MOV	DPTR,#0D000h
+  894:
+  895:	  63A5	78 FC		PROGRAM64:	MOV	R0,#SPICMD
+  896:	  63A7	76 50				MOV	@R0,#050h		; Byte Write Page
+  897:	  63A9	08				INC	R0
+  898:	  63AA	76 00				MOV	@R0,#0
+  899:	  63AC	08				INC 	R0
+  900:	  63AD	76 00				MOV	@R0,#0
+  901:
+  902:	  63AF	E4		PROGRAM64B:	CLR	A
+  903:	  63B0	93				MOVC	A,@A+DPTR
+  904:	  63B1	78 FF				MOV	R0,#SPIDATA
+  905:	  63B3	F6				MOV	@R0,A
+  906:	  63B4	91 66				ACALL	COMMAND
+  907:	  63B6	A3				INC	DPTR
+  908:
+  909:	  63B7	7E 3F				MOV	R6,#63
+  910:	  63B9	E4		PROGRAM64A:	CLR	A
+  911:	  63BA	93				MOVC	A,@A+DPTR
+  912:				;		ACALL	SPIBYTE
+  913:	  63BB	A3				INC	DPTR
+  914:	  63BC	DE FB				DJNZ	R6,PROGRAM64A
+  915:
+  916:	  63BE	76 FE				MOV	@R0,#SPIADRLO
+  917:	  63C0	E6				MOV	A,@R0
+  918:	  63C1	24 40				ADD	A,#64
+  919:	  63C3	F6				MOV	@R0,A
+  920:	  63C4	18				DEC	R0
+  921:	  63C5	E6				MOV	A,@R0
+  922:	  63C6	34 00				ADDC	A,#0
+  923:	  63C8	F6				MOV	@R0,A
+  924:	  63C9	91 77				ACALL	TIME5MS
+  925:	  63CB	B4 30 E1			CJNE	A,#030h,PROGRAM64B
+  926:	  63CE	22		PROGRAM64EX:	RET
+  927:
+  928:	  63CF	7A 01		VERIFY:		MOV	R2,#1
+  929:	  63D1	61 D5				AJMP	READFLASH1
+  930:
+  931:	  63D3	7A 00		READFLASH:	MOV	R2,#0
+  932:	  63D5	90 D0 00	READFLASH1:	MOV	DPTR,#0D000h
+  933:
+  934:	  63D8	78 FC		READ64:		MOV	R0,#SPICMD
+  935:	  63DA	76 30				MOV	@R0,#030h		; Byte Read Page
+  936:	  63DC	08				INC	R0
+  937:	  63DD	76 00				MOV	@R0,#0
+  938:	  63DF	08				INC 	R0
 
 ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 18
 
@@ -1076,62 +1076,62 @@ ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. H
 
  Line  I  Addr  Code            Source
 
-  939:
-  940:	  63E6	7E 3F				MOV	R6,#63
-  941:	  63E8			READ64A:	;ACALL	SPIBYTE
-  942:	  63E8	91 31				ACALL	READVERI
-  943:	  63EA	40 12				JC	READ64ERR
-  944:	  63EC	A3				INC	DPTR
-  945:	  63ED	DE F9				DJNZ	R6,READ64A
-  946:
-  947:	  63EF	76 FE				MOV	@R0,#SPIADRLO
-  948:	  63F1	E6				MOV	A,@R0
-  949:	  63F2	24 40				ADD	A,#64
-  950:	  63F4	F6				MOV	@R0,A
-  951:	  63F5	18				DEC	R0
-  952:	  63F6	E6				MOV	A,@R0
-  953:	  63F7	34 00				ADDC	A,#0
-  954:	  63F9	F6				MOV	@R0,A
-  955:	  63FA	B4 30 E2			CJNE	A,#030h,READ64B
-  956:	  63FD	22		READ64EX:	RET
-  957:
-  958:	  63FE	C0 E0		READ64ERR:	PUSH	ACC
-  959:	  6400	C0 82				PUSH	DP0L
-  960:	  6402	C0 83				PUSH	DP0H
-  961:	  6404	90 65 2F			MOV	DPTR,#MSGVERIFAIL
-  962:	  6407	12 00 38			CALL	PSTR
-  963:	  640A	D0 83				POP	DP0H
-  964:	  640C	D0 82				POP	DP0L
-  965:	  640E	12 00 36			CALL	PHEX16
-  966:	  6411	74 6D				MOV	A,#"m"
-  967:	  6413	12 00 30			CALL	COUT
-  968:	  6416	D0 E0				POP	ACC
-  969:	  6418	12 00 34			CALL	PHEX
-  970:	  641B	74 63				MOV	A,#"c"
-  971:	  641D	12 00 30			CALL	COUT
-  972:	  6420	E5 7F				MOV	A,TEMP
-  973:	  6422	12 00 34			CALL	PHEX
-  974:	  6425	12 00 48			CALL	NEWLINE
-  975:	  6428	12 00 32			CALL	CIN
-  976:	  642B	D0 E0				POP	ACC
-  977:	  642D	D0 E0				POP	ACC
-  978:	  642F	01 40				AJMP	START
-  979:
-  980:	  6431	BA 00 02	READVERI:	CJNE	R2,#0,READVERI1
-  981:	  6434	F0				MOVX	@DPTR,A
-  982:	  6435	22				RET
-  983:
-  984:	  6436	F5 7F		READVERI1:	MOV	TEMP,A
-  985:	  6438	E4				CLR	A
-  986:	  6439	93				MOVC	A,@A+DPTR
-  987:	  643A	B5 7F 01			CJNE	A,TEMP,READVERI2
-  988:	  643D	22				RET
-  989:	  643E	D3		READVERI2:	SETB	C
-  990:	  643F	22				RET
-  991:
-  992:	  6440	78 FC		SIGNATURE:	MOV	R0,#SPICMD
-  993:	  6442	76 28				MOV	@R0,#028h
-  994:	  6444	08				INC	R0
+  939:	  63E0	76 00				MOV	@R0,#0
+  940:	  63E2	91 66		READ64B:	ACALL	COMMAND
+  941:	  63E4	91 34				ACALL	READVERI
+  942:	  63E6	40 19				JC	READ64ERR
+  943:	  63E8	A3				INC	DPTR
+  944:
+  945:	  63E9	7E 3F				MOV	R6,#63
+  946:	  63EB			READ64A:	;ACALL	SPIBYTE
+  947:	  63EB	91 34				ACALL	READVERI
+  948:	  63ED	40 12				JC	READ64ERR
+  949:	  63EF	A3				INC	DPTR
+  950:	  63F0	DE F9				DJNZ	R6,READ64A
+  951:
+  952:	  63F2	76 FE				MOV	@R0,#SPIADRLO
+  953:	  63F4	E6				MOV	A,@R0
+  954:	  63F5	24 40				ADD	A,#64
+  955:	  63F7	F6				MOV	@R0,A
+  956:	  63F8	18				DEC	R0
+  957:	  63F9	E6				MOV	A,@R0
+  958:	  63FA	34 00				ADDC	A,#0
+  959:	  63FC	F6				MOV	@R0,A
+  960:	  63FD	B4 30 E2			CJNE	A,#030h,READ64B
+  961:	  6400	22		READ64EX:	RET
+  962:
+  963:	  6401	C0 E0		READ64ERR:	PUSH	ACC
+  964:	  6403	C0 82				PUSH	DP0L
+  965:	  6405	C0 83				PUSH	DP0H
+  966:	  6407	90 65 32			MOV	DPTR,#MSGVERIFAIL
+  967:	  640A	12 00 38			CALL	PSTR
+  968:	  640D	D0 83				POP	DP0H
+  969:	  640F	D0 82				POP	DP0L
+  970:	  6411	12 00 36			CALL	PHEX16
+  971:	  6414	74 6D				MOV	A,#"m"
+  972:	  6416	12 00 30			CALL	COUT
+  973:	  6419	D0 E0				POP	ACC
+  974:	  641B	12 00 34			CALL	PHEX
+  975:	  641E	74 63				MOV	A,#"c"
+  976:	  6420	12 00 30			CALL	COUT
+  977:	  6423	E5 7F				MOV	A,TEMP
+  978:	  6425	12 00 34			CALL	PHEX
+  979:	  6428	12 00 48			CALL	NEWLINE
+  980:	  642B	12 00 32			CALL	CIN
+  981:	  642E	D0 E0				POP	ACC
+  982:	  6430	D0 E0				POP	ACC
+  983:	  6432	01 40				AJMP	START
+  984:
+  985:	  6434	BA 00 02	READVERI:	CJNE	R2,#0,READVERI1
+  986:	  6437	F0				MOVX	@DPTR,A
+  987:	  6438	22				RET
+  988:
+  989:	  6439	F5 7F		READVERI1:	MOV	TEMP,A
+  990:	  643B	E4				CLR	A
+  991:	  643C	93				MOVC	A,@A+DPTR
+  992:	  643D	B5 7F 01			CJNE	A,TEMP,READVERI2
+  993:	  6440	22				RET
+  994:	  6441	D3		READVERI2:	SETB	C
 
 ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 19
 
@@ -1139,62 +1139,62 @@ ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. H
 
  Line  I  Addr  Code            Source
 
-  995:	  6445	08				INC	R0
-  996:	  6446	76 30				MOV	@R0,#030h
-  997:	  6448	91 63				ACALL	COMMAND
-  998:	  644A	B4 1E 0B			CJNE	A,#01Eh,SIGFAIL
-  999:	  644D	78 FE				MOV	R0,#SPIADRLO
- 1000:	  644F	76 31				MOV	@R0,#031h
- 1001:	  6451	91 63				ACALL	COMMAND
- 1002:	  6453	B4 73 02			CJNE	A,#073h,SIGFAIL
- 1003:	  6456	C3				CLR	C
- 1004:	  6457	22				RET
- 1005:	  6458	D3		SIGFAIL:	SETB	C
- 1006:	  6459	22				RET
- 1007:
- 1008:	  645A	78 FC		ENABLE:		MOV	R0,#SPICMD
- 1009:	  645C	76 AC				MOV	@R0,#0ACh
- 1010:	  645E	08				INC	R0
- 1011:	  645F	76 53				MOV	@R0,#053h
- 1012:	  6461	81 63				AJMP	COMMAND
- 1013:
- 1014:	  6463	78 FC		COMMAND:	MOV	R0,#SPICMD
- 1015:	  6465	E6		COMMAND1:	MOV	A,@R0
- 1016:				;		CALL	PHEX
- 1017:				;		ACALL	SPIBYTE
- 1018:	  6466	08				INC	R0
- 1019:	  6467	B8 00 FB			CJNE	R0,#0,COMMAND1
- 1020:				;		CALL	NEWLINE
- 1021:	  646A	22				RET
- 1022:
- 1023:				;SPIBYTE:	MOV	R7,#8
- 1024:				;SPIBYTE1:	RLC	A
- 1025:				;		SETB	SCK_52
- 1026:				;		MOV	MOSI_52,C
- 1027:				;		CLR	SCK_52
- 1028:				;		MOV	C,MISO_52
- 1029:				;		DJNZ	R7,SPIBYTE1
- 1030:				;		RLC	A
- 1031:				;		CALL	PHEX
- 1032:				;		RET
- 1033:
- 1034:	  646B	7E 00		TIME35MS:	MOV	R6,#0
- 1035:	  646D	7F 00		TIME35MS2:	MOV	R7,#0
- 1036:	  646F	DF FE		TIME35MS1:	DJNZ	R7,TIME35MS1
- 1037:	  6471	DE FC				DJNZ	R6,TIME35MS1
- 1038:	  6473	22				RET
- 1039:
- 1040:	  6474	7E 12		TIME5MS:	MOV	R6,#18
- 1041:	  6476	81 6D				AJMP	TIME35MS2
- 1042:
- 1043:	  6478	0D 0A 41 54	MSGMENU:	DB	13,10,"AT89S8253 - Prommer Menu",13,10
-	  647C	38 39 53 38
-	  6480	32 35 33 20
-	  6484	2D 20 50 72
-	  6488	6F 6D 6D 65
-	  648C	72 20 4D 65
-	  6490	6E 75 0D 0A
- 1044:	  6494	43 20 2D 20			DB	"C - Clear Flash",13,10
+  995:	  6442	22				RET
+  996:
+  997:	  6443	78 FC		SIGNATURE:	MOV	R0,#SPICMD
+  998:	  6445	76 28				MOV	@R0,#028h
+  999:	  6447	08				INC	R0
+ 1000:	  6448	08				INC	R0
+ 1001:	  6449	76 30				MOV	@R0,#030h
+ 1002:	  644B	91 66				ACALL	COMMAND
+ 1003:	  644D	B4 1E 0B			CJNE	A,#01Eh,SIGFAIL
+ 1004:	  6450	78 FE				MOV	R0,#SPIADRLO
+ 1005:	  6452	76 31				MOV	@R0,#031h
+ 1006:	  6454	91 66				ACALL	COMMAND
+ 1007:	  6456	B4 73 02			CJNE	A,#073h,SIGFAIL
+ 1008:	  6459	C3				CLR	C
+ 1009:	  645A	22				RET
+ 1010:	  645B	D3		SIGFAIL:	SETB	C
+ 1011:	  645C	22				RET
+ 1012:
+ 1013:	  645D	78 FC		ENABLE:		MOV	R0,#SPICMD
+ 1014:	  645F	76 AC				MOV	@R0,#0ACh
+ 1015:	  6461	08				INC	R0
+ 1016:	  6462	76 53				MOV	@R0,#053h
+ 1017:	  6464	81 66				AJMP	COMMAND
+ 1018:
+ 1019:	  6466	78 FC		COMMAND:	MOV	R0,#SPICMD
+ 1020:	  6468	E6		COMMAND1:	MOV	A,@R0
+ 1021:				;		CALL	PHEX
+ 1022:				;		ACALL	SPIBYTE
+ 1023:	  6469	08				INC	R0
+ 1024:	  646A	B8 00 FB			CJNE	R0,#0,COMMAND1
+ 1025:				;		CALL	NEWLINE
+ 1026:	  646D	22				RET
+ 1027:
+ 1028:				;SPIBYTE:	MOV	R7,#8
+ 1029:				;SPIBYTE1:	RLC	A
+ 1030:				;		SETB	SCK_52
+ 1031:				;		MOV	MOSI_52,C
+ 1032:				;		CLR	SCK_52
+ 1033:				;		MOV	C,MISO_52
+ 1034:				;		DJNZ	R7,SPIBYTE1
+ 1035:				;		RLC	A
+ 1036:				;		CALL	PHEX
+ 1037:				;		RET
+ 1038:
+ 1039:	  646E	7E 00		TIME35MS:	MOV	R6,#0
+ 1040:	  6470	7F 00		TIME35MS2:	MOV	R7,#0
+ 1041:	  6472	DF FE		TIME35MS1:	DJNZ	R7,TIME35MS1
+ 1042:	  6474	DE FC				DJNZ	R6,TIME35MS1
+ 1043:	  6476	22				RET
+ 1044:
+ 1045:	  6477	7E 12		TIME5MS:	MOV	R6,#18
+ 1046:	  6479	81 70				AJMP	TIME35MS2
+ 1047:
+ 1048:	  647B	0D 0A 41 54	MSGMENU:	DB	13,10,"AT89S8253 - Prommer Menu",13,10
+	  647F	38 39 53 38
+	  6483	32 35 33 20
 
 ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 20
 
@@ -1202,62 +1202,62 @@ ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. H
 
  Line  I  Addr  Code            Source
 
-	  6498	43 6C 65 61
-	  649C	72 20 46 6C
-	  64A0	61 73 68 0D
-	  64A4	0A
- 1045:	  64A5	44 20 2D 20			DB	"D - Download Intel-Hex file at $D000",13,10
-	  64A9	44 6F 77 6E
-	  64AD	6C 6F 61 64
-	  64B1	20 49 6E 74
-	  64B5	65 6C 2D 48
-	  64B9	65 78 20 66
-	  64BD	69 6C 65 20
-	  64C1	61 74 20 24
-	  64C5	44 30 30 30
-	  64C9	0D 0A
- 1046:	  64CB	50 20 2D 20			DB	"P - Program Chip",13,10
-	  64CF	50 72 6F 67
-	  64D3	72 61 6D 20
-	  64D7	43 68 69 70
-	  64DB	0D 0A
- 1047:	  64DD	52 20 2D 20			DB	"R - Read Flash",13,10
-	  64E1	52 65 61 64
-	  64E5	20 46 6C 61
-	  64E9	73 68 0D 0A
- 1048:	  64ED	56 20 2D 20			DB	"V - Verify Flash",13,10
-	  64F1	56 65 72 69
-	  64F5	66 79 20 46
-	  64F9	6C 61 73 68
-	  64FD	0D 0A
- 1049:	  64FF	58 20 2D 20			DB	"X - Exit"
-	  6503	45 78 69 74
- 1050:	  6507	0D 0A 00			DB	13, 10, 0
- 1051:
- 1052:	  650A	41 54 38 39	MSGSIGFAIL:	DB	"AT89S8253 signature check failure!",13,10,0
-	  650E	53 38 32 35
-	  6512	33 20 73 69
-	  6516	67 6E 61 74
-	  651A	75 72 65 20
-	  651E	63 68 65 63
-	  6522	6B 20 66 61
-	  6526	69 6C 75 72
-	  652A	65 21 0D 0A
-	  652E	00
- 1053:	  652F	56 65 72 69	MSGVERIFAIL:	DB	"Verify failure at: ",0
-	  6533	66 79 20 66
-	  6537	61 69 6C 75
-	  653B	72 65 20 61
-	  653F	74 3A 20 00
- 1054:
- 1055:	  6543	0D 0D 1F 9F	dnlds1: 	db	13,13,31,159," ascii",249,150,31,152,132,137
-	  6547	20 61 73 63
-	  654B	69 69 F9 96
-	  654F	1F 98 84 89
- 1056:	  6553	2C 95 8C 80			db	",",149,140,128,160,13,14
-	  6557	A0 0D 0E
- 1057:	  655A	0D 1F 8A A0	dnlds2: 	db	13,31,138,160,"ed",13,14
-	  655E	65 64 0D 0E
+	  6487	2D 20 50 72
+	  648B	6F 6D 6D 65
+	  648F	72 20 4D 65
+	  6493	6E 75 0D 0A
+ 1049:	  6497	43 20 2D 20			DB	"C - Clear Flash",13,10
+	  649B	43 6C 65 61
+	  649F	72 20 46 6C
+	  64A3	61 73 68 0D
+	  64A7	0A
+ 1050:	  64A8	44 20 2D 20			DB	"D - Download Intel-Hex file at $D000",13,10
+	  64AC	44 6F 77 6E
+	  64B0	6C 6F 61 64
+	  64B4	20 49 6E 74
+	  64B8	65 6C 2D 48
+	  64BC	65 78 20 66
+	  64C0	69 6C 65 20
+	  64C4	61 74 20 24
+	  64C8	44 30 30 30
+	  64CC	0D 0A
+ 1051:	  64CE	50 20 2D 20			DB	"P - Program Chip",13,10
+	  64D2	50 72 6F 67
+	  64D6	72 61 6D 20
+	  64DA	43 68 69 70
+	  64DE	0D 0A
+ 1052:	  64E0	52 20 2D 20			DB	"R - Read Flash",13,10
+	  64E4	52 65 61 64
+	  64E8	20 46 6C 61
+	  64EC	73 68 0D 0A
+ 1053:	  64F0	56 20 2D 20			DB	"V - Verify Flash",13,10
+	  64F4	56 65 72 69
+	  64F8	66 79 20 46
+	  64FC	6C 61 73 68
+	  6500	0D 0A
+ 1054:	  6502	58 20 2D 20			DB	"X - Exit"
+	  6506	45 78 69 74
+ 1055:	  650A	0D 0A 00			DB	13, 10, 0
+ 1056:
+ 1057:	  650D	41 54 38 39	MSGSIGFAIL:	DB	"AT89S8253 signature check failure!",13,10,0
+	  6511	53 38 32 35
+	  6515	33 20 73 69
+	  6519	67 6E 61 74
+	  651D	75 72 65 20
+	  6521	63 68 65 63
+	  6525	6B 20 66 61
+	  6529	69 6C 75 72
+	  652D	65 21 0D 0A
+	  6531	00
+ 1058:	  6532	56 65 72 69	MSGVERIFAIL:	DB	"Verify failure at: ",0
+	  6536	66 79 20 66
+	  653A	61 69 6C 75
+	  653E	72 65 20 61
+	  6542	74 3A 20 00
+ 1059:
+ 1060:	  6546	0D 0D 1F 9F	dnlds1: 	db	13,13,31,159," ascii",249,150,31,152,132,137
+	  654A	20 61 73 63
+	  654E	69 69 F9 96
 
 ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 21
 
@@ -1265,46 +1265,51 @@ ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. H
 
  Line  I  Addr  Code            Source
 
- 1058:	  6562	0D 1F 8A C1	dnlds3: 	DB	13,31,138,193,"d",13,14
-	  6566	64 0D 0E
- 1059:	  6569	53 75 6D 6D	dnlds4: 	DB	"Summary:",14
-	  656D	61 72 79 3A
-	  6571	0E
- 1060:	  6572	20 C6 73 91	dnlds5: 	DB	" ",198,"s",145,"d",14
-	  6576	64 0E
- 1061:	  6578	20 8B 91 64	dnlds6a:	DB	" ",139,145,"d",14
-	  657C	0E
- 1062:	  657D	20 8B 20 77	dnlds6b:	DB	" ",139," written",14
-	  6581	72 69 74 74
-	  6585	65 6E 0E
- 1063:	  6588	1F 9B 3A 0E	dnlds7: 	DB	31,155,":",14
- 1064:	  658C	20 8B 20 75	dnlds8: 	DB	" ",139," unable",128," write",14
-	  6590	6E 61 62 6C
-	  6594	65 80 20 77
-	  6598	72 69 74 65
-	  659C	0E
- 1065:	  659D	20 20 62 61	dnlds9: 	DB	32,32,"bad",245,"s",14
-	  65A1	64 F5 73 0E
- 1066:	  65A5	20 85 9F 96	dnlds10:	DB	" ",133,159,150,198,14
-	  65A9	C6 0E
- 1067:	  65AB	20 85 84 9D	dnlds11:	DB	" ",133,132,157,14
-	  65AF	0E
- 1068:	  65B0	20 85 20 6E	dnlds12:	DB	" ",133," non",132,157,14
-	  65B4	6F 6E 84 9D
-	  65B8	0E
- 1069:	  65B9	1F 97 9B 20	dnlds13:	DB	31,151,155," detected",13,14
-	  65BD	64 65 74 65
-	  65C1	63 74 65 64
-	  65C5	0D 0E
- 1070:
- 1071:		N      007F	TEMP		EQU	127
- 1072:		N      00EC	dnld_parm	EQU	236
- 1073:		N      00FC	SPICMD		EQU	252
- 1074:		N      00FD	SPIADRHI	EQU	253
- 1075:		N      00FE	SPIADRLO	EQU	254
- 1076:		N      00FF	SPIDATA		EQU	255
- 1077:
- 1078:						END
+	  6552	1F 98 84 89
+ 1061:	  6556	2C 95 8C 80			db	",",149,140,128,160,13,14
+	  655A	A0 0D 0E
+ 1062:	  655D	0D 1F 8A A0	dnlds2: 	db	13,31,138,160,"ed",13,14
+	  6561	65 64 0D 0E
+ 1063:	  6565	0D 1F 8A C1	dnlds3: 	DB	13,31,138,193,"d",13,14
+	  6569	64 0D 0E
+ 1064:	  656C	53 75 6D 6D	dnlds4: 	DB	"Summary:",14
+	  6570	61 72 79 3A
+	  6574	0E
+ 1065:	  6575	20 C6 73 91	dnlds5: 	DB	" ",198,"s",145,"d",14
+	  6579	64 0E
+ 1066:	  657B	20 8B 91 64	dnlds6a:	DB	" ",139,145,"d",14
+	  657F	0E
+ 1067:	  6580	20 8B 20 77	dnlds6b:	DB	" ",139," written",14
+	  6584	72 69 74 74
+	  6588	65 6E 0E
+ 1068:	  658B	1F 9B 3A 0E	dnlds7: 	DB	31,155,":",14
+ 1069:	  658F	20 8B 20 75	dnlds8: 	DB	" ",139," unable",128," write",14
+	  6593	6E 61 62 6C
+	  6597	65 80 20 77
+	  659B	72 69 74 65
+	  659F	0E
+ 1070:	  65A0	20 20 62 61	dnlds9: 	DB	32,32,"bad",245,"s",14
+	  65A4	64 F5 73 0E
+ 1071:	  65A8	20 85 9F 96	dnlds10:	DB	" ",133,159,150,198,14
+	  65AC	C6 0E
+ 1072:	  65AE	20 85 84 9D	dnlds11:	DB	" ",133,132,157,14
+	  65B2	0E
+ 1073:	  65B3	20 85 20 6E	dnlds12:	DB	" ",133," non",132,157,14
+	  65B7	6F 6E 84 9D
+	  65BB	0E
+ 1074:	  65BC	1F 97 9B 20	dnlds13:	DB	31,151,155," detected",13,14
+	  65C0	64 65 74 65
+	  65C4	63 74 65 64
+	  65C8	0D 0E
+ 1075:
+ 1076:		N      007F	TEMP		EQU	127
+ 1077:		N      00EC	dnld_parm	EQU	236
+ 1078:		N      00FC	SPICMD		EQU	252
+ 1079:		N      00FD	SPIADRHI	EQU	253
+ 1080:		N      00FE	SPIADRLO	EQU	254
+ 1081:		N      00FF	SPIDATA		EQU	255
+ 1082:
+ 1083:						END
 
 
 
@@ -1341,44 +1346,44 @@ AUXR1				  DATA	      A2	  24
 B				  DATA	      F0	  37
 CIN				  NUMBER    0032	 107
 CIN_FILTER			  NUMBER    0062	 133
-CLEAR				  CODE	    61F9	 596
-COMMAND				  CODE	    6463	1014
-COMMAND1			  CODE	    6465	1015
-COPYFONT			  CODE	    60F0	 343
-COPYFONT1			  CODE	    60FA	 349
+CLEAR				  CODE	    61FC	 601
+COMMAND				  CODE	    6466	1019
+COMMAND1			  CODE	    6468	1020
+COPYFONT			  CODE	    60ED	 343
+COPYFONT1			  CODE	    60F7	 349
 COUT				  NUMBER    0030	 106
 CPRL2				  BIT	      C8	  81
 CT2				  BIT	      C9	  82
 CY				  BIT	      D7	  95
 DATABUS				  NUMBER    0090	 181
-DLND_SUM_DONE			  CODE	    636F	 851
-DNLD				  CODE	    6206	 603
-DNLD0				  CODE	    638E	 874
-DNLD1				  CODE	    620E	 609
-DNLD2				  CODE	    6216	 613
-DNLD2B				  CODE	    621B	 615
-DNLD2D				  CODE	    622D	 627
-DNLD3				  CODE	    6231	 631
-DNLD3_A				  CODE	    6240	 640
-DNLD3_B				  CODE	    6244	 642
-DNLD4				  CODE	    6251	 648
-DNLD5				  CODE	    6253	 649
-DNLDDLY2			  CODE	    62A8	 716
-DNLDER2				  CODE	    633B	 823
-DNLDER3				  CODE	    6349	 831
-DNLDGH1				  CODE	    62CE	 760
-DNLDGH2				  CODE	    62D7	 763
-DNLDGH3				  CODE	    62DD	 766
-DNLDGH4				  CODE	    62E0	 767
-DNLDGH5				  CODE	    62EA	 772
-DNLDGH6				  CODE	    62F5	 777
-DNLDGH7				  CODE	    62F6	 778
-DNLDGH8				  CODE	    6301	 782
-DNLDGH9				  CODE	    6306	 784
-DNLDGHA				  CODE	    6311	 789
-DNLDGP2				  CODE	    62CD	 748
-DNLDIN2				  CODE	    62BC	 733
-DNLDS1				  CODE	    6543	1055
+DLND_SUM_DONE			  CODE	    6372	 856
+DNLD				  CODE	    6209	 608
+DNLD0				  CODE	    6391	 879
+DNLD1				  CODE	    6211	 614
+DNLD2				  CODE	    6219	 618
+DNLD2B				  CODE	    621E	 620
+DNLD2D				  CODE	    6230	 632
+DNLD3				  CODE	    6234	 636
+DNLD3_A				  CODE	    6243	 645
+DNLD3_B				  CODE	    6247	 647
+DNLD4				  CODE	    6254	 653
+DNLD5				  CODE	    6256	 654
+DNLDDLY2			  CODE	    62AB	 721
+DNLDER2				  CODE	    633E	 828
+DNLDER3				  CODE	    634C	 836
+DNLDGH1				  CODE	    62D1	 765
+DNLDGH2				  CODE	    62DA	 768
+DNLDGH3				  CODE	    62E0	 771
+DNLDGH4				  CODE	    62E3	 772
+DNLDGH5				  CODE	    62ED	 777
+DNLDGH6				  CODE	    62F8	 782
+DNLDGH7				  CODE	    62F9	 783
+DNLDGH8				  CODE	    6304	 787
+DNLDGH9				  CODE	    6309	 789
+DNLDGHA				  CODE	    6314	 794
+DNLDGP2				  CODE	    62D0	 753
+DNLDIN2				  CODE	    62BF	 738
+DNLDS1				  CODE	    6546	1060
 
 ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 23
 
@@ -1386,54 +1391,54 @@ ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. H
 
 SYMBOL				  TYPE     VALUE	LINE
 ------------------------------------------------------------
-DNLDS10				  CODE	    65A5	1066
-DNLDS11				  CODE	    65AB	1067
-DNLDS12				  CODE	    65B0	1068
-DNLDS13				  CODE	    65B9	1069
-DNLDS2				  CODE	    655A	1057
-DNLDS3				  CODE	    6562	1058
-DNLDS4				  CODE	    6569	1059
-DNLDS5				  CODE	    6572	1060
-DNLDS6A				  CODE	    6578	1061
-DNLDS6B				  CODE	    657D	1062
-DNLDS7				  CODE	    6588	1063
-DNLDS8				  CODE	    658C	1064
-DNLDS9				  CODE	    659D	1065
-DNLD_DLY			  CODE	    62A6	 711
-DNLD_END			  CODE	    627E	 682
-DNLD_END_2			  CODE	    6281	 685
-DNLD_END_3			  CODE	    6285	 688
-DNLD_END_4			  CODE	    6297	 699
-DNLD_ERR			  CODE	    6339	 821
-DNLD_ESC			  CODE	    629C	 705
-DNLD_GET_CKSUM			  CODE	    626A	 665
-DNLD_GHEX			  CODE	    62CE	 759
-DNLD_GP				  CODE	    62BD	 735
-DNLD_I0				  CODE	    6388	 867
-DNLD_I2				  CODE	    637C	 861
-DNLD_I3				  CODE	    6387	 865
-DNLD_INC			  CODE	    62AF	 721
-DNLD_INIT			  CODE	    638C	 871
-DNLD_ITEM			  CODE	    6378	 858
-DNLD_NOW			  CODE	    6226	 622
-DNLD_PARM			  NUMBER    00EC	1072
-DNLD_SUM			  CODE	    6319	 803
-DNLD_SUMERR			  CODE	    626F	 669
-DNLD_UKN2			  CODE	    6278	 677
-DNLD_UNKNOWN			  CODE	    6275	 674
+DNLDS10				  CODE	    65A8	1071
+DNLDS11				  CODE	    65AE	1072
+DNLDS12				  CODE	    65B3	1073
+DNLDS13				  CODE	    65BC	1074
+DNLDS2				  CODE	    655D	1062
+DNLDS3				  CODE	    6565	1063
+DNLDS4				  CODE	    656C	1064
+DNLDS5				  CODE	    6575	1065
+DNLDS6A				  CODE	    657B	1066
+DNLDS6B				  CODE	    6580	1067
+DNLDS7				  CODE	    658B	1068
+DNLDS8				  CODE	    658F	1069
+DNLDS9				  CODE	    65A0	1070
+DNLD_DLY			  CODE	    62A9	 716
+DNLD_END			  CODE	    6281	 687
+DNLD_END_2			  CODE	    6284	 690
+DNLD_END_3			  CODE	    6288	 693
+DNLD_END_4			  CODE	    629A	 704
+DNLD_ERR			  CODE	    633C	 826
+DNLD_ESC			  CODE	    629F	 710
+DNLD_GET_CKSUM			  CODE	    626D	 670
+DNLD_GHEX			  CODE	    62D1	 764
+DNLD_GP				  CODE	    62C0	 740
+DNLD_I0				  CODE	    638B	 872
+DNLD_I2				  CODE	    637F	 866
+DNLD_I3				  CODE	    638A	 870
+DNLD_INC			  CODE	    62B2	 726
+DNLD_INIT			  CODE	    638F	 876
+DNLD_ITEM			  CODE	    637B	 863
+DNLD_NOW			  CODE	    6229	 627
+DNLD_PARM			  NUMBER    00EC	1077
+DNLD_SUM			  CODE	    631C	 808
+DNLD_SUMERR			  CODE	    6272	 674
+DNLD_UKN2			  CODE	    627B	 682
+DNLD_UNKNOWN			  CODE	    6278	 679
 DP0H				  DATA	      83	   9
 DP0L				  DATA	      82	   8
 DP1H				  DATA	      85	  11
 DP1L				  DATA	      84	  10
 DPH				  NUMBER    0083	 190
 DPL				  NUMBER    0082	 189
-DUMPRAM				  CODE	    60B8	 306
-DUMPRAM1			  CODE	    60CF	 316
-DUMPRAM2			  CODE	    60BB	 307
+DUMPRAM				  CODE	    60B5	 306
+DUMPRAM1			  CODE	    60CC	 316
+DUMPRAM2			  CODE	    60B8	 307
 EA				  BIT	      AF	  66
-ENABLE				  CODE	    645A	1008
+ENABLE				  CODE	    645D	1013
 ERALL				  NUMBER    005C	 131
-ERROR				  CODE	    6171	 474
+ERROR				  CODE	    6174	 479
 ES				  BIT	      AC	  64
 ESC				  NUMBER    003E	 117
 ET0				  BIT	      A9	  61
@@ -1459,7 +1464,7 @@ GHEX16				  NUMBER    003C	 115
 IE				  DATA	      A8	  26
 IE0				  BIT	      89	  40
 IE1				  BIT	      8B	  42
-INIT6845			  CODE	    6111	 371
+INIT6845			  CODE	    610E	 371
 INT0				  BIT	      B2	  69
 INT1				  BIT	      B3	  70
 INTADD				  NUMBER    982C	 159
@@ -1486,7 +1491,7 @@ IT0				  BIT	      88	  39
 IT1				  BIT	      8A	  41
 LENSTR				  NUMBER    004A	 125
 LOCAT				  NUMBER    6000	 192
-LOOP				  CODE	    61B1	 536
+LOOP				  CODE	    61B4	 541
 MEMCLR				  NUMBER    980A	 141
 MEMCLR4				  NUMBER    9808	 140
 MEMCMP				  NUMBER    980E	 143
@@ -1503,8 +1508,8 @@ MEMINTA4			  NUMBER    9834	 164
 MEMINTC				  NUMBER    9814	 146
 MEMINTC2			  NUMBER    9810	 144
 MEMINTC4			  NUMBER    9812	 145
-MENU				  CODE	    61C9	 575
-MENUC				  CODE	    61D2	 578
+MENU				  CODE	    61CC	 580
+MENUC				  CODE	    61D5	 583
 
 ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 25
 
@@ -1512,17 +1517,17 @@ ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. H
 
 SYMBOL				  TYPE     VALUE	LINE
 ------------------------------------------------------------
-MENUD				  CODE	    61D9	 581
-MENULOOP			  CODE	    61CF	 577
-MENUP				  CODE	    61E0	 584
-MENUR				  CODE	    61E7	 587
-MENUV				  CODE	    61EE	 590
-MENUX				  CODE	    61F5	 593
+MENUD				  CODE	    61DC	 586
+MENULOOP			  CODE	    61D2	 582
+MENUP				  CODE	    61E3	 589
+MENUR				  CODE	    61EA	 592
+MENUV				  CODE	    61F1	 595
+MENUX				  CODE	    61F8	 598
 MISO				  BIT	      96	  50
 MOSI				  BIT	      95	  49
-MSGMENU				  CODE	    6478	1043
-MSGSIGFAIL			  CODE	    650A	1052
-MSGVERIFAIL			  CODE	    652F	1053
+MSGMENU				  CODE	    647B	1048
+MSGSIGFAIL			  CODE	    650D	1057
+MSGVERIFAIL			  CODE	    6532	1058
 NEWLINE				  NUMBER    0048	 124
 OV				  BIT	      D2	  90
 P				  BIT	      D0	  89
@@ -1540,11 +1545,11 @@ PINT16U				  NUMBER    0053	 128
 PINT8				  NUMBER    0050	 127
 PINT8U				  NUMBER    004D	 126
 PRGM				  NUMBER    0059	 130
-PROGRAM				  CODE	    639F	 888
-PROGRAM64			  CODE	    63A2	 890
-PROGRAM64A			  CODE	    63B6	 905
-PROGRAM64B			  CODE	    63AC	 897
-PROGRAM64EX			  CODE	    63CB	 921
+PROGRAM				  CODE	    63A2	 893
+PROGRAM64			  CODE	    63A5	 895
+PROGRAM64A			  CODE	    63B9	 910
+PROGRAM64B			  CODE	    63AF	 902
+PROGRAM64EX			  CODE	    63CE	 926
 PS				  BIT	      BC	  79
 PSTR				  NUMBER    0038	 110
 PSTRR7				  NUMBER    9848	 177
@@ -1554,20 +1559,20 @@ PT1				  BIT	      BB	  78
 PT2				  BIT	      BD	  80
 PX0				  BIT	      B8	  75
 PX1				  BIT	      BA	  77
-R6R7TODPTR			  CODE	    639A	 882
+R6R7TODPTR			  CODE	    639D	 887
 RB8				  BIT	      9A	  54
 RCAP2H				  DATA	      CB	  32
 RCAP2L				  DATA	      CA	  31
 RCLK				  BIT	      CD	  86
 RD				  BIT	      B7	  74
-READ64				  CODE	    63D5	 929
-READ64A				  CODE	    63E8	 941
-READ64B				  CODE	    63DF	 935
-READ64ERR			  CODE	    63FE	 958
-READ64EX			  CODE	    63FD	 956
-READFLASH			  CODE	    63D0	 926
-READFLASH1			  CODE	    63D2	 927
-READPAGE			  CODE	    6198	 508
+READ64				  CODE	    63D8	 934
+READ64A				  CODE	    63EB	 946
+READ64B				  CODE	    63E2	 940
+READ64ERR			  CODE	    6401	 963
+READ64EX			  CODE	    6400	 961
+READFLASH			  CODE	    63D3	 931
+READFLASH1			  CODE	    63D5	 932
+READPAGE			  CODE	    619B	 513
 
 ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 26
 
@@ -1575,15 +1580,15 @@ ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. H
 
 SYMBOL				  TYPE     VALUE	LINE
 ------------------------------------------------------------
-READVERI			  CODE	    6431	 980
-READVERI1			  CODE	    6436	 984
-READVERI2			  CODE	    643E	 989
-REGS				  CODE	    6063	 255
-REGS1				  CODE	    6085	 273
-REGS2				  CODE	    608B	 276
-REGS3				  CODE	    607C	 269
-REGS4				  CODE	    606D	 260
-REGSSET				  CODE	    6091	 279
+READVERI			  CODE	    6434	 985
+READVERI1			  CODE	    6439	 989
+READVERI2			  CODE	    6441	 994
+REGS				  CODE	    6060	 255
+REGS1				  CODE	    6082	 273
+REGS2				  CODE	    6088	 276
+REGS3				  CODE	    6079	 269
+REGS4				  CODE	    606A	 260
+REGSSET				  CODE	    608E	 279
 REN				  BIT	      9C	  56
 RESET				  CODE	    0000	  97
 RI				  BIT	      98	  52
@@ -1593,25 +1598,25 @@ RXD				  BIT	      B0	  67
 SBUF				  DATA	      99	  22
 SCK				  BIT	      97	  51
 SCON				  DATA	      98	  21
-SETREGS				  CODE	    611F	 378
-SIGFAIL				  CODE	    6458	1005
-SIGNATURE			  CODE	    6440	 992
+SETREGS				  CODE	    611F	 381
+SIGFAIL				  CODE	    645B	1010
+SIGNATURE			  CODE	    6443	 997
 SINT				  CODE	    0023	 102
 SM0				  BIT	      9F	  59
 SM1				  BIT	      9E	  58
 SM2				  BIT	      9D	  57
 SMART_WR			  NUMBER    0056	 129
 SP				  DATA	      81	   7
-SPACE				  CODE	    6395	 879
-SPIADRHI			  NUMBER    00FD	1074
-SPIADRLO			  NUMBER    00FE	1075
-SPICMD				  NUMBER    00FC	1073
-SPIDATA				  NUMBER    00FF	1076
+SPACE				  CODE	    6398	 884
+SPIADRHI			  NUMBER    00FD	1079
+SPIADRLO			  NUMBER    00FE	1080
+SPICMD				  NUMBER    00FC	1078
+SPIDATA				  NUMBER    00FF	1081
 START				  CODE	    6040	 210
 START1				  CODE	    604B	 237
 STRCOPY				  NUMBER    984A	 179
 SYCS				  NUMBER    00B2	 183
-SYDATA				  CODE	    6144	 435
+SYDATA				  CODE	    6147	 440
 SYPHI2				  NUMBER    00B4	 185
 SYRS				  NUMBER    00B3	 184
 SYRW				  NUMBER    00B5	 186
@@ -1624,13 +1629,13 @@ T2MOD				  DATA	      C9	  30
 TB8				  BIT	      9B	  55
 TCLK				  BIT	      CC	  85
 TCON				  DATA	      88	  13
-TEMP				  NUMBER    007F	1071
-TESTLOOP			  CODE	    615E	 463
-TESTLOOP1			  CODE	    6162	 465
-TESTRAM				  CODE	    6158	 458
-TESTSCREEN			  CODE	    60D5	 320
-TESTSCREEN1			  CODE	    60DE	 325
-TESTSCREEN2			  CODE	    60EB	 337
+TEMP				  NUMBER    007F	1076
+TESTLOOP			  CODE	    6161	 468
+TESTLOOP1			  CODE	    6165	 470
+TESTRAM				  CODE	    615B	 463
+TESTSCREEN			  CODE	    60D2	 320
+TESTSCREEN1			  CODE	    60DB	 325
+TESTSCREEN2			  CODE	    60E8	 337
 
 ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. Heinz                                         PAGE 27
 
@@ -1638,7 +1643,7 @@ ASEM-51 V1.3                                        Copyright (c) 2002 by W.W. H
 
 SYMBOL				  TYPE     VALUE	LINE
 ------------------------------------------------------------
-TESTSCREEN3			  CODE	    60DA	 323
+TESTSCREEN3			  CODE	    60D7	 323
 TF0				  BIT	      8D	  44
 TF1				  BIT	      8F	  46
 TF2				  BIT	      CF	  88
@@ -1646,12 +1651,12 @@ TH0				  DATA	      8C	  17
 TH1				  DATA	      8D	  18
 TH2				  DATA	      CD	  34
 TI				  BIT	      99	  53
-TIME				  CODE	    61BE	 544
-TIME1				  CODE	    61C2	 546
-TIME35MS			  CODE	    646B	1034
-TIME35MS1			  CODE	    646F	1036
-TIME35MS2			  CODE	    646D	1035
-TIME5MS				  CODE	    6474	1040
+TIME				  CODE	    61C1	 549
+TIME1				  CODE	    61C5	 551
+TIME35MS			  CODE	    646E	1039
+TIME35MS1			  CODE	    6472	1041
+TIME35MS2			  CODE	    6470	1040
+TIME5MS				  CODE	    6477	1045
 TIMER0				  CODE	    000B	  99
 TIMER1				  CODE	    001B	 101
 TIMER2				  CODE	    002B	 103
@@ -1659,14 +1664,14 @@ TL0				  DATA	      8A	  15
 TL1				  DATA	      8B	  16
 TL2				  DATA	      CC	  33
 TMOD				  DATA	      89	  14
-TP0				  CODE	    6186	 488
-TP1				  CODE	    619C	 510
+TP0				  CODE	    6189	 493
+TP1				  CODE	    619F	 515
 TR0				  BIT	      8C	  43
 TR1				  BIT	      8E	  45
 TR2				  BIT	      CA	  83
 TXD				  BIT	      B1	  68
 UPPER				  NUMBER    0040	 119
-VERIFY				  CODE	    63CC	 923
+VERIFY				  CODE	    63CF	 928
 WDTRST				  DATA	      A6	  25
 WR				  BIT	      B6	  73
-WRITEPAGE			  CODE	    6172	 478
+WRITEPAGE			  CODE	    6175	 483

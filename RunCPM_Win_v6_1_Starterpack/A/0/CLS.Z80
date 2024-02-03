@@ -1,0 +1,12 @@
+;
+cpm equ 5
+org 100h
+;
+ld de,msg1
+ld c,9;print string
+call cpm
+ret
+;
+msg1 db 27,'[;f',27,'[2J$'
+end
+
