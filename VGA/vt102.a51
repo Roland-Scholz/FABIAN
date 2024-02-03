@@ -28,6 +28,17 @@ ST_ESC_LBRACK	equ	12
 ST_CSI_Q	equ	14
 ST_ESC_RBRACK	equ	16
 
+BLACK		equ	0
+RED		equ	1
+GREEN		equ	2
+YELLOW		equ	3
+BLUE		equ	4
+MAGENTA		equ	5
+TURQUOISE	equ	6
+WHITE		equ	7
+
+DEFAULTCOLOR	equ	WHITE SHL 4 + BLACK
+
 C_TIME		equ	10
 
 C_BELL		equ	7
@@ -126,7 +137,6 @@ wrap		equ	flags2.0
 origin		equ	flags2.1
 newlinemode	equ	flags2.2
 insert		equ	flags2.3
-baudflag	equ	flags2.4
 
 retstate	equ	023h
 nargs		equ	025h
@@ -134,7 +144,7 @@ arg0		equ	026h
 arg1		equ	027h
 arg2		equ	028h
 arg3		equ	029h
-dummy		equ	02ah
+baudidx		equ	02ah
 scursorx	equ	02bh
 scursory	equ	02ch
 color		equ	02dh
@@ -153,7 +163,7 @@ t0cnt		equ	039h
 keyrxcnt	equ	03ah
 keyrxval	equ	03bh
 oldstatus	equ	03ch
-baudidx		equ	03dh
+defcol		equ	03dh
 
 serbuf		equ	040h
 
@@ -345,7 +355,7 @@ main_loop:	jnb	keyavail, main_serin		;key available?
 		mov	a, keyrxval
 		cjne	a, #F5, main_F6			;F5 ?
 		ajmp	init_2				;reset terminal
-main_F6:	cjne	a, #F6, main_cout		;F6 ?
+main_F6:	cjne	a, #F6, main_F7			;F6 ?
 		mov	r0, baudidx			;switch baud
 		inc	r0
 		cjne	r0, #5, main_F6a
@@ -357,6 +367,14 @@ main_F6a:	mov	baudidx, r0
 		mov	TH0, a
 		setb	tr1
 		sjmp	main_status
+		
+main_F7:	cjne	a, #F7, main_cout		;F7 ? cycle color		
+		mov	a, defcol
+		add	a, #16
+		anl	a, #07fh
+		mov	defcol, a
+		mov	color, a
+		sjmp	main_loop
 		
 main_cout:	call	cout				;send out over serial
 		cjne	a, #C_CR, main_serin		;CR sent?
@@ -697,14 +715,14 @@ do_csi_u:	cjne	a, #'u', do_csi_m	;restore cursor
 
 do_csi_m:	cjne	a, #'m', do_csi_n	;color handling
 		mov	r1, nargs
-		cjne	r1, #0, do_csi_ma
-		mov	color, #0f0h		;no args, reset
+		cjne	r1, #0, do_csi_ma	;no args, reset
+		mov	color, defcol
 		clr	inverse
 		ret
 do_csi_ma:	mov	r0, #arg0
 do_csi_mc:	mov	a, @r0
 		cjne	a, #0, do_csi_md	;if arg = 0, all attrs off
-		mov	color, #0f0h
+		mov	color, defcol
 		clr	inverse
 		ajmp	do_csi_mx3		;loop nargs		
 do_csi_md:	cjne	a, #30, do_csi_mb
@@ -731,13 +749,20 @@ do_csi_mh:	cjne	a, #48, $+3
 		anl	a, #0f0h
 		orl	a, r2
 		mov	color, a
-		ajmp	do_csi_mx3		; loop nargs
-do_csi_mx:	cjne	a, #7, do_csi_mx1	; inverse
+		ajmp	do_csi_mx3		;loop nargs
+do_csi_mx:	cjne	a, #7, do_csi_mx1	;inverse
 		setb	inverse
-do_csi_mx1:	cjne	a, #1, do_csi_mx2	; bold
-		mov	color, #30h
+do_csi_mx1:	cjne	a, #1, do_csi_mx2	;bold
+		mov	a, color
+		anl	a, #0fh
+		orl	a, #YELLOW SHL 4
+		mov	color, a
+		sjmp	do_csi_mx3
 do_csi_mx2:	cjne	a, #5, do_csi_mx3
-		mov	color, #10h
+		mov	a, color		;underline
+		anl	a, #0fh
+		orl	a, #RED SHL 4
+		mov	color, a
 do_csi_mx3:	inc	r0
 		djnz	r1, do_csi_mc
 		ret 
@@ -1230,7 +1255,8 @@ isdigit3:	ret				;= '9' carry clear
 ;===============================================	
 term_reset:	clr	ea
 		acall	clear_vars
-		mov	color, #0f0h
+		mov	defcol, #DEFAULTCOLOR
+		mov	color, defcol
 		mov	bottom, #HEIGHT-1
 		mov	serstart, #serbuf
 		mov	serend, #serbuf
@@ -1787,24 +1813,12 @@ getbdtxt:	movc	a, @a+pc
 			
 ;
 ;
-prtstatus:
-;		mov	dptr, #08000h + 20 * WIDTH * 2
-;		mov	r0, #0
-;prtstatus6:	mov	a, r0
-;		movx	@dptr, a
-;		inc	dptr
-;		mov	a, #070h
-;		movx	@dptr, a
-;		inc	dptr
-;		inc	r0
-;		cjne	r0, #0, prtstatus6		
-
-		mov	dptr, #08000h + 24 * WIDTH * 2
+prtstatus:	mov	dptr, #08000h + 24 * WIDTH * 2
 		mov	r0, #1
 prtstatus1:	acall	getstatus			;get status line
 		movx	@dptr, a
 		inc	dptr
-		mov	a, #06h				;color turquoise
+		mov	a, #TURQUOISE			;color turquoise
 		movx	@dptr, a
 		inc	dptr		
 		inc	r0
