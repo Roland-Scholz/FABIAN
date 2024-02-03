@@ -37,19 +37,20 @@ R1_ILLEGAL_COMMAND equ 4
 
 SDCS		equ	OP0
 SDMOSI		equ	OP1
-SDCLK		equ	OP2
+;SDCLK		equ	OP2
 SDMISO		equ	IP0
 
 FEOF		equ	$FF
 FNOTFOUND	equ	$FE
 
-
+;CR		equ	13
+;LF		equ	10
 ;--------------------------------------------------------------
 ; Input
 ; HL 	pointer to 4-byte seek-length			
 ;--------------------------------------------------------------
 fseek:
-		call	isZero32			;first request?
+		call	isZero32			;(hl) zero = first request?
 		jr	Z, fseek8
 		
 		ld	de, currpos			;no, currpos equal?
@@ -57,7 +58,7 @@ fseek:
 		ret	z				;yes nothing to do
 		
 fseek8:		push	hl
-		call	fopen1				;reset file-Ptr
+		call	fopen1				;reset file-Ptr, currpos etc.
 
 		pop	hl
 		ld	de, bytesavail
@@ -82,10 +83,10 @@ fseek1:		call	sbc32				;byteavail -= seeklen
 		ld	b, a				;save a in bc
 		add	DATBUF >> 8			;carry clear
 		ld	(de), a
-		push	bc
+		push	bc				;offset into DATBUF
 		
 		inc	hl
-		inc	hl
+		inc	hl				;3rd byte of seeklen
 		ld	de, datsec + 3
 		xor	a				;clear 4th byte
 		ld	(de), a
@@ -98,16 +99,17 @@ fseek2:		dec	de				;giving datsec
 		dec	hl
 		djnz	fseek2
 
-		xor	a
+		xor	a				;clear carry
 		pop	bc
-		ld	hl, $200
+		ld	hl, 512
 		sbc	hl, bc
-		ld	(bytes2read), hl
+		ld	(bytes2read), hl		;remaining bytes in sector
 		
 		ld	hl, datsec			;copy datsec to var32
 		ld	de, var32
 		call	copy32
-		
+
+							;compute cluster number
 		ld	a, (secclus)			;rotate secclus bitposition to right
 		ld	c, a		
 fseek4:		rr	c
@@ -145,7 +147,7 @@ fseek7:		call	clust2sec
 		ld	(var8), a
 		ld	de, datsec
 		ld	hl, var8
-		call	add32
+		call	add32				;de += hl
 		call	sdReadDat
 		
 ;		ld	hl, (datptr)
@@ -256,8 +258,8 @@ fread5:
 		jr	fread2				;bytes2read is <> 0 so we always end up at fread4
 		
 fread4:		ld	(var16), bc			;copy available sector data to buffer
+		ld	hl, (datptr)			;copy from datptr to fbuffer
 		ld	de, (fbuffer)
-		ld	hl, (datptr)
 		ldir
 		ld	(fbuffer), de
 		ld	(datptr), hl
@@ -319,7 +321,7 @@ fopen:		call	dirSearch
 		or	a
 		ret
 
-fopen1:			
+fopen1:				
 		ld	de, currpos			;currpos = 0
 		call	clear32
 		
@@ -374,13 +376,15 @@ fatNextCluster:
 fatNextCluster1:
 		ld	hl, fatbase			;computer FAT sector containing cluster
 		ld	de, fatsector
-		call	copy32
+		call	copy32				;fatsector = fatbase
 		ld	a, (curclus + 1)
 		ld	(var8), a
 		ld	hl, var8
-		call	add32				;fatsector = fatbase + hi(firstclust)		
-		call	sdReadFat	
-		
+		call	add32				;de = fatsector = fatbase + hi(firstclust)		
+
+		call	sdReadFat
+
+	
 		ld	hl, (curclus)			;lo(curclus) * 2
 		ld	h, 0
 		add	hl, hl
@@ -428,14 +432,16 @@ dirReadSector:
 dirRead2:	ld	a, (hl)				;first byte of name zero?
 		or	a	
 		ret	Z				;yes, dir-ed reached, quit ZERO flag set
+		cp	0e5h				;first byte of file-name E5? -> deleted
+		jr	Z, dirRead1
 	
 		push	hl	
 		pop	ix				;ix = hl
 		ld	a, (ix + 11)			;load attribute byte
 		and	%00011111			;mask out archive ($20) and 2 highest bits
 		jr	NZ, dirRead1			;if no file -> next dir
-			
-		ld	b, 6	
+		
+		ld	b, 6				;copy 6 bytes (clust + size)
 		ld	de, firstclust			;to firstclust, filesize
 dirRead5:	ld	a, (ix + $1a)	
 		ld	(de), a	
@@ -450,7 +456,7 @@ dirRead1:	ld	de, 32				;hl = hl + 32
 		add	hl, de	
 		ld	(dirptr), hl	
 	
-		ld	a, h	
+		ld	a, h
 		cp	DATEND >> 8	
 		jr	NZ, dirRead2 	
 			
@@ -462,10 +468,11 @@ dirRead1:	ld	de, 32				;hl = hl + 32
 ;--------------------------------------------------------------
 ; prints entire directory
 ;--------------------------------------------------------------	
-dirPrint:;	ld	hl, allpattern			;copy allpattern to dirpattern
-	;	ld	de, dirpattern
-	;	ld	bc, 11
-	;	ldir
+dirPrint:
+;		ld	hl, allpattern			;copy allpattern to dirpattern
+;		ld	de, dirpattern
+;		ld	bc, 11
+;		ldir
 		
 		call	dirReadFirst
 dirPrint1:	ret	Z				;return if zero
@@ -484,10 +491,10 @@ dirPrintEntry:	push	hl
 		ld	b, 3
 		call	dirPrintEntry1
 		
-		call	space
+		call	space				;filesize high
 		ld	hl, (filesize + 2)
 		call	printadr		
-		ld	hl, (filesize)
+		ld	hl, (filesize)			;filesize low
 		call	printadr
 		
 		call	newline
@@ -530,9 +537,13 @@ clust2sec1:	ld	(datsec), hl
 ;--------------------------------------------------------------
 ;
 ;--------------------------------------------------------------
-sdInit:		call	sdDeselect
-		ld	a, SDCLK			;bring SDCLK low
-		out	(OPSET), a	
+sdInit:
+;		ld	hl, init0msg
+;		call	printstr
+		
+		call	sdDeselect
+;		ld	a, SDCLK			;bring SDCLK low
+;		out	(OPSET), a	
 		ld	d, 12				;clock 96 times
 		call	sdReadbyteX	
 		
@@ -580,6 +591,7 @@ sdInit6:	call	sdDeselect
 		ld	a, CMD41
 		call	sdCardCmd
 		jr	NZ, sdInit6			;result not 0, start over
+		call	sdDeselect
 			
 ;sdInit4:	call	sdDeselect	
 ;		ld	a, CMD58			;read OCR, ($3A)
@@ -639,6 +651,9 @@ fatcompDatbase:	srl	h
 		ld	de, (dirbase)	
 		add	hl, de				;datbase += dirbase
 		ld	(datbase), hl
+		
+;		ld	hl, init1msg
+;		jp	printstr		
 		ret
 		
 ;--------------------------------------------------------------
@@ -650,9 +665,9 @@ sdSetSector:	ld	hl, sdadr + 3
 		dec	hl
 		ld	b, 3
 sdSetSector1:	ld	a, (de)
-	if DEBUG = 1
-		call	printhexdebug
-	endif
+;	if DEBUG = 1
+;		call	printhexdebug
+;	endif
 		rla
 		ld	(hl), a
 		inc	de
@@ -664,9 +679,20 @@ sdSetSector1:	ld	a, (de)
 ;
 ;--------------------------------------------------------------
 sdReadFat:	
+;		push	de
+;		ld	b, 4
+;sdReadFat1:	ld	a, (de)
+;		call	printhex
+;		inc	de
+;		djnz	sdReadFat1
+;		pop	de
+		
 		ld	hl, lastfatsec			;FAT sector in DE already read?
 		call	equal32
 		ret	Z				;yes
+		
+;		ld	c, 'F'
+;		call	chrout
 		
 		ex	de, hl				;copy sector to lastfatsec
 		call	copy32
@@ -680,11 +706,25 @@ sdReadFat:
 ;--------------------------------------------------------------
 sdReadDat:	
 		ld	hl, lastdatsec			;FAT sector in DE already read?
-		call	equal32
+		call	equal32				;de = hl ?
 		ret	Z				;yes
 		
-		ex	de, hl				;copy sector to lastdatsec
-		call	copy32
+;		ld	c, 'R'
+;		call	chrout
+		
+		ld	a, (isdirty)
+		or	a
+		jr	Z, sdReadDat1
+		
+		push	de
+		push	hl
+		ld	de, lastdatsec
+		call	sdWriteDat
+		pop	hl
+		pop	de
+		
+sdReadDat1:	ex	de, hl				;copy sector to lastdatsec
+		call	copy32				;de = hl
 		ex	de, hl
 		ld	hl, DATBUF
 		
@@ -701,84 +741,68 @@ sdReadSec2:	call	sdReadByte			;data token until $FE, i.e. bit 0 = 0;
 		rr	c	
 		jr	C, sdReadSec2	
 
-		ld	a, SDMOSI
-		out	(OPRES), a			;SDMOSI = 1
+;		ld	a, SDMOSI
+;		out	(OPRES), a			;SDMOSI = 1
 			
 		pop	hl	
-		ld	de, 512				;read 512 bytes
-		ld	b, SDCLK
-sdReadSec1:	
-		in	a, (INPORT)
-		rra
-		rl	c
-		ld	a, b	
-		out	(OPRES), a			;sdClock high
-		out	(OPSET), a			;sdClock low
-		in	a, (INPORT)
-		rra
-		rl	c
-		ld	a, b	
-		out	(OPRES), a			;sdClock high
-		out	(OPSET), a			;sdClock low
-		in	a, (INPORT)
-		rra
-		rl	c
-		ld	a, b	
-		out	(OPRES), a			;sdClock high
-		out	(OPSET), a			;sdClock low
-		in	a, (INPORT)
-		rra
-		rl	c
-		ld	a, b	
-		out	(OPRES), a			;sdClock high
-		out	(OPSET), a			;sdClock low
-		in	a, (INPORT)
-		rra
-		rl	c
-		ld	a, b	
-		out	(OPRES), a			;sdClock high
-		out	(OPSET), a			;sdClock low
-		in	a, (INPORT)
-		rra
-		rl	c
-		ld	a, b	
-		out	(OPRES), a			;sdClock high
-		out	(OPSET), a			;sdClock low
-		in	a, (INPORT)
-		rra
-		rl	c
-		ld	a, b	
-		out	(OPRES), a			;sdClock high
-		out	(OPSET), a			;sdClock low
-		in	a, (INPORT)
-		rra
-		rl	c
-		ld	a, b	
-		out	(OPRES), a			;sdClock high
-		out	(OPSET), a			;sdClock low
+;		ld	de, 512				;read 512 bytes
+;		ld	b, SDCLK
 
-		ld	(hl), c	
+;		ld	d, 2
+		ld	bc, 02h				;b = 0, c = 2
+sdReadSec1:	
+		in	a, (INPORT)			;11
+		rra					;4
+		rl	d				;7 = 22
+		in	a, (INPORT)
+		rra
+		rl	d
+		in	a, (INPORT)
+		rra
+		rl	d
+		in	a, (INPORT)
+		rra
+		rl	d
+		in	a, (INPORT)
+		rra
+		rl	d
+		in	a, (INPORT)
+		rra
+		rl	d
+		in	a, (INPORT)
+		rra
+		rl	d
+		in	a, (INPORT)
+		rra
+		rl	d
+
+		ld	(hl), d	
 		inc	hl	
-		dec	e	
-		jp	NZ, sdReadSec1	
-		dec	d	
+		djnz	sdReadSec1
+		dec	c	
 		jr	NZ, sdReadSec1	
 
 		ld	d, 2				;2-byte checksum
 		call	sdReadbyteX	
-		call	sdDeselect	
-		ret
+		jp	sdDeselect
 		
 		
 ;--------------------------------------------------------------
 ; writes one sector in (DE) into DATBUF
 ;--------------------------------------------------------------
-sdWriteDat:	ld	hl, DATBUF
+sdWriteDat:
+;		ld	c, 'W'
+;		call	chrout
+		
+		ld	hl, DATBUF
+		xor	a
+		ld	(isdirty), a
 ;--------------------------------------------------------------
 ; hl		buffer to copy data from
 ; de		pointer to 4-byte sector number
 ;--------------------------------------------------------------
-sdWriteSec:	push	hl
+sdWriteSec:	
+		push	hl
 		call	sdSetSector
 		ld	a, CMD24			;write sector
 		call	sdCardCmd	
@@ -787,14 +811,12 @@ sdWriteSec:	push	hl
 		call	sdSendByte
 		
 		pop	hl	
-		ld	de, 512				;read 512 bytes
-sdWriteSec1:	ld	c, (hl)
-		call	sdSendByte
-		inc	hl	
-		dec	e	
-		jp	NZ, sdWriteSec1	
-		dec	d	
-		jr	NZ, sdWriteSec1	
+		ld	b, 0				;read 512 bytes
+		ld	d, SDMOSI
+		ld	e, 7
+		
+sdWriteSec1:	call	sdWrite256
+		call	sdWrite256	
 
 sdWriteSec2:	call	sdReadByte
 		ld	a, c
@@ -805,9 +827,54 @@ sdWriteSec2:	call	sdReadByte
 ;		cp	DATA_RES_ACCEPTED		; "00000101" = 5 ?
 
 		call	sdWait
-		call	sdDeselect	
-		ret
+		jp	sdDeselect	
 
+
+sdWrite256:	ld	a, (hl)
+		rla					;4
+		ld	c, e				;4
+		rl	c				;8
+		out	(c), d				;12
+		in	c, (c)				;12 just clock the sdCard = 40
+		rla		
+		ld	c, e
+		rl	c	
+		out	(c), d
+		in	c, (c)
+		rla		
+		ld	c, e	
+		rl	c	
+		out	(c), d
+		in	c, (c)
+		rla		
+		ld	c, e	
+		rl	c	
+		out	(c), d
+		in	c, (c)
+		rla		
+		ld	c, e	
+		rl	c	
+		out	(c), d
+		in	c, (c)
+		rla		
+		ld	c, e	
+		rl	c	
+		out	(c), d
+		in	c, (c)
+		rla		
+		ld	c, e	
+		rl	c	
+		out	(c), d
+		in	c, (c)
+		rla		
+		ld	c, e	
+		rl	c	
+		out	(c), d
+		in	c, (c)
+
+		inc	hl		
+		djnz	sdWrite256	
+		ret
 ;--------------------------------------------------------------
 ;
 ;--------------------------------------------------------------
@@ -835,23 +902,34 @@ sdReadbyteX:	call	sdReadByte
 		ret
 
 ;--------------------------------------------------------------
-; Input
-; c		byte to send to sd-card
+; Input, get byte form sdCard
+;
+; c : read byte from sd-card
 ;--------------------------------------------------------------
-sdReadByte:	ld	c, $ff
-sdSendByte:	ld	b, 8
-sdSendByte2:	in	a, (INPORT)
+sdReadByte:	ld	a, SDMOSI
+		out	(OPRES), a			;SDMOSI = 1
+		ld	b, 8
+sdReadByte1:	in	a, (INPORT)
 		rra
 		rl	c
-		ld	a, SDMOSI
-		jp	C, sdSendByte4
-		out	(OPSET), a			;carry 0, SDMOSI = 0
-		jp	sdSendByte3	
-sdSendByte4:	out	(OPRES), a			;carry 1, SDMOSI = 1
-sdSendByte3:	ld	a, SDCLK	
-		out	(OPRES), a			;sdClock high
-		out	(OPSET), a			;sdClock low
-		djnz	sdSendByte2
+		djnz	sdReadByte1
+		ret
+		
+
+;--------------------------------------------------------------
+; output, send byte to sdCard
+;
+; c : byte to send to sd-card
+;--------------------------------------------------------------
+sdSendByte:	ld	b, 8
+sdSendByte1:	rl	c				;7
+		ld	a, SDMOSI			;7
+		jr	C, sdSendByte2			;12/7
+		out	(OPSET), a			;11 ;carry 0, SDMOSI = 0
+		jr	sdSendByte3			;12/7		
+sdSendByte2:	out	(OPRES), a			;11 carry 1, SDMOSI = 1
+sdSendByte3:	in	a, (INPORT)			;11 just clock the sdCard
+		djnz	sdSendByte1
 		ret
 
 ;--------------------------------------------------------------
@@ -860,15 +938,16 @@ sdSendByte3:	ld	a, SDCLK
 sdCardCmd:	ld	hl, sdcmd
 		ld	(hl), a
 			
-	if DEBUG = 1
-		ld	c, 'C'
-		call	chroutdebug
-		call	printhexdebug
-		call	spacedebug
-	endif
+;	if DEBUG = 1
+;		ld	c, 'C'
+;		call	chroutdebug
+;		call	printhexdebug
+;		call	spacedebug
+;	endif
 	
-sdCardCmd3:	ld	d, 6
+sdCardCmd3:	
 		call	sdSelect
+		ld	d, 6
 sdCardCmd1:	ld	c, (hl)
 		call	sdSendByte
 		inc	hl
@@ -876,14 +955,14 @@ sdCardCmd1:	ld	c, (hl)
 		jr	NZ, sdCardCmd1
 sdCardCmd2:	call	sdReadByte
 		ld	a, c
-	if DEBUG = 1
-		call	printhexdebug
-	endif
+;	if DEBUG = 1
+;		call	printhexdebug
+;	endif
 		or	a, a
 		jp	M, sdCardCmd2
-	if DEBUG = 1
-		call	spacedebug
-	endif
+;	if DEBUG = 1
+;		call	spacedebug
+;	endif
 	
 		ret
 
@@ -953,6 +1032,10 @@ newlinedebugex:	pop	af
 ;--------------------------------------------------------------
 ; variables and constants
 ;--------------------------------------------------------------	
+
+;init0msg:	db	13, 10, "initialising SDcard... ", 0
+;init1msg:	db	"done.", 13, 10 , 0
+	
 sdcmd:		db	0			;1-byte SD card command
 sdadr:		db	0, 0, 0, 0		;4-byte SD card address
 sdchk:		db	0			;1-byte SD card checksum
@@ -986,6 +1069,7 @@ dirptr:		dw	0			;2-byte pointer in directory data
 ;dirfilesize:	dw	0, 0			;4-byte size of file in bytes
 			
 const1:		db	1, 0, 0, 0		;4-byte const1
+const128:	db	128, 0, 0, 0
 var32:		dw	0, 0
 var16:		dw	0, 0
 var8:		dw	0, 0
@@ -1016,3 +1100,4 @@ datptr:		dw 0				;2-byte pointer into data sector
 fstatus:	db 0				;1-byte status of operation
 fseeklen:	dw 0, 0				;4-byte length of fseek
 fsecmask:	db 0				;1-byte mask for sector in fseek
+isdirty:	db 0				;1-byte flag if data sector is dirty and need to be written to disk

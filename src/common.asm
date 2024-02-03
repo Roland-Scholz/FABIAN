@@ -1,3 +1,6 @@
+C_XON		equ	17
+C_XOFF		equ	19
+
 ;--------------------------------------------------------------
 ;
 ;--------------------------------------------------------------
@@ -38,65 +41,96 @@ newline:
 		push	bc
 		ld	c, 13
 		call	chrout
+		ld	c, 10
+		call	chrout
 		pop	bc
 		ret
-;		ld	c, 10
-;		jp	chrout
 		
-;--------------------------------------------------------------
-; get a character in A from rs232 (1)
-; 
-;--------------------------------------------------------------
-chrin:
-		in	a, (STATA)
-		and	a, 1
-		jr	Z, chrin
-		in	a, (RECA)
-		ret
-		
-;--------------------------------------------------------------
-; output a character in A over rs232 (1)
-;--------------------------------------------------------------
-chrouta:
-		ld	c, a
-chrout:
-		push	AF
-chrout1:	in	a, (STATA)
-		and	a, 4
-		jr	Z, chrout1
-		ld	a, c
-		out	(TRANSA), a
-		pop	AF
-		ret
 		
 ;--------------------------------------------------------------
 ; get a character in A from rs232 (2)
 ; 
 ;--------------------------------------------------------------
-serin:		ld	bc, 0
-serin1:		in	a, (STATB)
+chrin:
+		in	a, (STATB)
 		and	a, 1
-		jr	NZ, serin2
-		djnz	b, serin1
-		dec	c
-		jr	NZ, serin1
-		scf
+		jr	Z, chrin
+;		in	a, (RECA)
+		in	a, (RECB)
 		ret
-serin2:		in	a, (RECB)
+		
+		
+;--------------------------------------------------------------
+; output a character in A over rs232 (2) honour XON/XOFF
+;--------------------------------------------------------------
+chrouta:
+		push	bc
+		ld	c, a
+		call	chrout
+		pop	bc
 		ret
 
 ;--------------------------------------------------------------
-; output a character in A over rs232 (1)
+; output a character in C over rs232 (2) honour XON/XOFF
+;--------------------------------------------------------------		
+chrout:
+		push	AF
+		
+;		ld	a, 40h			
+;		out	(COMMB), a		;RESET ERROR
+		
+		in	a, (STATB)
+		and	a, 1
+		jr	Z, chrout1
+		in	a, (RECB)
+		cp	C_XOFF
+		jr	NZ, chrout1
+		
+chrout2:	in	a, (STATB)
+		and	a, 1
+		jr	Z, chrout2
+		in	a, (RECB)
+		cp	C_XON
+		jr	NZ, chrout2
+
+chrout1:	in	a, (STATB)
+		and	a, 4
+		jr	Z, chrout1
+		ld	a, c
+		out	(TRANSB), a
+		pop	AF
+		ret	
+
+				
+;--------------------------------------------------------------
+; get a character in A from rs232 (1)
+; 
+;--------------------------------------------------------------
+serin:
+;		ld	a, 40h			
+;		out	(COMMA), a		;RESET ERROR
+		
+		in	a, (STATA)
+		and	a, 1
+		jr	Z, serin
+		in	a, (RECA)
+		ret
+
+
+;--------------------------------------------------------------
+; output a character in C over rs232 (1)
 ; 
 ;--------------------------------------------------------------
 serout:
 		push	AF
-serout1:	in	a, (STATB)
+serout1:	in	a, (STATA)
 		and	a, 4
 		jr	Z, serout1
+		ld	a, c
+		out	(TRANSA), a
 		pop	AF
-		out	(TRANSB), a
-		ret	
+		ret
+
 
 ;--------------------------------------------------------------
 ; prints byte in A in hexadecimal format

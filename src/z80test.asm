@@ -5,10 +5,10 @@ adr0038		equ	038h
 
 
 
-;PS2DATA		equ	IP2	
+;PS2DATA	equ	IP2	
 ;PS2CLK		equ	IP1
 
-CR:		equ	$0d
+CR:		equ	0dh
 
 CCHM		equ	$1C	;move cursor home
 CCBT		equ	$1D	;move cursor to bottom
@@ -52,8 +52,9 @@ DATBUF		equ	$FA00
 		org	$2000
 
 		call	sdInit
-		ld	de, sec2
-		call	sdReadDat
+;		ld	de, sec2
+;		call	sdReadDat
+;		call	dirPrint
 		ret
 		
 		ld	de, sec2
@@ -64,7 +65,7 @@ sec2:		db	2, 0, 0, 0
 
 		ld	hl, $d800
 		ld	de, $8000
-		ld	BC, $1600
+		ld	bc, $1600
 compare:	ld	a, (de)
 		cp	(hl)
 		jr	NZ, noequal
@@ -100,7 +101,7 @@ debug:		db	0
 		ld	(adr0038 + 1), hl
 		im	1				;interrupt mode 1, goto $38
 		
-		ld	a, $E2				;BRG set 2 and timer = X1/CLK and IP1 change
+		ld	a, 0E2h				;BRG set 2 and timer = X1/CLK and IP1 change
 		out	(AUXCTRL), a
 		
 		ld	a, $82				;enable IP0-3 change
@@ -133,10 +134,10 @@ readloop:
 		ld	(fseeklen + 2), hl
 		ld	hl, 1000
 		ld	(fseeklen), hl
-		ld	hl, fseeklen
+		ld	hl, fseeklen			;adr of fseeklen in hl
 		call	fseek		
 		
-		ld	bc, $80
+		ld	bc, 80h
 		ld	hl, $1000
 		call	fread
 		
@@ -308,7 +309,7 @@ decodeMakeExt2: ld	bc, 13
 		ld	(rxaltgr), a			
 		ret
 		
-decodeAltGr:	ld	a, (rxaltgr)			;ALTGR-Presed?
+decodeAltGr:	ld	a, (rxaltgr)			;ALTGR-pressed?
 		or	a
 		jr	Z, decodeMake			;no
 		

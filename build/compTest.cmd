@@ -10,8 +10,11 @@ rem set ASM=tniasm.exe
 call :compile z80test 2000
 if not %ERRORLEVEL%==0 goto error
 
-call :compile cpm22bios F200 -DSTANDALONE
-if not %ERRORLEVEL%==0 goto error
+rem call :compile cpm22bios F200 -DSTANDALONE
+rem if not %ERRORLEVEL%==0 goto error
+
+rem call :compile termio 0100
+rem if not %ERRORLEVEL%==0 goto error
 
 move ..\src\*.o ..\release
 move ..\src\*.hex ..\release

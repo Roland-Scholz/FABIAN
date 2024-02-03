@@ -3,14 +3,21 @@
 		include "mc68681.asm"
 	
 CR:		equ	0dh
+LF:		equ	0ah
+C_XON		equ	17
+C_XOFF		equ	19
 
 
 VARS		equ	$FFF0			;stack grows downwards from this address
 sum:		equ	0
 addr:		equ	1
 echo:		equ	3			;0 = off, 1 = on
+xonxoff		equ	4			;0 = transmit, 1 = stop
 
-
+;
+; must be loaded at 04000h in 27c256 EPROM!
+; BIOS at 05200h
+;
 
 		ORG     0000h
 		
@@ -22,12 +29,12 @@ echo:		equ	3			;0 = off, 1 = on
 
 		ld	HL, 0			;copy ROM to RAM from
 		ld	DE, 0			;to
-		ld	BC, 1800h		;length, 6KB
+		ld	BC, 1000h		;length, 4KB
 		ldir
 		
-		ld	HL, 1A00h		;copy ROM to RAM from $1A00
-		ld	DE, 0FA00h		;to $FA00 (CP/M Bios)
-		ld	BC, 600h		;length, 6 pages
+		ld	HL, 01200h		;copy ROM to RAM from $1200
+		ld	DE, 0F200h		;to $F200 (CP/M Bios)
+		ld	BC, 0e00h		;length, 14 pages
 		ldir
 		
 		ld	(VARS + addr), BC	;set addr to zero
@@ -36,6 +43,7 @@ echo:		equ	3			;0 = off, 1 = on
 				
 		ld	IX, VARS
 		ld	(IX + echo), 1		;echo on
+		ld	(IX + xonxoff), 0	;xonxoff off
 	
 		ld	a, $4A			;RX+TX off and
 		out	(COMMA),a		;RESET ERROR
@@ -111,7 +119,6 @@ wait:		in	a, (STATA)
 		jr	C, printmenu
 		in	a, (COMMA)		;switch to test baudrates
 
-
 ;--------------------------------------------------------------
 ; print menu
 ; print prompt
@@ -154,6 +161,20 @@ enterkey1:
 		ex	DE, HL			;in HL now
 		jp	(HL)
 
+
+vt102:		in	a, (STATA)
+		and	a, 1
+		jr	Z, vt102a
+		in	a, (RECA)
+		call	serout
+vt102a:
+		in	a, (STATB)
+		and	a, 1
+		jr	Z, vt102
+		in	a, (RECB)
+		ld	c, a
+		call	conout
+		jp	vt102
 
 ;--------------------------------------------------------------
 ; open a diskfile (and close if already assigned)
@@ -236,7 +257,7 @@ getfilename1:
 ; jump to CP/M
 ;--------------------------------------------------------------
 cpm:
-		jp	0FA00h
+		jp	0F200h
 ;--------------------------------------------------------------
 ; jump to printmenu
 ;--------------------------------------------------------------
@@ -562,6 +583,10 @@ printstr2:
 		jr	Z, printstr1
 		ld	c, a
 		call	conout
+		cp	CR
+		jr	NZ, printstr2
+		ld	c, LF
+		call	conout
 		jr	printstr2
 printstr1:
 		pop	BC
@@ -577,9 +602,16 @@ chrin:
 		jr	Z, chrin
 		in	a, (RECA)
 		ret
+
+;chrin1:
+;		in	a, (STATB)
+;		and	a, 1
+;		jr	Z, chrin
+;		in	a, (RECB)
+;		ret
 		
 ;--------------------------------------------------------------
-; output a character in A over rs232 (1)
+; output a character in C over rs232 (1)
 ; 
 ;--------------------------------------------------------------
 chrout:
@@ -621,11 +653,26 @@ serin:
 		ret
 
 ;--------------------------------------------------------------
-; output a character in A over rs232 (2)
+; output a character in A over rs232 (1)
 ; 
 ;--------------------------------------------------------------
 serout:
 		push	AF
+
+;		in	a, (STATB)
+;		and	a, 1
+;		jr	Z, serout1
+;		in	a, (RECB)
+;		cp	C_XOFF
+;		jr	NZ, serout1
+;		
+;serout2:	in	a, (STATB)
+;		and	a, 1
+;		jr	Z, serout2
+;		in	a, (RECB)
+;		cp	C_XON
+;		jr	NZ, serout2
+
 serout1:	in	a, (STATB)
 		and	a, 4
 		jr	Z, serout1
@@ -634,8 +681,8 @@ serout1:	in	a, (STATB)
 		ret	
 		
 menukey:
-		DB	12
-		DB	"?CDEFGLMNOPT"
+		DB	13
+		DB	"?CDEFGLMNOPTV"
 
 menutab:	DW	questionmark
 		DW	changebyte
@@ -649,6 +696,7 @@ menutab:	DW	questionmark
 		DW	opendisk
 		DW	cpm
 		DW	transfer
+		DW	vt102
 ;		DW	exit
 	
 menutext:
@@ -668,6 +716,7 @@ menutext:
 		DB	"O - Open Disk", CR
 		DB	"P - CP/M", CR
 		DB	"T - Transfer memory", CR
+		DB	"V - VT102 test", CR
 ;		DB	"X - eXit", CR
 		DB	0
 
@@ -715,6 +764,8 @@ print:
 newline:
 		push    BC
 		ld      c, CR
+		call    conout
+		ld      c, LF
 		call    conout
 		pop     BC
 		ret

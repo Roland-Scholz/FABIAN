@@ -49,16 +49,21 @@ CBASE:	JP	COMMAND		;execute command processor (ccp).
 ;   Standard cp/m ccp input buffer. Format is (max length),
 ; (actual length), (char #1), (char #2), (char #3), etc.
 ;
-INBUFF:	DB	127		;length of input buffer.
-	DB	0		;current length of contents.
-	DB	"Copyright"
-	DB	" 1979 (c) by Digital Research      "
-	DB	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-	DB	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-	DB	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-	DB	0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-INPOINT:DW	INBUFF+2	;input line pointer
-NAMEPNT:DW	0		;input line pointer used for error message. Points to
+INBUFF:		DB	127		;length of input buffer.
+		DB	0		;current length of contents.
+copyright:	DB	27, "[2J", 27, "[H", 27, "[1m"
+		DB	"Z80 "
+		DB	27, "[35mFa", 27, "[m"
+		DB	"bulous "
+		DB	27, "[32mBi", 27, "[m"
+		DB	"nary "
+		DB	27, "[36mAn", 27, "[m"
+		DB	"ihilator",13, 10
+		DB	"CP/M 2.2 Copyright 1979 (c) by Digital Research"
+		DB	0
+		DB	0,0,0,0,0,0,0,0,0,0,0,0,0
+INPOINT:	DW	INBUFF+2	;input line pointer
+NAMEPNT:	DW	0		;input line pointer used for error message. Points to
 ;			;start of name in error.
 ;
 ;   Routine to print (A) on the console. All registers used.
