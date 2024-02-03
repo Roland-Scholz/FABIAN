@@ -1,3 +1,11 @@
+;===============================================	
+; AT89S52 code for emulating a VT102 terminal
+; 2023-24 Roland Scholz (rolandscholz@gmx.de)
+; no warranties
+; do whatever you want with this code
+; assembled with M-IDE Studio for MCS-51
+;===============================================	
+
 		$NOMOD51
 		$INCLUDE (89S52.MCU)
 
