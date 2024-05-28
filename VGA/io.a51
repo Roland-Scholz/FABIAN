@@ -15,22 +15,22 @@ setregs:
 ;		call	PHEX
 ;		call	SPACE
 		
-		mov	A, R0			; send address
-		call	PHEX
-		movx	@DPTR,A			; address register
-		setb	T1			; clock high
-		clr	T1			; clock low
-		inc	DPTR			; data reg
+		mov	A, R0			;send address
+;		call	PHEX
+		movx	@DPTR,A			;address register
+		setb	T1			;clock high
+		clr	T1			;clock low
+		inc	DPTR			;data reg
 
 		inc	AUXR1			;data pointer
 		movc	A, @A+DPTR
-		call	PHEX
-		inc	AUXR1			; address pointer
-		movx	@DPTR, A		; send data
-		setb	T1			; clock high
-		clr	T1			; clock low
+;		call	PHEX
+		inc	AUXR1			;address pointer
+		movx	@DPTR, A		;send data
+		setb	T1			;clock high
+		clr	T1			;clock low
 
-		call	SPACE
+;		call	SPACE
 		inc	DPTR
 		inc	R0
 		cjne	R0, #15, setregs
@@ -38,7 +38,7 @@ setregs:
 		mov	dptr, #0		;enable ADR + DAT
 		movx	a, @dptr
 
-		call	newline
+;		call	newline
 ;		call	CIN
 ;		
 ;		setb	INT0
@@ -94,7 +94,7 @@ SYDATA:		DB	100		;R0 Horizontal Total - 1
 ;
 ;	
 copyFont:	
-		mov	DPTR, #7000h
+		mov	DPTR, #vt100_font
 		inc	AUXR1
 		mov	DPTR, #(8000h+2000h) ;+4000h+1000h
 		inc	AUXR1
@@ -168,43 +168,33 @@ cout:		jb	serbusy, cout
 		setb	serbusy
 		mov	sbuf, a
 		ret
-
 		
-cout_x:		jnb	ti, cout_x
-		clr	ti			;clr ti before the mov to sbuf!
-		mov	sbuf, a
-		ret
 
 cin:		push	ar0
+		push	ar1	
 cin_2:		mov	a, serstart
-		cjne	a, serend, cin_1
+		mov	r1, serend
+		cjne	a, ar1, cin_1
 		sjmp	cin_2
-cin_1:		clr	ES			;no serial interrupt
+		
+cin_1:		;clr	ES			;no serial interrupt
 		inc	a
+		setb	acc.7
 		mov	r0, a
-		cjne	r0, #serbuf+16, $+3
-		jc	cin_3
-		mov	r0, #serbuf
-cin_3:		mov	a, @r0
-		mov	serstart, r0
-		dec	sercount
-;		push	acc
-;		mov	a, sercount
-;		call	phex
-;		pop	acc
-
-cin_5:		mov	r0, sercount
-		cjne	r0, #0, cin_4
+		mov	serstart, a
 		
-		jnb	xonoff, cin_4
+		jnb	xonoff, cin_3		;XON/XOFF active?
+		cjne	a, ar1, cin_3	
 		
-cin_7:		mov	SBUF, #C_XON
+cin_4:		;setb	ES
+		mov	a, #C_XON		;yes, send XON
+		acall	cout
 		clr	xonoff
-;		mov	r0, #80
-;		djnz	r0, $
-		
-cin_4:		pop	ar0
-		setb	ES
+				
+cin_3:		;setb	ES
+		mov	a, @r0
+		pop	ar1
+		pop	ar0
 		ret
 	
 	
@@ -244,18 +234,18 @@ phex16:
 ;(which takes 3 bytes of code!)... this is useful for inserting
 ;numbers or spaces between strings.
 
-pstr:		push	acc
-pstr1:		clr	a
-		movc	a, @a+dptr
-		inc	dptr
-		jz	pstr2
-		mov	c, acc.7
-		anl	a, 7Fh
-		call	cout
-		jc	pstr2
-		sjmp	pstr1
-pstr2:		pop	acc
-		ret
+;pstr:		push	acc
+;pstr1:		clr	a
+;		movc	a, @a+dptr
+;		inc	dptr
+;		jz	pstr2
+;		mov	c, acc.7
+;		anl	a, 7Fh
+;		call	cout
+;		jc	pstr2
+;		sjmp	pstr1
+;pstr2:		pop	acc
+;		ret
 
 ;converts the ascii code in Acc to uppercase, if it is lowercase
 

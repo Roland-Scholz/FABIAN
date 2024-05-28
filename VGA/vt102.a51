@@ -6,14 +6,16 @@
 ; assembled with M-IDE Studio for MCS-51
 ;===============================================	
 
-		$NOMOD51
-		$INCLUDE (89S52.MCU)
+;		$NOMOD51
+;		$INCLUDE (89S52.MCU)
+		
+;base		equ	02000h
+;monstart	equ	0h
+;stack		equ	080h
+;dpl		equ	dp0l
+;dph		equ	dp0h
 
-HARDWARE	equ	1
-
-stack		equ	80h
-dph		equ	DP0H
-dpl		equ	DP0L
+vt102base	equ	base
 
 WIDTH		equ	80
 HEIGHT		equ	24
@@ -27,6 +29,8 @@ ST_CMD_ARG	equ	10
 ST_ESC_LBRACK	equ	12
 ST_CSI_Q	equ	14
 ST_ESC_RBRACK	equ	16
+ST_ROW		equ	18
+ST_COLUMN	equ	20
 
 BLACK		equ	0
 RED		equ	1
@@ -54,6 +58,17 @@ C_XON		equ	17
 C_XOFF		equ	19
 C_ESC		equ	27
 C_DEL		equ	07fh
+
+CTRLG		equ	7
+CTRLH		equ	8
+CTRLI		equ	9
+CTRLJ		equ	10
+CTRLK		equ	11
+CTRLL		equ	12
+CTRLM		equ	13
+CTRLZ		equ	26
+CTRLLT		equ	30
+CTRLGT		equ	31
 
 CCHM		equ	01Ch	;move cursor home
 CCBT		equ	01Dh	;move cursor to bottom
@@ -113,6 +128,7 @@ DECINLM		equ	9	;Interlace
 IRM		equ	4	;Insert Replace mode
 LNM		equ	20	;new line mode
 
+VARLEN		equ	48
 
 VARS		equ	020h
 
@@ -137,6 +153,10 @@ wrap		equ	flags2.0
 origin		equ	flags2.1
 newlinemode	equ	flags2.2
 insert		equ	flags2.3
+databits	equ	flags2.4
+evenodd		equ	flags2.5
+termmode	equ	flags2.6
+dump		equ	flags2.7
 
 retstate	equ	023h
 nargs		equ	025h
@@ -165,61 +185,88 @@ keyrxval	equ	03bh
 oldstatus	equ	03ch
 defcol		equ	03dh
 
-serbuf		equ	040h
 
-tabutab		equ	050h	;10-bytes tabulator
+tabutab		equ	040h		;10-bytes tabulator
 
-free0		equ	05ah
-free1		equ	05bh
-free2		equ	05ch
-free3		equ	05dh
-free4		equ	05eh
-free5		equ	05fh
+dumpcnt		equ	04ah
+free1		equ	04bh
+free2		equ	04ch
+free3		equ	04dh
+free4		equ	04eh
+free5		equ	04fh
 
-		org	0
-		
-	IF HARDWARE = 0 
-		ljmp	start
-	ENDIF
-		org	2003h
-		ajmp	exint0
-		
-		org	200bh
-		ajmp	timer0int
-		
-		org	02023h
-		
-serint:		push	psw
-		push	acc
-		push	0
+;stack @ 50h
 
-		jnb	ri, serintti	;ri active?
-		clr	ri		;yes
+serbuf		equ	080h
+serlim		equ	64
 
-		mov	r0, serend
-		inc	r0
-		cjne	r0, #serbuf+16, $+3
-		jc	serint1
-		mov	r0, #serbuf
-serint1:	mov	@r0, sbuf
-		mov	serend, r0
-		inc	sercount
-		mov	a, sercount
-		cjne	a, #8, serintti
-		mov	SBUF, #C_XOFF
-		setb	xonoff
-		mov	r0, #80
-		djnz	r0, $
-		clr	ti
+;===============================================	
+; Interrupt vector table
+;
+;===============================================	
+		org	vt102base
+		ajmp	start
+					
+		org	vt102base + 3		;ext int0 vector
+		ajmp	exint0			;PS/2 keyboard
 		
-serintti:	jnb 	ti, serintex
-		clr	ti
+		org	vt102base + 11		;timer0 vector
+		ajmp	timer0int		;cursor blink
+		
+		org	vt102base + 19		;ext int1 vector
+						;not used
+						
+		org	vt102base + 27		;timer1 vector
+						;not used
+
+		org	vt102base + 35		;uart vector
+		ajmp	serint
+
+		org	vt102base + 43		;timer2 vector (8052)
+						;not used
+		
+;
+; leave space for a mini-monitor
+;
+		org	vt102base + 200h
+		jmp	start
+		
+serint:		jnb	ti, serintri		;ti active?
 		clr	serbusy
+		clr	ti
+		reti
 		
-serintex:	pop	0
+serintri:	push	psw
+		push	acc
+		push	ar0
+		
+		mov	a, serend
+		inc	a
+		setb	acc.7
+		mov	serend, a
+		mov	r0, a		
+		mov	@r0, sbuf
+
+		jb	xonoff, serintex	;XON/XOFF already active?		
+		clr	c			;no compute number auf bytes in buffer
+		subb	a, serstart
+		jnc	serint1
+		cpl	a
+		inc	a
+serint1:	cjne	a, #serlim, serintex
+		;jc	serintex
+		setb	xonoff
+		
+		mov	SBUF, #C_XOFF
+
+serintex:	pop	ar0
 		pop	acc
 		pop	psw
+		clr	ri			;no, receive int
 		reti
+		
+
+		
 
 
 
@@ -256,6 +303,18 @@ exint0:		push	psw
 		push	acc
 
 		mov	a, keyrxcnt
+;		mov	dptr, #8000h
+;		clr	c
+;		rlc	a
+;		add	a, dp0l
+;		mov	dp0l, a
+;		clr	a
+;		mov	a, #'0'
+;		mov	c, t0
+;		mov	acc.0, c
+;		movx	@dptr, a
+			
+		mov	a, keyrxcnt
 		jnz	exint0b			;first bit?
 		jb	t0, exint0ex		;not zero, no startbit
 
@@ -270,7 +329,7 @@ exint0b:	inc	a
 		sjmp 	exint0ex
 			
 exint0a:	mov	a, keyrxval
-		mov	c, t0
+		mov	c, t0			;shift in bit of t0
 		rrc	a
 		mov	keyrxval, a
 					
@@ -280,24 +339,25 @@ exint0ex:	pop	acc
 
 
 
-LOCAT		equ	02100h
+;LOCAT		equ	02100h
+;
+;		org	LOCAT
+;
+;		ORG    LOCAT
+;		DB     0A5H,0E5H,0E0H,0A5H	;SIGNITURE BYTES
+;		DB     35,0,0,0			;ID (35=PROG), id (253=startup)
+;		DB     0,0,0,0			;PROMPT CODE VECTOR
+;		DB     0,0,0,0			;RESERVED
+;		DB     0,0,0,0			;RESERVED
+;		DB     0,0,0,0			;RESERVED
+;		DB     0,0,0,0			;USER DEFINED
+;		DB     255,255,255,255		;LENGTH AND CHECKSUM (255=UNUSED)
+;		DB     "VT100",0		;MAX 31 CHARACTERS, PLUS THE ZERO
 
-		org	LOCAT
-
-		ORG    LOCAT
-		DB     0A5H,0E5H,0E0H,0A5H	;SIGNITURE BYTES
-		DB     35,0,0,0			;ID (35=PROG), id (253=startup)
-		DB     0,0,0,0			;PROMPT CODE VECTOR
-		DB     0,0,0,0			;RESERVED
-		DB     0,0,0,0			;RESERVED
-		DB     0,0,0,0			;RESERVED
-		DB     0,0,0,0			;USER DEFINED
-		DB     255,255,255,255		;LENGTH AND CHECKSUM (255=UNUSED)
-		DB     "VT100",0		;MAX 31 CHARACTERS, PLUS THE ZERO
-
-		ORG    LOCAT+64			;EXECUTABLE CODE BEGINS HERE
+;		ORG    LOCAT+64			;EXECUTABLE CODE BEGINS HERE
 		
-start:
+start:				
+
 		mov	sp, #stack		;set stack
 						;1  1  0  1	0    1    1   1
 		mov	p3, #0d7h		;RD WR T1 T0	INT1 INT0 TXD RXD
@@ -315,11 +375,12 @@ start:
 		mov	ie, #093h		;ea - ET2 ES  ET1 EX1 ET0 EX0
 		setb	it0			;set int0 to falling edge
 
-		acall	term_reset
+		
+		call	term_reset		
 		
 		mov	a, #C_XON
 		call	cout
-		
+
 init:		call	init6845
 		call	copyFont
 		call	testScreen		
@@ -332,20 +393,21 @@ init:		call	init6845
 		mov	dptr, #0h
 		movx	a, @dptr
 		sjmp	init
-	
-init_loop:	call	cin
-		cjne	a, #'x', init_1
-		sjmp	init_2
 
-init_1:		cjne	a, #'y', init_loop
+init_loop:	
+;		call	cin
+;		cjne	a, #'x', init_1
+;		sjmp	init_2
 
-loop_test:	call	cin
-		call	cout
-		sjmp	loop_test
+;init_1:		cjne	a, #'y', init_loop
+
+;loop_test:	call	cin
+;		call	cout
+;		sjmp	loop_test
 
 		
 init_2:		setb	tr0				;start timer0
-		acall	term_reset
+		call	term_reset
 
 ;		mov	dptr, #msg1
 ;		call	print
@@ -353,22 +415,39 @@ init_2:		setb	tr0				;start timer0
 main_loop:	jnb	keyavail, main_serin		;key available?
 		clr	keyavail			;clear key available
 		mov	a, keyrxval
+
 		cjne	a, #F5, main_F6			;F5 ?
 		ajmp	init_2				;reset terminal
 main_F6:	cjne	a, #F6, main_F7			;F6 ?
-		mov	r0, baudidx			;switch baud
-		inc	r0
-		cjne	r0, #5, main_F6a
-		mov	r0, #0
-main_F6a:	mov	baudidx, r0
-		call	getbaud
-		clr	tr1
-		mov	TH1, a
-		mov	TH0, a
-		setb	tr1
+		mov	a, baudidx			;switch baud
+		inc	a
+		cjne	a, #5, main_F6a
+		clr	a
+main_F6a:	mov	baudidx, a
+		call	setbaud
 		sjmp	main_status
 		
-main_F7:	cjne	a, #F7, main_cout		;F7 ? cycle color		
+		
+main_F7:	cjne	a, #F7, main_F8			;F7 8/7 data bits, even/odd
+		jb	databits, main_F7a
+		setb	databits
+		sjmp	main_status
+main_F7a:	cpl	evenodd
+		jb	evenodd, main_status
+		clr	databits
+		sjmp	main_status
+
+
+main_F8:	cjne	a, #F8, main_F12		;F8 terminal mode VT102 / ADM-3A
+		jb	termmode, main_F8a
+		setb	termmode
+		sjmp	main_status
+main_F8a:	cpl	dump
+		jb	dump, main_status
+		cpl	termmode
+		sjmp	main_status		
+		
+main_F12:	cjne	a, #F12, main_cout		;F12 cycle color		
 		mov	a, defcol
 		add	a, #16
 		anl	a, #07fh
@@ -376,7 +455,21 @@ main_F7:	cjne	a, #F7, main_cout		;F7 ? cycle color
 		mov	color, a
 		sjmp	main_loop
 		
-main_cout:	call	cout				;send out over serial
+main_cout:	jnb	termmode, main_cout3		;ADM-3A to uppercase?
+		cjne	a, #'a', $+3			;< 'a'
+		jc	main_cout3
+		cjne	a, #'z'+1, $+3			;<= z?
+		jnc	main_cout3
+		subb	a, #31				;=32, carry set
+
+main_cout3:	jnb	databits, main_cout2		;8 databits, just output
+		anl	a, #07fh
+		mov	c, P
+		jnb	evenodd, main_cout1
+		cpl	c
+main_cout1:	mov	acc.7, c
+
+main_cout2:	call	cout				;send out over serial
 		cjne	a, #C_CR, main_serin		;CR sent?
 		jnb	newlinemode, main_serin
 		mov	a, #C_NEWLINE			;send LF, too
@@ -384,44 +477,33 @@ main_cout:	call	cout				;send out over serial
 
 main_serin:	mov	a, serstart			;serin available?
 		cjne	a, serend, loop_cin
-		sjmp	main_loop			;no serin available
+		ajmp	main_loop			;no serin available
 		
 loop_cin:	call	cin				;read from serial
 		call	ansiout				;output to terminal's CRT
 		
 		mov	a, flags2			;have flags changed?
 		xrl	a, oldstatus
-		jz	main_loop			;no
+		jz	main_loop1			;no
 		mov	oldstatus, flags2	
 main_status:	call	prtstatus			;print status-line
-		sjmp	main_loop
+main_loop1:	ajmp	main_loop
+
 		
-
+setbaud:	call	getbaud
+		clr	tr1
+		mov	TH1, a
+		mov	TL1, a
+		setb	tr1
+		ret
 ;===============================================	
-; ansiout: dispatch according to state
+; ansiout: dispatch vt102 or ADM-3A or DUMP
 ;===============================================
-ansiout:	mov	r7, a			;save acc in r7
+ansiout:	jnb	databits, ansiout3		;8-bit?
+		anl	a, #07fh			;mask out bit 7
+ansiout3:	mov	r7, a				;save acc in r7
 
-		mov	a, state
-		jz	do_idle			;speed up
-		add	a, #ansi_tab-ansiout1+1	;fetch low-byte
-		movc	a, @a+pc		
-ansiout1:	push	acc			;2
-		mov	a, state		;2
-		add	a, #ansi_tab-ansiout2	;2
-		movc	a, @a+pc		;1 fetch, high-byte
-ansiout2:	push	acc			;2
-		mov	a, r7			;1
-		ret				;1
-
-ansi_tab:	dw	do_idle, do_esc, do_csi, do_esc_q, do_esc_hash, do_cmd_arg, do_esc_lbrack, do_csi_q
-		dw	do_esc_rbrack
-		
-
-;===============================================	
-; state IDLE
-;===============================================
-do_idle:	mov	C, lastchar
+		mov	C, lastchar
 		mov	lchartmp, C
 		clr	lastchar
 
@@ -429,23 +511,148 @@ do_idle:	mov	C, lastchar
 		mov	r0, a				;x-offset
 		mov	r1, a				;y-offset
 		mov	r2, a				;scrolling, 0 = no
+		
+		jb	dump, dumpterm
+		jb	termmode, adm3a			;switch to ADM-3A
+		
+		mov	a, state
+;		jz	do_idle				;speed up
+		add	a, #ansi_tab-ansiout1+1		;fetch low-byte
+		movc	a, @a+pc		
+ansiout1:	push	acc				;2
+		mov	a, state			;2
+		add	a, #ansi_tab-ansiout2		;2
+		movc	a, @a+pc			;1 fetch, high-byte
+ansiout2:	push	acc				;2
+		mov	a, r7				;1
+		ret					;1
+
+ansi_tab:	dw	do_idle, do_esc, do_csi, do_esc_q, do_esc_hash, do_cmd_arg, do_esc_lbrack, do_csi_q
+		dw	do_esc_rbrack
+		
+dumpterm:	mov	a, r7
+		acall	dumpnibble
+		acall	dumpnibble
+		mov	r7, #' '
+		acall	draw_char
+		mov	a, dumpcnt
+		inc	a
+		cjne	a, #16, dumpterm2
+		mov	r0, #0
+		acall	do_newline
+		clr	a
+dumpterm2:	mov	dumpcnt, a
+		ret		
+		
+dumpnibble:	swap	a				;SWAP A will be twice => A unchanged
+		push	acc
+		anl	a, #15
+		add	a, #90h				; acc is 0x9X, where X is hex digit
+		da	a				; if A to F, C=1 and lower four bits are 0..5
+		addc	a, #40h
+		da	a
+		mov	r7, a
+		acall	draw_char
+		pop	acc
+		ret
+
+
+;===============================================	
+; ADM-3A code
+;===============================================
+adm3a:		mov	a, state
+		cjne	a, #ST_IDLE, adm_esc		;not in IDLE state?
+
+;===============================================	
+; state ADM_IDLE
+;===============================================
+		cjne	r7, #32, $+3			;<32, do CTRL-codes
+		jc	adm_ctrl_g	
+		ajmp	draw_char
+		
+adm_ctrl_g:	cjne	r7, #CTRLG, adm_ctrl_h		
+		ajmp	do_idle_bell+3			;bell
+adm_ctrl_h:	cjne	r7, #CTRLH, adm_ctrl_i
+		ajmp	do_idle_bs+3			;back space
+adm_ctrl_i:	cjne	r7, #CTRLI, adm_ctrl_j
+		ajmp	do_idle_tab+3			;tab
+adm_ctrl_j:	cjne	r7, #CTRLJ, adm_ctrl_k
+		ajmp	do_idle_nl+3			;newline
+adm_ctrl_k:	cjne	r7, #CTRLK, adm_ctrl_l
+		ajmp	do_esc_M+3			;cursor up
+adm_ctrl_l:	cjne	r7, #CTRLL, adm_ctrl_m
+		ajmp	do_csi_C+3			;cursor right
+adm_ctrl_m:	cjne	r7, #CTRLM, adm_ctrl_z
+		ajmp	do_idle_cr+3			;carriage return
+adm_ctrl_z:	cjne	r7, #CTRLZ, adm_ctrl_esc
+adm_ctrl_z1:	call	clear_screen			;clr-home
+		ajmp	do_csi_rc
+adm_ctrl_esc:	cjne	r7, #ESC, adm_ctrl_lt
+		mov	state, #ST_ESC			;ESC
+adm_ctrl_lt:	cjne	r7, #CTRLLT, adm_ctrl_gr
+		ajmp	do_csi_rc			;CTRL-< (home)
+adm_ctrl_gr:	;cjne	r7, #CTRLGT, adm_ctrl_draw
+		ret					;CTRL-> (direct)
+
+		
+;===============================================	
+; state ADM_ESC
+;===============================================
+adm_esc:	cjne	a, #ST_ESC, adm_row		;ESC = <row> <col>?
+		mov	state, #ST_IDLE
+		cjne	r7, #'*', adm_esc_7
+		ajmp	adm_ctrl_z1			;clr-home
+adm_esc_7:	cjne	r7, #'7', adm_esc_eq
+		setb	inverse				;inverse
+adm_esc_eq:	cjne	r7, #'=', adm_esc_lbr
+		mov	state, #ST_ROW			
+adm_esc_lbr:	cjne	r7, #'(', adm_esc_esc
+		clr	inverse
+adm_esc_esc:	cjne	r7, #C_ESC, adm_esc_ex
+		ljmp	monstart
+adm_esc_ex:	ret
+
+;===============================================	
+; state ADM_ROW
+;===============================================
+adm_row:	cjne	a, #ST_ROW, adm_column
+		mov	state, #ST_COLUMN
+		mov	a, r7
+		subb	a, #32				;carry clear!
+		mov	cursory, a
+		ret
+
+;===============================================	
+; state ADM_COLUMN
+;===============================================
+adm_column:	mov	state, #ST_IDLE
+		mov	a, r7
+		subb	a, #32				;carry clear! R7 > ST_ROW
+		mov	cursorx, a
+		jmp	ansi_move
+
+
+;===============================================	
+; state VT102-IDLE
+;===============================================
+do_idle:
 
 do_idle_del:	cjne	r7, #C_DEL, do_idle_pre
 		dec	r0
-		ajmp	ansi_move
+		jmp	ansi_move
 				
 do_idle_pre:	cjne	r7, #32, $+3			;speed up
 		jnc	draw_char
 		
-		cjne	r7, #C_BELL, do_idle_bs
+do_idle_bell:	cjne	r7, #C_BELL, do_idle_bs
 		ret					;no bell yet
 
 do_idle_bs:	cjne	r7, #C_BACKSP, do_idle_tab	;backspace
 		dec	r0
-		ajmp	ansi_move
+		jmp	ansi_move
 		
 do_idle_tab:	cjne	r7, #C_TAB, do_idle_nl		;tabulator
-		acall	tab_set_r0_r1
+		call	tab_set_r0_r1
 do_idle_tab3:	clr	a
 		inc	r1
 		inc	cursorx
@@ -457,32 +664,32 @@ do_idle_tab3:	clr	a
 		mov	cursorx, a
 		inc	r1				
 		inc	r2				;scroll on
-		acall	ansi_move
-		acall	tab_set_r0_r1
-do_idle_tab1:	acall	getbit
+		call	ansi_move
+		call	tab_set_r0_r1
+do_idle_tab1:	call	getbit
 		anl	a, @r0
 		jz	do_idle_tab3			;bit not found
 do_idle_tab2:	clr	a
 		mov	r0, a
 		mov	r1, a
-		ajmp	ansi_move
+		jmp	ansi_move
 
 
 do_idle_nl:	cjne	r7, #C_NEWLINE, do_idle_cr
 do_newline:	mov	cursorx, #0
 		inc	r1
 		inc	r2
-		ajmp	ansi_move
+		jmp	ansi_move
 		
 do_idle_cr:	cjne	r7, #C_CR, do_idle_esc
 do_cr:		mov	cursorx, #0
-		acall	ansi_move
+		call	ansi_move
 		jb	newlinemode, do_newline		;per default, CR
 		ret
 
 do_idle_esc:	cjne	r7, #C_ESC, do_idle_so
 		mov	state, #ST_ESC
-		ajmp	clearargs
+		jmp	clearargs
 
 do_idle_so:	cjne	r7, #C_SO, do_idle_si
 		setb	special
@@ -508,7 +715,7 @@ draw_char:	push	ar7				;save r7 (received byte)
 		inc	r2				;with scroll
 		jnb	lchartmp, char_out		;last char in line?
 		jnb	wrap, char_out			;wrap turned on?
-		acall	do_newline
+		call	do_newline
 
 ;===============================================	
 ; draws a char in ACC at cursor position
@@ -547,10 +754,7 @@ char_out_3:	jnb	insert, char_out_4	;insert mode?
 		mov	a, dp1h
 		subb	a, #0
 		mov	dp0h, a		
-		
 
-		
-		
 char_out_2:	movx	a, @dptr		;copy r0 bytes from right to left
 		inc	auxr1
 		mov	a, p1
@@ -584,14 +788,16 @@ char_out_1:	movx	@dptr, a
 draw_char_1:	mov	r0, #1
 		mov	r1, #0
 		call	draw_cursor
-		ajmp	ansi_move
+		jmp	ansi_move
 
 ;===============================================	
 ; state ESC
 ;===============================================	
-do_esc:		mov	state, #ST_IDLE	
-		cjne	a, #C_ESC, do_esc_csi
-		jmp	0h
+do_esc:		mov	state, #ST_IDLE		
+		cjne	a, #C_ESC, do_esc_csi	;2x ESC? return to monitor
+;		call	dump_vars
+;		call	cin
+		ljmp	monstart
 		
 do_esc_csi:	cjne	a, #'[', do_esc_7	;switch to CSI state
 		mov	state, #ST_CSI
@@ -630,11 +836,11 @@ do_esc_rbr:	cjne	a, #')', do_esc_c
 		ret
 
 do_esc_c:	cjne	a, #'c', do_esc_H
-		ajmp	term_reset
+		jmp	term_reset
 
 do_esc_H:	cjne	a, #'H', do_esc_Z
-		acall	tab_set_r0_r1
-		acall	getbit
+		call	tab_set_r0_r1
+		call	getbit
 		orl	a, @r0
 		mov	@r0, a
 		ret
@@ -648,7 +854,7 @@ do_esc_ex:	ret
 ; state CSI
 ;===============================================	
 do_csi:
-		acall	isparm			;is parameter?
+		call	isparm			;is parameter?
 		jnc	do_csi_keys		;no
 		mov	retstate, state
 		mov	state, #ST_CMD_ARG
@@ -659,46 +865,46 @@ do_csi_keys:	mov	r0, #0			;x (column)
 		mov	state, #ST_IDLE
 
 		cjne	a, #'A', do_csi_B	;cursor up 
-		acall	args_gr_zero
+		call	args_gr_zero
 		mov	a, arg0
 		cpl	a
 		inc	a
 		mov	r1, a
-		ajmp	ansi_move
+		jmp	ansi_move
 
 
 do_csi_B: 	cjne	a, #'B', do_csi_C	;cursor down
-		acall	args_gr_zero
+		call	args_gr_zero
 		mov	r1, arg0
-		ajmp	ansi_move
+		jmp	ansi_move
 
 
 do_csi_C:	cjne	a, #'C', do_csi_D	;cursor right
-		acall	args_gr_zero
+		call	args_gr_zero
 		mov	r0, arg0
-		ajmp	ansi_move
+		jmp	ansi_move
 
 
 do_csi_D:	cjne	a, #'D', do_csi_H 	;cursor left
-		acall	args_gr_zero
+		call	args_gr_zero
 		mov	a, arg0
 		cpl	a
 		inc	a
 		mov	r0, a
-		ajmp	ansi_move
+		jmp	ansi_move
 
 
 do_csi_H:	cjne	a, #'H', do_csi_H1	;position cursor
 		sjmp	do_csi_H2
 do_csi_H1:	cjne	a, #'f', do_csi_s
-do_csi_H2:	acall	args_gr_zero
+do_csi_H2:	call	args_gr_zero
 		mov	a, arg0
 		dec	a
 		mov	cursory, a
 		mov	a, arg1
 		dec	a
 		mov	cursorx, a
-		ajmp	ansi_move
+		jmp	ansi_move
 
 
 do_csi_s:	cjne	a, #'s', do_csi_u	;save cursor
@@ -710,7 +916,7 @@ do_csi_s:	cjne	a, #'s', do_csi_u	;save cursor
 do_csi_u:	cjne	a, #'u', do_csi_m	;restore cursor
 		mov	cursorx, scursorx
 		mov	cursory, scursory
-		ajmp	ansi_move		
+		jmp	ansi_move		
 
 
 do_csi_m:	cjne	a, #'m', do_csi_n	;color handling
@@ -777,7 +983,7 @@ do_csi_n1:	mov	a, r0
 		inc	r0
 		cjne	r0, #5, do_csi_n1
 		ret	
-do_csi_n6:	cjne	a, #6, do_csi_cc		;report cursor position
+do_csi_n6:	cjne	a, #6, do_csi_cc	;report cursor position
 		mov	a, #ESC
 		call	cout
 		mov	a, #'['
@@ -819,7 +1025,7 @@ do_csi_r:	cjne	a, #'r', do_csi_J	;set scroll margins
 		mov	top, #0
 		mov	bottom, #HEIGHT-1
 		sjmp	do_csi_rc
-do_csi_ra:	acall	args_gr_zero
+do_csi_ra:	call	args_gr_zero
 		cjne	a, #2, $+3
 		jnc	do_csi_rb		;>= 2 args
 		mov	top, arg0
@@ -846,7 +1052,7 @@ do_csi_rc:	clr	a			;cursor home
 		mov	cursory, a
 		jnb	origin, do_csi_rd
 		mov	cursory, top			
-do_csi_rd:	ajmp	ansi_move
+do_csi_rd:	jmp	ansi_move
 	
 	
 do_csi_J:	cjne	a, #'J', do_csi_ques		;ED – Erase In Display
@@ -901,21 +1107,21 @@ do_csi_Kb:	cjne	a, #2, do_csi_end1		;Erase all of the line, inclusive
 		mov	r2, #0
 		mov	r5, #WIDTH
 		jmp	clear_lines
-do_csi_end1:	ajmp	do_csi_end
+do_csi_end1:	jmp	do_csi_end
 
 do_csi_g:	cjne	a, #'g', do_csi_L
 		mov	a, arg0
 		cjne	a, #3, do_csi_g1
-		ajmp	cleartabu			;clear all tabs
-do_csi_g1:	acall	tab_set_r0_r1
-		acall	getbit
+		jmp	cleartabu			;clear all tabs
+do_csi_g1:	call	tab_set_r0_r1
+		call	getbit
 		cpl	a
 		anl	a, @r0
 		mov	@r0, a
-		ajmp	do_csi_end
+		jmp	do_csi_end
 
 do_csi_L:	cjne	a, #'L', do_csi_MM		;insert line
-		acall	args_gr_zero
+		call	args_gr_zero
 		mov	a, cursory			;check if within bounds
 		cjne	a, top, $+3
 		jc	do_csi_end1
@@ -929,12 +1135,12 @@ do_csi_L2:	mov	r3, #-1
 		mov	a, bottom
 		subb	a, cursory
 		mov	r4, a
-		acall	scroll_r4
+		call	scroll_r4
 		djnz	r0, do_csi_L2
 		jmp	cursor_on
 
 do_csi_MM:	cjne	a, #'M', do_csi_hh		;delete line
-		acall	args_gr_zero
+		call	args_gr_zero
 		mov	a, cursory			;check if within bounds
 		cjne	a, top, $+3
 		jc	do_csi_end1
@@ -950,7 +1156,7 @@ do_csi_MM2:	mov	r3, #1
 		subb	a, cursory
 		mov	r4, a
 		mov	top, cursory
-		acall	scroll_r4
+		call	scroll_r4
 		djnz	r0, do_csi_MM2 
 		pop	top
 		jmp	cursor_on
@@ -985,7 +1191,7 @@ do_csi_llx:	inc	r0
 		ret
 		
 do_csi_P:	cjne	a, #'P', do_csi_end		;Delete Character (DCH)
-		acall	args_gr_zero
+		call	args_gr_zero
 		mov	r1, arg0
 do_csi_P2:	clr	c
 		mov	a, #WIDTH-1
@@ -1031,11 +1237,11 @@ do_csi_end:	ret
 ;===============================================	
 ; state CSI_questionmark "ESC [ ?"
 ;===============================================
-do_csi_q:	acall	isparm				;is parameter?
+do_csi_q:	call	isparm				;is parameter?
 		jnc	do_csi_q_h			;no	
 		mov	retstate, state
 		mov	state, #ST_CMD_ARG
-		ajmp	do_cmd_arg
+		jmp	do_cmd_arg
 		
 do_csi_q_h:	mov	state, #ST_IDLE
 		mov	oldstatus, flags2
@@ -1049,7 +1255,7 @@ do_csi_q_h1:	cjne	@r0, #DECAWM, do_csi_q_h2	;set auto wrap
 		setb	wrap
 do_csi_q_h2:	cjne	@r0, #DECOM, do_csi_q_hx	;set origin
 		setb	origin
-		ajmp	do_csi_rc			;position cursor home
+		jmp	do_csi_rc			;position cursor home
 do_csi_q_hx:	inc	r0
 		djnz	r1, do_csi_q_h1
 		ret
@@ -1063,7 +1269,7 @@ do_csi_q_l1:	cjne	@r0, #DECAWM, do_csi_q_l2	;reset auto wrap
 		clr	wrap
 do_csi_q_l2:	cjne	@r0, #DECOM, do_csi_q_lx	;reset origin
 		clr	origin
-		ajmp	do_csi_rc			;position cursor home
+		jmp	do_csi_rc			;position cursor home
 do_csi_q_lx:	inc	r0
 		djnz	r1, do_csi_q_l1
 do_csi_q_end:	ret
@@ -1114,7 +1320,7 @@ do_cmd_arg:
 		add	a, nargs
 		mov	r0, a
 		mov	a, r1
-		acall	isdigit
+		call	isdigit
 		jnc	do_cmd_arg_1		;no digit
 ;		inc	argcnt
 		mov	a, @r0
@@ -1137,7 +1343,7 @@ do_cmd_arg_2:	cjne	a, #C_ESC, do_cmd_arg_3
 do_cmd_arg_3:	inc	nargs
 		mov	state, retstate
 do_cmd_arg_4:	;mov	retstate, #0
-		ajmp	ansiout
+		jmp	ansiout
 		
 		
 ;
@@ -1161,7 +1367,7 @@ args_gr_zero_1:	inc	r0
 ; r3: scroll occured
 ; r4: 0 = within bounds, 1 = out of bounds
 ansi_move:	
-		;acall	cursor_off
+		;call	cursor_off
 				
 		mov	r3, #0			;no scroll
 		mov	r4, top
@@ -1221,7 +1427,7 @@ ansi_move_y3:	mov	cursory, a
 		mov	a, r3			;did scrolling occur?
 		jz	ansi_move_ex		;no, exit
 		
-		acall	scroll
+		call	scroll
 		
 ansi_move_ex:	call	draw_cursor
 		ret
@@ -1230,7 +1436,7 @@ ansi_move_ex:	call	draw_cursor
 		;call	phex
 ;		ret
 				
-isparm:		acall	isdigit
+isparm:		call	isdigit
 		jc	isparmex
 		cjne	a, #';', isparm1
 		setb	c
@@ -1254,7 +1460,7 @@ isdigit3:	ret				;= '9' carry clear
 ; reset terminal
 ;===============================================	
 term_reset:	clr	ea
-		acall	clear_vars
+		call	clear_vars
 		mov	defcol, #DEFAULTCOLOR
 		mov	color, defcol
 		mov	bottom, #HEIGHT-1
@@ -1262,7 +1468,13 @@ term_reset:	clr	ea
 		mov	serend, #serbuf
 		mov	t0cnt, #C_TIME
 
-		acall	resettabu
+;		inc	baudidx
+;		setb	databits
+;		setb	evenodd
+;		setb	termmode
+		
+		call	setbaud
+		call	resettabu
 		call	clear_screen
 		setb	ea
 	
@@ -1271,16 +1483,38 @@ term_reset:	clr	ea
 		ret
 		
 ;
-; clear 32 vars from "state" on
+; clear VARLEN vars from "state" on
 ;	
-clear_vars:	mov	r0, #VARS	;clear term-vars
-		mov	r1, #64
+clear_vars:
+;		mov	r0, #080h
+;clear_v2:	mov	@r0, #0aah
+;		inc	r0
+;		cjne	r0, #0, clear_v2
+		
+		mov	r0, #VARS	;clear term-vars
+		mov	r1, #VARLEN
 clear_v1:	mov	@r0, #0
 		inc	r0
 		djnz	r1, clear_v1
 		ret
 		
-		
+;dump_vars:	mov	r0, #0
+;dump_vars2:	mov	r1, #16
+;		mov	a, r0
+;		acall	phex
+;		acall	space
+;		mov	a, #':'
+;		acall	cout
+;		acall	space
+;dump_vars1:	mov	a, @r0
+;		acall	phex
+;		acall	space
+;		inc	r0
+;		djnz	r1, dump_vars1
+;		acall	newline
+;		cjne	r0, #0, dump_vars2
+;		ret					
+
 resettabu:	mov	r0, #tabutab
 		mov	r1, #10
 resettabu1:	mov	@r0, #128
@@ -1336,7 +1570,7 @@ print:		clr	a
 		movc	a, @a+dptr
 		jnz	print1
 		ret
-print1:		acall	ansiout
+print1:		call	ansiout
 		inc	dptr
 		sjmp	print
 
@@ -1616,8 +1850,9 @@ comp_dptr:
 ;===============================================	
 ; decode scancode
 ;===============================================
-keydecode:	;mov	a, keyrxval
-		;call	phex
+keydecode:
+;		mov	a, keyrxval
+;		call	phex
 
 		mov	a, #EXTENDED			;extended?
 		cjne	a, keyrxval, keybreak
@@ -1793,7 +2028,7 @@ EXT_TABLE:	db	ALTGR
 ;	
 ;
 ;
-getbaud:	mov	a, r0
+getbaud:	mov	a, baudidx
 		inc	a
 		movc	a, @a+pc
 		ret
@@ -1810,12 +2045,14 @@ getbdtxt:	movc	a, @a+pc
 		db	" 192"
 		db	" 384"
 		db	" 576"
-			
+adm3atext:	db	"ADM-3A"
+dumptext:	db	"DUMP  "	
+
 ;
 ;
 prtstatus:	mov	dptr, #08000h + 24 * WIDTH * 2
 		mov	r0, #1
-prtstatus1:	acall	getstatus			;get status line
+prtstatus1:	call	getstatus			;get status line
 		movx	@dptr, a
 		inc	dptr
 		mov	a, #TURQUOISE			;color turquoise
@@ -1824,7 +2061,7 @@ prtstatus1:	acall	getstatus			;get status line
 		inc	r0
 		cjne	r0, #81, prtstatus1
 		
-		mov	dptr, #08000h + 24 * WIDTH * 2 + 8 * 2
+		mov	dptr, #08000h + 24 * WIDTH * 2 + 7 * 2
 		mov	a, baudidx
 		rl	a				;mul2
 		rl	a				;mul4
@@ -1840,25 +2077,51 @@ prtbaud:	call	getbdtxt
 		inc	r1
 		cjne	r1, #4, prtbaud
 		
-		mov	a, #251				;Haken
+		jnb	databits, prtstatus6		;print 7 data bits
+		mov	a, #'7'
+		mov	dptr, #08000h + 24 * WIDTH * 2 + 14 * 2
+		movx	@dptr, a
+		mov	a, #'E'
+		jnb	evenodd, prtstatus7
+		mov	a, #'O'
+prtstatus7:	mov	dptr, #08000h + 24 * WIDTH * 2 + 15 * 2
+		movx	@dptr, a
+prtstatus6:	mov	a, #251				;Haken
 		jnb	newlinemode, prtstatus2
-		mov	dptr, #08000h + 24 * WIDTH * 2 + 26 * 2
+		mov	dptr, #08000h + 24 * WIDTH * 2 + 28 * 2
 		movx	@dptr, a
 prtstatus2:	jnb	insert	, prtstatus3
-		mov	dptr, #08000h + 24 * WIDTH * 2 + 38 * 2
+		mov	dptr, #08000h + 24 * WIDTH * 2 + 40 * 2
 		movx	@dptr, a
 prtstatus3:	jnb	origin, prtstatus4
-		mov	dptr, #08000h + 24 * WIDTH * 2 + 50 * 2
+		mov	dptr, #08000h + 24 * WIDTH * 2 + 52 * 2
 		movx	@dptr, a
 prtstatus4:	jnb	wrap, prtstatus5
-		mov	dptr, #08000h + 24 * WIDTH * 2 + 60 * 2
+		mov	dptr, #08000h + 24 * WIDTH * 2 + 62 * 2
 		movx	@dptr, a
-prtstatus5:	ret
+prtstatus5:	jb	dump, prtstatus5c
+		jnb	termmode, prtstatusex
+prtstatus5c:	mov	dptr, #08000h + 24 * WIDTH * 2 + 69 * 2
+		mov	r0, #0
+prtstatus5a:	mov	a, r0
+		add	a, #adm3atext-getbdtxt-1
+		jnb	dump, prtstatus5b
+		add	a, #6
+prtstatus5b:	acall	getbdtxt
+		movx	@dptr, a
+		inc	dptr
+		inc	dptr
+		inc	r0
+		cjne	r0, #6, prtstatus5a
+prtstatusex:	ret
 		
 getstatus:	mov	a, r0
 		movc	a, @a + pc
 		ret	
 ;			"0         1         2         3         4         5         6         7         "
 ;			"01234567890123456789012345678901234567890123456789012345678901234567890123456789		
-status:		db	"| Baud:     00 | Newline: - | Insert: - | Origin: - | Wrap: - |     VT102      |"
-		END
+status:		db	"|Baud: xxxx00 8N | Newline: - | Insert: - | Origin: - | Wrap: - |    VT102     |"
+
+;vt100_font	equ	base + 1000h
+		$include (vt100_font.a51)
+;		end
