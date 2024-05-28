@@ -11,7 +11,7 @@ base		equ	00000h
 vector		equ	base
 psw_init	equ	0		;value for psw (which reg bank to use)
 dnld_parm	equ 	10h		;block of 16 bytes for download
-stack		equ	80h		;location of the stack
+stack		equ	50h		;location of the stack
 dpl		equ	dp0l
 dph		equ	dp0h
 

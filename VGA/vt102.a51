@@ -1,5 +1,9 @@
 ;===============================================	
-; AT89S52 code for emulating a VT102 terminal
+; AT89S52 code for emulating a 
+; - VT102  terminal
+; - ADM-3A terminal
+; - DUMP   hex-dump terminal
+;
 ; 2023-24 Roland Scholz (rolandscholz@gmx.de)
 ; no warranties
 ; do whatever you want with this code
@@ -8,12 +12,6 @@
 
 ;		$NOMOD51
 ;		$INCLUDE (89S52.MCU)
-		
-;base		equ	02000h
-;monstart	equ	0h
-;stack		equ	080h
-;dpl		equ	dp0l
-;dph		equ	dp0h
 
 vt102base	equ	base
 
@@ -156,7 +154,7 @@ insert		equ	flags2.3
 databits	equ	flags2.4
 evenodd		equ	flags2.5
 termmode	equ	flags2.6
-dump		equ	flags2.7
+dumpmode	equ	flags2.7
 
 retstate	equ	023h
 nargs		equ	025h
@@ -184,11 +182,11 @@ keyrxcnt	equ	03ah
 keyrxval	equ	03bh
 oldstatus	equ	03ch
 defcol		equ	03dh
-
+dumpcnt		equ	03eh
 
 tabutab		equ	040h		;10-bytes tabulator
 
-dumpcnt		equ	04ah
+free0		equ	04ah
 free1		equ	04bh
 free2		equ	04ch
 free3		equ	04dh
@@ -204,8 +202,8 @@ serlim		equ	64
 ; Interrupt vector table
 ;
 ;===============================================	
-		org	vt102base
-		ajmp	start
+;		org	vt102base
+;		ajmp	start
 					
 		org	vt102base + 3		;ext int0 vector
 		ajmp	exint0			;PS/2 keyboard
@@ -442,8 +440,8 @@ main_F8:	cjne	a, #F8, main_F12		;F8 terminal mode VT102 / ADM-3A
 		jb	termmode, main_F8a
 		setb	termmode
 		sjmp	main_status
-main_F8a:	cpl	dump
-		jb	dump, main_status
+main_F8a:	cpl	dumpmode
+		jb	dumpmode, main_status
 		cpl	termmode
 		sjmp	main_status		
 		
@@ -497,7 +495,7 @@ setbaud:	call	getbaud
 		setb	tr1
 		ret
 ;===============================================	
-; ansiout: dispatch vt102 or ADM-3A or DUMP
+; ansiout: dispatch vt102 or ADM-3A or DUMPMDOE
 ;===============================================
 ansiout:	jnb	databits, ansiout3		;8-bit?
 		anl	a, #07fh			;mask out bit 7
@@ -512,7 +510,7 @@ ansiout3:	mov	r7, a				;save acc in r7
 		mov	r1, a				;y-offset
 		mov	r2, a				;scrolling, 0 = no
 		
-		jb	dump, dumpterm
+		jb	dumpmode, dumpterm
 		jb	termmode, adm3a			;switch to ADM-3A
 		
 		mov	a, state
@@ -2099,13 +2097,13 @@ prtstatus3:	jnb	origin, prtstatus4
 prtstatus4:	jnb	wrap, prtstatus5
 		mov	dptr, #08000h + 24 * WIDTH * 2 + 62 * 2
 		movx	@dptr, a
-prtstatus5:	jb	dump, prtstatus5c
+prtstatus5:	jb	dumpmode, prtstatus5c
 		jnb	termmode, prtstatusex
 prtstatus5c:	mov	dptr, #08000h + 24 * WIDTH * 2 + 69 * 2
 		mov	r0, #0
 prtstatus5a:	mov	a, r0
 		add	a, #adm3atext-getbdtxt-1
-		jnb	dump, prtstatus5b
+		jnb	dumpmode, prtstatus5b
 		add	a, #6
 prtstatus5b:	acall	getbdtxt
 		movx	@dptr, a
