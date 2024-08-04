@@ -538,8 +538,8 @@ clust2sec1:	ld	(datsec), hl
 ;
 ;--------------------------------------------------------------
 sdInit:
-;		ld	hl, init0msg
-;		call	printstr
+		ld	hl, init0msg
+		call	printstr
 		
 		call	sdDeselect
 ;		ld	a, SDCLK			;bring SDCLK low
@@ -1033,7 +1033,7 @@ newlinedebugex:	pop	af
 ; variables and constants
 ;--------------------------------------------------------------	
 
-;init0msg:	db	13, 10, "initialising SDcard... ", 0
+init0msg:	db	13, 10, "initialising SDcard... ", 0
 ;init1msg:	db	"done.", 13, 10 , 0
 	
 sdcmd:		db	0			;1-byte SD card command

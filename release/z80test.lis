@@ -92,7 +92,7 @@ z80test.asm:
     58   000003 c9              		ret
     59                          
     60   000004 110b00          		ld	de, sec2
-    61   000007 cd3805          		call	sdWriteDat
+    61   000007 cd3e05          		call	sdWriteDat
     62   00000a c9              		ret
     63                          
     64   00000b 02000000        sec2:		db	2, 0, 0, 0
@@ -534,26 +534,26 @@ fat16.asm:
     53   00015a cd2b01          		call	isZero32			;(hl) zero = first request?
     54   00015d 2807            		jr	Z, fseek8
     55                          
-    56   00015f 115606          		ld	de, currpos			;no, currpos equal?
+    56   00015f 117606          		ld	de, currpos			;no, currpos equal?
     57   000162 cdeb00          		call	equal32
     58   000165 c8              		ret	z				;yes nothing to do
     59                          
     60   000166 e5              fseek8:		push	hl
-    61   000167 cde002          		call	fopen1				;reset file-Ptr
+    61   000167 cde002          		call	fopen1				;reset file-Ptr, currpos etc.
     62                          
     63   00016a e1              		pop	hl
-    64   00016b 116f06          		ld	de, bytesavail
+    64   00016b 118f06          		ld	de, bytesavail
     65   00016e cdfc00          		call	cmp32				;bytesavail - seeksize
     66   000171 3006            		jr	NC, fseek1			;seeksize <= bytesavail
     67   000173 3eff            		ld	a, FEOF				;no
-    68   000175 327d06          		ld	(fstatus), a
+    68   000175 329d06          		ld	(fstatus), a
     69   000178 c9              		ret
     70                          
     71   000179 cdda00          fseek1:		call	sbc32				;byteavail -= seeklen
-    72   00017c 115606          		ld	de, currpos			;currpos = seeklen
+    72   00017c 117606          		ld	de, currpos			;currpos = seeklen
     73   00017f cd1f01          		call	copy32
     74                          
-    75   000182 117b06          		ld	de, datptr
+    75   000182 119b06          		ld	de, datptr
     76   000185 7e              		ld	a, (hl)				;copy 9 bits to datptr
     77   000186 12              		ld	(de), a
     78   000187 4f              		ld	c, a				;save a in bc
@@ -568,7 +568,7 @@ fat16.asm:
     87                          
     88   000192 23              		inc	hl
     89   000193 23              		inc	hl				;3rd byte of seeklen
-    90   000194 116906          		ld	de, datsec + 3
+    90   000194 118906          		ld	de, datsec + 3
     91   000197 af              		xor	a				;clear 4th byte
     92   000198 12              		ld	(de), a
     93                          
@@ -584,36 +584,36 @@ fat16.asm:
    103   0001a3 c1              		pop	bc
    104   0001a4 210002          		ld	hl, 512
    105   0001a7 ed42            		sbc	hl, bc
-   106   0001a9 226c06          		ld	(bytes2read), hl		;remaining bytes in sector
+   106   0001a9 228c06          		ld	(bytes2read), hl		;remaining bytes in sector
    107                          
-   108   0001ac 216606          		ld	hl, datsec			;copy datsec to var32
-   109   0001af 113906          		ld	de, var32
+   108   0001ac 218606          		ld	hl, datsec			;copy datsec to var32
+   109   0001af 115906          		ld	de, var32
    110   0001b2 cd1f01          		call	copy32
    111                          
    112                          							;compute cluster number
-   113   0001b5 3a1406          		ld	a, (secclus)			;rotate secclus bitposition to right
+   113   0001b5 3a3406          		ld	a, (secclus)			;rotate secclus bitposition to right
    114   0001b8 4f              		ld	c, a
    115   0001b9 cb19            fseek4:		rr	c
    116   0001bb 380c            		jr	C, fseek3			;done
    117   0001bd 0603            		ld	b, 3
-   118   0001bf 213b06          		ld	hl, var32 + 2
+   118   0001bf 215b06          		ld	hl, var32 + 2
    119   0001c2 cb1e            fseek5:		rr	(hl)
    120   0001c4 2b              		dec	hl
    121   0001c5 10fb            		djnz	fseek5
    122   0001c7 18f0            		jr	fseek4
    123                          
-   124   0001c9 216606          fseek3:		ld	hl, datsec			;datsec
-   125   0001cc 3a1406          		ld	a, (secclus)
+   124   0001c9 218606          fseek3:		ld	hl, datsec			;datsec
+   125   0001cc 3a3406          		ld	a, (secclus)
    126   0001cf 3d              		dec	a
    127   0001d0 a6              		and	(hl)
-   128   0001d1 328206          		ld	(fsecmask), a
+   128   0001d1 32a206          		ld	(fsecmask), a
    129   0001d4 47              		ld	b, a
-   130   0001d5 3a1406          		ld	a, (secclus)
+   130   0001d5 3a3406          		ld	a, (secclus)
    131   0001d8 90              		sub	b
-   132   0001d9 326e06          		ld	(secs2read), a
+   132   0001d9 328e06          		ld	(secs2read), a
    133                          
    134                          
-   135   0001dc 2a3906          		ld	hl, (var32)
+   135   0001dc 2a5906          		ld	hl, (var32)
    136   0001df e5              fseek6:		push	hl				;traverse var32 + 1(firstclust) clusters
    137   0001e0 cdfa02          		call	fatNextCluster
    138   0001e3 e1              		pop	hl
@@ -624,12 +624,12 @@ fat16.asm:
    143   0001e9 18f4            		jr	fseek6
    144                          
    145   0001eb cdd503          fseek7:		call	clust2sec
-   146   0001ee 3a8206          		ld	a, (fsecmask)
-   147   0001f1 324106          		ld	(var8), a
-   148   0001f4 116606          		ld	de, datsec
-   149   0001f7 214106          		ld	hl, var8
+   146   0001ee 3aa206          		ld	a, (fsecmask)
+   147   0001f1 326106          		ld	(var8), a
+   148   0001f4 118606          		ld	de, datsec
+   149   0001f7 216106          		ld	hl, var8
    150   0001fa cd0c01          		call	add32				;de += hl
-   151   0001fd cdce04          		call	sdReadDat
+   151   0001fd cdd404          		call	sdReadDat
    152                          
    153                          ;		ld	hl, (datptr)
    154                          ;		call	printadr
@@ -664,56 +664,56 @@ fat16.asm:
    183                          ; A	status, 0 = OK, negativ = Error
    184                          ;--------------------------------------------------------------
    185   000201 e5              fread:		push	hl
-   186   000202 ed437506        		ld	(freadbytes), bc		;bytes still to be read during fread
-   187   000206 227906          		ld	(fbuffer), hl			;save hl in fbuffer
+   186   000202 ed439506        		ld	(freadbytes), bc		;bytes still to be read during fread
+   187   000206 229906          		ld	(fbuffer), hl			;save hl in fbuffer
    188   000209 af              		xor	a
-   189   00020a 327d06          		ld	(fstatus), a			;clear status
+   189   00020a 329d06          		ld	(fstatus), a			;clear status
    190   00020d 67              		ld	h, a
    191   00020e 6f              		ld	l, a
-   192   00020f 227306          		ld	(fbytesread), hl		;clear fbytesread
+   192   00020f 229306          		ld	(fbytesread), hl		;clear fbytesread
    193                          
    194                          freadloop:
    195                          	IF FATDEBUG = 1
    196                          		call	fdump
    197                          	ENDIF
-   198   000212 217506          		ld	hl, freadbytes			;bytes to be read?
+   198   000212 219506          		ld	hl, freadbytes			;bytes to be read?
    199   000215 cd2b01          		call	isZero32
    200   000218 280d            		jr	Z, freadex			;no -> finished
    201                          
-   202   00021a 216f06          		ld	hl, bytesavail			;are still bytes available?
+   202   00021a 218f06          		ld	hl, bytesavail			;are still bytes available?
    203   00021d cd2b01          		call	isZero32
    204   000220 200b            		jr	NZ, fread1
    205   000222 3eff            		ld	a, FEOF
-   206   000224 327d06          		ld	(fstatus),a
+   206   000224 329d06          		ld	(fstatus),a
    207   000227 e1              freadex:	pop	hl				;reload hl with adr of buffer
-   208   000228 ed4b7306        		ld	bc, (fbytesread)		;load bc with bytes read
+   208   000228 ed4b9306        		ld	bc, (fbytesread)		;load bc with bytes read
    209   00022c c9              		ret
    210                          
-   211   00022d 116f06          fread1:		ld	de, bytesavail			;if bytesavail < freadbytes
-   212   000230 217506          		ld	hl, freadbytes
+   211   00022d 118f06          fread1:		ld	de, bytesavail			;if bytesavail < freadbytes
+   212   000230 219506          		ld	hl, freadbytes
    213   000233 cdfc00          		call	cmp32
    214   000236 3009            		jr	NC, fread2
    215   000238 3eff            		ld	a, FEOF
-   216   00023a 327d06          		ld	(fstatus), a
+   216   00023a 329d06          		ld	(fstatus), a
    217   00023d eb              		ex	de, hl				;freadbytes = bytesavail
    218   00023e cd1f01          		call	copy32
    219                          
-   220   000241 ed4b7506        fread2:		ld	bc, (freadbytes)
+   220   000241 ed4b9506        fread2:		ld	bc, (freadbytes)
    221   000245 af              		xor	a				;clear carry
-   222   000246 2a6c06          		ld	hl, (bytes2read)		;if bytes2read < freadbytes?
+   222   000246 2a8c06          		ld	hl, (bytes2read)		;if bytes2read < freadbytes?
    223   000249 ed42            		sbc	hl, bc
    224   00024b 3004            		jr	NC, fread3
-   225   00024d ed4b6c06        		ld	bc, (bytes2read)
+   225   00024d ed4b8c06        		ld	bc, (bytes2read)
    226                          
    227   000251 78              fread3:		ld	a, b				;is bytes2read zero?
    228   000252 b1              		or	a, c
    229   000253 201d            		jr	NZ, fread4			;no, continue coying data
    230                          
-   231   000255 116606          		ld	de, datsec			;increase data sector number
-   232   000258 213106          		ld	hl, const1
+   231   000255 118606          		ld	de, datsec			;increase data sector number
+   232   000258 215106          		ld	hl, const1
    233   00025b cd0c01          		call	add32
    234                          
-   235   00025e 216e06          		ld	hl, secs2read	 		;read new cluster?
+   235   00025e 218e06          		ld	hl, secs2read	 		;read new cluster?
    236   000261 35              		dec	(hl)
    237   000262 2006            		jr	NZ, fread6			;not zero, just go with incremented sector-number
    238                          
@@ -735,34 +735,34 @@ fat16.asm:
    254                          ;		jr	fread7
    255                          
    256                          fread5:
-   257   00026d cdce04          		call	sdReadDat
+   257   00026d cdd404          		call	sdReadDat
    258   000270 18cf            		jr	fread2				;bytes2read is <> 0 so we always end up at fread4
    259                          
-   260   000272 ed433d06        fread4:		ld	(var16), bc			;copy available sector data to buffer
-   261   000276 2a7b06          		ld	hl, (datptr)			;copy from datptr to fbuffer
-   262   000279 ed5b7906        		ld	de, (fbuffer)
+   260   000272 ed435d06        fread4:		ld	(var16), bc			;copy available sector data to buffer
+   261   000276 2a9b06          		ld	hl, (datptr)			;copy from datptr to fbuffer
+   262   000279 ed5b9906        		ld	de, (fbuffer)
    263   00027d edb0            		ldir
-   264   00027f ed537906        		ld	(fbuffer), de
-   265   000283 227b06          		ld	(datptr), hl
+   264   00027f ed539906        		ld	(fbuffer), de
+   265   000283 229b06          		ld	(datptr), hl
    266                          
    267   000286 af              fread7:		xor	a				;bytes2read -= var16
-   268   000287 2a6c06          		ld	hl, (bytes2read)
-   269   00028a ed4b3d06        		ld	bc, (var16)
+   268   000287 2a8c06          		ld	hl, (bytes2read)
+   269   00028a ed4b5d06        		ld	bc, (var16)
    270   00028e ed42            		sbc	hl, bc
-   271   000290 226c06          		ld	(bytes2read), hl
+   271   000290 228c06          		ld	(bytes2read), hl
    272                          
-   273   000293 2a7306          		ld	hl, (fbytesread)		;fbytesread += var16
+   273   000293 2a9306          		ld	hl, (fbytesread)		;fbytesread += var16
    274   000296 09              		add	hl, bc
-   275   000297 227306          		ld	(fbytesread), hl
+   275   000297 229306          		ld	(fbytesread), hl
    276                          
-   277   00029a 116f06          		ld	de, bytesavail			;bytesavail -= bytes2read
-   278   00029d 213d06          		ld	hl, var16
+   277   00029a 118f06          		ld	de, bytesavail			;bytesavail -= bytes2read
+   278   00029d 215d06          		ld	hl, var16
    279   0002a0 cdda00          		call	sbc32
    280                          
-   281   0002a3 117506          		ld	de, freadbytes			;freadbytes -= bytes2read
+   281   0002a3 119506          		ld	de, freadbytes			;freadbytes -= bytes2read
    282   0002a6 cdda00          		call	sbc32
    283                          
-   284   0002a9 115606          		ld	de, currpos			;currpos += bytes2read
+   284   0002a9 117606          		ld	de, currpos			;currpos += bytes2read
    285   0002ac cd0c01          		call	add32
    286   0002af c31202          		jp	freadloop
    287                          
@@ -771,15 +771,15 @@ fat16.asm:
    290                          ;--------------------------------------------------------------
    291                          fatInitSector:
    292   0002b2 2100fa          		ld	hl, DATBUF			;datptr = DATBUF
-   293   0002b5 227b06          		ld	(datptr), hl
+   293   0002b5 229b06          		ld	(datptr), hl
    294                          
-   295   0002b8 3a1406          		ld	a, (secclus)			;secs2read = secclus
-   296   0002bb 326e06          		ld	(secs2read), a
+   295   0002b8 3a3406          		ld	a, (secclus)			;secs2read = secclus
+   296   0002bb 328e06          		ld	(secs2read), a
    297                          
    298   0002be 210002          		ld	hl, 512				;bytes to read = 512
-   299   0002c1 226c06          		ld	(bytes2read), hl
+   299   0002c1 228c06          		ld	(bytes2read), hl
    300                          
-   301   0002c4 217206          		ld	hl, bytesavail + 3
+   301   0002c4 219206          		ld	hl, bytesavail + 3
    302   0002c7 7e              		ld	a, (hl)				;if filesize < 512 then
    303   0002c8 2b              		dec	hl
    304   0002c9 b6              		or	a, (hl)
@@ -789,8 +789,8 @@ fat16.asm:
    308   0002cd fe02            		cp	2				;>= $200?
    309   0002cf d0              		ret	NC				;yes
    310                          
-   311   0002d0 2a6f06          		ld	hl, (bytesavail)		;bytes2read = filesize
-   312   0002d3 226c06          		ld	(bytes2read), hl
+   311   0002d0 2a8f06          		ld	hl, (bytesavail)		;bytes2read = filesize
+   312   0002d3 228c06          		ld	(bytes2read), hl
    313                          
    314   0002d6 c9              		ret
    315                          ;
@@ -803,16 +803,16 @@ fat16.asm:
    322   0002df c9              		ret
    323                          
    324                          fopen1:
-   325   0002e0 115606          		ld	de, currpos			;currpos = 0
+   325   0002e0 117606          		ld	de, currpos			;currpos = 0
    326   0002e3 cd3901          		call	clear32
    327                          
-   328   0002e6 215206          		ld	hl, filesize			;bytesavail = filesize
-   329   0002e9 116f06          		ld	de, bytesavail
+   328   0002e6 217206          		ld	hl, filesize			;bytesavail = filesize
+   329   0002e9 118f06          		ld	de, bytesavail
    330   0002ec cd1f01          		call	copy32
    331                          
    332   0002ef 210000          		ld	hl, 0
-   333   0002f2 226c06          		ld	(bytes2read), hl
-   334   0002f5 226a06          		ld	(curclus), hl
+   333   0002f2 228c06          		ld	(bytes2read), hl
+   334   0002f5 228a06          		ld	(curclus), hl
    335                          
    336                          ;		dec	hl
    337                          ;		ld	(lastfatsec), hl
@@ -847,26 +847,26 @@ fat16.asm:
    366                          ; gets next cluster after curclus and stores in curclus
    367                          ;--------------------------------------------------------------
    368                          fatNextCluster:
-   369   0002fa 2a6a06          		ld	hl, (curclus)			;is curclus = 0, go with curclus = firstclust
+   369   0002fa 2a8a06          		ld	hl, (curclus)			;is curclus = 0, go with curclus = firstclust
    370   0002fd 7d              		ld	a, l
    371   0002fe b4              		or	a, h
    372   0002ff 2006            		jr	NZ, fatNextCluster1		;no
-   373   000301 ed4b5006        		ld	bc, (firstclust)
+   373   000301 ed4b7006        		ld	bc, (firstclust)
    374   000305 1825            		jr	fatNextCluster2
    375                          
    376                          fatNextCluster1:
-   377   000307 211f06          		ld	hl, fatbase			;computer FAT sector containing cluster
-   378   00030a 115a06          		ld	de, fatsector
+   377   000307 213f06          		ld	hl, fatbase			;computer FAT sector containing cluster
+   378   00030a 117a06          		ld	de, fatsector
    379   00030d cd1f01          		call	copy32				;fatsector = fatbase
-   380   000310 3a6b06          		ld	a, (curclus + 1)
-   381   000313 324106          		ld	(var8), a
-   382   000316 214106          		ld	hl, var8
+   380   000310 3a8b06          		ld	a, (curclus + 1)
+   381   000313 326106          		ld	(var8), a
+   382   000316 216106          		ld	hl, var8
    383   000319 cd0c01          		call	add32				;de = fatsector = fatbase + hi(firstclust)
    384                          
-   385   00031c cdbd04          		call	sdReadFat
+   385   00031c cdc304          		call	sdReadFat
    386                          
    387                          
-   388   00031f 2a6a06          		ld	hl, (curclus)			;lo(curclus) * 2
+   388   00031f 2a8a06          		ld	hl, (curclus)			;lo(curclus) * 2
    389   000322 2600            		ld	h, 0
    390   000324 29              		add	hl, hl
    391   000325 0100f8          		ld	bc, FATBUF
@@ -875,7 +875,7 @@ fat16.asm:
    394   00032a 23              		inc	hl
    395   00032b 46              		ld	b, (hl)
    396                          fatNextCluster2:
-   397   00032c ed436a06        		ld	(curclus), bc
+   397   00032c ed438a06        		ld	(curclus), bc
    398   000330 c9              		ret
    399                          
    400                          ;--------------------------------------------------------------
@@ -884,7 +884,7 @@ fat16.asm:
    403   000331 cd4e03          dirSearch:	call	dirReadFirst			;read first root-entry
    404   000334 c8              dirSearch1:	ret	Z				;exit if zero
    405   000335 060b            		ld	b, 11				;compare 11-bytes of dir name
-   406   000337 114506          		ld	de, dirpattern
+   406   000337 116506          		ld	de, dirpattern
    407   00033a 1a              dirSearch2:	ld	a, (de)
    408   00033b fe3f            		cp	'?'
    409   00033d 2803            		jr	Z, dirSearch3
@@ -901,14 +901,14 @@ fat16.asm:
    420                          ;
    421                          ;
    422                          dirReadFirst:
-   423   00034e 212306          		ld	hl, dirbase			;from dirbase
-   424   000351 112b06          		ld	de, dirsec			;to dirsec
+   423   00034e 214306          		ld	hl, dirbase			;from dirbase
+   424   000351 114b06          		ld	de, dirsec			;to dirsec
    425   000354 cd1f01          		call	copy32
    426                          
    427                          dirReadSector:
-   428   000357 cdce04          		call	sdReadDat			;load directory sectorgiven in DE
+   428   000357 cdd404          		call	sdReadDat			;load directory sectorgiven in DE
    429   00035a 2100fa          		ld	hl, DATBUF 			;start at begin of dir-data
-   430   00035d 222f06          		ld	(dirptr), hl
+   430   00035d 224f06          		ld	(dirptr), hl
    431                          
    432   000360 7e              dirRead2:	ld	a, (hl)				;first byte of name zero?
    433   000361 b7              		or	a
@@ -923,7 +923,7 @@ fat16.asm:
    442   00036f 2014            		jr	NZ, dirRead1			;if no file -> next dir
    443                          
    444   000371 0606            		ld	b, 6				;copy 6 bytes (clust + size)
-   445   000373 115006          		ld	de, firstclust			;to firstclust, filesize
+   445   000373 117006          		ld	de, firstclust			;to firstclust, filesize
    446   000376 dd7e1a          dirRead5:	ld	a, (ix + $1a)
    447   000379 12              		ld	(de), a
    448   00037a 13              		inc	de
@@ -932,17 +932,17 @@ fat16.asm:
    451   00037f f601            		or	1				;reset ZERO flag
    452   000381 c9              		ret
    453                          
-   454   000382 2a2f06          dirReadNext:	ld	hl, (dirptr)
+   454   000382 2a4f06          dirReadNext:	ld	hl, (dirptr)
    455   000385 112000          dirRead1:	ld	de, 32				;hl = hl + 32
    456   000388 19              		add	hl, de
-   457   000389 222f06          		ld	(dirptr), hl
+   457   000389 224f06          		ld	(dirptr), hl
    458                          
    459   00038c 7c              		ld	a, h
    460   00038d fefc            		cp	DATEND >> 8
    461   00038f 20cf            		jr	NZ, dirRead2
    462                          
-   463   000391 112b06          		ld	de, dirsec			;increment dirsector 32-bit
-   464   000394 213106          		ld	hl, const1
+   463   000391 114b06          		ld	de, dirsec			;increment dirsector 32-bit
+   464   000394 215106          		ld	hl, const1
    465   000397 cd0c01          		call	add32
    466   00039a 18bb            		jr	dirReadSector
    467                          
@@ -965,7 +965,7 @@ fat16.asm:
    484                          ; prints dir @ hl
    485                          ;--------------------------------------------------------------
    486   0003a8 e5              dirPrintEntry:	push	hl
-   487   0003a9 2a2f06          		ld	hl, (dirptr)			;print dir name 8 space 3
+   487   0003a9 2a4f06          		ld	hl, (dirptr)			;print dir name 8 space 3
    488   0003ac 0608            		ld	b, 8
    489   0003ae cdcd03          		call	dirPrintEntry1
    490   0003b1 cd3e00          		call	space
@@ -973,9 +973,9 @@ fat16.asm:
    492   0003b6 cdcd03          		call	dirPrintEntry1
    493                          
    494   0003b9 cd3e00          		call	space				;filesize high
-   495   0003bc 2a5406          		ld	hl, (filesize + 2)
+   495   0003bc 2a7406          		ld	hl, (filesize + 2)
    496   0003bf cdcf00          		call	printadr
-   497   0003c2 2a5206          		ld	hl, (filesize)			;filesize low
+   497   0003c2 2a7206          		ld	hl, (filesize)			;filesize low
    498   0003c5 cdcf00          		call	printadr
    499                          
    500   0003c8 cd4600          		call	newline
@@ -995,11 +995,11 @@ fat16.asm:
    514                          ; datsec = (curclus - 2) * secclus + datbase
    515                          ; de : points to datsec
    516                          ;--------------------------------------------------------------
-   517   0003d5 2a6a06          clust2sec:	ld	hl, (curclus)
+   517   0003d5 2a8a06          clust2sec:	ld	hl, (curclus)
    518   0003d8 2b              		dec	hl
    519   0003d9 2b              		dec	hl				;minus 2
    520   0003da 110000          		ld	de, 0
-   521   0003dd 3a1406          		ld	a, (secclus)
+   521   0003dd 3a3406          		ld	a, (secclus)
    522                          
    523   0003e0 1f              clust2sec2:	rra
    524   0003e1 380a            		jr	C, clust2sec1			;carry set, finished
@@ -1009,47 +1009,47 @@ fat16.asm:
    528   0003e9 cb12            		rl	d
    529   0003eb 18f3            		jr	clust2sec2
    530                          
-   531   0003ed 226606          clust2sec1:	ld	(datsec), hl
-   532   0003f0 ed536806        		ld	(datsec + 2), de
-   533   0003f4 116606          		ld	de, datsec
-   534   0003f7 212706          		ld	hl, datbase
+   531   0003ed 228606          clust2sec1:	ld	(datsec), hl
+   532   0003f0 ed538806        		ld	(datsec + 2), de
+   533   0003f4 118606          		ld	de, datsec
+   534   0003f7 214706          		ld	hl, datbase
    535   0003fa c30c01          		jp	add32
    536                          
    537                          ;--------------------------------------------------------------
    538                          ;
    539                          ;--------------------------------------------------------------
    540                          sdInit:
-   541                          ;		ld	hl, init0msg
-   542                          ;		call	printstr
+   541   0003fd 211306          		ld	hl, init0msg
+   542   000400 cd3500          		call	printstr
    543                          
-   544   0003fd cdba05          		call	sdDeselect
+   544   000403 cdc005          		call	sdDeselect
    545                          ;		ld	a, SDCLK			;bring SDCLK low
    546                          ;		out	(OPSET), a
-   547   000400 160c            		ld	d, 12				;clock 96 times
-   548   000402 cdc105          		call	sdReadbyteX
+   547   000406 160c            		ld	d, 12				;clock 96 times
+   548   000408 cdc705          		call	sdReadbyteX
    549                          
    550                          ;
    551                          ; send CMD0
    552                          ;
-   553   000405 cd0306          		call	sdClrAdr
-   554   000408 3e95            		ld	a, CMD0CHK			;load checksum
-   555   00040a 321206          		ld	(sdchk), a
-   556   00040d 3e40            sdInit1:	ld	a, CMD0				;command in A
-   557   00040f cde905          		call	sdCardCmd
-   558   000412 fe01            		cp	R1_IDLE_STATE
-   559   000414 20e7            		jr	NZ, sdInit
+   553   00040b cd0906          		call	sdClrAdr
+   554   00040e 3e95            		ld	a, CMD0CHK			;load checksum
+   555   000410 323206          		ld	(sdchk), a
+   556   000413 3e40            sdInit1:	ld	a, CMD0				;command in A
+   557   000415 cdef05          		call	sdCardCmd
+   558   000418 fe01            		cp	R1_IDLE_STATE
+   559   00041a 20e1            		jr	NZ, sdInit
    560                          
    561                          ;
    562                          ; send CMD8
    563                          ;
    564                          
-   565   000416 cd0306          sdInit2:	call	sdClrAdr
-   566   000419 2101aa          		ld	hl, $aa01
-   567   00041c 221006          		ld	(sdadr+2), hl
-   568   00041f 3e87            		ld	a, CMD8CHK
-   569   000421 321206          		ld	(sdchk), a
-   570   000424 3e48            		ld	a, CMD8
-   571   000426 cde905          		call	sdCardCmd
+   565   00041c cd0906          sdInit2:	call	sdClrAdr
+   566   00041f 2101aa          		ld	hl, $aa01
+   567   000422 223006          		ld	(sdadr+2), hl
+   568   000425 3e87            		ld	a, CMD8CHK
+   569   000427 323206          		ld	(sdchk), a
+   570   00042a 3e48            		ld	a, CMD8
+   571   00042c cdef05          		call	sdCardCmd
    572                          ;		and	#R1_ILLEGAL_COMMAND
    573                          ;		cmp	#R1_ILLEGAL_COMMAND
    574                          ;		bne	sdInit3
@@ -1062,17 +1062,17 @@ fat16.asm:
    581                          ;
    582                          ; ACMD41 = CMD55 + CMD41
    583                          ;
-   584   000429 cdba05          sdInit6:	call	sdDeselect
-   585   00042c cd0306          		call	sdClrAdr
-   586   00042f 3e77            		ld	a, CMD55
-   587   000431 cde905          		call	sdCardCmd
+   584   00042f cdc005          sdInit6:	call	sdDeselect
+   585   000432 cd0906          		call	sdClrAdr
+   586   000435 3e77            		ld	a, CMD55
+   587   000437 cdef05          		call	sdCardCmd
    588                          
-   589   000434 3e40            		ld	a, $40
-   590   000436 320e06          		ld	(sdadr), a
-   591   000439 3e69            		ld	a, CMD41
-   592   00043b cde905          		call	sdCardCmd
-   593   00043e 20e9            		jr	NZ, sdInit6			;result not 0, start over
-   594   000440 cdba05          		call	sdDeselect
+   589   00043a 3e40            		ld	a, $40
+   590   00043c 322e06          		ld	(sdadr), a
+   591   00043f 3e69            		ld	a, CMD41
+   592   000441 cdef05          		call	sdCardCmd
+   593   000444 20e9            		jr	NZ, sdInit6			;result not 0, start over
+   594   000446 cdc005          		call	sdDeselect
    595                          
    596                          ;sdInit4:	call	sdDeselect
    597                          ;		ld	a, CMD58			;read OCR, ($3A)
@@ -1083,78 +1083,78 @@ fat16.asm:
    602                          ;		ld	d, 3
    603                          ;		call	sdReadbyteX
    604                          
-   605   000443 115a06          		ld	de, fatsector			;read sector 0
-   606   000446 cd3901          		call	clear32
-   607   000449 cdbd04          		call	sdReadFat
+   605   000449 117a06          		ld	de, fatsector			;read sector 0
+   606   00044c cd3901          		call	clear32
+   607   00044f cdc304          		call	sdReadFat
    608                          
-   609   00044c 2100f8          		ld	hl, FATBUF			;from
-   610   00044f 01c601          		ld	bc, $1c6			;sdbuffer + $1c6
-   611   000452 09              		add	hl, bc
-   612   000453 115a06          		ld	de, fatsector			;to fatsector
-   613   000456 cd1f01          		call	copy32
+   609   000452 2100f8          		ld	hl, FATBUF			;from
+   610   000455 01c601          		ld	bc, $1c6			;sdbuffer + $1c6
+   611   000458 09              		add	hl, bc
+   612   000459 117a06          		ld	de, fatsector			;to fatsector
+   613   00045c cd1f01          		call	copy32
    614                          
-   615   000459 cdbd04          		call	sdReadFat
+   615   00045f cdc304          		call	sdReadFat
    616                          
-   617   00045c 2100f8          		ld	hl, FATBUF			;from
-   618   00045f 010d00          		ld	bc, 13				;sdbuffer + 13
-   619   000462 09              		add	hl, bc
-   620   000463 111406          		ld	de, secclus			;to secclus
-   621   000466 010b00          		ld	bc, 11				;copy 11-bytes
-   622   000469 edb0            		ldir
+   617   000462 2100f8          		ld	hl, FATBUF			;from
+   618   000465 010d00          		ld	bc, 13				;sdbuffer + 13
+   619   000468 09              		add	hl, bc
+   620   000469 113406          		ld	de, secclus			;to secclus
+   621   00046c 010b00          		ld	bc, 11				;copy 11-bytes
+   622   00046f edb0            		ldir
    623                          
    624                          
-   625   00046b 2a1506          		ld	hl, (ressec)			;fatbase = dirbase = fatsector + ressec
-   626   00046e 223d06          		ld	(var16), hl			;copy resec to var16
-   627   000471 215a06          		ld	hl, fatsector			;copy sdsector to fatbase
-   628   000474 111f06          		ld	de, fatbase
-   629   000477 cd1f01          		call	copy32
-   630   00047a 213d06          		ld	hl, var16			;add resec to fatbase
-   631   00047d cd0c01          		call	add32
-   632   000480 eb              		ex	de, hl				;copy fatbase to dirbase
-   633   000481 112306          		ld	de, dirbase
-   634   000484 cd1f01          		call	copy32
+   625   000471 2a3506          		ld	hl, (ressec)			;fatbase = dirbase = fatsector + ressec
+   626   000474 225d06          		ld	(var16), hl			;copy resec to var16
+   627   000477 217a06          		ld	hl, fatsector			;copy sdsector to fatbase
+   628   00047a 113f06          		ld	de, fatbase
+   629   00047d cd1f01          		call	copy32
+   630   000480 215d06          		ld	hl, var16			;add resec to fatbase
+   631   000483 cd0c01          		call	add32
+   632   000486 eb              		ex	de, hl				;copy fatbase to dirbase
+   633   000487 114306          		ld	de, dirbase
+   634   00048a cd1f01          		call	copy32
    635                          
-   636   000487 2a1d06          		ld	hl, (secsfat)
-   637   00048a 223d06          		ld	(var16), hl
-   638   00048d 213d06          		ld	hl, var16
-   639   000490 3a1706          		ld	a, (numfats)			;dirbase += secsfat * numfats
-   640   000493 47              		ld	b, a
-   641   000494 cd0c01          fatCompDirbase:	call	add32
-   642   000497 10fb            		djnz	fatCompDirbase
+   636   00048d 2a3d06          		ld	hl, (secsfat)
+   637   000490 225d06          		ld	(var16), hl
+   638   000493 215d06          		ld	hl, var16
+   639   000496 3a3706          		ld	a, (numfats)			;dirbase += secsfat * numfats
+   640   000499 47              		ld	b, a
+   641   00049a cd0c01          fatCompDirbase:	call	add32
+   642   00049d 10fb            		djnz	fatCompDirbase
    643                          
    644                          							;datbase = (numdir / 16) + dirbase
-   645   000499 2a1806          		ld	hl, (numdir)			;datbase = numdir
-   646   00049c 0604            		ld	b, 4
-   647   00049e cb3c            fatcompDatbase:	srl	h
-   648   0004a0 cb1d            		rr	l
-   649   0004a2 10fa            		djnz	fatcompDatbase
+   645   00049f 2a3806          		ld	hl, (numdir)			;datbase = numdir
+   646   0004a2 0604            		ld	b, 4
+   647   0004a4 cb3c            fatcompDatbase:	srl	h
+   648   0004a6 cb1d            		rr	l
+   649   0004a8 10fa            		djnz	fatcompDatbase
    650                          
-   651   0004a4 ed5b2306        		ld	de, (dirbase)
-   652   0004a8 19              		add	hl, de				;datbase += dirbase
-   653   0004a9 222706          		ld	(datbase), hl
+   651   0004aa ed5b4306        		ld	de, (dirbase)
+   652   0004ae 19              		add	hl, de				;datbase += dirbase
+   653   0004af 224706          		ld	(datbase), hl
    654                          
    655                          ;		ld	hl, init1msg
    656                          ;		jp	printstr
-   657   0004ac c9              		ret
+   657   0004b2 c9              		ret
    658                          
    659                          ;--------------------------------------------------------------
    660                          ; DE: address of 4-byte sector number
    661                          ;--------------------------------------------------------------
-   662   0004ad 211106          sdSetSector:	ld	hl, sdadr + 3
-   663   0004b0 af              		xor	a
-   664   0004b1 77              		ld	(hl), a
-   665   0004b2 2b              		dec	hl
-   666   0004b3 0603            		ld	b, 3
-   667   0004b5 1a              sdSetSector1:	ld	a, (de)
+   662   0004b3 213106          sdSetSector:	ld	hl, sdadr + 3
+   663   0004b6 af              		xor	a
+   664   0004b7 77              		ld	(hl), a
+   665   0004b8 2b              		dec	hl
+   666   0004b9 0603            		ld	b, 3
+   667   0004bb 1a              sdSetSector1:	ld	a, (de)
    668                          ;	if DEBUG = 1
    669                          ;		call	printhexdebug
    670                          ;	endif
-   671   0004b6 17              		rla
-   672   0004b7 77              		ld	(hl), a
-   673   0004b8 13              		inc	de
-   674   0004b9 2b              		dec	hl
-   675   0004ba 10f9            		djnz	sdSetSector1
-   676   0004bc c9              		ret
+   671   0004bc 17              		rla
+   672   0004bd 77              		ld	(hl), a
+   673   0004be 13              		inc	de
+   674   0004bf 2b              		dec	hl
+   675   0004c0 10f9            		djnz	sdSetSector1
+   676   0004c2 c9              		ret
    677                          
    678                          ;--------------------------------------------------------------
    679                          ;
@@ -1168,104 +1168,104 @@ fat16.asm:
    687                          ;		djnz	sdReadFat1
    688                          ;		pop	de
    689                          
-   690   0004bd 215e06          		ld	hl, lastfatsec			;FAT sector in DE already read?
-   691   0004c0 cdeb00          		call	equal32
-   692   0004c3 c8              		ret	Z				;yes
+   690   0004c3 217e06          		ld	hl, lastfatsec			;FAT sector in DE already read?
+   691   0004c6 cdeb00          		call	equal32
+   692   0004c9 c8              		ret	Z				;yes
    693                          
    694                          ;		ld	c, 'F'
    695                          ;		call	chrout
    696                          
-   697   0004c4 eb              		ex	de, hl				;copy sector to lastfatsec
-   698   0004c5 cd1f01          		call	copy32
-   699   0004c8 eb              		ex	de, hl
+   697   0004ca eb              		ex	de, hl				;copy sector to lastfatsec
+   698   0004cb cd1f01          		call	copy32
+   699   0004ce eb              		ex	de, hl
    700                          
-   701   0004c9 2100f8          		ld	hl, FATBUF
-   702   0004cc 181f            		jr	sdReadSec
+   701   0004cf 2100f8          		ld	hl, FATBUF
+   702   0004d2 181f            		jr	sdReadSec
    703                          
    704                          ;--------------------------------------------------------------
    705                          ; reads one sector in (DE) into DATBUF
    706                          ;--------------------------------------------------------------
    707                          sdReadDat:
-   708   0004ce 216206          		ld	hl, lastdatsec			;FAT sector in DE already read?
-   709   0004d1 cdeb00          		call	equal32				;de = hl ?
-   710   0004d4 c8              		ret	Z				;yes
+   708   0004d4 218206          		ld	hl, lastdatsec			;FAT sector in DE already read?
+   709   0004d7 cdeb00          		call	equal32				;de = hl ?
+   710   0004da c8              		ret	Z				;yes
    711                          
    712                          ;		ld	c, 'R'
    713                          ;		call	chrout
    714                          
-   715   0004d5 3a8306          		ld	a, (isdirty)
-   716   0004d8 b7              		or	a
-   717   0004d9 280a            		jr	Z, sdReadDat1
+   715   0004db 3aa306          		ld	a, (isdirty)
+   716   0004de b7              		or	a
+   717   0004df 280a            		jr	Z, sdReadDat1
    718                          
-   719   0004db d5              		push	de
-   720   0004dc e5              		push	hl
-   721   0004dd 116206          		ld	de, lastdatsec
-   722   0004e0 cd3805          		call	sdWriteDat
-   723   0004e3 e1              		pop	hl
-   724   0004e4 d1              		pop	de
+   719   0004e1 d5              		push	de
+   720   0004e2 e5              		push	hl
+   721   0004e3 118206          		ld	de, lastdatsec
+   722   0004e6 cd3e05          		call	sdWriteDat
+   723   0004e9 e1              		pop	hl
+   724   0004ea d1              		pop	de
    725                          
-   726   0004e5 eb              sdReadDat1:	ex	de, hl				;copy sector to lastdatsec
-   727   0004e6 cd1f01          		call	copy32				;de = hl
-   728   0004e9 eb              		ex	de, hl
-   729   0004ea 2100fa          		ld	hl, DATBUF
+   726   0004eb eb              sdReadDat1:	ex	de, hl				;copy sector to lastdatsec
+   727   0004ec cd1f01          		call	copy32				;de = hl
+   728   0004ef eb              		ex	de, hl
+   729   0004f0 2100fa          		ld	hl, DATBUF
    730                          
    731                          ;--------------------------------------------------------------
    732                          ; hl		buffer to load data into
    733                          ; de		pointer to 4-byte sector number
    734                          ;--------------------------------------------------------------
-   735   0004ed e5              sdReadSec:	push	hl
-   736   0004ee cdad04          		call	sdSetSector
-   737   0004f1 3e51            		ld	a, CMD17			;read block
-   738   0004f3 cde905          		call	sdCardCmd
+   735   0004f3 e5              sdReadSec:	push	hl
+   736   0004f4 cdb304          		call	sdSetSector
+   737   0004f7 3e51            		ld	a, CMD17			;read block
+   738   0004f9 cdef05          		call	sdCardCmd
    739                          
-   740   0004f6 cdc805          sdReadSec2:	call	sdReadByte			;data token until $FE, i.e. bit 0 = 0;
-   741   0004f9 cb19            		rr	c
-   742   0004fb 38f9            		jr	C, sdReadSec2
+   740   0004fc cdce05          sdReadSec2:	call	sdReadByte			;data token until $FE, i.e. bit 0 = 0;
+   741   0004ff cb19            		rr	c
+   742   000501 38f9            		jr	C, sdReadSec2
    743                          
    744                          ;		ld	a, SDMOSI
    745                          ;		out	(OPRES), a			;SDMOSI = 1
    746                          
-   747   0004fd e1              		pop	hl
+   747   000503 e1              		pop	hl
    748                          ;		ld	de, 512				;read 512 bytes
    749                          ;		ld	b, SDCLK
    750                          
    751                          ;		ld	d, 2
-   752   0004fe 010200          		ld	bc, 02h				;b = 0, c = 2
+   752   000504 010200          		ld	bc, 02h				;b = 0, c = 2
    753                          sdReadSec1:
-   754   000501 db0d            		in	a, (INPORT)			;11
-   755   000503 1f              		rra					;4
-   756   000504 cb12            		rl	d				;7 = 22
-   757   000506 db0d            		in	a, (INPORT)
-   758   000508 1f              		rra
-   759   000509 cb12            		rl	d
-   760   00050b db0d            		in	a, (INPORT)
-   761   00050d 1f              		rra
-   762   00050e cb12            		rl	d
-   763   000510 db0d            		in	a, (INPORT)
-   764   000512 1f              		rra
-   765   000513 cb12            		rl	d
-   766   000515 db0d            		in	a, (INPORT)
-   767   000517 1f              		rra
-   768   000518 cb12            		rl	d
-   769   00051a db0d            		in	a, (INPORT)
-   770   00051c 1f              		rra
-   771   00051d cb12            		rl	d
-   772   00051f db0d            		in	a, (INPORT)
-   773   000521 1f              		rra
-   774   000522 cb12            		rl	d
-   775   000524 db0d            		in	a, (INPORT)
-   776   000526 1f              		rra
-   777   000527 cb12            		rl	d
+   754   000507 db0d            		in	a, (INPORT)			;11
+   755   000509 1f              		rra					;4
+   756   00050a cb12            		rl	d				;7 = 22
+   757   00050c db0d            		in	a, (INPORT)
+   758   00050e 1f              		rra
+   759   00050f cb12            		rl	d
+   760   000511 db0d            		in	a, (INPORT)
+   761   000513 1f              		rra
+   762   000514 cb12            		rl	d
+   763   000516 db0d            		in	a, (INPORT)
+   764   000518 1f              		rra
+   765   000519 cb12            		rl	d
+   766   00051b db0d            		in	a, (INPORT)
+   767   00051d 1f              		rra
+   768   00051e cb12            		rl	d
+   769   000520 db0d            		in	a, (INPORT)
+   770   000522 1f              		rra
+   771   000523 cb12            		rl	d
+   772   000525 db0d            		in	a, (INPORT)
+   773   000527 1f              		rra
+   774   000528 cb12            		rl	d
+   775   00052a db0d            		in	a, (INPORT)
+   776   00052c 1f              		rra
+   777   00052d cb12            		rl	d
    778                          
-   779   000529 72              		ld	(hl), d
-   780   00052a 23              		inc	hl
-   781   00052b 10d4            		djnz	sdReadSec1
-   782   00052d 0d              		dec	c
-   783   00052e 20d1            		jr	NZ, sdReadSec1
+   779   00052f 72              		ld	(hl), d
+   780   000530 23              		inc	hl
+   781   000531 10d4            		djnz	sdReadSec1
+   782   000533 0d              		dec	c
+   783   000534 20d1            		jr	NZ, sdReadSec1
    784                          
-   785   000530 1602            		ld	d, 2				;2-byte checksum
-   786   000532 cdc105          		call	sdReadbyteX
-   787   000535 c3ba05          		jp	sdDeselect
+   785   000536 1602            		ld	d, 2				;2-byte checksum
+   786   000538 cdc705          		call	sdReadbyteX
+   787   00053b c3c005          		jp	sdDeselect
    788                          
    789                          
    790                          ;--------------------------------------------------------------
@@ -1275,126 +1275,126 @@ fat16.asm:
    794                          ;		ld	c, 'W'
    795                          ;		call	chrout
    796                          
-   797   000538 2100fa          		ld	hl, DATBUF
-   798   00053b af              		xor	a
-   799   00053c 328306          		ld	(isdirty), a
+   797   00053e 2100fa          		ld	hl, DATBUF
+   798   000541 af              		xor	a
+   799   000542 32a306          		ld	(isdirty), a
    800                          ;--------------------------------------------------------------
    801                          ; hl		buffer to copy data from
    802                          ; de		pointer to 4-byte sector number
    803                          ;--------------------------------------------------------------
    804                          sdWriteSec:
-   805   00053f e5              		push	hl
-   806   000540 cdad04          		call	sdSetSector
-   807   000543 3e58            		ld	a, CMD24			;write sector
-   808   000545 cde905          		call	sdCardCmd
+   805   000545 e5              		push	hl
+   806   000546 cdb304          		call	sdSetSector
+   807   000549 3e58            		ld	a, CMD24			;write sector
+   808   00054b cdef05          		call	sdCardCmd
    809                          
-   810   000548 0efe            		ld	c, DATA_START_BLOCK
-   811   00054a cdd605          		call	sdSendByte
+   810   00054e 0efe            		ld	c, DATA_START_BLOCK
+   811   000550 cddc05          		call	sdSendByte
    812                          
-   813   00054d e1              		pop	hl
-   814   00054e 0600            		ld	b, 0				;read 512 bytes
-   815   000550 1602            		ld	d, SDMOSI
-   816   000552 1e07            		ld	e, 7
+   813   000553 e1              		pop	hl
+   814   000554 0600            		ld	b, 0				;read 512 bytes
+   815   000556 1602            		ld	d, SDMOSI
+   816   000558 1e07            		ld	e, 7
    817                          
-   818   000554 cd6805          sdWriteSec1:	call	sdWrite256
-   819   000557 cd6805          		call	sdWrite256
+   818   00055a cd6e05          sdWriteSec1:	call	sdWrite256
+   819   00055d cd6e05          		call	sdWrite256
    820                          
-   821   00055a cdc805          sdWriteSec2:	call	sdReadByte
-   822   00055d 79              		ld	a, c
-   823   00055e feff            		cp	$FF
-   824   000560 28f8            		jr	Z, sdWriteSec2			;loop if $ff
+   821   000560 cdce05          sdWriteSec2:	call	sdReadByte
+   822   000563 79              		ld	a, c
+   823   000564 feff            		cp	$FF
+   824   000566 28f8            		jr	Z, sdWriteSec2			;loop if $ff
    825                          
    826                          ;		and	DATA_RES_MASK			;assume data accepted
    827                          ;		cp	DATA_RES_ACCEPTED		; "00000101" = 5 ?
    828                          
-   829   000562 cdb105          		call	sdWait
-   830   000565 c3ba05          		jp	sdDeselect
+   829   000568 cdb705          		call	sdWait
+   830   00056b c3c005          		jp	sdDeselect
    831                          
    832                          
-   833   000568 7e              sdWrite256:	ld	a, (hl)
-   834   000569 17              		rla					;4
-   835   00056a 4b              		ld	c, e				;4
-   836   00056b cb11            		rl	c				;8
-   837   00056d ed51            		out	(c), d				;12
-   838   00056f ed48            		in	c, (c)				;12 just clock the sdCard = 40
-   839   000571 17              		rla
-   840   000572 4b              		ld	c, e
-   841   000573 cb11            		rl	c
-   842   000575 ed51            		out	(c), d
-   843   000577 ed48            		in	c, (c)
-   844   000579 17              		rla
-   845   00057a 4b              		ld	c, e
-   846   00057b cb11            		rl	c
-   847   00057d ed51            		out	(c), d
-   848   00057f ed48            		in	c, (c)
-   849   000581 17              		rla
-   850   000582 4b              		ld	c, e
-   851   000583 cb11            		rl	c
-   852   000585 ed51            		out	(c), d
-   853   000587 ed48            		in	c, (c)
-   854   000589 17              		rla
-   855   00058a 4b              		ld	c, e
-   856   00058b cb11            		rl	c
-   857   00058d ed51            		out	(c), d
-   858   00058f ed48            		in	c, (c)
-   859   000591 17              		rla
-   860   000592 4b              		ld	c, e
-   861   000593 cb11            		rl	c
-   862   000595 ed51            		out	(c), d
-   863   000597 ed48            		in	c, (c)
-   864   000599 17              		rla
-   865   00059a 4b              		ld	c, e
-   866   00059b cb11            		rl	c
-   867   00059d ed51            		out	(c), d
-   868   00059f ed48            		in	c, (c)
-   869   0005a1 17              		rla
-   870   0005a2 4b              		ld	c, e
-   871   0005a3 cb11            		rl	c
-   872   0005a5 ed51            		out	(c), d
-   873   0005a7 ed48            		in	c, (c)
+   833   00056e 7e              sdWrite256:	ld	a, (hl)
+   834   00056f 17              		rla					;4
+   835   000570 4b              		ld	c, e				;4
+   836   000571 cb11            		rl	c				;8
+   837   000573 ed51            		out	(c), d				;12
+   838   000575 ed48            		in	c, (c)				;12 just clock the sdCard = 40
+   839   000577 17              		rla
+   840   000578 4b              		ld	c, e
+   841   000579 cb11            		rl	c
+   842   00057b ed51            		out	(c), d
+   843   00057d ed48            		in	c, (c)
+   844   00057f 17              		rla
+   845   000580 4b              		ld	c, e
+   846   000581 cb11            		rl	c
+   847   000583 ed51            		out	(c), d
+   848   000585 ed48            		in	c, (c)
+   849   000587 17              		rla
+   850   000588 4b              		ld	c, e
+   851   000589 cb11            		rl	c
+   852   00058b ed51            		out	(c), d
+   853   00058d ed48            		in	c, (c)
+   854   00058f 17              		rla
+   855   000590 4b              		ld	c, e
+   856   000591 cb11            		rl	c
+   857   000593 ed51            		out	(c), d
+   858   000595 ed48            		in	c, (c)
+   859   000597 17              		rla
+   860   000598 4b              		ld	c, e
+   861   000599 cb11            		rl	c
+   862   00059b ed51            		out	(c), d
+   863   00059d ed48            		in	c, (c)
+   864   00059f 17              		rla
+   865   0005a0 4b              		ld	c, e
+   866   0005a1 cb11            		rl	c
+   867   0005a3 ed51            		out	(c), d
+   868   0005a5 ed48            		in	c, (c)
+   869   0005a7 17              		rla
+   870   0005a8 4b              		ld	c, e
+   871   0005a9 cb11            		rl	c
+   872   0005ab ed51            		out	(c), d
+   873   0005ad ed48            		in	c, (c)
    874                          
-   875   0005a9 23              		inc	hl
-   876   0005aa 10bc            		djnz	sdWrite256
-   877   0005ac c9              		ret
+   875   0005af 23              		inc	hl
+   876   0005b0 10bc            		djnz	sdWrite256
+   877   0005b2 c9              		ret
    878                          ;--------------------------------------------------------------
    879                          ;
    880                          ;--------------------------------------------------------------
-   881   0005ad 3e01            sdSelect:	ld	a, SDCS
-   882   0005af d30e            		out	(OPSET), a			;SDCS low (active)
-   883   0005b1 cdc805          sdWait:		call	sdReadByte
-   884   0005b4 3eff            		ld	a, 255
-   885   0005b6 b9              		cp	c
-   886   0005b7 20f8            		jr	NZ, sdWait
-   887   0005b9 c9              		ret
+   881   0005b3 3e01            sdSelect:	ld	a, SDCS
+   882   0005b5 d30e            		out	(OPSET), a			;SDCS low (active)
+   883   0005b7 cdce05          sdWait:		call	sdReadByte
+   884   0005ba 3eff            		ld	a, 255
+   885   0005bc b9              		cp	c
+   886   0005bd 20f8            		jr	NZ, sdWait
+   887   0005bf c9              		ret
    888                          
    889                          ;--------------------------------------------------------------
    890                          ;
    891                          ;--------------------------------------------------------------
-   892   0005ba 3e01            sdDeselect:	ld	a, SDCS
-   893   0005bc d30f            		out	(OPRES), a
-   894   0005be c3c805          		jp	sdReadByte
+   892   0005c0 3e01            sdDeselect:	ld	a, SDCS
+   893   0005c2 d30f            		out	(OPRES), a
+   894   0005c4 c3ce05          		jp	sdReadByte
    895                          
    896                          ;--------------------------------------------------------------
    897                          ;
    898                          ;--------------------------------------------------------------
-   899   0005c1 cdc805          sdReadbyteX:	call	sdReadByte
-   900   0005c4 15              		dec	d
-   901   0005c5 20fa            		jr	NZ, sdReadbyteX
-   902   0005c7 c9              		ret
+   899   0005c7 cdce05          sdReadbyteX:	call	sdReadByte
+   900   0005ca 15              		dec	d
+   901   0005cb 20fa            		jr	NZ, sdReadbyteX
+   902   0005cd c9              		ret
    903                          
    904                          ;--------------------------------------------------------------
    905                          ; Input, get byte form sdCard
    906                          ;
    907                          ; c : read byte from sd-card
    908                          ;--------------------------------------------------------------
-   909   0005c8 3e02            sdReadByte:	ld	a, SDMOSI
-   910   0005ca d30f            		out	(OPRES), a			;SDMOSI = 1
-   911   0005cc 0608            		ld	b, 8
-   912   0005ce db0d            sdReadByte1:	in	a, (INPORT)
-   913   0005d0 1f              		rra
-   914   0005d1 cb11            		rl	c
-   915   0005d3 10f9            		djnz	sdReadByte1
-   916   0005d5 c9              		ret
+   909   0005ce 3e02            sdReadByte:	ld	a, SDMOSI
+   910   0005d0 d30f            		out	(OPRES), a			;SDMOSI = 1
+   911   0005d2 0608            		ld	b, 8
+   912   0005d4 db0d            sdReadByte1:	in	a, (INPORT)
+   913   0005d6 1f              		rra
+   914   0005d7 cb11            		rl	c
+   915   0005d9 10f9            		djnz	sdReadByte1
+   916   0005db c9              		ret
    917                          
    918                          
    919                          ;--------------------------------------------------------------
@@ -1402,22 +1402,22 @@ fat16.asm:
    921                          ;
    922                          ; c : byte to send to sd-card
    923                          ;--------------------------------------------------------------
-   924   0005d6 0608            sdSendByte:	ld	b, 8
-   925   0005d8 cb11            sdSendByte1:	rl	c				;7
-   926   0005da 3e02            		ld	a, SDMOSI			;7
-   927   0005dc 3804            		jr	C, sdSendByte2			;12/7
-   928   0005de d30e            		out	(OPSET), a			;11 ;carry 0, SDMOSI = 0
-   929   0005e0 1802            		jr	sdSendByte3			;12/7
-   930   0005e2 d30f            sdSendByte2:	out	(OPRES), a			;11 carry 1, SDMOSI = 1
-   931   0005e4 db0d            sdSendByte3:	in	a, (INPORT)			;11 just clock the sdCard
-   932   0005e6 10f0            		djnz	sdSendByte1
-   933   0005e8 c9              		ret
+   924   0005dc 0608            sdSendByte:	ld	b, 8
+   925   0005de cb11            sdSendByte1:	rl	c				;7
+   926   0005e0 3e02            		ld	a, SDMOSI			;7
+   927   0005e2 3804            		jr	C, sdSendByte2			;12/7
+   928   0005e4 d30e            		out	(OPSET), a			;11 ;carry 0, SDMOSI = 0
+   929   0005e6 1802            		jr	sdSendByte3			;12/7
+   930   0005e8 d30f            sdSendByte2:	out	(OPRES), a			;11 carry 1, SDMOSI = 1
+   931   0005ea db0d            sdSendByte3:	in	a, (INPORT)			;11 just clock the sdCard
+   932   0005ec 10f0            		djnz	sdSendByte1
+   933   0005ee c9              		ret
    934                          
    935                          ;--------------------------------------------------------------
    936                          ; sends command in A to SD card
    937                          ;--------------------------------------------------------------
-   938   0005e9 210d06          sdCardCmd:	ld	hl, sdcmd
-   939   0005ec 77              		ld	(hl), a
+   938   0005ef 212d06          sdCardCmd:	ld	hl, sdcmd
+   939   0005f2 77              		ld	(hl), a
    940                          
    941                          ;	if DEBUG = 1
    942                          ;		ld	c, 'C'
@@ -1427,33 +1427,33 @@ fat16.asm:
    946                          ;	endif
    947                          
    948                          sdCardCmd3:
-   949   0005ed cdad05          		call	sdSelect
-   950   0005f0 1606            		ld	d, 6
-   951   0005f2 4e              sdCardCmd1:	ld	c, (hl)
-   952   0005f3 cdd605          		call	sdSendByte
-   953   0005f6 23              		inc	hl
-   954   0005f7 15              		dec	d
-   955   0005f8 20f8            		jr	NZ, sdCardCmd1
-   956   0005fa cdc805          sdCardCmd2:	call	sdReadByte
-   957   0005fd 79              		ld	a, c
+   949   0005f3 cdb305          		call	sdSelect
+   950   0005f6 1606            		ld	d, 6
+   951   0005f8 4e              sdCardCmd1:	ld	c, (hl)
+   952   0005f9 cddc05          		call	sdSendByte
+   953   0005fc 23              		inc	hl
+   954   0005fd 15              		dec	d
+   955   0005fe 20f8            		jr	NZ, sdCardCmd1
+   956   000600 cdce05          sdCardCmd2:	call	sdReadByte
+   957   000603 79              		ld	a, c
    958                          ;	if DEBUG = 1
    959                          ;		call	printhexdebug
    960                          ;	endif
-   961   0005fe b7              		or	a, a
-   962   0005ff fafa05          		jp	M, sdCardCmd2
+   961   000604 b7              		or	a, a
+   962   000605 fa0006          		jp	M, sdCardCmd2
    963                          ;	if DEBUG = 1
    964                          ;		call	spacedebug
    965                          ;	endif
    966                          
-   967   000602 c9              		ret
+   967   000608 c9              		ret
    968                          
    969                          ;--------------------------------------------------------------
    970                          ;
    971                          ;--------------------------------------------------------------
-   972   000603 210000          sdClrAdr:	ld	hl, 0
-   973   000606 220e06          		ld	(sdadr), hl
-   974   000609 221006          		ld	(sdadr + 2), hl
-   975   00060c c9              		ret
+   972   000609 210000          sdClrAdr:	ld	hl, 0
+   973   00060c 222e06          		ld	(sdadr), hl
+   974   00060f 223006          		ld	(sdadr + 2), hl
+   975   000612 c9              		ret
    976                          
    977                          	if DEBUG = 1
    978                          printadrdebug:
@@ -1514,30 +1514,33 @@ fat16.asm:
   1033                          ; variables and constants
   1034                          ;--------------------------------------------------------------
   1035                          
-  1036                          ;init0msg:	db	13, 10, "initialising SDcard... ", 0
+  1036   000613 0d0a696e69746961init0msg:	db	13, 10, "initialising SDcard... ", 0
+                6c6973696e672053
+                44636172642e2e2e
+                2000            
   1037                          ;init1msg:	db	"done.", 13, 10 , 0
   1038                          
-  1039   00060d 00              sdcmd:		db	0			;1-byte SD card command
-  1040   00060e 00000000        sdadr:		db	0, 0, 0, 0		;4-byte SD card address
-  1041   000612 00              sdchk:		db	0			;1-byte SD card checksum
-  1042   000613 00              sdres:		db	0			;1-byte SD card R1 result
+  1039   00062d 00              sdcmd:		db	0			;1-byte SD card command
+  1040   00062e 00000000        sdadr:		db	0, 0, 0, 0		;4-byte SD card address
+  1041   000632 00              sdchk:		db	0			;1-byte SD card checksum
+  1042   000633 00              sdres:		db	0			;1-byte SD card R1 result
   1043                          
   1044                          ;
   1045                          ; FATBUF + 13, 11-bytes holding basic FAT info
-  1046   000614 00              secclus:	db	0			;1-byte FAT sectors per cluster
-  1047   000615 0000            ressec:		db	0, 0			;2-byte	DAT reserved sectors
-  1048   000617 00              numfats:	db	0			;1-byte number of FATS
-  1049   000618 0000            numdir:		db	0, 0			;2-byte max number of 32-bytes root directoy entries
-  1050   00061a 0000            numsecs:	db	0, 0			;2-byte number of sectors in this volume
-  1051   00061c 00              media:		db	0			;1-byte 0xF8 is the standard value for “fixed” (nonremovable) media. For removable media, 0xF0 is frequently used.
-  1052   00061d 0000            secsfat:	db	0, 0			;2-byte FAT12/FAT16 16-bit count of sectors occupied by one FAT
+  1046   000634 00              secclus:	db	0			;1-byte FAT sectors per cluster
+  1047   000635 0000            ressec:		db	0, 0			;2-byte	DAT reserved sectors
+  1048   000637 00              numfats:	db	0			;1-byte number of FATS
+  1049   000638 0000            numdir:		db	0, 0			;2-byte max number of 32-bytes root directoy entries
+  1050   00063a 0000            numsecs:	db	0, 0			;2-byte number of sectors in this volume
+  1051   00063c 00              media:		db	0			;1-byte 0xF8 is the standard value for “fixed” (nonremovable) media. For removable media, 0xF0 is frequently used.
+  1052   00063d 0000            secsfat:	db	0, 0			;2-byte FAT12/FAT16 16-bit count of sectors occupied by one FAT
   1053                          
-  1054   00061f 00000000        fatbase:	db	0, 0, 0, 0		;4-byte	first sector of FAT
-  1055   000623 00000000        dirbase:	db	0, 0, 0, 0		;4-byte	first sector of root directory
-  1056   000627 00000000        datbase:	db	0, 0, 0, 0		;4-byte	first sector of data section
+  1054   00063f 00000000        fatbase:	db	0, 0, 0, 0		;4-byte	first sector of FAT
+  1055   000643 00000000        dirbase:	db	0, 0, 0, 0		;4-byte	first sector of root directory
+  1056   000647 00000000        datbase:	db	0, 0, 0, 0		;4-byte	first sector of data section
   1057                          
-  1058   00062b 00000000        dirsec:		db	0, 0, 0, 0		;4-byte	current sector of root directory
-  1059   00062f 0000            dirptr:		dw	0			;2-byte pointer in directory data
+  1058   00064b 00000000        dirsec:		db	0, 0, 0, 0		;4-byte	current sector of root directory
+  1059   00064f 0000            dirptr:		dw	0			;2-byte pointer in directory data
   1060                          						;32-byte directory structure
   1061                          ;dirname:	dw	0, 0, 0, 0		;8-byte
   1062                          ;dirext:		db 0, 0, 0		;3-byte
@@ -1549,13 +1552,13 @@ fat16.asm:
   1068                          ;dircluster:	dw	0			;2-byte first cluster of data
   1069                          ;dirfilesize:	dw	0, 0			;4-byte size of file in bytes
   1070                          
-  1071   000631 01000000        const1:		db	1, 0, 0, 0		;4-byte const1
-  1072   000635 80000000        const128:	db	128, 0, 0, 0
-  1073   000639 00000000        var32:		dw	0, 0
-  1074   00063d 00000000        var16:		dw	0, 0
-  1075   000641 00000000        var8:		dw	0, 0
+  1071   000651 01000000        const1:		db	1, 0, 0, 0		;4-byte const1
+  1072   000655 80000000        const128:	db	128, 0, 0, 0
+  1073   000659 00000000        var32:		dw	0, 0
+  1074   00065d 00000000        var16:		dw	0, 0
+  1075   000661 00000000        var8:		dw	0, 0
   1076                          
-  1077   000645 4449534b30303f3fdirpattern:	db	"DISK00??DSK"	;
+  1077   000665 4449534b30303f3fdirpattern:	db	"DISK00??DSK"	;
                 44534b          
   1078                          ;allpattern:	db	"???????????"	;
   1079                          ;kilopattern:	db	"KILO????C??"	;
@@ -1563,26 +1566,26 @@ fat16.asm:
   1081                          ;
   1082                          ; file related data
   1083                          ;
-  1084   000650 0000            firstclust:	dw 0				;2-byte first cluster of file
-  1085   000652 00000000        filesize:	dw 0, 0				;4-byte length of file
-  1086   000656 00000000        currpos:	dw 0, 0
+  1084   000670 0000            firstclust:	dw 0				;2-byte first cluster of file
+  1085   000672 00000000        filesize:	dw 0, 0				;4-byte length of file
+  1086   000676 00000000        currpos:	dw 0, 0
   1087                          
-  1088   00065a 00000000        fatsector:	dw 0, 0				;4-byte actual FAT sector read
-  1089   00065e ffffffff        lastfatsec:	dw $ffff, $ffff			;4-byte last read FAT sector
-  1090   000662 ffffffff        lastdatsec:	dw $ffff, $ffff			;4-byte last read data sector
-  1091   000666 00000000        datsec:		dw 0, 0				;4-byte current data sector read
-  1092   00066a 0000            curclus:	dw 0				;2-byte current cluster
-  1093   00066c 0000            bytes2read:	dw 0				;2-byte remaining bytes in sector to read
-  1094   00066e 00              secs2read:	db 0				;1-byte sectors to read in cluster
-  1095   00066f 00000000        bytesavail:	dw 0, 0				;4-byte bytes still available in file
-  1096   000673 0000            fbytesread:	dw 0				;2-byte bytes read during fread
-  1097   000675 00000000        freadbytes:	dw 0, 0				;4-byte
-  1098   000679 0000            fbuffer:	dw 0				;2-byte buffer data to be copied to
-  1099   00067b 0000            datptr:		dw 0				;2-byte pointer into data sector
-  1100   00067d 00              fstatus:	db 0				;1-byte status of operation
-  1101   00067e 00000000        fseeklen:	dw 0, 0				;4-byte length of fseek
-  1102   000682 00              fsecmask:	db 0				;1-byte mask for sector in fseek
-  1103   000683 00              isdirty:	db 0				;1-byte flag if data sector is dirty and need to be written to disk
+  1088   00067a 00000000        fatsector:	dw 0, 0				;4-byte actual FAT sector read
+  1089   00067e ffffffff        lastfatsec:	dw $ffff, $ffff			;4-byte last read FAT sector
+  1090   000682 ffffffff        lastdatsec:	dw $ffff, $ffff			;4-byte last read data sector
+  1091   000686 00000000        datsec:		dw 0, 0				;4-byte current data sector read
+  1092   00068a 0000            curclus:	dw 0				;2-byte current cluster
+  1093   00068c 0000            bytes2read:	dw 0				;2-byte remaining bytes in sector to read
+  1094   00068e 00              secs2read:	db 0				;1-byte sectors to read in cluster
+  1095   00068f 00000000        bytesavail:	dw 0, 0				;4-byte bytes still available in file
+  1096   000693 0000            fbytesread:	dw 0				;2-byte bytes read during fread
+  1097   000695 00000000        freadbytes:	dw 0, 0				;4-byte
+  1098   000699 0000            fbuffer:	dw 0				;2-byte buffer data to be copied to
+  1099   00069b 0000            datptr:		dw 0				;2-byte pointer into data sector
+  1100   00069d 00              fstatus:	db 0				;1-byte status of operation
+  1101   00069e 00000000        fseeklen:	dw 0, 0				;4-byte length of fseek
+  1102   0006a2 00              fsecmask:	db 0				;1-byte mask for sector in fseek
+  1103   0006a3 00              isdirty:	db 0				;1-byte flag if data sector is dirty and need to be written to disk
   1104                          
 z80test.asm:
     89                          
