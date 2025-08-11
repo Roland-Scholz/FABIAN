@@ -690,24 +690,25 @@
 ; The next routine outputs a character.
 ;
 ; -------------------------------------
+.CHROP		jp	putchar
 
-.CHROP 	PUSH 	HL
-       	PUSH 	DE
-       	PUSH 	BC
-
-	ld	c, a
-	call	conout
-	
-;	ld	h,0
-;	ld	l,a
-;	push	hl		; parameter passing
-;      	call 	fputc_cons	; This calls the Z88DK "put char" function
-;	pop	hl
-
-       	POP 	BC
-       	POP 	DE
-       	POP 	HL
-
-       	RET
+;.CHROP 	PUSH 	HL
+;       	PUSH 	DE
+;       	PUSH 	BC
+;
+;	ld	c, a
+;	call	conout
+;	
+;;	ld	h,0
+;;	ld	l,a
+;;	push	hl		; parameter passing
+;;      	call 	fputc_cons	; This calls the Z88DK "put char" function
+;;	pop	hl
+;
+;       	POP 	BC
+;       	POP 	DE
+;       	POP 	HL
+;
+;       	RET
 	
 	
